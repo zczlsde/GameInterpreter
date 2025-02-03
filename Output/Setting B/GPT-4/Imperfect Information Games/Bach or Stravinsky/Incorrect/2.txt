@@ -1,0 +1,29 @@
+```python
+import pygambit as gbt
+
+# Create a new game instance with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Since Alexis and Beverley make their decisions simultaneously, we model this by introducing a chance move at the root.
+# This chance move will lead to four outcomes, representing all possible combinations of choices.
+g.append_move(g.root, g.players.chance, ["Bach_Bach", "Bach_Stravinsky", "Stravinsky_Bach", "Stravinsky_Stravinsky"])
+
+# Set the probabilities for each outcome to be equal, as the decisions are made independently and simultaneously.
+# Since there are four outcomes, each outcome has a probability of 1/4.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# Define the payoffs for each outcome:
+# If they both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff.
+# If they both choose Stravinsky, Beverley gets a higher payoff, and Alexis gets a lower payoff.
+# If they choose different events, they both get no payoffs.
+# Payoffs are set as follows: [Alexis, Beverley]
+g.set_outcome(g.root.children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+g.set_outcome(g.root.children[1], g.add_outcome([0, 0], label="Alexis chooses Bach, Beverley chooses Stravinsky"))
+g.set_outcome(g.root.children[2], g.add_outcome([0, 0], label="Alexis chooses Stravinsky, Beverley chooses Bach"))
+g.set_outcome(g.root.children[3], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form game for the "Bach or Stravinsky?" scenario using the PyGambit library. The game is modeled with a chance move at the beginning to represent the simultaneous decision-making process of Alexis and Beverley. The outcomes and their associated payoffs are defined based on the preferences of Alexis and Beverley for Bach and Stravinsky, respectively.

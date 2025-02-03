@@ -1,0 +1,10 @@
+EFG 2 R "Coalition Formation Game" { "Party 1" "Party 2" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Moderate Platform" { 1, 1 }
+t "" 3 "Party 2 Dominates" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Party 1 Dominates" { 2, 0 }
+t "" 4 "No Coalition" { -1, -1 }

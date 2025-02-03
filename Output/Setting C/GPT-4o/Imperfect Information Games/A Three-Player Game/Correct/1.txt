@@ -1,0 +1,67 @@
+```python
+# Step 1: The game starts with a chance event determining either "A" or "B".
+# This is a chance node, and player 1 does not know the outcome of this chance event.
+
+# Step 2: Player 1 makes a decision between "L" and "R".
+# Since player 1 does not know the outcome of the chance event, both decision nodes for player 1 (after "A" and "B") should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 3: If player 1 chooses "L", player 2 makes a decision between "l" and "r".
+# Player 2 does not know player 1's choice, so both decision nodes for player 2 (after player 1's "L" choice from "A" and "B") should be in the same information set.
+
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Step 4: If player 2 chooses "l", player 3 makes a decision between "a" and "b".
+# Player 3 does not know player 2's choice, so both decision nodes for player 3 (after player 2's "l" choice from "A" and "B") should be in the same information set.
+
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Step 1: The game starts with a chance event determining either "A" or "B".
+# This is a chance node, and player 1 does not know the outcome of this chance event.
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 makes a decision between "L" and "R".
+# Since player 1 does not know the outcome of the chance event, both decision nodes for player 1 (after "A" and "B") should be in the same information set.
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+g.append_move(g.root.children[1], "Player 1", ["L", "R"])
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# If player 1 chooses "R", the game ends with a payoff of (1, 1, 1) to all players.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1]))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1, 1]))
+
+# Step 3: If player 1 chooses "L", player 2 makes a decision between "l" and "r".
+# Player 2 does not know player 1's choice, so both decision nodes for player 2 (after player 1's "L" choice from "A" and "B") should be in the same information set.
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["l", "r"])
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If player 2 chooses "r", the game ends with a payoff of (2, 2, 2) to all players.
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2]))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 2, 2]))
+
+# Step 4: If player 2 chooses "l", player 3 makes a decision between "a" and "b".
+# Player 3 does not know player 2's choice, so both decision nodes for player 3 (after player 2's "l" choice from "A" and "B") should be in the same information set.
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["a", "b"])
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# The game concludes with a payoff of (3, 3, 3) once player 3 makes a decision.
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')
+```

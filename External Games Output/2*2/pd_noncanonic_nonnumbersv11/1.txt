@@ -1,0 +1,68 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Roommate 1 and Roommate 2.
+# Both players have two actions: Clean or Not Clean.
+
+# Step 2: Determine the structure of the game.
+# Since the players make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Roommate 1 moves first and Roommate 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Roommate 1's decision node.
+# Roommate 1 has two actions, Clean and Not Clean.
+# Roommate 2's decision nodes are g.root.children[0] (Roommate 1 chooses Clean) and g.root.children[1] (Roommate 1 chooses Not Clean).
+
+# Step 4: Group the decision nodes in the same information set.
+# Roommate 2, moving simultaneously, does not know which action Roommate 1 has taken.
+# Therefore, Roommate 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Roommate 1 and Roommate 2.
+# Both players have two actions: Clean or Not Clean.
+
+# Step 2: Determine the structure of the game.
+# Since the players make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Roommate 1 moves first and Roommate 2 moves second.
+
+# Create a new extensive-form game with two players: Roommate 1 and Roommate 2.
+g = gbt.Game.new_tree(players=["Roommate 1", "Roommate 2"],
+                      title="Roommates Cleaning Game")
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Roommate 1's decision node.
+# Roommate 1 has two actions, Clean and Not Clean.
+g.append_move(g.root, "Roommate 1", ["Clean", "Not Clean"])
+
+# Roommate 2's decision nodes are g.root.children[0] (Roommate 1 chooses Clean) and g.root.children[1] (Roommate 1 chooses Not Clean).
+g.append_move(g.root.children[0], "Roommate 2", ["Clean", "Not Clean"])
+g.append_move(g.root.children[1], "Roommate 2", ["Clean", "Not Clean"])
+
+# Step 4: Group the decision nodes in the same information set.
+# Roommate 2, moving simultaneously, does not know which action Roommate 1 has taken.
+# Therefore, Roommate 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes for each terminal node.
+# If both clean, they maintain a harmonious relationship.
+harmonious = g.add_outcome([1, 1], label="Harmonious")
+# If one cleans and the other does not, the cleaner feels resentful, and the non-cleaner enjoys a clean home.
+resentful_cleaner = g.add_outcome([-1, 2], label="Resentful Cleaner")
+resentful_non_cleaner = g.add_outcome([2, -1], label="Resentful Non-Cleaner")
+# If neither cleans, they both live in a messy environment.
+messy = g.add_outcome([0, 0], label="Messy")
+
+# Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], harmonious)
+g.set_outcome(g.root.children[0].children[1], resentful_cleaner)
+g.set_outcome(g.root.children[1].children[0], resentful_non_cleaner)
+g.set_outcome(g.root.children[1].children[1], messy)
+
+# Save the EFG
+efg = g.write(format='native')
+```

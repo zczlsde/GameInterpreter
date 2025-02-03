@@ -1,0 +1,60 @@
+```python
+# Importing pygambit is assumed as a prerequisite to using its API, but it's not included in the code block as per instructions.
+
+# Step 1: Initialize the game with two players, Alice and Bob.
+# This step involves creating the game structure and is not part of the code block for setting information sets.
+
+# Step 2: Append a chance move for the initial card distribution.
+# This step involves appending a chance node for the card distribution to Alice and Bob, which is not directly related to setting information sets.
+
+# Step 3: Append moves for Alice based on the card she observes.
+# Alice has two possible actions (Bet or Not Bet) after observing her card. This step is crucial for understanding the game flow but not directly related to setting information sets.
+
+# Step 4: Identify and set information sets for Bob.
+# Since Bob does not know Alice's card, his decision nodes after Alice decides to Bet need to be grouped in the same information set.
+# However, in this game description, Bob does not make a decision after Alice; the outcome is directly determined by the cards and Alice's action.
+# Therefore, there's no need to set information sets for Bob's decisions in this specific game setup.
+
+# Conclusion: In this game description, there are no explicit decision nodes for Bob that require grouping into information sets based on the provided instructions.
+# The game's outcome is directly determined by Alice's decision and the chance outcomes (cards dealt), without a subsequent decision by Bob that would necessitate grouping nodes into information sets.
+# Hence, there's no code block required for setting information sets for Bob's decisions in this scenario.
+
+# Note: If the game description included Bob making decisions based on Alice's actions without knowing her card, then we would group those decision nodes into information sets accordingly.
+```
+
+Given the game description of Rock, Paper, Scissors, we need to model this as an extensive-form game using the PyGambit library. Since both players reveal their choices simultaneously, we model this by introducing a chance move that represents all possible outcomes of the game. This approach simulates the simultaneous move aspect by having a chance node decide the outcome based on the probabilities of each player choosing rock, paper, or scissors. Here's how you can do it:
+
+```python
+import pygambit as gbt
+
+# Step 1: Create the game with two players
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Rock, Paper, Scissors Game")
+
+# Step 2: Append a chance move to represent the simultaneous choice of rock, paper, or scissors by both players
+# There are 9 possible outcomes when both players simultaneously choose rock, paper, or scissors
+actions = ["Rock-Rock", "Rock-Paper", "Rock-Scissors", 
+           "Paper-Rock", "Paper-Paper", "Paper-Scissors", 
+           "Scissors-Rock", "Scissors-Paper", "Scissors-Scissors"]
+g.append_move(g.root, g.players.chance, actions)
+
+# Since it's a symmetric game, each outcome has an equal probability of occurring
+probabilities = [gbt.Rational(1, 9) for _ in actions]  # Equal probability for each outcome
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Step 3: Set outcomes based on the game rules
+# Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# Payoffs are set such that winning yields +1, losing yields -1, and a tie yields 0 for both players
+outcomes = {
+    "Rock-Rock": [0, 0], "Rock-Paper": [-1, 1], "Rock-Scissors": [1, -1],
+    "Paper-Rock": [1, -1], "Paper-Paper": [0, 0], "Paper-Scissors": [-1, 1],
+    "Scissors-Rock": [-1, 1], "Scissors-Paper": [1, -1], "Scissors-Scissors": [0, 0]
+}
+
+for i, action in enumerate(actions):
+    g.set_outcome(g.root.children[i], g.add_outcome(outcomes[action]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representation of Rock, Paper, Scissors. It starts by defining the game and its players. Then, it introduces a chance node with all possible outcomes of the simultaneous move game. Each outcome is assigned a probability, reflecting the equal chance of each pair of actions being chosen. Finally, the outcomes are set based on the rules of Rock, Paper, Scissors, with payoffs assigned to reflect wins, losses, and ties.

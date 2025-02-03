@@ -1,0 +1,51 @@
+```python
+# Step-by-step thought process:
+# 1. This is a simultaneous move game where both friends decide at the same time.
+# 2. To model this game with a sequential structure, assume one friend moves first and the other moves second.
+# 3. The starting node, g.root, is the decision node for the first friend.
+# 4. The first friend has two actions: attend the rock concert or the jazz festival.
+# 5. The second friend's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first friend's actions.
+# 6. Since the second friend does not know the first friend's choice, these decision nodes should be grouped in the same information set.
+
+# Set the information set for the second friend's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: RockFan and JazzFan
+g = gbt.Game.new_tree(players=["RockFan", "JazzFan"],
+                      title="Music Event Decision Game")
+
+# Step 1: Assume RockFan moves first and decides between Rock and Jazz
+g.append_move(g.root, "RockFan", ["Rock", "Jazz"])
+
+# Step 2: JazzFan moves second, but does not know RockFan's choice
+# JazzFan's decision nodes are g.root.children[0] and g.root.children[1]
+g.append_move(g.root.children[0], "JazzFan", ["Rock", "Jazz"])
+g.append_move(g.root.children[1], "JazzFan", ["Rock", "Jazz"])
+
+# Step 3: Set the information set for JazzFan's decision nodes
+# This models the imperfect information where JazzFan does not know RockFan's choice
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the payoffs for each outcome
+# If both choose Rock, RockFan gets a higher payoff, JazzFan gets a lower payoff
+rock_rock_outcome = g.add_outcome([2, 1], label="Both choose Rock")
+
+# If both choose Jazz, JazzFan gets a higher payoff, RockFan gets a lower payoff
+jazz_jazz_outcome = g.add_outcome([1, 2], label="Both choose Jazz")
+
+# If they choose different events, both get no payoff
+different_outcome = g.add_outcome([0, 0], label="Different events")
+
+# Step 5: Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], rock_rock_outcome)  # Both choose Rock
+g.set_outcome(g.root.children[0].children[1], different_outcome)  # RockFan chooses Rock, JazzFan chooses Jazz
+g.set_outcome(g.root.children[1].children[0], different_outcome)  # RockFan chooses Jazz, JazzFan chooses Rock
+g.set_outcome(g.root.children[1].children[1], jazz_jazz_outcome)  # Both choose Jazz
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,13 @@
+EFG 2 R "Rock-Paper-Scissors" { "Player 1" "Player 2" }
+""
+
+c "" 1 "" { "P1_Rock_P2_Rock" 1/9 "P1_Rock_P2_Paper" 1/9 "P1_Rock_P2_Scissors" 1/9 "P1_Paper_P2_Rock" 1/9 "P1_Paper_P2_Paper" 1/9 "P1_Paper_P2_Scissors" 1/9 "P1_Scissors_P2_Rock" 1/9 "P1_Scissors_P2_Paper" 1/9 "P1_Scissors_P2_Scissors" 1/9 } 0
+t "" 1 "P1 Rock vs P2 Rock" { 1, -1 }
+t "" 2 "P1 Rock vs P2 Paper" { -1, 1 }
+t "" 3 "P1 Rock vs P2 Scissors" { 1, -1 }
+t "" 4 "P1 Paper vs P2 Rock" { 1, -1 }
+t "" 5 "P1 Paper vs P2 Paper" { 0, 0 }
+t "" 6 "P1 Paper vs P2 Scissors" { -1, 1 }
+t "" 7 "P1 Scissors vs P2 Rock" { -1, 1 }
+t "" 8 "P1 Scissors vs P2 Paper" { 1, -1 }
+t "" 9 "P1 Scissors vs P2 Scissors" { 0, 0 }

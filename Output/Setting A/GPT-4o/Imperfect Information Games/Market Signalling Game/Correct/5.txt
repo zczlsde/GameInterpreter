@@ -1,0 +1,51 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: New Manufacturer and Existing Manufacturer
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game with Signaling")
+
+# Step 1: The strength of the new manufacturer is determined by chance
+# The chance node has two outcomes: Strong (S) with probability 2/3 and Weak (W) with probability 1/3
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: The new manufacturer sends a signal, either Strong (S) or Weak (W)
+# This move is made by the New Manufacturer
+g.append_move(g.root.children[0], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+g.append_move(g.root.children[1], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# Step 3: The existing manufacturer observes the signal and decides to either Fight (F) or Accommodate (A)
+# This move is made by the Existing Manufacturer
+g.append_move(g.root.children[0].children[0], "Existing Manufacturer", ["Fight", "Accommodate"])
+g.append_move(g.root.children[0].children[1], "Existing Manufacturer", ["Fight", "Accommodate"])
+g.append_move(g.root.children[1].children[0], "Existing Manufacturer", ["Fight", "Accommodate"])
+g.append_move(g.root.children[1].children[1], "Existing Manufacturer", ["Fight", "Accommodate"])
+
+# Step 4: Set the information sets for the Existing Manufacturer
+# The Existing Manufacturer cannot distinguish between the actual strength of the New Manufacturer, only the signal
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Step 5: Set the payoffs for each outcome
+# Payoffs are set according to the game description
+
+# Strong Manufacturer, Strong Signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong, Strong Signal, Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong, Strong Signal, Accommodate"))
+
+# Strong Manufacturer, Weak Signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong, Weak Signal, Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong, Weak Signal, Accommodate"))
+
+# Weak Manufacturer, Strong Signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak, Strong Signal, Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak, Strong Signal, Accommodate"))
+
+# Weak Manufacturer, Weak Signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak, Weak Signal, Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak, Weak Signal, Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Imperfect Information Game" { "Player 1" "Player 2" }
+""
+
+c "" 1 "" { "S" 1/2 "C" 1/2 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both choose S" { 3, 2 }
+t "" 2 "Player 1 chooses S, Player 2 chooses C" { 1, 0 }
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "Player 1 chooses C, Player 2 chooses S" { 4, 1 }
+t "" 4 "Both choose C" { -1, -1 }

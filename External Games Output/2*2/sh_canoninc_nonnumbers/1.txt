@@ -1,0 +1,53 @@
+```python
+# Step-by-step thought process:
+
+# 1. In the Stag Hunt game, both hunters (players) must decide simultaneously whether to collaborate or act independently.
+# 2. This simultaneous decision-making introduces imperfect information, as each player does not know the other's choice.
+# 3. To model this in a sequential structure, we can assume one player moves first, and the other moves second.
+# 4. Let's assume Player 1 moves first and Player 2 moves second.
+# 5. Player 1's decision node is at g.root, with actions "Collaborate" and "Act Independently".
+# 6. Player 2's decision nodes are g.root.children[0] (if Player 1 collaborates) and g.root.children[1] (if Player 1 acts independently).
+# 7. Since Player 2 does not know Player 1's choice, Player 2's decision nodes should be grouped in the same information set.
+
+# Group Player 2's decision nodes in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Hunter 1 and Hunter 2
+g = gbt.Game.new_tree(players=["Hunter 1", "Hunter 2"], title="Stag Hunt Game")
+
+# Step 1: Assume Hunter 1 moves first. Hunter 1 has two actions: "Collaborate" and "Act Independently".
+g.append_move(g.root, "Hunter 1", ["Collaborate", "Act Independently"])
+
+# Step 2: Hunter 2 moves after Hunter 1. Hunter 2 also has two actions: "Collaborate" and "Act Independently".
+# Hunter 2's decision nodes are g.root.children[0] (if Hunter 1 collaborates) and g.root.children[1] (if Hunter 1 acts independently).
+g.append_move(g.root.children[0], "Hunter 2", ["Collaborate", "Act Independently"])
+g.append_move(g.root.children[1], "Hunter 2", ["Collaborate", "Act Independently"])
+
+# Step 3: Since Hunter 2 does not know Hunter 1's choice, Hunter 2's decision nodes should be grouped in the same information set.
+# Group Hunter 2's decision nodes in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes for each possible combination of actions.
+# If both collaborate, they each receive a large reward.
+collaborate_outcome = g.add_outcome([3, 3], label="Both Collaborate")
+
+# If one collaborates and the other acts independently, the collaborator gets nothing and the independent hunter gets a moderate reward.
+independent_outcome_h1 = g.add_outcome([0, 2], label="Hunter 1 Collaborates, Hunter 2 Acts Independently")
+independent_outcome_h2 = g.add_outcome([2, 0], label="Hunter 1 Acts Independently, Hunter 2 Collaborates")
+
+# If both act independently, they each receive a small reward.
+independent_both_outcome = g.add_outcome([1, 1], label="Both Act Independently")
+
+# Step 5: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], collaborate_outcome)  # Both collaborate
+g.set_outcome(g.root.children[0].children[1], independent_outcome_h1)  # Hunter 1 collaborates, Hunter 2 acts independently
+g.set_outcome(g.root.children[1].children[0], independent_outcome_h2)  # Hunter 1 acts independently, Hunter 2 collaborates
+g.set_outcome(g.root.children[1].children[1], independent_both_outcome)  # Both act independently
+
+# Save the EFG
+efg = g.write(format='native')
+```

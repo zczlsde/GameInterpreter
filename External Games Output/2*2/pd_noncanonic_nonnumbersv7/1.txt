@@ -1,0 +1,66 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Country 1 and Country 2, who must decide simultaneously whether to comply or not comply with the treaty.
+
+# Step 2: Recognize the simultaneous nature of the game.
+# Since both countries make their decisions simultaneously, this game involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Country 1 moves first and Country 2 moves second.
+
+# Step 4: Define the decision nodes.
+# The starting node, g.root, is Country 1's decision node.
+# Country 1 has two actions: Comply and Not Comply.
+# Country 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Country 1's actions Comply and Not Comply.
+
+# Step 5: Group Country 2's decision nodes in the same information set.
+# Since Country 2 cannot distinguish between Country 1's actions, Country 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Country 1 and Country 2.
+g = gbt.Game.new_tree(players=["Country 1", "Country 2"],
+                      title="Disarmament Treaty Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Country 1 moves first and Country 2 moves second.
+
+# Step 3: Define the decision nodes for Country 1.
+# Country 1 has two actions: Comply and Not Comply.
+g.append_move(g.root, "Country 1", ["Comply", "Not Comply"])
+
+# Step 4: Define the decision nodes for Country 2.
+# Country 2's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to Country 1's actions Comply and Not Comply.
+g.append_move(g.root.children[0], "Country 2", ["Comply", "Not Comply"])
+g.append_move(g.root.children[1], "Country 2", ["Comply", "Not Comply"])
+
+# Step 5: Group Country 2's decision nodes in the same information set.
+# Since Country 2 cannot distinguish between Country 1's actions, Country 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each terminal node.
+# If both comply, they ensure regional stability and mutual trust.
+both_comply = g.add_outcome([1, 1], label="Both Comply")
+
+# If one complies and the other doesn't, the compliant country feels betrayed and vulnerable,
+# while the non-compliant one gains a strategic advantage.
+country1_complies = g.add_outcome([-1, 2], label="Country 1 Complies, Country 2 Doesn't")
+country2_complies = g.add_outcome([2, -1], label="Country 2 Complies, Country 1 Doesn't")
+
+# If neither complies, they both continue an arms race, increasing tensions and risks of conflict.
+neither_comply = g.add_outcome([0, 0], label="Neither Comply")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], both_comply)
+g.set_outcome(g.root.children[0].children[1], country1_complies)
+g.set_outcome(g.root.children[1].children[0], country2_complies)
+g.set_outcome(g.root.children[1].children[1], neither_comply)
+
+# Save the EFG
+efg = g.write(format='native')
+```

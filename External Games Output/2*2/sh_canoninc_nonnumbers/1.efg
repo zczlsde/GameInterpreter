@@ -1,0 +1,10 @@
+EFG 2 R "Stag Hunt Game" { "Hunter 1" "Hunter 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Act Independently" } 0
+p "" 2 1 "" { "Collaborate" "Act Independently" } 0
+t "" 1 "Both Collaborate" { 3, 3 }
+t "" 2 "Hunter 1 Collaborates, Hunter 2 Acts Independently" { 0, 2 }
+p "" 2 1 "" { "Collaborate" "Act Independently" } 0
+t "" 3 "Hunter 1 Acts Independently, Hunter 2 Collaborates" { 2, 0 }
+t "" 4 "Both Act Independently" { 1, 1 }

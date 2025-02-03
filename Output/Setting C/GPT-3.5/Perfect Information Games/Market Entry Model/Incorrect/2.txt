@@ -1,0 +1,69 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                      title="Monopolist vs Potential Competitor Game")
+
+# Append the moves for Firm 2 at the root node
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Append the moves for Firm 1 based on Firm 2's decision to enter or stay out
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+g.append_move(g.root.children[1], "Firm 1", ["Fight", "Accommodate"])
+
+# Group the decision nodes of Firm 1 based on the same action of Firm 2 (Enter or Stay Out)
+# Firm 1 cannot distinguish between Firm 2 entering and Firm 2 staying out
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Output the necessary set_infoset() functions
+```
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                      title="Monopolist vs Potential Competitor Game")
+
+# Append the moves for Firm 2 at the root node
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Append the moves for Firm 1 based on Firm 2's decision to enter or stay out
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+g.append_move(g.root.children[1], "Firm 1", ["Fight", "Accommodate"])
+
+# Group the decision nodes of Firm 1 based on the same action of Firm 2 (Enter or Stay Out)
+# Firm 1 cannot distinguish between Firm 2 entering and Firm 2 staying out
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Output the necessary set_infoset() functions
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                      title="Monopolist vs Potential Competitor Game")
+
+# Append the moves for Firm 2 at the root node
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Append the moves for Firm 1 based on Firm 2's decision to enter or stay out
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+g.append_move(g.root.children[1], "Firm 1", ["Fight", "Accommodate"])
+
+# Group the decision nodes of Firm 1 based on the same action of Firm 2 (Enter or Stay Out)
+# Firm 1 cannot distinguish between Firm 2 entering and Firm 2 staying out
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Output the necessary set_infoset() functions

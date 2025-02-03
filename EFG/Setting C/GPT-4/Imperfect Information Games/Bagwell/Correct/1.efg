@@ -1,0 +1,18 @@
+EFG 2 R "Imperfect Information Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Correct Interpretation" 99/100 "Misinterpretation" 1/100 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 1 "" { 4, 1 }
+t "" 2 "" { 2, 0 }
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "" { 4, 1 }
+t "" 4 "" { 2, 0 }
+c "" 2 "" { "Correct Interpretation" 99/100 "Misinterpretation" 1/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 5 "" { 5, 2 }
+t "" 6 "" { 3, 3 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 7 "" { 5, 2 }
+t "" 8 "" { 3, 3 }

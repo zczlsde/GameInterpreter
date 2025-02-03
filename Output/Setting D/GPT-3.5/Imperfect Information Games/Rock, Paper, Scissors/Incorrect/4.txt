@@ -1,0 +1,81 @@
+```python
+# Set the information set for the game described below
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Card game between Alice and Bob")
+
+# Step 2: Add a chance node for Nature drawing a card for Alice and Bob
+g.append_move(g.root, g.players.chance, ["Jack", "Queen", "King"])
+
+# Step 3: Group the same card situations for Alice in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # JQ and JK
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # QJ and QK
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # KJ and KQ
+```
+
+```python
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Rock-paper-scissors game between Alice and Bob")
+
+# Step 2: Add a chance node for Nature drawing a symbol for Alice and Bob
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Step 3: Group the same symbol situations for Alice in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Rock and Paper
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Rock and Scissors
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Paper and Scissors
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Rock-paper-scissors game between Alice and Bob")
+
+# Step 2: Add a chance node for Nature drawing a symbol for Alice and Bob
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Step 3: Group the same symbol situations for Alice in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Rock and Paper
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Rock and Scissors
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Paper and Scissors
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Rock-paper-scissors game between Alice and Bob")
+
+# Step 2: Add a chance node for Nature drawing a symbol for Alice and Bob
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Step 3: Group the same symbol situations for Alice in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Rock and Paper
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Rock and Scissors
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Paper and Scissors
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Rock-paper-scissors game between Alice and Bob")
+
+# Step 2: Add a chance node for Nature drawing a symbol for Alice and Bob
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Step 3: Group the same symbol situations for Alice in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Rock and Paper
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Rock and Scissors
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Paper and Scissors

@@ -1,0 +1,10 @@
+EFG 2 R "Conservation Collaboration Game" { "Organization 1" "Organization 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Work Independently" } 0
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 1 "High Reward" { 3, 3 }
+t "" 2 "Moderate Reward for Org 2" { 0, 2 }
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 3 "Moderate Reward for Org 1" { 2, 0 }
+t "" 4 "Small Success" { 1, 1 }

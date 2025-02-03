@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Country 1 and Country 2. They can either Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# Since the players are making decisions simultaneously, this involves imperfect information.
+# To model this in a sequential structure, assume Country 1 moves first and Country 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Country 1's decision node.
+# Country 1 has two actions, Compromise and Hold Firm.
+# Country 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Country 1's actions Compromise and Hold Firm.
+
+# Step 4: Group the decision nodes into information sets.
+# Country 2, moving simultaneously, does not know which action Country 1 has taken.
+# Therefore, Country 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Country 1 and Country 2. They can either Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# Since the players are making decisions simultaneously, this involves imperfect information.
+# To model this in a sequential structure, assume Country 1 moves first and Country 2 moves second.
+
+# Create a new extensive-form game with two players: Country 1 and Country 2.
+g = gbt.Game.new_tree(players=["Country 1", "Country 2"],
+                      title="International Environmental Policy Negotiation")
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Country 1's decision node.
+# Country 1 has two actions, Compromise and Hold Firm.
+g.append_move(g.root, "Country 1", ["Compromise", "Hold Firm"])
+
+# Country 2's decision nodes are g.root.children[0] and g.root.children[1], 
+# which correspond to Country 1's actions Compromise and Hold Firm.
+g.append_move(g.root.children[0], "Country 2", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Country 2", ["Compromise", "Hold Firm"])
+
+# Step 4: Group the decision nodes into information sets.
+# Country 2, moving simultaneously, does not know which action Country 1 has taken.
+# Therefore, Country 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and payoffs.
+# If both compromise, a balanced environmental policy is established.
+balanced_policy = g.add_outcome([1, 1], label="Balanced Policy")
+
+# If one country holds firm and the other compromises, the firm holder benefits more.
+country1_benefits = g.add_outcome([2, 0], label="Country 1 Benefits")
+country2_benefits = g.add_outcome([0, 2], label="Country 2 Benefits")
+
+# If both hold firm, no agreement is reached, exacerbating environmental degradation.
+no_agreement = g.add_outcome([-1, -1], label="No Agreement")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], balanced_policy)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], country2_benefits)  # Country 1 Compromise, Country 2 Hold Firm
+g.set_outcome(g.root.children[1].children[0], country1_benefits)  # Country 1 Hold Firm, Country 2 Compromise
+g.set_outcome(g.root.children[1].children[1], no_agreement)  # Both Hold Firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Industrial Espionage Game" { "Corporation 1" "Corporation 2" }
+""
+
+p "" 1 1 "" { "Engage" "Refrain" } 0
+p "" 2 1 "" { "Engage" "Refrain" } 0
+t "" 1 "Both Engage" { 2, 2 }
+t "" 2 "Corp 1 Engages" { 7, 1 }
+p "" 2 1 "" { "Engage" "Refrain" } 0
+t "" 3 "Corp 2 Engages" { 1, 7 }
+t "" 4 "Neither Engages" { 5, 5 }

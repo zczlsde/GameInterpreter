@@ -1,0 +1,9 @@
+EFG 2 R "Market Entry Game" { "Firm 1" "Firm 2" }
+""
+
+p "" 2 1 "" { "Enter" "Stay Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 3 "Fight" { 1, 3 }
+t "" 2 "Accommodate" { 2, 2 }
+t "" 1 "Stay Out" { 3, 0 }
+

@@ -1,0 +1,18 @@
+Certainly! Below is the EFG representation of the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky?" { "Alexis" "Beverley" }
+p "" 1 1 "" { "Bach" "Stravinsky" } 0
+p "" 2 1 "" { "Bach" "Stravinsky" } 0
+t "" 1 "Bach-Bach" { 2, 1 }
+t "" 2 "Bach-Stravinsky" { 0, 0 }
+t "" 3 "Stravinsky-Bach" { 0, 0 }
+t "" 4 "Stravinsky-Stravinsky" { 1, 2 }
+```
+
+Explanation:
+- The game involves two players, Alexis and Beverley.
+- Both players make their decisions simultaneously and independently.
+- The payoffs are structured such that if both choose Bach, Alexis (the Bach lover) gets a higher payoff (2) and Beverley gets a lower payoff (1).
+- If both choose Stravinsky, Beverley (the Stravinsky lover) gets a higher payoff (2) and Alexis gets a lower payoff (1).
+- If they choose different concerts, both receive a payoff of 0.

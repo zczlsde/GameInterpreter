@@ -1,0 +1,10 @@
+EFG 2 R "Leader-Follower game with misinterpretation" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "SS" { 3, 2 }
+t "" 2 "SC" { 1, 0 }
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "CS" { 4, 1 }
+t "" 4 "CC" { -1, -1 }

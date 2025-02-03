@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each with two actions: AI or Blockchain.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous, meaning both players make their decisions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one player moves first and the other moves second to represent the simultaneous nature.
+
+# Step 4: Identify the decision nodes for each player.
+# The first player has a decision node at the root, and the second player has decision nodes corresponding to each action of the first player.
+
+# Step 5: Group the decision nodes of the second player in the same information set.
+# Since the second player does not know the first player's action, their decision nodes should be in the same information set.
+
+# Set the information set for the second player's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: AI Proponent and Blockchain Proponent.
+g = gbt.Game.new_tree(players=["AI Proponent", "Blockchain Proponent"],
+                      title="Tech Startup Partnership Game")
+
+# Step 2: Model the game as a sequential game to represent the simultaneous nature.
+# Assume AI Proponent moves first and Blockchain Proponent moves second.
+
+# Step 3: Add moves for the AI Proponent at the root node.
+g.append_move(g.root, "AI Proponent", ["AI", "Blockchain"])
+
+# Step 4: Add moves for the Blockchain Proponent at each of the AI Proponent's decision nodes.
+g.append_move(g.root.children[0], "Blockchain Proponent", ["AI", "Blockchain"])
+g.append_move(g.root.children[1], "Blockchain Proponent", ["AI", "Blockchain"])
+
+# Step 5: Set the information set for the Blockchain Proponent's decision nodes.
+# Since the Blockchain Proponent does not know the AI Proponent's action, their decision nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the payoffs for each outcome.
+# If both choose AI, AI Proponent gets a higher payoff.
+ai_wins = g.add_outcome([2, 1], label="AI Project")
+# If both choose Blockchain, Blockchain Proponent gets a higher payoff.
+blockchain_wins = g.add_outcome([1, 2], label="Blockchain Project")
+# If they choose different projects, both get no payoff.
+no_payoff = g.add_outcome([0, 0], label="No Collaboration")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], ai_wins)  # Both choose AI
+g.set_outcome(g.root.children[0].children[1], no_payoff)  # AI Proponent chooses AI, Blockchain Proponent chooses Blockchain
+g.set_outcome(g.root.children[1].children[0], no_payoff)  # AI Proponent chooses Blockchain, Blockchain Proponent chooses AI
+g.set_outcome(g.root.children[1].children[1], blockchain_wins)  # Both choose Blockchain
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,14 @@
+EFG 2 R "Coin Doubling Game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+p "" 2 1 "" { "Take" "Push" } 0
+p "" 1 2 "" { "Take" "Push" } 0
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 }
+t "" 2 "Alice takes 2, Bob takes 8" { 2, 8 }
+t "" 3 "Alice takes 8, Bob takes 2" { 8, 2 }
+t "" 4 "Alice takes 4, Bob takes 16" { 4, 16 }
+t "" 5 "Alice takes 16, Bob takes 4" { 16, 4 }
+t "" 6 "Alice takes 8, Bob takes 32" { 8, 32 }
+t "" 7 "Alice takes 32, Bob takes 8" { 32, 8 }
+t "" 8 "Alice takes 16, Bob takes 64" { 16, 64 }
+t "" 9 "Alice takes 64, Bob takes 16" { 64, 16 }

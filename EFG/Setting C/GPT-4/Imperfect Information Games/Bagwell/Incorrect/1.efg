@@ -1,0 +1,18 @@
+EFG 2 R "Imperfect Information Game" { "Leader" "Follower" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "S_correct" 99/100 "S_misinterpreted" 1/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "SS" { 5, 2 }
+t "" 2 "SC" { 3, 1 }
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "SS_mis" { 5, 2 }
+t "" 4 "SC_mis" { 3, 1 }
+c "" 2 "" { "C_correct" 99/100 "C_misinterpreted" 1/100 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 5 "CS" { 6, 3 }
+t "" 6 "CC" { 4, 4 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 7 "CS_mis" { 6, 3 }
+t "" 8 "CC_mis" { 4, 4 }

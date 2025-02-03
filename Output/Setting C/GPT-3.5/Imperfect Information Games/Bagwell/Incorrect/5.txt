@@ -1,0 +1,73 @@
+```python
+# Step 1: Create a new game tree with two players, Player 1 and Player 2
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Leader-Follower game with misinterpretation")
+
+# Step 2: Add the initial decision node for Player 1 with actions "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Step 3: Add the decision node for Player 2 after Player 1's action
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Step 4: Set the information set for Player 2's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome
+payoff_A = 3
+payoff_B = 2
+payoff_W = 1
+payoff_D = 0
+payoff_E = 4
+payoff_F = -1
+
+# Step 6: Add outcomes for all possible combinations of Player 1 and Player 2 actions
+outcome_SS = g.add_outcome([payoff_A, payoff_B], label="SS")
+outcome_SC = g.add_outcome([payoff_W, payoff_D], label="SC")
+outcome_CS = g.add_outcome([payoff_E, payoff_W], label="CS")
+outcome_CC = g.add_outcome([payoff_F, payoff_F], label="CC")
+
+# Step 7: Set outcomes for each combination of actions
+g.set_outcome(g.root.children[0].children[0], outcome_SS)
+g.set_outcome(g.root.children[0].children[1], outcome_SC)
+g.set_outcome(g.root.children[1].children[0], outcome_CS)
+g.set_outcome(g.root.children[1].children[1], outcome_CC)
+```
+
+```python
+# Step 1: Create a new game tree with two players, Player 1 and Player 2
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Leader-Follower game with misinterpretation")
+
+# Step 2: Add the initial decision node for Player 1 with actions "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Step 3: Add the decision node for Player 2 after Player 1's action
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Step 4: Set the information set for Player 2's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome
+payoff_A = 3
+payoff_B = 2
+payoff_W = 1
+payoff_D = 0
+payoff_E = 4
+payoff_F = -1
+
+# Step 6: Add outcomes for all possible combinations of Player 1 and Player 2 actions
+outcome_SS = g.add_outcome([payoff_A, payoff_B], label="SS")
+outcome_SC = g.add_outcome([payoff_W, payoff_D], label="SC")
+outcome_CS = g.add_outcome([payoff_E, payoff_W], label="CS")
+outcome_CC = g.add_outcome([payoff_F, payoff_F], label="CC")
+
+# Step 7: Set outcomes for each combination of actions
+g.set_outcome(g.root.children[0].children[0], outcome_SS)
+g.set_outcome(g.root.children[0].children[1], outcome_SC)
+g.set_outcome(g.root.children[1].children[0], outcome_CS)
+g.set_outcome(g.root.children[1].children[1], outcome_CC)
+```

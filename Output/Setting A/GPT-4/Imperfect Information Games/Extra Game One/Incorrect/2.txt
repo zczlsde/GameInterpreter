@@ -1,0 +1,201 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses among D, E, or F after Player 1's choice
+# For action A, Player 2 knows the action taken
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# For actions B and C, Player 2 does not know which was taken
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Since Player 2 cannot distinguish between B and C, we group them into the same information set
+# Use the identical code for setting the information set as instructed
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 chooses between G and H
+# We need to append moves for both D and E choices leading to G and H for all initial choices of Player 1
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.append_move(g.root.children[i].children[j], "Player 1", ["G", "H"])
+
+# Setting outcomes for the game
+# For choice F, the game ends
+for i in range(3):  # For each of Player 1's initial choices
+    g.set_outcome(g.root.children[i].children[2], g.add_outcome([0, 0], label="End with F"))
+
+# For choice H, Player 1 gets 2, Player 2 gets -1
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.set_outcome(g.root.children[i].children[j].children[1], g.add_outcome([2, -1], label="End with H"))
+
+# For choice G, Player 2 decides between Q and W
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.append_move(g.root.children[i].children[j].children[0], "Player 2", ["Q", "W"])
+
+# Setting outcomes for choices Q and W
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.set_outcome(g.root.children[i].children[j].children[0].children[0], g.add_outcome([3, 3], label="Both choose Q"))
+        g.set_outcome(g.root.children[i].children[j].children[0].children[1], g.add_outcome([0, 0], label="Both choose W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's decision depends on Player 1's action
+# For action A, Player 2 has a distinct decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# For actions B and C, Player 2's decision nodes are indistinguishable
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Grouping B and C's follow-up decisions into the same information set
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 chooses between G and H
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Only for D and E choices
+        g.append_move(grandchild, "Player 1", ["G", "H"])
+
+# Setting outcomes for choosing F, H, Q, and W
+# For F, game ends immediately
+for child in g.root.children:
+    g.set_outcome(child.children[2], g.add_outcome([0, 0], label="F chosen"))
+
+# For H, Player 1 gets 2, Player 2 gets -1
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Only for D and E choices
+        g.set_outcome(grandchild.children[1], g.add_outcome([2, -1], label="H chosen"))
+
+# For G, Player 2 decides between Q and W
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Only for D and E choices
+        g.append_move(grandchild.children[0], "Player 2", ["Q", "W"])
+        # Setting outcomes for Q and W
+        g.set_outcome(grandchild.children[0].children[0], g.add_outcome([3, 3], label="Q chosen"))
+        g.set_outcome(grandchild.children[0].children[1], g.add_outcome([0, 0], label="W chosen"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's decision depends on Player 1's action
+# For action A, Player 2 has a distinct decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# For actions B and C, Player 2's decision nodes are indistinguishable
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Grouping B and C's follow-up nodes into the same information set for Player 2
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, then Player 1 decides between G and H
+# Adding moves for Player 1 after Player 2 chooses D or E
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Exclude the F option which ends the game
+        g.append_move(grandchild, "Player 1", ["G", "H"])
+
+# Final decisions and outcomes
+# If Player 2 chooses F, the game ends with specific payoffs
+for child in g.root.children:
+    g.set_outcome(child.children[2], g.add_outcome([0, 0], label="F chosen"))
+
+# If Player 1 chooses H after D or E
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Exclude the F option
+        g.set_outcome(grandchild.children[1], g.add_outcome([2, -1], label="H chosen"))
+
+# If Player 1 chooses G, then Player 2 decides between Q and W with respective outcomes
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # Exclude the F option
+        g.append_move(grandchild.children[0], "Player 2", ["Q", "W"])
+        g.set_outcome(grandchild.children[0].children[0], g.add_outcome([3, 3], label="Q chosen"))
+        g.set_outcome(grandchild.children[0].children[1], g.add_outcome([0, 0], label="W chosen"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's decision based on Player 1's action
+# Player 2 knows when A was chosen but cannot distinguish between B and C
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])  # After A
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])  # After B
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])  # After C
+
+# Group B and C into the same information set for Player 2
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 chooses between G and H
+# Append moves for Player 1 after Player 2 chooses D or E
+for child in g.root.children:  # For each of Player 1's initial choices (A, B, C)
+    for grandchild in child.children[:2]:  # For Player 2's choices D and E (excluding F)
+        g.append_move(grandchild, "Player 1", ["G", "H"])
+
+# Setting outcomes for F, H, and after G (Q and W)
+# For F, game ends immediately
+for child in g.root.children:
+    g.set_outcome(child.children[2], g.add_outcome([0, 0], label="F ends game"))
+
+# For H, Player 1 gets 2, Player 2 gets -1
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # For D and E
+        g.set_outcome(grandchild.children[1], g.add_outcome([2, -1], label="H chosen"))
+
+# For G, Player 2 decides between Q and W
+for child in g.root.children:
+    for grandchild in child.children[:2]:  # For D and E
+        g.append_move(grandchild.children[0], "Player 2", ["Q", "W"])
+        # Set outcomes for Q and W
+        g.set_outcome(grandchild.children[0].children[0], g.add_outcome([3, 3], label="Q chosen"))
+        g.set_outcome(grandchild.children[0].children[1], g.add_outcome([0, 0], label="W chosen"))
+
+# Save the EFG
+efg = g.write(format='native')

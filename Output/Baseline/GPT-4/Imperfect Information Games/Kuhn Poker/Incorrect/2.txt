@@ -1,0 +1,22 @@
+Given the complexity of the game described, the EFG representation will be quite extensive. Here's a simplified version of the EFG representation for the game:
+
+```
+EFG 2 R "Three-card game between Alice and Bob" { "Alice" "Bob" }
+c "" 1 "" { "JQ" 1/6 "JK" 1/6 "QJ" 1/6 "QK" 1/6 "KJ" 1/6 "KQ" 1/6 } 0
+p "" 1 1 "" { "Check" "Bet" } 0
+    p "" 2 1 "" { "Check" "Bet" } 0
+        t "" 1 "Higher card wins 1" { 1, -1 }
+        t "" 2 "Higher card wins 1" { -1, 1 }
+    p "" 2 2 "" { "Fold" "Call" } 0
+        t "" 3 "Bob wins 1" { -1, 1 }
+        t "" 4 "Higher card wins 2" { 2, -2 }
+        t "" 5 "Higher card wins 2" { -2, 2 }
+p "" 1 2 "" { "Fold" "Call" } 0
+    t "" 6 "Alice wins 1" { 1, -1 }
+    t "" 7 "Higher card wins 2" { 2, -2 }
+    t "" 8 "Higher card wins 2" { -2, 2 }
+```
+
+This representation simplifies the game's outcomes based on the actions taken by Alice and Bob, without detailing each card's specific outcome. The outcomes are generalized to "Higher card wins 1" or "Higher card wins 2," depending on whether the bet was matched or not, and who initiated the bet. The probabilities for each card allocation (JQ, JK, QJ, QK, KJ, KQ) are set at 1/6, reflecting the chance node at the beginning of the game.
+
+Please note, this representation assumes a simplified view of the payoffs, where the winner takes an additional 1 or 2 from the loser, depending on the betting sequence. The actual payoffs would need to be adjusted based on the specific rules for determining the winner with each card combination.

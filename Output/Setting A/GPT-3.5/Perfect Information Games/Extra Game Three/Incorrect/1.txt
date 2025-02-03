@@ -1,0 +1,229 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4])
+
+# Append Player 1's actions after observing the chance node
+g.append_move(g.root.children[0], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[3], "Player 1", ["E", "F", "G"])
+# Set information set for Player 1's actions
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+g.set_infoset(g.root.children[3], g.root.children[1].infoset)
+
+# Append Player 2's actions after observing Player 1's actions
+g.append_move(g.root.children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[2], "Player 2", ["Q", "W"])
+# Set information set for Player 2's actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[2], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[3].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[3].children[2], g.root.children[0].children[1].infoset)
+
+# Define the outcomes for each combination of actions
+outcome_A_Q = g.add_outcome([1, -1], label="Outcome A: Q")
+outcome_A_W = g.add_outcome([2, -2], label="Outcome A: W")
+outcome_B_Q = g.add_outcome([3, -3], label="Outcome B: Q")
+outcome_B_W = g.add_outcome([-3, 3], label="Outcome B: W")
+outcome_C_Q = g.add_outcome([0, 0], label="Outcome C: Q")
+outcome_C_W = g.add_outcome([-1, 1], label="Outcome C: W")
+outcome_D_Q = g.add_outcome([4, -4], label="Outcome D: Q")
+outcome_D_W = g.add_outcome([-4, 4], label="Outcome D: W")
+
+# Set the outcomes for each action combination
+g.set_outcome(g.root.children[0].children[0].children[0], outcome_A_Q)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome_A_W)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_B_Q)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_B_W)
+g.set_outcome(g.root.children[0].children[2].children[0], outcome_C_Q)
+g.set_outcome(g.root.children[0].children[2].children[1], outcome_C_W)
+g.set_outcome(g.root.children[0].children[3].children[0], outcome_D_Q)
+g.set_outcome(g.root.children[0].children[3].children[1], outcome_D_W)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+closing parenthesis ']' does not match opening parenthesis '(' (<string>, line 11)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4)])
+
+# Append Player 1's actions after observing the chance node
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+# Set information set for Player 1's actions
+for i in range(1, 4):
+    g.set_infoset(g.root.children[0], g.root.children[i].infoset)
+
+# Append Player 2's actions after observing Player 1's actions
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 2", ["Q", "W"])
+# Set information set for Player 2's actions
+for i in range(3):
+    for j in range(1, 4):
+        g.set_infoset(g.root.children[i].children[0], g.root.children[i].children[j].infoset)
+
+# Define the outcomes for each combination of actions
+outcomes = {
+    ("A", "Q"): [1, -1],
+    ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3],
+    ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0],
+    ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4],
+    ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes for each action combination
+for i, node in enumerate(g.root.children):
+    for j, child_node in enumerate(node.children):
+        outcome = g.add_outcome(outcomes[(node.label, child_node.label)], label=f"Outcome {node.label}: {child_node.label}")
+        g.set_outcome(child_node.children[0], outcome)
+        g.set_outcome(child_node.children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4)])
+
+# Append Player 1's actions after observing the chance node
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+# Set information set for Player 1's actions
+for i in range(1, 4):
+    g.set_infoset(g.root.children[0], g.root.children[i].infoset)
+
+# Append Player 2's actions after observing Player 1's actions
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 2", ["Q", "W"])
+# Set information set for Player 2's actions
+for i in range(3):
+    for j in range(1, 4):
+        g.set_infoset(g.root.children[i].children[0], g.root.children[i].children[j].infoset)
+
+# Define the outcomes for each combination of actions
+outcomes = {
+    ("A", "Q"): [1, -1],
+    ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3],
+    ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0],
+    ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4],
+    ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes for each action combination
+for i, node in enumerate(g.root.children):
+    for j, child_node in enumerate(node.children):
+        outcome = g.add_outcome(outcomes[(node.label, child_node.label)], label=f"Outcome {node.label}: {child_node.label}")
+        g.set_outcome(child_node.children[0], outcome)
+        g.set_outcome(child_node.children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4)])
+
+# Append Player 1's actions after observing the chance node
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+# Set information set for Player 1's actions
+for i in range(1, 4):
+    g.set_infoset(g.root.children[0], g.root.children[i].infoset)
+
+# Append Player 2's actions after observing Player 1's actions
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 2", ["Q", "W"])
+# Set information set for Player 2's actions
+for i in range(3):
+    for j in range(1, 4):
+        g.set_infoset(g.root.children[i].children[0], g.root.children[i].children[j].infoset)
+
+# Define the outcomes for each combination of actions
+outcomes = {
+    ("A", "Q"): [1, -1],
+    ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3],
+    ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0],
+    ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4],
+    ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes for each action combination
+for i, node in enumerate(g.root.children):
+    for j, child_node in enumerate(node.children):
+        outcome = g.add_outcome(outcomes[(node.label, child_node.label)], label=f"Outcome {node.label}: {child_node.label}")
+        g.set_outcome(child_node.children[0], outcome)
+        g.set_outcome(child_node.children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')

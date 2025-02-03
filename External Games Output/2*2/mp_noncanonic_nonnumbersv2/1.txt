@@ -1,0 +1,54 @@
+```python
+# Step 1: Both the startup and the major tech corporation make their decisions simultaneously.
+# Step 2: To model this as a sequential game, assume the major tech corporation moves first, and the startup moves second.
+# Step 3: The starting node, g.root, is the major tech corporation's decision node.
+# Step 4: The major tech corporation has two actions: develop product A or product B.
+# Step 5: The startup's decision nodes are g.root.children[0] (if the corporation develops product A) and g.root.children[1] (if the corporation develops product B).
+# Step 6: Since the startup does not know which product the corporation has chosen to develop, the startup's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: the startup and the major tech corporation.
+g = gbt.Game.new_tree(players=["Startup", "Major Tech Corporation"],
+                      title="Product Development Game")
+
+# Step 1: Model the game as a sequential game where the major tech corporation moves first.
+# The major tech corporation has two actions: develop product A or product B.
+g.append_move(g.root, "Major Tech Corporation", ["Develop A", "Develop B"])
+
+# Step 2: The startup makes its decision after the major tech corporation.
+# The startup's decision nodes are g.root.children[0] (if the corporation develops product A)
+# and g.root.children[1] (if the corporation develops product B).
+g.append_move(g.root.children[0], "Startup", ["Develop A", "Develop B"])
+g.append_move(g.root.children[1], "Startup", ["Develop A", "Develop B"])
+
+# Step 3: Since the startup does not know which product the corporation has chosen to develop,
+# the startup's decision nodes should be grouped in the same information set.
+# Use the provided code to handle the imperfect information.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes based on the players' choices.
+# If both develop the same product, the startup profits and the corporation loses market share.
+# If their choices differ, the corporation profits by dominating the market segment.
+
+# Outcomes when both develop the same product
+startup_profits = g.add_outcome([1, -1], label="Startup Profits")
+corporation_profits = g.add_outcome([-1, 1], label="Corporation Profits")
+
+# Set outcomes for each possible combination of actions
+# Both develop A
+g.set_outcome(g.root.children[0].children[0], startup_profits)
+# Startup develops A, Corporation develops B
+g.set_outcome(g.root.children[0].children[1], corporation_profits)
+# Startup develops B, Corporation develops A
+g.set_outcome(g.root.children[1].children[0], corporation_profits)
+# Both develop B
+g.set_outcome(g.root.children[1].children[1], startup_profits)
+
+# Save the EFG
+efg = g.write(format='native')
+```

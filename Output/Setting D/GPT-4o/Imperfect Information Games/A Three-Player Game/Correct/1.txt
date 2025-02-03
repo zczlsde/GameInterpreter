@@ -1,0 +1,68 @@
+```python
+# Step 1: The game starts with a chance node deciding between "A" or "B".
+# Step 2: Player 1 makes a decision between "L" or "R" without knowing the outcome of the chance node.
+# Player 1's decision nodes for "A" and "B" should be in the same information set because Player 1 does not know the chance node's decision.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 3: If Player 1 chooses "L", Player 2 makes a decision between "l" or "r".
+# Player 2 does not know Player 1's decision, so Player 2's decision nodes for "A" and "B" should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Step 4: If Player 2 chooses "l", Player 3 makes a decision between "a" or "b".
+# Player 3 does not know Player 2's decision, so Player 3's decision nodes for "A" and "B" should be in the same information set.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Imperfect Information")
+
+# Step 1: The game starts with a chance node deciding between "A" or "B".
+# The chance node has two outcomes, "A" and "B", each with a probability of 1/2.
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 makes a decision between "L" or "R" without knowing the outcome of the chance node.
+# Append moves for Player 1 at both chance outcomes.
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+g.append_move(g.root.children[1], "Player 1", ["L", "R"])
+
+# Player 1's decision nodes for "A" and "B" should be in the same information set because Player 1 does not know the chance node's decision.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# If Player 1 chooses "R", the game ends with a payoff (1, 1, 1).
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+
+# Step 3: If Player 1 chooses "L", Player 2 makes a decision between "l" or "r".
+# Append moves for Player 2 at both Player 1's "L" outcomes.
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["l", "r"])
+
+# Player 2 does not know Player 1's decision, so Player 2's decision nodes for "A" and "B" should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 2 chooses "r", the game ends with a payoff (2, 2, 2).
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+
+# Step 4: If Player 2 chooses "l", Player 3 makes a decision between "a" or "b".
+# Append moves for Player 3 at both Player 2's "l" outcomes.
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["a", "b"])
+
+# Player 3 does not know Player 2's decision, so Player 3's decision nodes for "A" and "B" should be in the same information set.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# The game ends with a payoff (3, 3, 3) after Player 3's decision.
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Player 3 chooses a"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="Player 3 chooses b"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Player 3 chooses a"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="Player 3 chooses b"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

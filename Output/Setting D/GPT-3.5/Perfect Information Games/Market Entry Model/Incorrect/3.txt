@@ -1,0 +1,109 @@
+```python
+# Step 1: Create a new game tree with two players, Player 1 and Player 2
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Example game with imperfect information")
+
+# Step 2: Add a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Step 3: Add decision nodes for Player 1 after the chance node outcomes
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Step 4: Add decision nodes for Player 2 after Player 1's decisions
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+for node in g.root.children[1].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+for node in g.root.children[2].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+for node in g.root.children[3].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+
+# Step 5: Set the information set for Player 2's decision nodes based on Player 1's decisions
+# Group the decision nodes for Player 2 based on the outcomes of the chance node
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+g.set_infoset(g.root.children[0].children[3], g.root.children[1].children[3].infoset)
+```
+
+```python
+# Step 1: Create a new game tree with two players, Player 1 and Player 2
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Example game with imperfect information")
+
+# Step 2: Add a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Step 3: Add decision nodes for Player 1 after the chance node outcomes
+g.append_move(g.root.children[0], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[3], "Player 1", ["E", "F", "G"])
+
+# Step 4: Add decision nodes for Player 2 after Player 1's decisions
+g.append_move(g.root.children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[3], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[3], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[3], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[2], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[3], "Player 2", ["Q", "W"])
+
+# Step 5: Set the information set for Player 2's decision nodes based on Player 1's decisions
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+g.set_infoset(g.root.children[0].children[3], g.root.children[1].children[3].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[0].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[0].children[2].infoset)
+g.set_infoset(g.root.children[1].children[3], g.root.children[0].children[3].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[3].children[0].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[3].children[1].infoset)
+g.set_infoset(g.root.children[2].children[2], g.root.children[3].children[2].infoset)
+g.set_infoset(g.root.children[2].children[3], g.root.children[3].children[3].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[3].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[3].children[2], g.root.children[2].children[2].infoset)
+g.set_infoset(g.root.children[3].children[3], g.root.children[2].children[3].infoset)
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players, Player 1 and Player 2
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Example game with imperfect information")
+
+# Step 2: Add a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Step 3: Add decision nodes for Player 1 after the chance node outcomes
+g.append_move(g.root.children[0], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[3], "Player 1", ["E", "F", "G"])
+
+# Step 4: Add decision nodes for Player 2 after Player 1's decisions
+for i in range(4):
+    for j in range(3):
+        g.append_move(g.root.children[i].children[j], "Player 2", ["Q", "W"])
+
+# Step 5: Set the information set for Player 2's decision nodes based on Player 1's decisions
+for i in range(4):
+    for j in range(3):
+        g.set_infoset(g.root.children[i].children[j], g.root.children[(i+1)%4].children[j].infoset)

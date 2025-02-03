@@ -1,0 +1,62 @@
+A challenge of this task is to represent the imperfect information in the game with pygambit. Given the game description below, please infer the imperfect information structure in the game. 
+Make sure that if there are multiple decision nodes of a player who cannot tell among these nodes which node they are at, then these nodes are all grouped in the same information set. 
+In short, an information set belongs to a player and should contain all nodes of that player such that the player will know that they are at one of these nodes but they will not know exactly which one they are at.
+
+Example 1:
+
+Game description:
+There are two players in this game. 
+Player 1 and Player 2 move simultaneously. Player 1 has two possible actions: A and B. Player 2 also has two possible actions: X and Y.
+
+Thought process:
+Since the players move simultaneously, this game involves imperfect information. 
+To model the game with a sequential structure, assume Player 2 moves first and Player 1 moves second.
+The starting node, g.root, is Player 2's decision node.
+Player 2 has two actions, X and Y. So, Player 1's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 2's actions X and Y.
+Player 1, moving simultaneously, does not know which action Player 2 has taken. 
+Therefore, Player 1's decision nodes should be grouped in the same information set.
+
+Output:
+```python
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+Example 2:
+Game description:
+There are two players, Alice and Bob. A deck of cards contains an equal number of Kings and Queens. The game begins with each player contributing $1 to the pot. One card is randomly dealt to Alice, who observes it while Bob does not. After observing her card, Alice can choose either to Raise or Fold. If she folds, Bob wins the pot. If Alice raises, she adds another $1 to the pot, and Bob then decides either to Meet or Pass. If Bob passes, Alice wins the pot; if Bob meets, a showdown occurs. If Alice holds a King, she wins the pot. If she holds a Queen, Bob wins the pot.
+
+Thought process:
+This game involves imperfect information because Bob does not know Alice's card.
+The game begins with a chance node (g.root) that randomly assigns a King or Queen to Alice and Bob.
+Alice moves first. Since the chance node has two outcomes (King and Queen), Alice's decision nodes are g.root.children[0] (King) and g.root.children[1] (Queen). Alice can Raise or Fold.
+If Alice raises, Bob must decide whether to Meet or Pass. Bob's decision nodes are g.root.children[0].children[0] (King and Raise) and g.root.children[1].children[0] (Queen and Raise). 
+Since Bob cannot distinguish between Alice holding a King or a Queen, Bob's decision nodes should be grouped in the same information set.
+
+Output:
+```python
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+```
+
+Example 3:
+Game description:
+This is a two players card game between Alice and Bob. Nature has 3 cards, Jack, Queen, and King. A chance node will draw one card for Alice, one card for Bob. Alice knows her own card but not Bob's card. If she bets and her card is higher than Bob's card she wins 1, if lower -1. If she doesn't bet, she gets 0.
+
+Thought process:
+There are total 6 possible outcomes for the chance node:
+JQ (g.root.children[0]), JK (g.root.children[1]), QJ (g.root.children[2]), QK (g.root.children[3]), KJ (g.root.children[4]), KQ (g.root.children[5]).
+
+Alice have the same card situations are (group the same card situations for Alice):
+JQ (g.root.children[0]) and JK (g.root.children[1]), QJ (g.root.children[2]) and QK (g.root.children[3]), KJ (g.root.children[4]) and KQ (g.root.children[5]).
+
+Bob have the same card situations are (group the same card situations for Bob):
+QJ (g.root.children[2]) and KJ (g.root.children[4]), JQ (g.root.children[0]) and KQ (g.root.children[5]), JK (g.root.children[1]) and QK (g.root.children[3]).
+
+These nodes are the decision nodes for Alice, because she only konws her own card, we have to group JQ and JK, QJ and QK, KJ and KQ in the same information set.
+
+Output:
+
+```python
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)
+```

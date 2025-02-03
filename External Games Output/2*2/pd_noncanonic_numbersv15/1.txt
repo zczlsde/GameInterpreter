@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two athletes, and they must decide simultaneously whether to use performance-enhancing drugs or not.
+
+# Step 2: Since the athletes make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Athlete 1 moves first and Athlete 2 moves second.
+
+# Step 3: The starting node, g.root, is Athlete 1's decision node.
+# Athlete 1 has two actions: Use Drugs or Compete Clean.
+
+# Step 4: Athlete 2's decision nodes are g.root.children[0] (Use Drugs) and g.root.children[1] (Compete Clean).
+# Athlete 2, moving simultaneously, does not know which action Athlete 1 has taken.
+
+# Step 5: Therefore, Athlete 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Athlete 1 and Athlete 2.
+g = gbt.Game.new_tree(players=["Athlete 1", "Athlete 2"],
+                      title="Performance-Enhancing Drugs Dilemma")
+
+# Step 2: Athlete 1 makes the first move. Athlete 1 has two actions: Use Drugs or Compete Clean.
+g.append_move(g.root, "Athlete 1", ["Use Drugs", "Compete Clean"])
+
+# Step 3: Athlete 2 makes the second move. Athlete 2 also has two actions: Use Drugs or Compete Clean.
+# Athlete 2's decision nodes are g.root.children[0] (Use Drugs) and g.root.children[1] (Compete Clean).
+g.append_move(g.root.children[0], "Athlete 2", ["Use Drugs", "Compete Clean"])
+g.append_move(g.root.children[1], "Athlete 2", ["Use Drugs", "Compete Clean"])
+
+# Step 4: Since the athletes make their decisions simultaneously, this game involves imperfect information.
+# Athlete 2, moving simultaneously, does not know which action Athlete 1 has taken.
+# Therefore, Athlete 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both use drugs, each receives a payoff of 3.
+outcome_both_use_drugs = g.add_outcome([3, 3], label="Both Use Drugs")
+
+# If Athlete 1 uses drugs and Athlete 2 competes clean, Athlete 1 receives a payoff of 9, Athlete 2 receives 1.
+outcome_athlete1_uses = g.add_outcome([9, 1], label="Athlete 1 Uses Drugs")
+
+# If Athlete 1 competes clean and Athlete 2 uses drugs, Athlete 1 receives a payoff of 1, Athlete 2 receives 9.
+outcome_athlete2_uses = g.add_outcome([1, 9], label="Athlete 2 Uses Drugs")
+
+# If neither uses drugs, each receives a payoff of 6.
+outcome_neither_uses = g.add_outcome([6, 6], label="Neither Uses Drugs")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_both_use_drugs)
+g.set_outcome(g.root.children[0].children[1], outcome_athlete1_uses)
+g.set_outcome(g.root.children[1].children[0], outcome_athlete2_uses)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_uses)
+
+# Save the EFG
+efg = g.write(format='native')
+```

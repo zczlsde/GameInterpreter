@@ -1,0 +1,76 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the independent film studio and the major Hollywood studio.
+# Both players decide independently whether to release their film on a holiday weekend or a regular weekend.
+
+# Step 2: Determine the structure of the game.
+# Since both players decide independently, this is a simultaneous move game.
+# To model it sequentially, assume one player moves first and the other moves second.
+
+# Step 3: Define the decision nodes.
+# Assume the independent film studio moves first, and the major Hollywood studio moves second.
+# The independent film studio's decision node is the root node (g.root).
+# The major Hollywood studio's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the independent film studio's actions (holiday or regular).
+
+# Step 4: Identify the imperfect information.
+# The major Hollywood studio does not know the independent film studio's decision when making its own decision.
+# Therefore, the major Hollywood studio's decision nodes should be grouped in the same information set.
+
+# Step 5: Set the information set for the major Hollywood studio's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players: the independent film studio and the major Hollywood studio.
+# Both players decide independently whether to release their film on a holiday weekend or a regular weekend.
+
+# Step 2: Determine the structure of the game.
+# Since both players decide independently, this is a simultaneous move game.
+# To model it sequentially, assume one player moves first and the other moves second.
+
+# Step 3: Define the decision nodes.
+# Assume the independent film studio moves first, and the major Hollywood studio moves second.
+g = gbt.Game.new_tree(players=["Independent Studio", "Hollywood Studio"],
+                      title="Film Release Timing Game")
+
+# The independent film studio's decision node is the root node (g.root).
+g.append_move(g.root, "Independent Studio", ["Holiday", "Regular"])
+
+# The major Hollywood studio's decision nodes are g.root.children[0] and g.root.children[1],
+# corresponding to the independent film studio's actions (holiday or regular).
+g.append_move(g.root.children[0], "Hollywood Studio", ["Holiday", "Regular"])
+g.append_move(g.root.children[1], "Hollywood Studio", ["Holiday", "Regular"])
+
+# Step 4: Identify the imperfect information.
+# The major Hollywood studio does not know the independent film studio's decision when making its own decision.
+# Therefore, the major Hollywood studio's decision nodes should be grouped in the same information set.
+
+# Step 5: Set the information set for the major Hollywood studio's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the payoffs for each outcome.
+# If both release on the same weekend, the independent studio benefits.
+# If they release on different weekends, the Hollywood studio benefits.
+
+# Payoffs when both release on the holiday weekend.
+outcome_holiday_holiday = g.add_outcome([1, -1], label="Holiday-Holiday")
+g.set_outcome(g.root.children[0].children[0], outcome_holiday_holiday)
+
+# Payoffs when independent studio releases on holiday and Hollywood studio on regular weekend.
+outcome_holiday_regular = g.add_outcome([-1, 1], label="Holiday-Regular")
+g.set_outcome(g.root.children[0].children[1], outcome_holiday_regular)
+
+# Payoffs when independent studio releases on regular and Hollywood studio on holiday weekend.
+outcome_regular_holiday = g.add_outcome([-1, 1], label="Regular-Holiday")
+g.set_outcome(g.root.children[1].children[0], outcome_regular_holiday)
+
+# Payoffs when both release on the regular weekend.
+outcome_regular_regular = g.add_outcome([1, -1], label="Regular-Regular")
+g.set_outcome(g.root.children[1].children[1], outcome_regular_regular)
+
+# Save the EFG
+efg = g.write(format='native')
+```

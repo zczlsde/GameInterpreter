@@ -1,0 +1,69 @@
+```python
+# Step 1: Player 1's decision at the first stage (A, B, C) is not known to Player 2 when making their decision (D, E).
+# Therefore, all of Player 2's decision nodes after each of Player 1's actions are in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+
+# Step 2: Similarly, Player 1's decision in the third stage (F, G) is made without knowledge of Player 2's second-stage choice.
+# Thus, for each of Player 1's initial actions (A, B, C), the decision nodes corresponding to F and G are in the same information set.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[0], g.root.children[2].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1].children[0], g.root.children[2].children[1].children[1].infoset)
+
+# Note: Player 3's decision does not require an information set configuration as it is the final action and does not have imperfect information regarding its own decision.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-stage game with imperfect information")
+
+# First stage: Player 1 chooses among A, B, C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses between D and E without knowing Player 1's choice
+for child in g.root.children:
+    g.append_move(child, "Player 2", ["D", "E"])
+
+# Third stage: Player 1 chooses between F and G without knowing Player 2's choice
+for child in g.root.children:
+    for grandchild in child.children:
+        g.append_move(grandchild, "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 decides between Q and W
+for child in g.root.children:
+    for grandchild in child.children:
+        for great_grandchild in grandchild.children:
+            g.append_move(great_grandchild, "Player 3", ["Q", "W"])
+
+# Set outcomes based on Player 3's decision
+for child in g.root.children:
+    for grandchild in child.children:
+        for great_grandchild in grandchild.children:
+            g.set_outcome(great_grandchild.children[0], g.add_outcome([3, 3, 3], label="All get 3"))
+            g.set_outcome(great_grandchild.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 get 2, P3 gets 3"))
+
+# Handle imperfect information
+# Step 1: Player 2's decisions are in the same information set after each of Player 1's actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+
+# Step 2: Player 1's decisions in the third stage are in the same information set after each of Player 2's actions
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[0], g.root.children[2].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1].children[0], g.root.children[2].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code constructs an extensive-form game with three stages and imperfect information, following the game description provided. It uses the `pygambit` library to create the game tree, append moves for each player at each stage, set outcomes based on the final decisions, and handle imperfect information by grouping decision nodes into information sets as specified.

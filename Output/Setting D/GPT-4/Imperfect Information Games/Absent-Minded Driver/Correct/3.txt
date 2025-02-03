@@ -1,0 +1,45 @@
+```python
+# Step 1: The driver starts at junction X with two choices: EXIT or CONTINUE.
+# Step 2: If the driver CONTINUES, he moves to junction Y, where he faces the same choices: EXIT or CONTINUE.
+# Step 3: The driver cannot distinguish between being at junction X or Y, meaning these decision points are in the same information set.
+
+# Assuming g.root is the starting point at junction X, and g.root.children[1] is the node for CONTINUE leading to junction Y,
+# we need to group the decision node at X and the decision node at Y into the same information set.
+# Since the driver cannot distinguish between X and Y, both decision nodes (at X and at Y) must be in the same information set.
+
+g.set_infoset(g.root, g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with a single player, the driver
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# Step 1: The driver starts at junction X with two choices: EXIT or CONTINUE.
+# This creates the initial decision node at junction X.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Step 2: If the driver CONTINUES, he moves to junction Y, where he faces the same choices: EXIT or CONTINUE.
+# This creates the decision node at junction Y, which is reached by continuing from junction X.
+# Note: g.root.children[1] is the node for CONTINUE from junction X to Y.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Step 3: The driver cannot distinguish between being at junction X or Y, meaning these decision points are in the same information set.
+# Since the driver cannot distinguish between X and Y, both decision nodes (at X and at Y) must be in the same information set.
+# This is handled by setting the information set of the node at X to be the same as the node at Y.
+g.set_infoset(g.root, g.root.children[1].infoset)
+
+# Now, we define the outcomes based on the driver's decisions.
+# If the driver exits at junction X, the payoff is 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Exit at X"))
+
+# If the driver exits at junction Y, the payoff is 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at Y"))
+
+# If the driver continues at junction Y, the payoff is 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue at Y"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

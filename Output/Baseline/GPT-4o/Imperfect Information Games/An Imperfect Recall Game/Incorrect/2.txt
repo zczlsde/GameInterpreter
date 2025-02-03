@@ -1,0 +1,26 @@
+Certainly! Below is the EFG representation of the described game:
+
+```
+EFG 2 R "Three-stage game with forgetting" { "Player 1" }
+c "" 1 "" { "L" 1/2 "R" 1/2 } 0
+p "" 1 1 "" { "l" "r" } 0
+p "" 1 2 "" { "A" "B" } 0
+t "" 1 "" { 0 }
+t "" 2 "" { 0 }
+p "" 1 2 "" { "A" "B" } 0
+t "" 1 "" { 0 }
+t "" 2 "" { 0 }
+p "" 1 1 "" { "l" "r" } 0
+p "" 1 2 "" { "A" "B" } 0
+t "" 1 "" { 0 }
+t "" 2 "" { 0 }
+p "" 1 2 "" { "A" "B" } 0
+t "" 1 "" { 0 }
+t "" 2 "" { 0 }
+``` 
+
+In this representation:
+- The game starts with a chance node determining L or R with equal probability.
+- Player 1 then observes the outcome and chooses between l or r.
+- In the final stage, Player 1 chooses between A or B, having forgotten the outcome of stage 1.
+- All payoffs are set to 0 as specified.

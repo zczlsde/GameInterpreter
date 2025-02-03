@@ -1,0 +1,65 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Sibling 1 and Sibling 2. They can either Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# The game involves simultaneous moves, which means there is imperfect information.
+# To model this, assume Sibling 1 moves first and Sibling 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Sibling 1's decision node.
+# Sibling 1 has two actions: Compromise and Hold Firm.
+# Sibling 2's decision nodes are g.root.children[0] (Sibling 1 Compromises) and g.root.children[1] (Sibling 1 Holds Firm).
+
+# Step 4: Group the decision nodes into information sets.
+# Since Sibling 2 moves simultaneously with Sibling 1, Sibling 2 does not know Sibling 1's action.
+# Therefore, Sibling 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Sibling 1 and Sibling 2. They can either Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# The game involves simultaneous moves, which means there is imperfect information.
+# To model this, assume Sibling 1 moves first and Sibling 2 moves second.
+
+# Step 3: Create a new extensive-form game with the players.
+g = gbt.Game.new_tree(players=["Sibling 1", "Sibling 2"],
+                      title="Inheritance Negotiation Game")
+
+# Step 4: Add the moves for Sibling 1.
+# Sibling 1 has two actions: Compromise and Hold Firm.
+g.append_move(g.root, "Sibling 1", ["Compromise", "Hold Firm"])
+
+# Step 5: Add the moves for Sibling 2.
+# Sibling 2's decision nodes are g.root.children[0] (Sibling 1 Compromises) and g.root.children[1] (Sibling 1 Holds Firm).
+g.append_move(g.root.children[0], "Sibling 2", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Sibling 2", ["Compromise", "Hold Firm"])
+
+# Step 6: Group the decision nodes into information sets.
+# Since Sibling 2 moves simultaneously with Sibling 1, Sibling 2 does not know Sibling 1's action.
+# Therefore, Sibling 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 7: Define the outcomes and set them for each terminal node.
+# If both compromise, they split the inheritance fairly.
+compromise_outcome = g.add_outcome([1, 1], label="Fair Split")
+# If one holds firm and the other compromises, the firm holder gets the desired assets.
+firm_outcome = g.add_outcome([2, 0], label="Firm Holder Wins")
+# If both hold firm, the inheritance remains unsettled.
+unsettled_outcome = g.add_outcome([-1, -1], label="Unsettled Dispute")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], compromise_outcome)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], firm_outcome)        # Sibling 1 Compromises, Sibling 2 Holds Firm
+g.set_outcome(g.root.children[1].children[0], firm_outcome)        # Sibling 1 Holds Firm, Sibling 2 Compromises
+g.set_outcome(g.root.children[1].children[1], unsettled_outcome)   # Both Hold Firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

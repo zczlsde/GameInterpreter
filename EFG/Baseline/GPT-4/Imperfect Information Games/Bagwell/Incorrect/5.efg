@@ -1,0 +1,10 @@
+EFG 2 R "Strategic Misinterpretation Game" { "Player 1" "Player 2" }
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Perceived S" 0.99 "Perceived C" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both S" { A, B }
+t "" 2 "S-C Misinterpretation" { C, D }
+c "" 2 "" { "Perceived C" 0.99 "Perceived S" 0.01 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "C-S Misinterpretation" { E, C }
+t "" 4 "Both C" { F, F }

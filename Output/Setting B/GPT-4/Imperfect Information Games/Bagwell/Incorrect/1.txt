@@ -1,0 +1,57 @@
+To generate the Extensive Form Game (EFG) for the described game using the PyGambit library, we'll follow the game's structure closely. Here's how we can approach coding this game:
+
+1. **Game Setup**: Player 1 (the leader) chooses between "S" and "C". Player 2 (the follower) then interprets Player 1's choice, with a small chance of misinterpretation, and makes their own choice between "S" and "C".
+
+2. **Misinterpretation Chance**: We'll model the chance of misinterpretation as a chance move right after Player 1's decision. This will represent the 1% probability that Player 2 misinterprets Player 1's choice.
+
+3. **Payoffs**: We need to assign values to the payoffs based on the given ranking: E > A > F > W > B > D. For simplicity, let's assign numerical values corresponding to their ranks in descending order: E=6, A=5, F=4, W=3, B=2, D=1.
+
+4. **Implementing the Game in PyGambit**:
+   - We start by creating a new game tree.
+   - Player 1 makes the initial move.
+   - We then create a chance node to model the misinterpretation.
+   - Based on the interpretation, Player 2 makes their decision.
+   - Finally, we assign the outcomes based on the actual choices of Player 1 and Player 2.
+
+Here's the Python code using PyGambit to model this game:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Strategic Misinterpretation Game")
+
+# Player 1's move
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Chance node for misinterpretation after each of Player 1's choices
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["Interpreted as S", "Interpreted as C"])
+    # Setting the chance probabilities: 99% correct interpretation, 1% misinterpretation
+    g.set_chance_probs(node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2's decisions based on interpretation
+for node in g.root.children:
+    for chance_node in node.children:
+        g.append_move(chance_node, "Player 2", ["S", "C"])
+
+# Assigning payoffs based on the actual choices of Player 1 and not the interpretation
+# Payoffs: E=6, A=5, F=4, W=3, B=2, D=1
+# If both choose S
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([5, 2]))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([5, 2]))
+# If Player 1 chooses S and Player 2 chooses C
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1]))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([3, 1]))
+# If Player 1 chooses C and Player 2 chooses S
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([6, 3]))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([6, 3]))
+# If both choose C
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([4, 4]))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([4, 4]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code models the game as described, including the chance of misinterpretation and the resulting payoffs based on the actual choices of Player 1 and Player 2.

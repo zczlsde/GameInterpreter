@@ -1,0 +1,49 @@
+```python
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Step 2: Append the initial chance node where Alice has piles of 4 and 1 coins
+g.append_move(g.root, g.players.chance, ["Take", "Push"])
+
+# Step 3: Alice's decision nodes after the chance node
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Take", "Push"])
+
+# Step 4: Bob's decision nodes after Alice's decision nodes
+for node in g.root.children[0].children:
+    g.append_move(node, "Bob", ["Take", "Push"])
+for node in g.root.children[1].children:
+    g.append_move(node, "Bob", ["Take", "Push"])
+
+# Step 5: Set information sets for the decision nodes
+# Grouping Alice's decision nodes in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```  
+
+```python
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Step 2: Append the initial chance node where Alice has piles of 4 and 1 coins
+g.append_move(g.root, g.players.chance, ["Take", "Push"])
+
+# Step 3: Alice's decision nodes after the chance node
+g.append_move(g.root.children[0], "Alice", ["Take", "Push"])
+g.append_move(g.root.children[1], "Alice", ["Take", "Push"])
+
+# Step 4: Bob's decision nodes after Alice's decision nodes
+g.append_move(g.root.children[0].children[0], "Bob", ["Take", "Push"])
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+g.append_move(g.root.children[1].children[0], "Bob", ["Take", "Push"])
+g.append_move(g.root.children[1].children[1], "Bob", ["Take", "Push"])
+
+# Step 5: Set information sets for the decision nodes
+# Grouping Alice's decision nodes in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Battle of the Sexes" { "Opera Lover" "Football Lover" }
+""
+
+p "" 1 1 "" { "Opera" "Football" } 0
+p "" 2 1 "" { "Opera" "Football" } 0
+t "" 1 "Both choose Opera" { 2, 1 }
+t "" 3 "Different events" { 0, 0 }
+p "" 2 1 "" { "Opera" "Football" } 0
+t "" 3 "Different events" { 0, 0 }
+t "" 2 "Both choose Football" { 1, 2 }

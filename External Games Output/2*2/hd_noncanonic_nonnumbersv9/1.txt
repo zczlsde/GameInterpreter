@@ -1,0 +1,71 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each with two actions: Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# Since both players move simultaneously, this game involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Player 1's decision node.
+# Player 1 has two actions, Compromise and Hold Firm.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 1's actions Compromise and Hold Firm.
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 moves simultaneously with Player 1, Player 2 does not know which action Player 1 has taken.
+# Therefore, Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Leader A and Leader B, each with two actions: Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# Since both players move simultaneously, this game involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Leader A moves first and Leader B moves second.
+
+# Step 4: Create the game tree with the players.
+g = gbt.Game.new_tree(players=["Leader A", "Leader B"],
+                      title="Military Strategy Game")
+
+# Step 5: Identify the decision nodes.
+# The starting node, g.root, is Leader A's decision node.
+# Leader A has two actions, Compromise and Hold Firm.
+g.append_move(g.root, "Leader A", ["Compromise", "Hold Firm"])
+
+# Leader B's decision nodes are g.root.children[0] and g.root.children[1], 
+# which correspond to Leader A's actions Compromise and Hold Firm.
+g.append_move(g.root.children[0], "Leader B", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Leader B", ["Compromise", "Hold Firm"])
+
+# Step 6: Group Leader B's decision nodes in the same information set.
+# Since Leader B moves simultaneously with Leader A, Leader B does not know which action Leader A has taken.
+# Therefore, Leader B's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 7: Set the outcomes for each possible combination of actions.
+# If both compromise, a ceasefire is agreed upon.
+ceasefire = g.add_outcome([1, 1], label="Ceasefire")
+# If one holds firm and the other compromises, the firm holder gains a strategic advantage.
+advantage_A = g.add_outcome([2, 0], label="Advantage A")
+advantage_B = g.add_outcome([0, 2], label="Advantage B")
+# If both hold firm, ongoing warfare continues, resulting in higher casualties and prolonged conflict.
+warfare = g.add_outcome([-1, -1], label="Warfare")
+
+# Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], ceasefire)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], advantage_B)  # A Compromise, B Hold Firm
+g.set_outcome(g.root.children[1].children[0], advantage_A)  # A Hold Firm, B Compromise
+g.set_outcome(g.root.children[1].children[1], warfare)  # Both Hold Firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each can either Compromise or Hold Firm.
+
+# Step 2: Determine the structure of the game.
+# Since both players make their decisions simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Player 1's decision node.
+# Player 1 has two actions, Compromise and Hold Firm.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 1's actions Compromise and Hold Firm.
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 does not know Player 1's action, Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Politician 1 and Politician 2.
+g = gbt.Game.new_tree(players=["Politician 1", "Politician 2"],
+                      title="Bipartisan Bill Negotiation")
+
+# Step 2: Politician 1 makes the first move with two actions: Compromise or Hold Firm.
+g.append_move(g.root, "Politician 1", ["Compromise", "Hold Firm"])
+
+# Step 3: Politician 2 makes a move after Politician 1, with the same actions: Compromise or Hold Firm.
+# Politician 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Politician 1's actions.
+g.append_move(g.root.children[0], "Politician 2", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Politician 2", ["Compromise", "Hold Firm"])
+
+# Step 4: Group Politician 2's decision nodes in the same information set to model imperfect information.
+# Since Politician 2 does not know Politician 1's action, Politician 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both compromise, the payoff is [0, 0].
+outcome_compromise = g.add_outcome([0, 0], label="Bipartisan Bill Passed")
+
+# If Politician 1 compromises and Politician 2 holds firm, the payoff is [-3, 3].
+outcome_p1_compromise_p2_firm = g.add_outcome([-3, 3], label="Politician 2 Gains Support")
+
+# If Politician 1 holds firm and Politician 2 compromises, the payoff is [3, -3].
+outcome_p1_firm_p2_compromise = g.add_outcome([3, -3], label="Politician 1 Gains Support")
+
+# If both hold firm, the payoff is [-5, -5].
+outcome_hold_firm = g.add_outcome([-5, -5], label="Bill Stalled")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_compromise)
+g.set_outcome(g.root.children[0].children[1], outcome_p1_compromise_p2_firm)
+g.set_outcome(g.root.children[1].children[0], outcome_p1_firm_p2_compromise)
+g.set_outcome(g.root.children[1].children[1], outcome_hold_firm)
+
+# Save the EFG
+efg = g.write(format='native')
+```

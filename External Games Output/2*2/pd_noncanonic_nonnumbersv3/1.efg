@@ -1,0 +1,10 @@
+EFG 2 R "Idea Sharing Game" { "Employee 1" "Employee 2" }
+""
+
+p "" 1 1 "" { "Share" "Withhold" } 0
+p "" 2 1 "" { "Share" "Withhold" } 0
+t "" 1 "Flourish" { 2, 2 }
+t "" 2 "Exploited" { -1, 3 }
+p "" 2 1 "" { "Share" "Withhold" } 0
+t "" 3 "Benefit" { 3, -1 }
+t "" 4 "Mediocre" { 0, 0 }

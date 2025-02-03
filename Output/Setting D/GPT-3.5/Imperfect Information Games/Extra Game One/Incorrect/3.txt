@@ -1,0 +1,102 @@
+```python
+# Step-by-step thought process:
+# Player 1's decision nodes are g.root.children[0] (A), g.root.children[1] (B), and g.root.children[2] (C).
+# Player 2 knows when action A was taken, but cannot distinguish between B or C.
+# Player 2's decision nodes are g.root.children[0].children[0] (A and D), g.root.children[1].children[0] (B and E), and g.root.children[2].children[0] (C and F).
+# Player 1's decision nodes after Player 2's decision are g.root.children[0].children[0].children[0] (A, D, and G), g.root.children[1].children[0].children[0] (B, E, and H), and g.root.children[2].children[0].children[0] (C and F).
+# Player 2's decision nodes after Player 1's decision are g.root.children[0].children[0].children[0].children[0] (A, D, G, and Q), g.root.children[0].children[0].children[0].children[1] (A, D, G, and W).
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Player 1", ["Q"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Player 1", ["W"])
+
+# Set information set for Player 2
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+```
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Player 1", ["Q"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Player 1", ["W"])
+
+# Set information set for Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Player 1", ["Q"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Player 1", ["W"])
+
+# Set information set for Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Player 1", ["Q"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Player 1", ["W"])
+
+# Set information set for Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)

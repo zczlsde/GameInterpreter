@@ -1,0 +1,49 @@
+```python
+# Step 1: Identify the decision nodes for the absent-minded driver.
+# The driver has two decision points, but cannot distinguish between them. 
+# These are when the driver is at junction X and when the driver is at junction Y.
+
+# Step 2: Group the decision nodes into the same information set.
+# Since the driver cannot tell the difference between junction X and Y, 
+# we group the decision nodes corresponding to these junctions into the same information set.
+
+# Assuming the game tree has been constructed and the root node is the first decision point (junction X),
+# and the child of the root node (after choosing CONTINUE) is the second decision point (junction Y).
+
+# The code to set the information set for the absent-minded driver's decision nodes would be:
+g.set_infoset(g.root, g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game tree with a single player representing the absent-minded driver.
+g = gbt.Game.new_tree(players=["Absent-minded driver"], title="Absent-minded driver game")
+
+# Step 2: Append the first move at the root for the driver with two choices: EXIT or CONTINUE.
+# This represents the decision at junction X.
+g.append_move(g.root, "Absent-minded driver", ["EXIT", "CONTINUE"])
+
+# Step 3: Append the second move for the driver after choosing CONTINUE at the first junction.
+# This represents the decision at junction Y, which is identical to the decision at junction X due to the driver's absent-mindedness.
+# Note: We only append the move for the CONTINUE choice from the first decision point.
+g.append_move(g.root.children[1], "Absent-minded driver", ["EXIT", "CONTINUE"])
+
+# Step 4: Set the outcomes for each decision.
+# If the driver exits at the first junction (X), they reach destination A with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Reach A"))
+
+# If the driver continues from the first junction (X) and then exits at the second junction (Y), they reach destination B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Reach B"))
+
+# If the driver continues from both junctions, they reach destination C with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Reach C"))
+
+# Step 5: Handle the imperfect information.
+# Since the driver cannot distinguish between junction X and Y, we group the decision nodes into the same information set.
+# Use the identical code provided to handle the imperfect information.
+g.set_infoset(g.root, g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

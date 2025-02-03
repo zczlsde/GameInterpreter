@@ -1,0 +1,176 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with memory loss")
+
+# Stage 1: Chance node determines L or R with equal probabilities
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+# Append moves for Player 1 after each outcome of the chance node
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, without remembering the outcome of stage 1
+# Since Player 1 forgets the outcome of stage 1, the information sets for choices in stage 3
+# should be grouped based on the choice in stage 2, not on the outcome of the chance node.
+
+# Append moves for Player 1's second decision, after choosing 'l' or 'r' in stage 2
+for node in g.root.children[0].children + g.root.children[1].children:
+    g.append_move(node, "Player 1", ["A", "B"])
+
+# At this point, Player 1's decisions after choosing 'l' in stage 2 are in separate information sets
+# from the decisions after choosing 'r', because they were appended separately.
+# We need to group them into the same information set based on the choice in stage 2, not the outcome of stage 1.
+
+# Group nodes based on the choice in stage 2 ('l' or 'r') for the decision in stage 3
+# This is done by setting the information set of the second decision nodes to be the same
+# for nodes that follow the same choice in stage 2.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+
+# Set all payoffs to 0 as specified
+for node in g.root.children[0].children[0].children + g.root.children[0].children[1].children + g.root.children[1].children[0].children + g.root.children[1].children[1].children:
+    g.set_outcome(node, g.add_outcome([0]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a three-stage game where a chance node initially decides between two paths with equal probability. In the second stage, Player 1 makes a choice based on the outcome of the chance node. In the third stage, Player 1 makes another choice, but this time without remembering the initial outcome from the chance node. The information sets for the third stage are grouped based on Player 1's choice in the second stage, not on the outcome of the chance node, reflecting the memory loss aspect. All payoffs are set to 0, as specified.
+=======================================
+unsupported operand type(s) for +: 'pygambit.gambit.NodeChildren' and 'pygambit.gambit.NodeChildren'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with memory loss")
+
+# Stage 1: Chance node determines L or R with equal probabilities
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+# Append moves for Player 1 after each outcome of the chance node
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, without remembering the outcome of stage 1
+# Append moves for Player 1's second decision, after choosing 'l' or 'r' in stage 2
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["A", "B"])
+
+# Now, we need to group the nodes based on Player 1's choice in stage 2 for the decision in stage 3.
+# This requires identifying the nodes after 'l' and 'r' choices in stage 2 and grouping them correctly.
+
+# Since we cannot concatenate NodeChildren directly and loop through them for setting infosets,
+# we manually set the infoset for the second decision nodes based on the choice in stage 2.
+# This is corrected by directly accessing the nodes based on their structure.
+
+# Group nodes based on the choice in stage 2 ('l' or 'r') for the decision in stage 3
+# Correctly setting the infoset for nodes after choosing 'l'
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+
+# Similarly, for nodes after choosing 'r', ensure they are in the same infoset
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Set all payoffs to 0 as specified
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0]))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with memory loss")
+
+# Stage 1: Chance node determines L or R with equal probabilities
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+for outcome in ["L", "R"]:
+    node = g.append_move(g.root.children[outcome == "R"], "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, without remembering the outcome of stage 1
+# Since Player 1 forgets the outcome of stage 1, we need to ensure that the information sets for choices in stage 3
+# are grouped based on the choice in stage 2, not on the outcome of the chance node.
+for lr_choice in ["l", "r"]:
+    # Append moves for Player 1's second decision, after choosing 'l' or 'r' in stage 2
+    for outcome in ["L", "R"]:
+        parent_node = g.root.children[outcome == "R"].children[lr_choice == "r"]
+        g.append_move(parent_node, "Player 1", ["A", "B"])
+
+# Correctly setting the infoset for nodes after choosing 'l' or 'r' in stage 2 for the decision in stage 3
+# We need to manually set the infoset for the second decision nodes based on the choice in stage 2.
+# This is corrected by directly accessing the nodes based on their structure and ensuring they share the same infoset.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+
+# Set all payoffs to 0 as specified
+for outcome in ["L", "R"]:
+    for lr_choice in ["l", "r"]:
+        for ab_choice in ["A", "B"]:
+            node = g.root.children[outcome == "R"].children[lr_choice == "r"].children[ab_choice == "B"]
+            g.set_outcome(node, g.add_outcome([0]))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with memory loss")
+
+# Stage 1: Chance node determines L or R with equal probabilities
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+# Append moves for Player 1 after each outcome of the chance node
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, without remembering the outcome of stage 1
+# Append moves for Player 1's second decision, after choosing 'l' or 'r' in stage 2
+# For each choice in stage 2, append moves for stage 3
+for child in g.root.children[0].children + g.root.children[1].children:
+    g.append_move(child, "Player 1", ["A", "B"])
+
+# Since Player 1 forgets the outcome of stage 1, we need to group the nodes based on the choice in stage 2
+# Correctly setting the infoset for nodes after choosing 'l' in stage 2 for the decision in stage 3
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+
+# Correctly setting the infoset for nodes after choosing 'r' in stage 2 for the decision in stage 3
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Set all payoffs to 0 as specified
+for child in g.root.children:
+    for grandchild in child.children:
+        for great_grandchild in grandchild.children:
+            g.set_outcome(great_grandchild, g.add_outcome([0]))
+
+# Save the EFG
+efg = g.write(format='native')

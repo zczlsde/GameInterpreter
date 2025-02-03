@@ -1,0 +1,176 @@
+```python
+# Step 1: Identify the chance node outcomes for the card allocations (JQ, JK, QJ, QK, KJ, KQ).
+# Step 2: For each allocation, Alice has the option to check or bet, creating decision nodes for each allocation.
+# Step 3: If Alice checks, Bob then has the decision to check or bet. This creates further decision nodes under each of Alice's check decisions.
+# Step 4: If Bob bets after Alice checks, Alice then has the decision to fold or call, creating decision nodes under each of Bob's bet decisions.
+# Step 5: If Alice bets initially, Bob has the decision to fold or call, creating decision nodes under each of Alice's bet decisions.
+# Step 6: Since Alice and Bob make decisions without knowing the other's card, we need to group decision nodes into information sets where decisions are made under the same knowledge conditions.
+
+# For Alice, when she is making the initial decision to check or bet, she does not know Bob's card but knows her own. 
+# Therefore, we group Alice's initial decision nodes based on her card, not on Bob's card.
+# For Bob, when he is making decisions, he does not know Alice's card. 
+# Therefore, we group Bob's decision nodes based on his card, not on Alice's card.
+
+# Grouping Alice's decision nodes when she checks or bets, based on her card:
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # Grouping JQ and JK (Alice has Jack)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # Grouping QJ and QK (Alice has Queen)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # Grouping KJ and KQ (Alice has King)
+
+# Grouping Bob's decision nodes after Alice checks, based on his card:
+# Note: Bob's decisions after Alice checks are at the second level of decisions after Alice's initial check.
+# For simplicity, let's assume g.root.children[i].children[0] represents Alice checking, and g.root.children[i].children[1] represents Alice betting.
+# Bob's decisions to check or bet after Alice checks are then at g.root.children[i].children[0].children[0] for each card scenario.
+# However, since Bob's decisions are not directly influenced by Alice's initial action due to the information set grouping, we focus on grouping Bob's decisions after Alice bets, which are more straightforward to identify in this setup.
+
+# Grouping Bob's decision nodes after Alice bets, based on his card:
+g.set_infoset(g.root.children[0].children[1], g.root.children[2].children[1].infoset) # Grouping JQ and QJ (Bob has Queen)
+g.set_infoset(g.root.children[1].children[1], g.root.children[4].children[1].infoset) # Grouping JK and KJ (Bob has King)
+# Note: The above lines assume that children[1] after the root's children corresponds to Alice betting. 
+# This is a simplification for demonstration purposes. The exact indexing may vary based on how the game tree is constructed.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Step 1: Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+for node in g.root.children:
+    g.set_chance_probs(node.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# Step 2: For each allocation, append a move for Alice to check or bet
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# Step 3: For each of Alice's actions, append a move for Bob to check or bet if Alice checks, or to fold or call if Alice bets
+for node in g.root.children:
+    # If Alice checks
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+    # If Alice bets
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+
+# Step 4: For each of Bob's actions after Alice checks, append a move for Alice to fold or call if Bob bets
+for node in g.root.children:
+    # If Bob bets after Alice checks
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# Step 5: Define outcomes based on the higher card winning or the actions taken (fold, call)
+# This step involves setting outcomes for each terminal node based on the game description
+# For simplicity, we will not define each outcome explicitly in this code snippet
+
+# Step 6: Group decision nodes into information sets based on the knowledge conditions
+# Grouping Alice's decision nodes when she checks or bets, based on her card
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # Grouping JQ and JK (Alice has Jack)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # Grouping QJ and QK (Alice has Queen)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # Grouping KJ and KQ (Alice has King)
+
+# Grouping Bob's decision nodes after Alice bets, based on his card
+g.set_infoset(g.root.children[0].children[1], g.root.children[2].children[1].infoset) # Grouping JQ and QJ (Bob has Queen)
+g.set_infoset(g.root.children[1].children[1], g.root.children[4].children[1].infoset) # Grouping JK and KJ (Bob has King)
+
+# Note: The outcomes for each terminal node need to be defined based on the game rules, which involves comparing the cards
+# and determining the winner based on the actions taken (check, bet, fold, call). This would typically involve setting
+# outcomes with appropriate payoffs for each terminal node.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game with Imperfect Information")
+
+# Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+allocations = ["JQ", "JK", "QJ", "QK", "KJ", "KQ"]
+g.append_move(g.root, g.players.chance, allocations)
+for allocation, node in zip(allocations, g.root.children):
+    g.set_chance_probs(node.infoset, [gbt.Rational(1, 6) for _ in allocations])
+
+# For each allocation, append a move for Alice to check or bet
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's actions, append a move for Bob
+for node in g.root.children:
+    # If Alice checks
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+    # If Bob checks, the game ends, else Bob bets and Alice can fold or call
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+    
+    # If Alice bets
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+
+# The outcomes (win/lose) based on the higher card and actions taken are not explicitly defined here
+# They should be set according to the game rules for each terminal node
+
+# Grouping decision nodes into information sets based on the knowledge conditions
+# Grouping Alice's decision nodes when she checks or bets, based on her card
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # Grouping JQ and JK (Alice has Jack)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # Grouping QJ and QK (Alice has Queen)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # Grouping KJ and KQ (Alice has King)
+
+# Grouping Bob's decision nodes after Alice bets, based on his card
+g.set_infoset(g.root.children[0].children[1], g.root.children[2].children[1].infoset) # Grouping JQ and QJ (Bob has Queen)
+g.set_infoset(g.root.children[1].children[1], g.root.children[4].children[1].infoset) # Grouping JK and KJ (Bob has King)
+
+# Note: The explicit setting of outcomes for each terminal node based on the game rules is omitted for brevity
+# This would involve setting outcomes with appropriate payoffs for each terminal node based on the actions taken and card comparison
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Step 1: Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# Step 2: For each allocation, append a move for Alice to check or bet
+for allocation in g.root.children:
+    g.append_move(allocation, "Alice", ["Check", "Bet"])
+
+# Step 3: For each of Alice's actions, append a move for Bob
+for allocation in g.root.children:
+    # If Alice checks
+    g.append_move(allocation.children[0], "Bob", ["Check", "Bet"])
+    # If Bob checks, the game ends, so no further moves are appended here
+    # If Bob bets, Alice needs to decide to fold or call
+    g.append_move(allocation.children[0].children[1], "Alice", ["Fold", "Call"])
+    
+    # If Alice bets
+    g.append_move(allocation.children[1], "Bob", ["Fold", "Call"])
+    # No further moves are needed since the game ends after Bob's decision
+
+# Step 6: Group decision nodes into information sets based on the knowledge conditions
+# Grouping Alice's decision nodes when she checks or bets, based on her card
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # Grouping JQ and JK (Alice has Jack)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # Grouping QJ and QK (Alice has Queen)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # Grouping KJ and KQ (Alice has King)
+
+# Grouping Bob's decision nodes after Alice bets, based on his card
+g.set_infoset(g.root.children[0].children[1], g.root.children[2].children[1].infoset) # Grouping JQ and QJ (Bob has Queen)
+g.set_infoset(g.root.children[1].children[1], g.root.children[4].children[1].infoset) # Grouping JK and KJ (Bob has King)
+
+# Note: The outcomes for each terminal node need to be defined based on the game rules, which involves comparing the cards
+# and determining the winner based on the actions taken (check, bet, fold, call). This would typically involve setting
+# outcomes with appropriate payoffs for each terminal node.
+
+# Save the EFG
+efg = g.write(format='native')

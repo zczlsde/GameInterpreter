@@ -1,0 +1,182 @@
+```python
+# Step-by-step thought process:
+# 1. The game starts with a chance node that determines the strength of the new manufacturer (S or W).
+# 2. The new manufacturer then sends a signal (S or W).
+# 3. The current manufacturer observes the signal but does not know the actual strength of the new manufacturer.
+# 4. The current manufacturer must decide to either compete aggressively (F) or accommodate the new competitor (A).
+# 5. Group the decision nodes for the current manufacturer based on the signal and strength of the new manufacturer.
+
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node to determine the strength of the New Manufacturer (S or W)
+g.append_move(g.root, g.players.chance, ["S", "W"])
+
+# Add a move for the New Manufacturer to send a signal (S or W)
+g.append_move(g.root.children[0], "New Manufacturer", ["S", "W"])
+g.append_move(g.root.children[1], "New Manufacturer", ["S", "W"])
+
+# Add decision nodes for the Current Manufacturer based on the signal and strength of the New Manufacturer
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["F", "A"])
+
+# Set information sets for the decision nodes of the Current Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each scenario based on the strength of the New Manufacturer, the signal, and the decision of the Current Manufacturer
+outcomes = {
+    "SSFF": [1, 0], "SSFA": [3, 1], "SWFF": [0, 0], "SWFA": [2, 1],
+    "WSFF": [0, 2], "WSFA": [2, 1], "WWFF": [1, 2], "WWFA": [3, 1]
+}
+
+# Assign outcomes to the corresponding decision nodes
+for key, payoff in outcomes.items():
+    node = g.find_node(key)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+'pygambit.gambit.Game' object has no attribute 'find_node'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node to determine the strength of the New Manufacturer (S or W)
+g.append_move(g.root, g.players.chance, ["S", "W"])
+
+# Add a move for the New Manufacturer to send a signal (S or W)
+g.append_move(g.root.children[0], "New Manufacturer", ["S", "W"])
+g.append_move(g.root.children[1], "New Manufacturer", ["S", "W"])
+
+# Add decision nodes for the Current Manufacturer based on the signal and strength of the New Manufacturer
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["F", "A"])
+
+# Set information sets for the decision nodes of the Current Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each scenario based on the strength of the New Manufacturer, the signal, and the decision of the Current Manufacturer
+outcomes = {
+    "SFF": [1, 0], "SFA": [3, 1], "SWF": [0, 0], "SWA": [2, 1],
+    "WFF": [0, 2], "WFA": [2, 1], "WWF": [1, 2], "WWA": [3, 1]
+}
+
+# Assign outcomes to the corresponding decision nodes
+for key, payoff in outcomes.items():
+    node = g.find_node(key)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Game' object has no attribute 'find_node'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node to determine the strength of the New Manufacturer (S or W)
+g.append_move(g.root, g.players.chance, ["S", "W"])
+
+# Add a move for the New Manufacturer to send a signal (S or W)
+g.append_move(g.root.children[0], "New Manufacturer", ["S", "W"])
+g.append_move(g.root.children[1], "New Manufacturer", ["S", "W"])
+
+# Add decision nodes for the Current Manufacturer based on the signal and strength of the New Manufacturer
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["F", "A"])
+
+# Set information sets for the decision nodes of the Current Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each scenario based on the strength of the New Manufacturer, the signal, and the decision of the Current Manufacturer
+outcomes = {
+    "SSFF": [1, 0], "SSFA": [3, 1], "SWFF": [0, 0], "SWFA": [2, 1],
+    "WSFF": [0, 2], "WSFA": [2, 1], "WWFF": [1, 2], "WWFA": [3, 1]
+}
+
+# Assign outcomes to the corresponding decision nodes
+for key, payoff in outcomes.items():
+    node = g.find_node(key)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Game' object has no attribute 'find_node'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node to determine the strength of the New Manufacturer (S or W)
+g.append_move(g.root, g.players.chance, ["S", "W"])
+
+# Add a move for the New Manufacturer to send a signal (S or W)
+g.append_move(g.root.children[0], "New Manufacturer", ["S", "W"])
+g.append_move(g.root.children[1], "New Manufacturer", ["S", "W"])
+
+# Add decision nodes for the Current Manufacturer based on the signal and strength of the New Manufacturer
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["F", "A"])
+
+# Set information sets for the decision nodes of the Current Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each scenario based on the strength of the New Manufacturer, the signal, and the decision of the Current Manufacturer
+outcomes = {
+    "SSFF": [1, 0], "SSFA": [3, 1], "SWFF": [0, 0], "SWFA": [2, 1],
+    "WSFF": [0, 2], "WSFA": [2, 1], "WWFF": [1, 2], "WWFA": [3, 1]
+}
+
+# Assign outcomes to the corresponding decision nodes
+for key, payoff in outcomes.items():
+    node = g.find_node(key)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')

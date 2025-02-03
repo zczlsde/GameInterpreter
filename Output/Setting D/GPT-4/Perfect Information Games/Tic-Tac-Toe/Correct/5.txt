@@ -1,0 +1,52 @@
+```python
+# Since all moves by "x" and "o" are visible to both players, there's no traditional imperfect information in terms of hidden actions or private information.
+# However, the game tree's structure implies that decisions are made with full knowledge of the past moves.
+# Therefore, there's no need to group nodes into information sets based on hidden information, as all information is shared and visible.
+# In this specific scenario, every move leads to a distinct game state that both players can observe.
+# Thus, there are no nodes for "x" or "o" that need to be grouped into the same information set due to imperfect information.
+# The game is a perfect information game, and the concept of information sets to represent imperfect information does not apply here.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic-Tac-Toe")
+
+# The root of the game tree, where "x" makes the first move
+# "x" can place the mark on (0, 0), (0, 2), and (1, 0)
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# If "x" places the mark on (0, 0)
+# "o" can then place the mark on (0, 2) and (1, 0)
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+# If "o" places the mark on (0, 2), "o" wins
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="o wins"))
+# If "o" places the mark on (1, 0)
+# "x" can then place the mark on (0, 2), and "x" wins
+g.append_move(g.root.children[0].children[1], "x", ["(0, 2)"])
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="x wins"))
+
+# If "x" places the mark on (0, 2), "x" wins
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="x wins"))
+
+# If "x" places the mark on (1, 0)
+# "o" can then place the mark on (0, 0) and (0, 2)
+g.append_move(g.root.children[2], "o", ["(0, 0)", "(0, 2)"])
+# If "o" places the mark on (0, 0)
+# "x" can then place the mark on (0, 2), and "x" wins
+g.append_move(g.root.children[2].children[0], "x", ["(0, 2)"])
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="x wins"))
+# If "o" places the mark on (0, 2), "o" wins
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="o wins"))
+
+# Since all moves by "x" and "o" are visible to both players, there's no traditional imperfect information in terms of hidden actions or private information.
+# However, the game tree's structure implies that decisions are made with full knowledge of the past moves.
+# Therefore, there's no need to group nodes into information sets based on hidden information, as all information is shared and visible.
+# In this specific scenario, every move leads to a distinct game state that both players can observe.
+# Thus, there are no nodes for "x" or "o" that need to be grouped into the same information set due to imperfect information.
+# The game is a perfect information game, and the concept of information sets to represent imperfect information does not apply here.
+
+# Save the EFG
+efg = g.write(format='native')
+```

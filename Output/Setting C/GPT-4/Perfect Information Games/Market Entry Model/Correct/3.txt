@@ -1,0 +1,38 @@
+```python
+# Since the game description does not explicitly involve a chance move or simultaneous moves,
+# and the moves are sequential (Firm 2 decides to enter or not, then Firm 1 reacts),
+# there's no need to group decision nodes into the same information set based on the given description.
+# Each player's decision is made with perfect information about the previous actions.
+# Therefore, no set_infoset() function is necessary for this game structure.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to fight or accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the game description
+# Payoffs when Firm 2 stays out
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Firm 2 Stays Out"))
+
+# Payoffs when Firm 2 enters and Firm 1 fights
+# It's mentioned that Firm 2 earns more than Firm 1 if Firm 1 fights, but exact values are not given.
+# Assuming specific values for demonstration: Firm 1 earns 0, Firm 2 earns 3
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 3], label="Fight"))
+
+# Payoffs when Firm 2 enters and Firm 1 accommodates
+# Both firms earn an equal amount, assuming specific values for demonstration: both earn 1
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1], label="Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing the strategic interaction between an established monopolist (Firm 1) and a potential entrant (Firm 2). The game is sequential, starting with Firm 2's decision to enter the market or stay out. If Firm 2 enters, Firm 1 chooses how to react, either by fighting to maintain its monopoly or by accommodating the entrant to share the market. The payoffs reflect the outcomes of these strategic choices.

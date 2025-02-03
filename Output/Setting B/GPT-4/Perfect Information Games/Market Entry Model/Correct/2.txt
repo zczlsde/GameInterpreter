@@ -1,0 +1,35 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+# This is the first move in the game, so we append it to the root of the game tree
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 decides to enter, then Firm 1 must decide how to respond
+# We append this decision to the child of the root corresponding to Firm 2's decision to enter
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Now we set the outcomes based on the game description
+# If Firm 2 stays out, the game ends and Firm 1 earns more. Let's assume the payoffs are (2, 0) for simplicity
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1. Let's assume the payoffs are (1, 3)
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 3], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount. Let's assume the payoffs are (2, 2)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# The game tree is now fully specified, so we can save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive form game (EFG) for a market entry scenario using the Pygambit library. The game involves two players: Firm 1, an established monopolist, and Firm 2, a potential entrant. The game proceeds as follows:
+
+1. Firm 2 decides whether to enter the market or stay out. This decision is represented by appending a move to the root of the game tree.
+2. If Firm 2 chooses to enter, Firm 1 must decide how to respond: either fight to maintain its monopoly or accommodate the new entrant by sharing the market. This decision is represented by appending moves to the child node corresponding to Firm 2's decision to enter.
+3. The outcomes are then set based on the decisions made by the firms. The payoffs are chosen to reflect the game's description, with Firm 1 earning more if Firm 2 stays out, and specific payoffs assigned to the other possible outcomes.
+
+This code does not involve recursion, loops, or the "+" operator in its generation, adhering to the constraints provided.

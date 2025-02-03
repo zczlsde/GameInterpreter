@@ -1,0 +1,66 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both generals, who must decide whether to launch an attack or hesitate.
+
+# Step 2: Determine the nature of the game.
+# The game involves simultaneous decision-making, which means there is imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one general moves first and the other moves second.
+
+# Step 4: Identify the decision nodes.
+# The first general's decision node is g.root.
+# The second general's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first general's actions (attack or hesitate).
+
+# Step 5: Group the decision nodes into information sets.
+# Since the generals move simultaneously, the second general does not know the first general's action.
+# Therefore, the second general's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, General 1 and General 2.
+g = gbt.Game.new_tree(players=["General 1", "General 2"],
+                      title="Two Generals' Coordination Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume General 1 moves first and General 2 moves second.
+
+# Step 3: General 1 makes the first move with two actions: Attack or Hesitate.
+g.append_move(g.root, "General 1", ["Attack", "Hesitate"])
+
+# Step 4: General 2 makes a move after General 1, with the same two actions: Attack or Hesitate.
+# General 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to General 1's actions.
+g.append_move(g.root.children[0], "General 2", ["Attack", "Hesitate"])
+g.append_move(g.root.children[1], "General 2", ["Attack", "Hesitate"])
+
+# Step 5: Group the decision nodes into information sets to reflect simultaneous decision-making.
+# Since the generals move simultaneously, General 2 does not know General 1's action.
+# Therefore, General 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the actions taken by both generals.
+# If both generals attack, they each gain 9 points.
+both_attack = g.add_outcome([9, 9], label="Both Attack")
+
+# If General 1 attacks and General 2 hesitates, General 1 gains 0 points and General 2 gains 4 points.
+g1_attacks_g2_hesitates = g.add_outcome([0, 4], label="G1 Attacks, G2 Hesitates")
+
+# If General 1 hesitates and General 2 attacks, General 1 gains 4 points and General 2 gains 0 points.
+g1_hesitates_g2_attacks = g.add_outcome([4, 0], label="G1 Hesitates, G2 Attacks")
+
+# If both generals hesitate, they each gain 2 points.
+both_hesitate = g.add_outcome([2, 2], label="Both Hesitate")
+
+# Step 7: Assign the outcomes to the terminal nodes of the game tree.
+g.set_outcome(g.root.children[0].children[0], both_attack)
+g.set_outcome(g.root.children[0].children[1], g1_attacks_g2_hesitates)
+g.set_outcome(g.root.children[1].children[0], g1_hesitates_g2_attacks)
+g.set_outcome(g.root.children[1].children[1], both_hesitate)
+
+# Save the EFG
+efg = g.write(format='native')
+```

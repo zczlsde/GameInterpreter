@@ -1,0 +1,40 @@
+EFG 2 R "Imperfect Information Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" "F" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 10 "Both Choose Q" { 3, 3 }
+t "" 11 "Both Choose W" { 0, 0 }
+t "" 4 "End Game H" { 2, -1 }
+p "" 1 3 "" { "G" "H" } 0
+p "" 2 3 "" { "Q" "W" } 0
+t "" 16 "Both Choose Q" { 3, 3 }
+t "" 17 "Both Choose W" { 0, 0 }
+t "" 7 "End Game H" { 2, -1 }
+t "" 1 "End Game F" { 0, 0 }
+p "" 2 6 "" { "D" "E" "F" } 0
+p "" 1 4 "" { "G" "H" } 0
+p "" 2 4 "" { "Q" "W" } 0
+t "" 12 "Both Choose Q" { 3, 3 }
+t "" 13 "Both Choose W" { 0, 0 }
+t "" 5 "End Game H" { 2, -1 }
+p "" 1 5 "" { "G" "H" } 0
+p "" 2 5 "" { "Q" "W" } 0
+t "" 18 "Both Choose Q" { 3, 3 }
+t "" 19 "Both Choose W" { 0, 0 }
+t "" 8 "End Game H" { 2, -1 }
+t "" 2 "End Game F" { 0, 0 }
+p "" 2 6 "" { "D" "E" "F" } 0
+p "" 1 6 "" { "G" "H" } 0
+p "" 2 7 "" { "Q" "W" } 0
+t "" 14 "Both Choose Q" { 3, 3 }
+t "" 15 "Both Choose W" { 0, 0 }
+t "" 6 "End Game H" { 2, -1 }
+p "" 1 7 "" { "G" "H" } 0
+p "" 2 8 "" { "Q" "W" } 0
+t "" 20 "Both Choose Q" { 3, 3 }
+t "" 21 "Both Choose W" { 0, 0 }
+t "" 9 "End Game H" { 2, -1 }
+t "" 3 "End Game F" { 0, 0 }

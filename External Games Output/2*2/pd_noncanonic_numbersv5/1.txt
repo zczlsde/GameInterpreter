@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Candidate 1 and Candidate 2.
+# Both players have two actions: Mudsling or Clean.
+
+# Step 2: Determine the structure of the game.
+# Since both players decide simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Candidate 1 moves first and Candidate 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Candidate 1's decision node.
+# Candidate 1 has two actions, Mudsling and Clean.
+# Candidate 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Candidate 1's actions Mudsling and Clean.
+
+# Step 4: Group the decision nodes into information sets.
+# Candidate 2, moving simultaneously, does not know which action Candidate 1 has taken.
+# Therefore, Candidate 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Candidate 1 and Candidate 2.
+g = gbt.Game.new_tree(players=["Candidate 1", "Candidate 2"],
+                      title="Political Campaign Mudslinging Game")
+
+# Step 2: Candidate 1 moves first and has two actions: Mudsling or Clean.
+g.append_move(g.root, "Candidate 1", ["Mudsling", "Clean"])
+
+# Step 3: Candidate 2 moves second and has two actions: Mudsling or Clean.
+# Candidate 2's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to Candidate 1's actions Mudsling and Clean.
+g.append_move(g.root.children[0], "Candidate 2", ["Mudsling", "Clean"])
+g.append_move(g.root.children[1], "Candidate 2", ["Mudsling", "Clean"])
+
+# Step 4: Group Candidate 2's decision nodes into the same information set
+# because Candidate 2 moves simultaneously and does not know Candidate 1's action.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each terminal node.
+# If both engage in mudslinging, each receives a payoff of 3.
+outcome_both_mudsling = g.add_outcome([3, 3], label="Both Mudsling")
+g.set_outcome(g.root.children[0].children[0], outcome_both_mudsling)
+
+# If Candidate 1 mudslings and Candidate 2 runs a clean campaign,
+# Candidate 1 receives a payoff of 8, and Candidate 2 receives a payoff of 2.
+outcome_c1_mudsling = g.add_outcome([8, 2], label="C1 Mudsling, C2 Clean")
+g.set_outcome(g.root.children[0].children[1], outcome_c1_mudsling)
+
+# If Candidate 1 runs a clean campaign and Candidate 2 mudslings,
+# Candidate 1 receives a payoff of 2, and Candidate 2 receives a payoff of 8.
+outcome_c2_mudsling = g.add_outcome([2, 8], label="C1 Clean, C2 Mudsling")
+g.set_outcome(g.root.children[1].children[0], outcome_c2_mudsling)
+
+# If neither engages in mudslinging, each receives a payoff of 5.
+outcome_both_clean = g.add_outcome([5, 5], label="Both Clean")
+g.set_outcome(g.root.children[1].children[1], outcome_both_clean)
+
+# Save the EFG
+efg = g.write(format='native')
+```

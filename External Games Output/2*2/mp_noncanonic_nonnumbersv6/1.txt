@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the local store and the national retail chain.
+# Both players decide simultaneously whether to run a discount on electronics or clothing.
+
+# Step 2: Determine the imperfect information structure.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of their decision.
+# To model this in a sequential structure, assume one player moves first and the other moves second.
+# Let's assume the local store moves first and the national retail chain moves second.
+
+# Step 3: Identify the decision nodes for the national retail chain.
+# The national retail chain's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the local store's actions (electronics and clothing).
+
+# Step 4: Group the national retail chain's decision nodes in the same information set.
+# Since the national retail chain cannot distinguish between the local store choosing electronics or clothing, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game with two players: the local store and the national retail chain.
+g = gbt.Game.new_tree(players=["Local Store", "National Retail Chain"],
+                      title="Holiday Sale Discount Game")
+
+# Step 2: The local store moves first, deciding between running a discount on electronics or clothing.
+g.append_move(g.root, "Local Store", ["Electronics", "Clothing"])
+
+# Step 3: The national retail chain moves second, also deciding between running a discount on electronics or clothing.
+# The national retail chain's decision nodes are g.root.children[0] and g.root.children[1],
+# corresponding to the local store's actions (electronics and clothing).
+g.append_move(g.root.children[0], "National Retail Chain", ["Electronics", "Clothing"])
+g.append_move(g.root.children[1], "National Retail Chain", ["Electronics", "Clothing"])
+
+# Step 4: Group the national retail chain's decision nodes in the same information set.
+# Since the national retail chain cannot distinguish between the local store choosing electronics or clothing,
+# these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes based on the players' choices.
+# If both choose the same category, the local store benefits at the expense of the national chain.
+# If their promotions don't align, the national chain captures more market share.
+
+# Both choose electronics
+local_benefits = g.add_outcome([1, -1], label="Local benefits")
+# Both choose clothing
+local_benefits_clothing = g.add_outcome([1, -1], label="Local benefits")
+# Local chooses electronics, national chooses clothing
+national_benefits = g.add_outcome([-1, 1], label="National benefits")
+# Local chooses clothing, national chooses electronics
+national_benefits_clothing = g.add_outcome([-1, 1], label="National benefits")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], local_benefits)
+g.set_outcome(g.root.children[0].children[1], national_benefits)
+g.set_outcome(g.root.children[1].children[0], national_benefits_clothing)
+g.set_outcome(g.root.children[1].children[1], local_benefits_clothing)
+
+# Save the EFG
+efg = g.write(format='native')
+```

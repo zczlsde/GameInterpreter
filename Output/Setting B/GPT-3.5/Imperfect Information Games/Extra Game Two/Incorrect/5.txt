@@ -1,0 +1,50 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-stage game with imperfect information")
+
+# Stage 1: Player 1 has three options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 can select D or E without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Stage 3: Player 1 chooses between F or G
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 decides between Q and W
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set information sets for Player 1 and Player 2
+for node in g.root.children:
+    for child_node in node.children:
+        g.set_infoset(child_node, node.infoset)
+
+# Set information sets for Player 1
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.set_infoset(grandchild_node, child_node.infoset)
+
+# Define outcomes for the final stage
+all_receive_3 = g.add_outcome([3, 3, 3], label="All receive 3")
+p1_p2_receive_2_p3_receive_3 = g.add_outcome([2, 2, 3], label="P1 and P2 receive 2, P3 receive 3")
+
+# Set outcomes for Player 3's decision
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.set_outcome(grandchild_node.children[0], all_receive_3)
+            g.set_outcome(grandchild_node.children[1], p1_p2_receive_2_p3_receive_3)
+
+# Save the EFG
+efg = g.write(format='native')
+```

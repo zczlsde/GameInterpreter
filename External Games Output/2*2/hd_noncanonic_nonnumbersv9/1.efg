@@ -1,0 +1,10 @@
+EFG 2 R "Military Strategy Game" { "Leader A" "Leader B" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Ceasefire" { 1, 1 }
+t "" 3 "Advantage B" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Advantage A" { 2, 0 }
+t "" 4 "Warfare" { -1, -1 }

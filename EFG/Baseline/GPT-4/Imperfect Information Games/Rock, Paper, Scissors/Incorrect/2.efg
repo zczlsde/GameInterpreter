@@ -1,0 +1,12 @@
+EFG 2 R "Rock-Paper-Scissors Game" { "Player1" "Player2" }
+p "" 1 1 "" { "Rock" "Paper" "Scissors" } 0
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 1 "Tie - Rock" { 0, 0 }
+t "" 2 "Paper beats Rock" { -1, 1 }
+t "" 3 "Rock beats Scissors" { 1, -1 }
+t "" 4 "Rock beats Scissors" { -1, 1 }
+t "" 5 "Tie - Paper" { 0, 0 }
+t "" 6 "Scissors beats Paper" { 1, -1 }
+t "" 7 "Paper beats Rock" { 1, -1 }
+t "" 8 "Scissors beats Paper" { -1, 1 }
+t "" 9 "Tie - Scissors" { 0, 0 }

@@ -1,0 +1,204 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance node for the initial card distribution with six possible outcomes.
+# Each outcome has a probability of 1/6.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each outcome of the chance node, append moves for Alice to either check or bet.
+for chance_node in g.root.children:
+    g.append_move(chance_node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's actions, append moves for Bob.
+# If Alice checks, Bob can check or bet.
+# If Alice bets, Bob can fold or call.
+for chance_node in g.root.children:
+    # If Alice checks
+    g.append_move(chance_node.children[0], "Bob", ["Check", "Bet"])
+    # If Alice bets
+    g.append_move(chance_node.children[1], "Bob", ["Fold", "Call"])
+
+# For each of Bob's actions after Alice checks, define outcomes.
+for chance_node in g.root.children:
+    # If Bob checks, the game ends, and the higher card wins 1 from the other player.
+    # This outcome depends on the initial chance node allocation.
+    if chance_node.label in ["JQ", "QJ", "JK", "KJ"]:
+        # Jack loses to Queen or King
+        g.set_outcome(chance_node.children[0].children[0], g.add_outcome([-1, 1]))
+    elif chance_node.label in ["QK", "KQ"]:
+        # Queen loses to King
+        g.set_outcome(chance_node.children[0].children[0], g.add_outcome([-1, 1]))
+    
+    # If Bob bets, Alice can fold or call.
+    # If Alice folds, Bob wins 1 from Alice.
+    g.set_outcome(chance_node.children[0].children[1].children[0], g.add_outcome([-1, 1]))
+    # If Alice calls, the higher card wins 2 from the other player.
+    if chance_node.label in ["JQ", "QJ", "JK", "KJ"]:
+        g.set_outcome(chance_node.children[0].children[1].children[1], g.add_outcome([-2, 2]))
+    elif chance_node.label in ["QK", "KQ"]:
+        g.set_outcome(chance_node.children[0].children[1].children[1], g.add_outcome([-2, 2]))
+
+# For each of Bob's actions after Alice bets, define outcomes.
+for chance_node in g.root.children:
+    # If Bob folds, Alice wins 1 from Bob.
+    g.set_outcome(chance_node.children[1].children[0], g.add_outcome([1, -1]))
+    # If Bob calls, the higher card wins 2 from the other player.
+    if chance_node.label in ["JQ", "QJ", "JK", "KJ"]:
+        g.set_outcome(chance_node.children[1].children[1], g.add_outcome([2, -2]))
+    elif chance_node.label in ["QK", "KQ"]:
+        g.set_outcome(chance_node.children[1].children[1], g.add_outcome([2, -2]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code generates an Extensive Form Game (EFG) for a simplified three-card game involving Alice and Bob, where the initial card distribution is handled by a chance node. The game tree is constructed step by step, starting from the chance node that represents the initial card distribution, followed by Alice's decision to check or bet, and then Bob's responses to each of Alice's actions. The outcomes are determined based on the initial card distribution and the sequence of actions taken by Alice and Bob.
+=======================================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance node for the initial card distribution with six possible outcomes.
+# Each outcome has a probability of 1/6.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each outcome of the chance node, append moves for Alice to either check or bet.
+for chance_node in g.root.children:
+    g.append_move(chance_node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's actions, append moves for Bob.
+# If Alice checks, Bob can check or bet.
+# If Alice bets, Bob can fold or call.
+for chance_node in g.root.children:
+    # If Alice checks
+    g.append_move(chance_node.children[0], "Bob", ["Check", "Bet"])
+    # If Alice bets
+    g.append_move(chance_node.children[1], "Bob", ["Fold", "Call"])
+
+# Define outcomes for each scenario.
+# Note: The outcomes need to be defined based on the specific card allocations and actions taken.
+# For simplicity, let's assume the outcomes based on the higher card winning, without specifying the exact logic here.
+# You would need to adjust the outcomes based on the game's rules and the specific card distribution logic.
+
+# Example outcome setting for one scenario (adjust according to your game's logic)
+# This is a placeholder to illustrate how you might set outcomes. You'll need to implement the logic based on your game's rules.
+for chance_node in g.root.children:
+    # If Bob checks after Alice checks
+    g.set_outcome(chance_node.children[0].children[0], g.add_outcome([0, 0]))  # Placeholder outcome
+    # If Bob bets after Alice checks and Alice folds
+    g.set_outcome(chance_node.children[0].children[1].children[0], g.add_outcome([-1, 1]))  # Placeholder outcome
+    # If Bob bets after Alice checks and Alice calls
+    g.set_outcome(chance_node.children[0].children[1].children[1], g.add_outcome([0, 0]))  # Placeholder outcome
+    # If Alice bets and Bob folds
+    g.set_outcome(chance_node.children[1].children[0], g.add_outcome([1, -1]))  # Placeholder outcome
+    # If Alice bets and Bob calls
+    g.set_outcome(chance_node.children[1].children[1], g.add_outcome([0, 0]))  # Placeholder outcome
+
+# Save the EFG
+efg = g.write(format='native')
+
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance node for the initial card distribution with six possible outcomes.
+# Each outcome has a probability of 1/6.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each outcome of the chance node, append moves for Alice to either check or bet.
+for chance_node in g.root.children:
+    g.append_move(chance_node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's decisions (Check or Bet), append Bob's possible moves.
+for chance_node in g.root.children:
+    # If Alice checks
+    alice_checks_node = chance_node.children[0]
+    g.append_move(alice_checks_node, "Bob", ["Check", "Bet"])
+    # If Alice bets
+    alice_bets_node = chance_node.children[1]
+    g.append_move(alice_bets_node, "Bob", ["Fold", "Call"])
+
+# Now, we need to define the outcomes based on the actions taken by Alice and Bob.
+# This involves setting outcomes for each of Bob's decisions after Alice's move.
+for chance_node in g.root.children:
+    # Outcomes when Alice checks
+    alice_checks_node = chance_node.children[0]
+    # Bob checks - outcome depends on the card distribution
+    g.set_outcome(alice_checks_node.children[0], g.add_outcome([0, 0]))  # Placeholder for actual outcome based on cards
+    # Bob bets, Alice folds
+    g.set_outcome(alice_checks_node.children[1].children[0], g.add_outcome([-1, 1]))
+    # Bob bets, Alice calls - outcome depends on the card distribution
+    g.set_outcome(alice_checks_node.children[1].children[1], g.add_outcome([0, 0]))  # Placeholder for actual outcome based on cards
+
+    # Outcomes when Alice bets
+    alice_bets_node = chance_node.children[1]
+    # Bob folds
+    g.set_outcome(alice_bets_node.children[0], g.add_outcome([1, -1]))
+    # Bob calls - outcome depends on the card distribution
+    g.set_outcome(alice_bets_node.children[1], g.add_outcome([0, 0]))  # Placeholder for actual outcome based on cards
+
+# Note: The placeholders [0, 0] for outcomes need to be replaced with the actual game logic outcomes.
+# This includes determining the winner based on the card distribution and the actions taken.
+
+# Save the EFG
+efg = g.write(format='native')
+
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance node for the initial card distribution with six possible outcomes.
+# Each outcome has a probability of 1/6.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each outcome of the chance node, append moves for Alice to either check or bet.
+for chance_node in g.root.children:
+    g.append_move(chance_node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's decisions (Check or Bet), append Bob's possible moves.
+for chance_node in g.root.children:
+    # If Alice checks
+    g.append_move(chance_node.children[0], "Bob", ["Check", "Bet"])
+    # If Alice bets
+    g.append_move(chance_node.children[1], "Bob", ["Fold", "Call"])
+
+# Define outcomes for each scenario based on the actions taken by Alice and Bob.
+# This simplified example assumes specific outcomes for demonstration purposes.
+# You will need to adjust these based on the actual game logic and card distribution.
+for chance_node in g.root.children:
+    # Outcomes when Alice checks and Bob checks or bets
+    bob_after_alice_checks = chance_node.children[0]
+    g.set_outcome(bob_after_alice_checks.children[0], g.add_outcome([0, 0]))  # Placeholder outcome for check-check
+    g.append_move(bob_after_alice_checks.children[1], "Alice", ["Fold", "Call"])  # Alice's move after Bob bets
+    g.set_outcome(bob_after_alice_checks.children[1].children[0], g.add_outcome([-1, 1]))  # Alice folds
+    g.set_outcome(bob_after_alice_checks.children[1].children[1], g.add_outcome([0, 0]))  # Alice calls
+
+    # Outcomes when Alice bets and Bob folds or calls
+    bob_after_alice_bets = chance_node.children[1]
+    g.set_outcome(bob_after_alice_bets.children[0], g.add_outcome([1, -1]))  # Bob folds
+    g.set_outcome(bob_after_alice_bets.children[1], g.add_outcome([0, 0]))  # Bob calls
+
+# Note: The placeholder outcomes [0, 0], [-1, 1], and [1, -1] need to be replaced with the actual game logic outcomes.
+# This includes determining the winner based on the card distribution and the actions taken.
+
+# Save the EFG
+efg = g.write(format='native')

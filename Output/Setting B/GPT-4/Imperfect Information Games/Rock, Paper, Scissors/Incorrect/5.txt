@@ -1,0 +1,39 @@
+Certainly! In the game of Rock-Paper-Scissors, both players choose their actions simultaneously. However, in extensive form games (EFGs), we represent games as trees, which inherently have a sequential structure. To model simultaneous moves in an EFG, we introduce a "chance" player who randomly selects the outcomes of the simultaneous decisions. This way, we can maintain the sequential structure of the tree while accurately representing the game's simultaneous nature.
+
+Here's how you can generate the EFG for Rock-Paper-Scissors using the Pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Rock-Paper-Scissors")
+
+# Since moves are simultaneous, we start with a chance node to represent the possible outcomes
+# There are 9 possible outcomes when considering all combinations of Rock, Paper, and Scissors
+g.append_move(g.root, g.players.chance, ["R-R", "R-P", "R-S", "P-R", "P-P", "P-S", "S-R", "S-P", "S-S"])
+
+# Set the probabilities for each outcome, all equally likely in this case
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes
+# Rock vs Scissors (Player 1 wins), Scissors vs Paper (Player 1 wins), Paper vs Rock (Player 1 wins)
+g.set_outcome(g.root.children[2], g.add_outcome([1, -1], label="P1 wins with Rock"))
+g.set_outcome(g.root.children[4], g.add_outcome([1, -1], label="P1 wins with Paper"))
+g.set_outcome(g.root.children[7], g.add_outcome([1, -1], label="P1 wins with Scissors"))
+
+# Scissors vs Rock (Player 2 wins), Paper vs Scissors (Player 2 wins), Rock vs Paper (Player 2 wins)
+g.set_outcome(g.root.children[6], g.add_outcome([-1, 1], label="P2 wins with Rock"))
+g.set_outcome(g.root.children[3], g.add_outcome([-1, 1], label="P2 wins with Paper"))
+g.set_outcome(g.root.children[1], g.add_outcome([-1, 1], label="P2 wins with Scissors"))
+
+# Ties: Rock vs Rock, Paper vs Paper, Scissors vs Scissors
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Tie with Rock"))
+g.set_outcome(g.root.children[5], g.add_outcome([0, 0], label="Tie with Paper"))
+g.set_outcome(g.root.children[8], g.add_outcome([0, 0], label="Tie with Scissors"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a game tree for Rock-Paper-Scissors, starting with a chance node to represent the simultaneous move nature of the game. Each child of the chance node corresponds to one of the nine possible outcomes (combinations of Rock, Paper, and Scissors between the two players). The outcomes are then assigned based on the rules of Rock-Paper-Scissors, with payoffs reflecting wins, losses, or ties.

@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two researchers, and they can either choose to collaborate or work independently.
+
+# Step 2: Determine the structure of the game.
+# Since the researchers make their decisions simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one researcher moves first and the other moves second.
+
+# Step 4: Identify the decision nodes for the second researcher.
+# The second researcher does not know the action of the first researcher.
+
+# Step 5: Group the decision nodes of the second researcher in the same information set.
+# This reflects the imperfect information, as the second researcher cannot distinguish between the actions of the first researcher.
+
+# Since the researchers move simultaneously, we need to group the decision nodes of the second researcher in the same information set.
+# Let's assume the first researcher moves first, and the second researcher moves second.
+
+# The decision nodes for the second researcher are g.root.children[0] (first researcher collaborates) and g.root.children[1] (first researcher works independently).
+# The second researcher cannot distinguish between these nodes, so they should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game with two players, Researcher 1 and Researcher 2.
+g = gbt.Game.new_tree(players=["Researcher 1", "Researcher 2"],
+                      title="Collaboration Dilemma")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Researcher 1 moves first and Researcher 2 moves second.
+
+# Step 3: Researcher 1 has two actions: Collaborate or Work Independently.
+g.append_move(g.root, "Researcher 1", ["Collaborate", "Work Independently"])
+
+# Step 4: Researcher 2 also has two actions: Collaborate or Work Independently.
+# Researcher 2's decision nodes are g.root.children[0] and g.root.children[1].
+g.append_move(g.root.children[0], "Researcher 2", ["Collaborate", "Work Independently"])
+g.append_move(g.root.children[1], "Researcher 2", ["Collaborate", "Work Independently"])
+
+# Step 5: Group the decision nodes of Researcher 2 in the same information set.
+# This reflects the imperfect information, as Researcher 2 cannot distinguish between the actions of Researcher 1.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Set the outcomes for each possible combination of actions.
+# If both collaborate, they earn 8 points each.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([8, 8], label="Both Collaborate"))
+
+# If Researcher 1 collaborates and Researcher 2 works independently, Researcher 1 gets 0 and Researcher 2 gets 5.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 5], label="R1 Collaborates, R2 Independent"))
+
+# If Researcher 1 works independently and Researcher 2 collaborates, Researcher 1 gets 5 and Researcher 2 gets 0.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([5, 0], label="R1 Independent, R2 Collaborates"))
+
+# If both work independently, they earn 3 points each.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([3, 3], label="Both Independent"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

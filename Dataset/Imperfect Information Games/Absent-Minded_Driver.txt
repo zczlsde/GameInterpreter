@@ -1,0 +1,3 @@
+At junction X, an absent-minded driver has two choices: EXIT, reaching destination A with a payoff of 0, or CONTINUE to junction Y. 
+At junction Y, the driver can choose to EXIT, arriving at destination B with a payoff of 4, or CONTINUE to C, which yields a payoff of 1. 
+The key assumption is that the driver cannot tell the difference between junctions X and Y and does not remember if he has already passed one of them.

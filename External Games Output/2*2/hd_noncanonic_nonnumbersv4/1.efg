@@ -1,0 +1,10 @@
+EFG 2 R "Salary Negotiation Game" { "Employer" "Employee" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Moderate Raise" { 1, 1 }
+t "" 3 "Employee Advantage" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Employer Advantage" { 2, 0 }
+t "" 4 "Negotiation Breakdown" { -1, -1 }

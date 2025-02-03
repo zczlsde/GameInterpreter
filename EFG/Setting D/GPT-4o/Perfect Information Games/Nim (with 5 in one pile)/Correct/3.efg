@@ -1,0 +1,24 @@
+EFG 2 R "Stone Game" { "Alice" "Bob" }
+""
+
+p "" 1 1 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 2 1 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 1 2 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 2 2 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 1 3 "" { "Take 1 stone" } 0
+t "" 1 "Alice loses" { -1, 1 }
+t "" 2 "Bob loses" { 1, -1 }
+p "" 2 3 "" { "Take 1 stone" } 0
+t "" 3 "Bob loses" { 1, -1 }
+p "" 1 4 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 2 4 "" { "Take 1 stone" } 0
+t "" 4 "Bob loses" { 1, -1 }
+t "" 5 "Alice loses" { -1, 1 }
+p "" 2 5 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 1 5 "" { "Take 1 stone" "Take 2 stones" } 0
+p "" 2 6 "" { "Take 1 stone" } 0
+t "" 6 "Bob loses" { 1, -1 }
+t "" 7 "Alice loses" { -1, 1 }
+p "" 1 6 "" { "Take 1 stone" } 0
+t "" 8 "Alice loses" { -1, 1 }
+

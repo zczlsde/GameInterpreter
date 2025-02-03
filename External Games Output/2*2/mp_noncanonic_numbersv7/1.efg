@@ -1,0 +1,10 @@
+EFG 2 R "Tech Product Launch Game" { "Tech Startup" "Tech Giant" }
+""
+
+p "" 2 1 "" { "Smart Home Device" "Wearable Gadget" } 0
+p "" 1 1 "" { "Smart Home Device" "Wearable Gadget" } 0
+t "" 1 "Both choose Smart Home Device" { 3, -3 }
+t "" 2 "Giant: Smart Home, Startup: Wearable" { -4, 4 }
+p "" 1 1 "" { "Smart Home Device" "Wearable Gadget" } 0
+t "" 3 "Giant: Wearable, Startup: Smart Home" { -4, 4 }
+t "" 4 "Both choose Wearable Gadget" { 3, -3 }

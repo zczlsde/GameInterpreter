@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the tech startup and the tech giant.
+# Both players decide simultaneously between launching a smart home device or a wearable gadget.
+
+# Step 2: Recognize the imperfect information.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the tech giant moves first and the tech startup moves second.
+# The tech startup's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the tech giant's actions.
+
+# Step 4: Group the tech startup's decision nodes in the same information set.
+# The tech startup cannot distinguish between the tech giant choosing a smart home device or a wearable gadget.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: the tech startup and the tech giant.
+g = gbt.Game.new_tree(players=["Tech Startup", "Tech Giant"],
+                      title="Tech Product Launch Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume the tech giant moves first and the tech startup moves second.
+# The tech giant has two actions: launch a smart home device or a wearable gadget.
+g.append_move(g.root, "Tech Giant", ["Smart Home Device", "Wearable Gadget"])
+
+# Step 3: The tech startup also has two actions: launch a smart home device or a wearable gadget.
+# The tech startup's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the tech giant's actions.
+g.append_move(g.root.children[0], "Tech Startup", ["Smart Home Device", "Wearable Gadget"])
+g.append_move(g.root.children[1], "Tech Startup", ["Smart Home Device", "Wearable Gadget"])
+
+# Step 4: Group the tech startup's decision nodes in the same information set.
+# The tech startup cannot distinguish between the tech giant choosing a smart home device or a wearable gadget.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes based on the players' choices.
+# If both choose the same product, the startup wins 3 points, and the tech giant loses 3 points.
+# If their choices differ, the tech giant wins 4 points, and the startup loses 4 points.
+
+# Both choose Smart Home Device
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([3, -3], label="Both choose Smart Home Device"))
+
+# Tech Giant chooses Smart Home Device, Tech Startup chooses Wearable Gadget
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-4, 4], label="Giant: Smart Home, Startup: Wearable"))
+
+# Tech Giant chooses Wearable Gadget, Tech Startup chooses Smart Home Device
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([-4, 4], label="Giant: Wearable, Startup: Smart Home"))
+
+# Both choose Wearable Gadget
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([3, -3], label="Both choose Wearable Gadget"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

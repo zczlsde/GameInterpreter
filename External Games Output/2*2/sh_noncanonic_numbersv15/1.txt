@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two tech companies, Company 1 and Company 2, who decide simultaneously whether to commit or not.
+
+# Step 2: Since the companies move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Company 1 moves first and Company 2 moves second.
+
+# Step 3: The starting node, g.root, is Company 1's decision node.
+# Company 1 has two actions: Commit and Not Commit.
+
+# Step 4: Company 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Company 1's actions Commit and Not Commit.
+
+# Step 5: Company 2, moving simultaneously, does not know which action Company 1 has taken.
+# Therefore, Company 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Company 1 and Company 2.
+g = gbt.Game.new_tree(players=["Company 1", "Company 2"],
+                      title="Tech Companies Collaboration Game")
+
+# Step 2: Company 1 moves first. It has two actions: Commit and Not Commit.
+g.append_move(g.root, "Company 1", ["Commit", "Not Commit"])
+
+# Step 3: Company 2 moves second. It also has two actions: Commit and Not Commit.
+# Company 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Company 1's actions Commit and Not Commit.
+g.append_move(g.root.children[0], "Company 2", ["Commit", "Not Commit"])
+g.append_move(g.root.children[1], "Company 2", ["Commit", "Not Commit"])
+
+# Step 4: Since the companies move simultaneously, this game involves imperfect information.
+# Company 2, moving simultaneously, does not know which action Company 1 has taken.
+# Therefore, Company 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes based on the actions taken by both companies.
+# If both companies commit, they achieve a major technological breakthrough, earning 10 points each.
+breakthrough = g.add_outcome([10, 10], label="Breakthrough")
+
+# If one commits and the other pulls back, the committed company gets 0 points, and the non-committed gains 5 points.
+company1_commit_company2_not = g.add_outcome([0, 5], label="Company 1 Commit, Company 2 Not")
+company1_not_company2_commit = g.add_outcome([5, 0], label="Company 1 Not, Company 2 Commit")
+
+# If both avoid the risk and work independently, they come up with incremental improvements worth 4 points each.
+incremental_improvement = g.add_outcome([4, 4], label="Incremental Improvement")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], breakthrough)  # Both Commit
+g.set_outcome(g.root.children[0].children[1], company1_commit_company2_not)  # Company 1 Commit, Company 2 Not
+g.set_outcome(g.root.children[1].children[0], company1_not_company2_commit)  # Company 1 Not, Company 2 Commit
+g.set_outcome(g.root.children[1].children[1], incremental_improvement)  # Both Not Commit
+
+# Save the EFG
+efg = g.write(format='native')
+```

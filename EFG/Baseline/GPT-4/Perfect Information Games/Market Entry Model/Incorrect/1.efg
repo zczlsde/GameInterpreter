@@ -1,0 +1,6 @@
+EFG 2 R "Entry Deterrence Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Fights" { x, y }  // x < y, Firm 2 earns more than Firm 1 if Firm 1 fights
+t "" 2 "Firm 1 Accommodates" { z, z }  // Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates
+t "" 3 "Firm 2 Stays Out" { w, 0 }  // w > z, Firm 1 earns more if Firm 2 does not enter

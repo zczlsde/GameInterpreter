@@ -1,0 +1,71 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Company 1 and Company 2, each with two actions: Aggressive and Moderate.
+
+# Step 2: Determine the structure of the game.
+# Since both companies choose their advertising strategy simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Company 1 moves first and Company 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Company 1's decision node.
+# Company 1 has two actions, Aggressive and Moderate, leading to two decision nodes for Company 2: 
+# g.root.children[0] (Aggressive) and g.root.children[1] (Moderate).
+
+# Step 5: Group the decision nodes in the same information set.
+# Company 2, moving simultaneously, does not know which action Company 1 has taken.
+# Therefore, Company 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Company 1 and Company 2, each with two actions: Aggressive and Moderate.
+
+# Step 2: Determine the structure of the game.
+# Since both companies choose their advertising strategy simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Company 1 moves first and Company 2 moves second.
+
+# Create a new extensive-form game with two players: Company 1 and Company 2.
+g = gbt.Game.new_tree(players=["Company 1", "Company 2"],
+                      title="Advertising Strategy Game")
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Company 1's decision node.
+# Company 1 has two actions, Aggressive and Moderate.
+g.append_move(g.root, "Company 1", ["Aggressive", "Moderate"])
+
+# Company 2 moves after Company 1, but does not know Company 1's action.
+# Therefore, Company 2 has two decision nodes: g.root.children[0] (Aggressive) and g.root.children[1] (Moderate).
+g.append_move(g.root.children[0], "Company 2", ["Aggressive", "Moderate"])
+g.append_move(g.root.children[1], "Company 2", ["Aggressive", "Moderate"])
+
+# Step 5: Group the decision nodes in the same information set.
+# Company 2, moving simultaneously, does not know which action Company 1 has taken.
+# Therefore, Company 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Set the outcomes for each possible combination of actions.
+# If both go aggressive, they overspend on advertising, negating profits and each earning –20 points.
+both_aggressive = g.add_outcome([-20, -20], label="Both Aggressive")
+# If one goes aggressive while the other goes moderate, the aggressive advertiser captures more market share, earning 4 points, and the moderate advertiser loses market share, earning –4 points.
+aggressive_moderate = g.add_outcome([4, -4], label="Aggressive vs Moderate")
+moderate_aggressive = g.add_outcome([-4, 4], label="Moderate vs Aggressive")
+# If both go moderate, they maintain market share, each earning 0 points.
+both_moderate = g.add_outcome([0, 0], label="Both Moderate")
+
+# Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], both_aggressive)
+g.set_outcome(g.root.children[0].children[1], aggressive_moderate)
+g.set_outcome(g.root.children[1].children[0], moderate_aggressive)
+g.set_outcome(g.root.children[1].children[1], both_moderate)
+
+# Save the EFG
+efg = g.write(format='native')
+```

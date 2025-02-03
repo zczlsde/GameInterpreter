@@ -1,0 +1,10 @@
+EFG 2 R "Graduate Students Resource Sharing Game" { "Student 1" "Student 2" }
+""
+
+p "" 1 1 "" { "Share" "Not Share" } 0
+p "" 2 1 "" { "Share" "Not Share" } 0
+t "" 1 "Both Share" { 6, 6 }
+t "" 2 "S1 Share, S2 Not" { 2, 8 }
+p "" 2 1 "" { "Share" "Not Share" } 0
+t "" 3 "S1 Not, S2 Share" { 8, 2 }
+t "" 4 "Neither Share" { 4, 4 }

@@ -1,0 +1,10 @@
+EFG 2 R "Resource-sharing game during drought" { "Farmer 1" "Farmer 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Hoard" } 0
+p "" 2 1 "" { "Collaborate" "Hoard" } 0
+t "" 1 "Both Collaborate" { 5, 5 }
+t "" 2 "F1 Collaborates, F2 Hoards" { 2, 8 }
+p "" 2 1 "" { "Collaborate" "Hoard" } 0
+t "" 3 "F1 Hoards, F2 Collaborates" { 8, 2 }
+t "" 4 "Both Hoard" { 3, 3 }

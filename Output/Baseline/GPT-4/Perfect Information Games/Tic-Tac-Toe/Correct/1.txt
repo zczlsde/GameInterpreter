@@ -1,0 +1,17 @@
+Given the game description, here's an EFG representation for the tic-tac-toe scenario provided:
+
+```
+EFG 2 R "Tic-Tac-Toe Game" { "Player X" "Player O" }
+p "" 1 1 "" { "(0, 0)" "(0, 2)" "(1, 0)" } 0
+    p "" 2 1 "" { "(0, 2)" "(1, 0)" } 0
+        t "" 1 "O wins" { -1, 1 }
+        p "" 1 2 "" { "(0, 2)" } 0
+            t "" 2 "X wins" { 1, -1 }
+    t "" 3 "X wins" { 1, -1 }
+    p "" 2 2 "" { "(0, 0)" "(0, 2)" } 0
+        p "" 1 3 "" { "(0, 2)" } 0
+            t "" 4 "X wins" { 1, -1 }
+        t "" 5 "O wins" { -1, 1 }
+```
+
+This EFG representation outlines the possible moves and outcomes for the given state of the tic-tac-toe game. Each player's decision node is marked with `p`, indicating it's a personal decision node for either "Player X" or "Player O". The terminal nodes, marked with `t`, indicate the outcome of the game depending on the moves made by the players. The outcomes are labeled with the winner of the game and the corresponding payoffs for both players, where the winner receives a payoff of 1 and the loser receives a payoff of -1.

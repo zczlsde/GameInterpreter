@@ -1,0 +1,80 @@
+```python
+# Since the existing manufacturer observes the signal but not the actual strength of the new manufacturer,
+# the decision nodes for the existing manufacturer after observing a strong signal (regardless of the actual strength)
+# should be grouped in the same information set.
+# Similarly, the decision nodes after observing a weak signal should also be grouped in the same information set.
+
+# Let's assume the game tree structure is as follows:
+# g.root is the chance node determining the strength of the new manufacturer.
+# g.root.children[0] is the node for a strong new manufacturer, and g.root.children[1] is for a weak new manufacturer.
+# Each of these nodes then branches into two for the signal given by the new manufacturer, strong or weak.
+# So, g.root.children[0].children[0] is strong manufacturer giving a strong signal,
+# and g.root.children[0].children[1] is strong manufacturer giving a weak signal.
+# Similarly, g.root.children[1].children[0] is weak manufacturer giving a strong signal,
+# and g.root.children[1].children[1] is weak manufacturer giving a weak signal.
+
+# The existing manufacturer's decision nodes after a strong signal are:
+# - g.root.children[0].children[0] (Strong manufacturer, strong signal)
+# - g.root.children[1].children[0] (Weak manufacturer, strong signal)
+# These should be in the same information set because the existing manufacturer cannot distinguish between these scenarios based on the signal alone.
+
+# The existing manufacturer's decision nodes after a weak signal are:
+# - g.root.children[0].children[1] (Strong manufacturer, weak signal)
+# - g.root.children[1].children[1] (Weak manufacturer, weak signal)
+# These should also be in the same information set for the same reason.
+
+# Setting the information sets accordingly:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# Append a chance move at the root to determine the strength of the new manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Set the probabilities for the strength of the new manufacturer: 2/3 for Strong, 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Append moves for the new manufacturer to send a signal, either Strong (S) or Weak (W)
+# For the strong new manufacturer
+g.append_move(g.root.children[0], "New Manufacturer", ["S", "W"])
+# For the weak new manufacturer
+g.append_move(g.root.children[1], "New Manufacturer", ["S", "W"])
+
+# Append moves for the existing manufacturer to choose between competing aggressively (F) or adapting (A)
+# For each signal from a strong new manufacturer
+g.append_move(g.root.children[0].children[0], "Existing Manufacturer", ["F", "A"])
+g.append_move(g.root.children[0].children[1], "Existing Manufacturer", ["F", "A"])
+# For each signal from a weak new manufacturer
+g.append_move(g.root.children[1].children[0], "Existing Manufacturer", ["F", "A"])
+g.append_move(g.root.children[1].children[1], "Existing Manufacturer", ["F", "A"])
+
+# Set outcomes based on the game description
+# Strong manufacturer, strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="SSF"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="SSA"))
+# Strong manufacturer, weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="SWF"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="SWA"))
+# Weak manufacturer, strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="WSF"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="WSA"))
+# Weak manufacturer, weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="WWF"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="WWA"))
+
+# Since the existing manufacturer observes the signal but not the actual strength of the new manufacturer,
+# the decision nodes for the existing manufacturer after observing a strong signal (regardless of the actual strength)
+# should be grouped in the same information set.
+# Similarly, the decision nodes after observing a weak signal should also be grouped in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

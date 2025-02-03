@@ -1,0 +1,71 @@
+To model the game described using the PyGambit library, we need to consider the absent-minded driver's inability to distinguish between junction X and Y as an information set problem. Since the driver cannot remember passing through junction X when arriving at junction Y, both decisions at X and Y must be in the same information set. This means the driver has the same set of actions (EXIT or CONTINUE) at both junctions but cannot distinguish between them. Here's how we can code this scenario:
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with a title
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# At the root, the driver is at junction X. We append a move for the driver with two actions: EXIT and CONTINUE.
+# Since the driver cannot distinguish between junction X and Y, we will later set both decisions in the same information set.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction X, the game ends with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Exit to A"))
+
+# If the driver chooses to CONTINUE, he reaches junction Y, which is indistinguishable from X.
+# We append another decision node with the same set of actions: EXIT and CONTINUE.
+# Note: We are directly appending this move to the CONTINUE branch of the first decision.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction Y, the game ends with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit to B"))
+
+# If the driver chooses to CONTINUE at junction Y, the game ends with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Now, we need to set the information set for the driver's decisions at junction X and Y to reflect that they are indistinguishable.
+# We use the set_infoset method to place both decision nodes in the same information set.
+# This is done after appending moves to both nodes to ensure they have the same set of actions.
+g.set_infoset(g.root.children[1], g.root.children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code models the absent-minded driver problem as an extensive-form game where the driver's decisions at junctions X and Y are in the same information set, reflecting the problem's assumption that the driver cannot distinguish between these junctions.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with a title
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# At the root, the driver is at junction X. We append a move for the driver with two actions: EXIT and CONTINUE.
+# Since the driver cannot distinguish between junction X and Y, we will later set both decisions in the same information set.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction X, the game ends with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Exit to A"))
+
+# If the driver chooses to CONTINUE, he reaches junction Y, which is indistinguishable from X.
+# We append another decision node with the same set of actions: EXIT and CONTINUE.
+# Note: We are directly appending this move to the CONTINUE branch of the first decision.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction Y, the game ends with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit to B"))
+
+# If the driver chooses to CONTINUE at junction Y, the game ends with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Now, we need to set the information set for the driver's decisions at junction X and Y to reflect that they are indistinguishable.
+# We use the set_infoset method to place both decision nodes in the same information set.
+# This is done after appending moves to both nodes to ensure they have the same set of actions.
+# Correcting the previous mistake: We should reference the correct nodes directly.
+g.set_infoset(g.root.children[1], g.root.infoset)
+
+# Save the EFG
+efg = g.write(format='native')

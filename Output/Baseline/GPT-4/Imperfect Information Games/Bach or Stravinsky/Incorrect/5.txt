@@ -1,0 +1,23 @@
+Based on the game description provided, here is the EFG representation for the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Bach" 1/2 "Stravinsky" 1/2 } 0
+    p "" 1 1 "" { "Bach" "Stravinsky" } 0
+        p "" 2 1 "" { "Bach" "Stravinsky" } 0
+            t "" 1 "Both choose Bach" { 2, 1 }
+            t "" 2 "Disagreement" { 0, 0 }
+        p "" 2 2 "" { "Bach" "Stravinsky" } 0
+            t "" 2 "Disagreement" { 0, 0 }
+            t "" 3 "Both choose Stravinsky" { 1, 2 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with a chance node (denoted by `c`) to represent the simultaneous and independent decision-making process of Alexis and Beverley. However, since their decisions are not influenced by chance but are made simultaneously, this representation might seem a bit unconventional. Typically, simultaneous moves are modeled using information sets that reflect the players' inability to observe the other's choice, rather than using a chance node. The chance node here is used for simplicity to initiate the game structure, but it's important to note that in a strict sense, simultaneous games don't involve chance at the decision-making point. Instead, each player's decision node would be under an information set indicating they don't know the other's choice.
+
+- After the initial node, the game branches into player decision nodes (denoted by `p`), first for Alexis (player 1) and then for Beverley (player 2). Each player has two actions: "Bach" or "Stravinsky".
+
+- The terminal nodes (denoted by `t`) represent the outcomes of the game based on the players' choices. If both choose "Bach", Alexis (the Bach lover) gets a higher payoff, and Beverley (the Stravinsky lover) gets a lower payoff, and vice versa for choosing "Stravinsky". If their choices differ, both receive no payoff.
+
+This representation simplifies the simultaneous decision-making process into a sequential format for the sake of explanation. In practice, simultaneous moves in extensive form games are represented by having each player's moves within the same information set, indicating that they make their decisions without knowledge of the other's choice.

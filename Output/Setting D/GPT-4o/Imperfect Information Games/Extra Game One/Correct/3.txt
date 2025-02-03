@@ -1,0 +1,102 @@
+```python
+# Thought process:
+# Player 1 moves first and has three actions: A, B, or C.
+# Player 2 knows when action A was taken, so no need to group the node for action A.
+# However, Player 2 cannot distinguish between actions B and C.
+# Therefore, Player 2's decision nodes after actions B and C should be grouped in the same information set.
+
+# Assuming g.root.children[0] corresponds to action A,
+# g.root.children[1] corresponds to action B,
+# and g.root.children[2] corresponds to action C.
+
+# Player 2's decision nodes after actions B and C are g.root.children[1] and g.root.children[2].
+# These nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Player 1 moves first and has three actions: A, B, or C.
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# If Player 1 chooses action A, Player 2 has three options: D, E, and F.
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+
+# If Player 2 chooses F, the game ends. Let's set the outcome for this node.
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([0, 0], label="End after F"))
+
+# If Player 2 chooses D or E, Player 1 has a choice between actions G and H.
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["G", "H"])
+
+# If Player 1 chooses H, the game ends with payoffs 2 for Player 1 and -1 for Player 2.
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+
+# If Player 1 chooses G, Player 2 decides between actions Q and W.
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Set outcomes for Player 2's choices after Player 1 chooses G
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+
+# Player 2 knows when action A was taken, so no need to group the node for action A.
+# However, Player 2 cannot distinguish between actions B and C.
+# Therefore, Player 2's decision nodes after actions B and C should be grouped in the same information set.
+
+# Assuming g.root.children[0] corresponds to action A,
+# g.root.children[1] corresponds to action B,
+# and g.root.children[2] corresponds to action C.
+
+# Player 2's decision nodes after actions B and C are g.root.children[1] and g.root.children[2].
+# These nodes should be grouped in the same information set.
+
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Set the information set for Player 2's decision nodes after actions B and C
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# If Player 2 chooses F, the game ends. Let's set the outcome for these nodes.
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([0, 0], label="End after F"))
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="End after F"))
+
+# If Player 2 chooses D or E, Player 1 has a choice between actions G and H.
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["G", "H"])
+
+# If Player 1 chooses H, the game ends with payoffs 2 for Player 1 and -1 for Player 2.
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[2].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+
+# If Player 1 chooses G, Player 2 decides between actions Q and W.
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Set outcomes for Player 2's choices after Player 1 chooses G
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

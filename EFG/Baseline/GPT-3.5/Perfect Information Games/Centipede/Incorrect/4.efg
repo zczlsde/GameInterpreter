@@ -1,0 +1,7 @@
+EFG 2 R "Coin Game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+p "" 2 1 "" { "Take" "Push" } 0
+p "" 1 2 "" { "Take" "Push" } 0
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 1 "Alice wins" { 4, 1 }
+t "" 2 "Bob wins" { 1, 4 }

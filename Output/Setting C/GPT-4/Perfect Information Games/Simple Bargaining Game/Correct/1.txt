@@ -1,0 +1,50 @@
+```python
+# Step 1: A proposes a plan to B (A's decision node)
+# Step 2: B decides to accept or reject A's first proposal (B's decision node)
+# Step 3: If B rejects, B proposes an equal split (B's decision node)
+# Step 4: A decides to accept or reject B's proposal (A's decision node)
+# Step 5: If A rejects B's proposal, A proposes a new split (A's decision node)
+# Since all decisions are made sequentially and each player is fully aware of the previous actions, there's no need for information sets grouping nodes based on imperfect information.
+# This game does not involve simultaneous moves or hidden information after the game starts, hence no set_infoset() function is required in this scenario.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's decision node to propose the initial plan
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides to accept or reject A's first proposal
+# B's decision node following A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# Outcome if B accepts A's first proposal
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# Step 3: If B rejects, B proposes an equal split
+# B's decision node to propose an equal split after rejecting A's first proposal
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 4: A decides to accept or reject B's proposal
+# A's decision node following B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# Outcome if A accepts B's proposal
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# Step 5: If A rejects B's proposal, A proposes a new split
+# A's decision node to propose a new split after rejecting B's proposal
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# Outcome if A proposes a new split (B has to accept)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="Final split after negotiation"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B. The game is sequential, with each player making decisions based on the previous actions. The game starts with player A proposing a plan to split 10,000 pounds. Player B can either accept or reject this proposal. If B rejects, B then proposes an equal split. Player A can accept or reject this proposal. If A rejects, A proposes a new split, which B has to accept. The final payoffs are determined by the outcomes of these decisions.

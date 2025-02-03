@@ -1,0 +1,24 @@
+Based on the game description provided, here is the EFG representation for the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Alexis chooses Bach" 1/2 "Alexis chooses Stravinsky" 1/2 } 0
+    p "" 1 1 "" { "Bach" "Stravinsky" } 0
+        t "" 1 "Both choose Bach" { 2, 1 }
+        t "" 2 "Disagreement" { 0, 0 }
+    p "" 2 2 "" { "Bach" "Stravinsky" } 0
+        t "" 2 "Disagreement" { 0, 0 }
+        t "" 3 "Both choose Stravinsky" { 1, 2 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with a chance node (denoted by `c`) to represent the simultaneous decision-making process. However, since the decisions are made by the players and not by chance, this node is a simplification to fit the extensive form game format. The actions here are labeled as if they were chance moves, but they represent the players' choices.
+- The first player node (denoted by `p`) represents Alexis's decision with two actions: "Bach" or "Stravinsky".
+- The second player node represents Beverley's decision, also with two actions: "Bach" or "Stravinsky".
+- The terminal nodes (denoted by `t`) represent the outcomes of the game based on the players' decisions. The payoffs are given in curly braces, with Alexis's payoff first and Beverley's second.
+  - If both choose Bach, Alexis (the Bach lover) gets a higher payoff (2) and Beverley (the Stravinsky lover) gets a lower payoff (1).
+  - If both choose Stravinsky, Beverley gets a higher payoff (2) and Alexis gets a lower payoff (1).
+  - If they choose different events, both get no payoffs (0).
+
+Note: The representation simplifies the simultaneous decision-making by using a chance node at the beginning, which is not strictly accurate for a game of pure strategy without actual chance moves. This is a limitation of trying to fit the game into an extensive form representation that typically includes chance nodes for randomness, not simultaneous decisions.

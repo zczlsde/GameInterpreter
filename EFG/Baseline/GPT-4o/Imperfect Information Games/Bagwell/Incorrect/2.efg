@@ -1,0 +1,16 @@
+EFG 2 R "Misinterpretation Game" { "Player 1" "Player 2" }
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "S" 0.99 "C" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both choose S" { A, B }
+t "" 2 "Player 1 chooses S, Player 2 chooses C" { C, D }
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "Player 1 chooses C, Player 2 chooses S" { E, C }
+t "" 4 "Both choose C" { F, F }
+c "" 2 "" { "S" 0.01 "C" 0.99 } 0
+p "" 2 3 "" { "S" "C" } 0
+t "" 1 "Both choose S" { A, B }
+t "" 2 "Player 1 chooses S, Player 2 chooses C" { C, D }
+p "" 2 4 "" { "S" "C" } 0
+t "" 3 "Player 1 chooses C, Player 2 chooses S" { E, C }
+t "" 4 "Both choose C" { F, F }

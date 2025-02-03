@@ -1,0 +1,200 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors")
+
+# Since both players reveal their choices simultaneously, we model this by having a chance node first
+# to represent the simultaneous move. We'll create a dummy chance player to simulate this.
+g.append_move(g.root, g.players.chance, ["Dummy"])
+
+# From the dummy node, we create moves for Player 1's choices: Rock, Paper, Scissors.
+# These moves are essentially Player 1 deciding what to play without knowing Player 2's choice.
+for dummy_child in g.root.children:
+    g.append_move(dummy_child, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, we create corresponding moves for Player 2.
+# These moves represent Player 2's choices in response to Player 1's move, without actual knowledge of it.
+for p1_choice in g.root.children[0].children:
+    g.append_move(p1_choice, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Now, we set the outcomes based on the rules of Rock, Paper, Scissors.
+# Rock beats Scissors, Scissors beats Paper, and Paper beats Rock.
+# We assign payoffs accordingly: Win = 1, Lose = -1, Tie = 0 for both players.
+# The outcomes are set for each combination of choices.
+outcomes = {
+    ("Rock", "Scissors"): [1, -1],
+    ("Scissors", "Paper"): [1, -1],
+    ("Paper", "Rock"): [1, -1],
+    ("Scissors", "Rock"): [-1, 1],
+    ("Paper", "Scissors"): [-1, 1],
+    ("Rock", "Paper"): [-1, 1],
+    ("Rock", "Rock"): [0, 0],
+    ("Paper", "Paper"): [0, 0],
+    ("Scissors", "Scissors"): [0, 0]
+}
+
+# Iterate through Player 1's choices to set outcomes for each possible game state.
+for p1_choice_node in g.root.children[0].children:
+    p1_choice = p1_choice_node.move.actions[0]  # Player 1's choice
+    for p2_choice_node in p1_choice_node.children:
+        p2_choice = p2_choice_node.move.actions[0]  # Player 2's choice
+        outcome_label = f"{p1_choice} vs {p2_choice}"
+        g.set_outcome(p2_choice_node, g.add_outcome(outcomes[(p1_choice, p2_choice)], label=outcome_label))
+
+# Since the game involves simultaneous moves, we need to set the information sets accordingly.
+# We use the identical code provided to handle the imperfect information.
+for p1_choice_node in g.root.children[0].children:
+    for p2_choice_node in p1_choice_node.children:
+        g.set_infoset(p2_choice_node, p1_choice_node.infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code models the Rock, Paper, Scissors game as an extensive form game using the pygambit library. It starts with a dummy chance move to simulate the simultaneous decision-making process of the two players. Then, it iterates through the possible choices of both players, setting the outcomes based on the game's rules. Finally, it uses information sets to represent the imperfect information inherent in the game, where each player makes their choice without knowledge of the other's choice.
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by first creating a chance move.
+# This chance move will represent the simultaneous decision by introducing a dummy action to proceed.
+g.append_move(g.root, g.players.chance, ["Proceed"])
+
+# From the chance node, we create the moves for Player 1 and Player 2 simultaneously.
+# However, since the moves are simultaneous, we need to create an information set that reflects this.
+# We start by creating moves for Player 1 under the dummy "Proceed" action.
+for action in ["Rock", "Paper", "Scissors"]:
+    g.append_move(g.root.children[0], "Player 1", [action])
+
+# For each of Player 1's actions, we create corresponding moves for Player 2.
+# These moves are created as if Player 2 is responding to Player 1, but they are actually simultaneous.
+for p1_action_node in g.root.children[0].children:
+    for action in ["Rock", "Paper", "Scissors"]:
+        g.append_move(p1_action_node, "Player 2", [action])
+
+# Now, we need to set the outcomes based on the game's rules.
+# The outcomes depend on the combination of moves by Player 1 and Player 2.
+# We iterate through each combination to set the appropriate outcome.
+for p1_node in g.root.children[0].children:
+    p1_action = p1_node.move.actions[0]
+    for p2_node in p1_node.children:
+        p2_action = p2_node.move.actions[0]
+        if p1_action == p2_action:
+            outcome = [0, 0]  # Tie
+        elif (p1_action == "Rock" and p2_action == "Scissors") or \
+             (p1_action == "Scissors" and p2_action == "Paper") or \
+             (p1_action == "Paper" and p2_action == "Rock"):
+            outcome = [1, -1]  # Player 1 wins
+        else:
+            outcome = [-1, 1]  # Player 2 wins
+        g.set_outcome(p2_node, g.add_outcome(outcome))
+
+# Since the moves are simultaneous, we need to ensure that the game reflects this in the information sets.
+# We use the provided identical code to handle the imperfect information.
+# This step is crucial for correctly modeling the simultaneous nature of the game.
+for p1_node in g.root.children[0].children:
+    for p2_node in p1_node.children:
+        # Assign all nodes to the infoset of a single node to reflect simultaneous moves.
+        g.set_infoset(p2_node, p1_node.infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by creating a chance move at the root
+# to simulate the simultaneous decision-making process. This is a workaround for the lack of direct support
+# for simultaneous moves in extensive form games.
+g.append_move(g.root, g.players.chance, ["Simultaneous Move"])
+
+# For each outcome of the chance move, we create moves for Player 1's choices: Rock, Paper, Scissors.
+# These moves are made without Player 1 knowing Player 2's choice, simulating simultaneous play.
+for chance_child in g.root.children:
+    g.append_move(chance_child, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, we create corresponding moves for Player 2.
+# This models Player 2's choices in response to Player 1's move, also without knowing it, maintaining the simultaneous nature.
+for p1_move in g.root.children[0].children:
+    g.append_move(p1_move, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes based on the game's rules: Rock beats Scissors, Scissors beats Paper, and Paper beats Rock.
+# The payoffs are set accordingly: Win = 1, Lose = -1, Tie = 0 for both players.
+# We iterate through the game tree to set these outcomes for each combination of moves.
+for p1_move in g.root.children[0].children:
+    for p2_move in p1_move.children:
+        if p1_move.move.actions[0] == p2_move.move.actions[0]:  # Tie condition
+            g.set_outcome(p2_move, g.add_outcome([0, 0]))
+        elif (p1_move.move.actions[0], p2_move.move.actions[0]) in [("Rock", "Scissors"), ("Scissors", "Paper"), ("Paper", "Rock")]:
+            g.set_outcome(p2_move, g.add_outcome([1, -1]))  # Player 1 wins
+        else:
+            g.set_outcome(p2_move, g.add_outcome([-1, 1]))  # Player 2 wins
+
+# Since the moves are simultaneous, we need to ensure that the information sets reflect this.
+# We use the provided identical code to handle the imperfect information by setting the information sets
+# after all moves have been appended. This ensures that each player's move is made without knowledge of the other's move.
+for p1_move in g.root.children[0].children:
+    for p2_move in p1_move.children:
+        # Set the information set for Player 2's moves to reflect that they are made simultaneously with Player 1's moves
+        g.set_infoset(p2_move, p1_move.infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by creating a chance move at the root
+# to simulate the simultaneous decision-making process. This is a workaround for the lack of direct support
+# for simultaneous moves in extensive form games.
+g.append_move(g.root, g.players.chance, ["Start"])
+
+# From the chance node, we create moves for Player 1's choices: Rock, Paper, Scissors.
+# These moves are made without Player 1 knowing Player 2's choice, simulating simultaneous play.
+for start_node in g.root.children:
+    g.append_move(start_node, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, we create moves for Player 2's choices: Rock, Paper, Scissors.
+# This models Player 2's decision-making without knowing Player 1's choice.
+for p1_move in g.root.children[0].children:
+    g.append_move(p1_move, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Now, we define the outcomes for each combination of choices based on the game's rules.
+# Rock beats Scissors, Scissors beats Paper, and Paper beats Rock. Ties result in a draw.
+# We assign payoffs: Win = 1, Lose = -1, Draw = 0 for both players.
+for p1_move in g.root.children[0].children:
+    for p2_move in p1_move.children:
+        if p1_move.move.actions[0] == p2_move.move.actions[0]:  # Draw condition
+            g.set_outcome(p2_move, g.add_outcome([0, 0]))
+        elif (p1_move.move.actions[0], p2_move.move.actions[0]) in [("Rock", "Scissors"), ("Scissors", "Paper"), ("Paper", "Rock")]:  # P1 wins
+            g.set_outcome(p2_move, g.add_outcome([1, -1]))
+        else:  # P2 wins
+            g.set_outcome(p2_move, g.add_outcome([-1, 1]))
+
+# Since the moves are simultaneous, Player 2's choices should not reveal information about Player 1's choices.
+# We use the provided identical code to handle the imperfect information by setting the information sets.
+for p1_move in g.root.children[0].children:
+    for p2_move in p1_move.children:
+        # Assign all nodes where Player 2 makes a decision to the same information set as the first decision node of Player 2
+        g.set_infoset(p2_move, p1_move.children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

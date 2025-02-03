@@ -1,0 +1,10 @@
+EFG 2 R "Political Campaign Focus Game" { "Candidate A" "Candidate B" }
+""
+
+p "" 2 1 "" { "Economic" "Social" } 0
+p "" 1 1 "" { "Economic" "Social" } 0
+t "" 1 "Same Focus" { 5, -5 }
+t "" 2 "Different Focus" { -4, 4 }
+p "" 1 1 "" { "Economic" "Social" } 0
+t "" 2 "Different Focus" { -4, 4 }
+t "" 1 "Same Focus" { 5, -5 }

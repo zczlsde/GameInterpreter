@@ -1,0 +1,10 @@
+EFG 2 R "Disarmament Treaty Game" { "Country 1" "Country 2" }
+""
+
+p "" 1 1 "" { "Comply" "Not Comply" } 0
+p "" 2 1 "" { "Comply" "Not Comply" } 0
+t "" 1 "Both Comply" { 1, 1 }
+t "" 2 "Country 1 Complies, Country 2 Doesn't" { -1, 2 }
+p "" 2 1 "" { "Comply" "Not Comply" } 0
+t "" 3 "Country 2 Complies, Country 1 Doesn't" { 2, -1 }
+t "" 4 "Neither Comply" { 0, 0 }

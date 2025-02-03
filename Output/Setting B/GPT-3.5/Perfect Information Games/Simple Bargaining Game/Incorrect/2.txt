@@ -1,0 +1,120 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+outcome_A_accepts = g.add_outcome([5500, 4500], label="A accepts")
+outcome_B_accepts = g.add_outcome([4750, 4750], label="B accepts")
+outcome_A_rejects = g.add_outcome([5200, 4800], label="A rejects, B accepts")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], outcome_A_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_B_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_A_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+outcome_A_accepts = g.add_outcome([5500, 4500], label="A accepts")
+outcome_B_accepts = g.add_outcome([4750, 4750], label="B accepts")
+outcome_A_rejects = g.add_outcome([5200, 4800], label="A rejects, B accepts")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], outcome_A_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_B_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_A_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+outcome_A_accepts = g.add_outcome([5500, 4500], label="A accepts")
+outcome_B_accepts = g.add_outcome([4750, 4750], label="B accepts")
+outcome_A_rejects = g.add_outcome([5200, 4800], label="A rejects, B accepts")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], outcome_A_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_B_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_A_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+outcome_A_accepts = g.add_outcome([5500, 4500], label="A accepts")
+outcome_B_accepts = g.add_outcome([4750, 4750], label="B accepts")
+outcome_A_rejects = g.add_outcome([5200, 4800], label="A rejects, B accepts")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], outcome_A_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_B_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_A_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

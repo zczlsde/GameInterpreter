@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each with two actions: "Gourmet Heaven" and "Urban Buzz".
+
+# Step 2: Determine the structure of the game.
+# The game is simultaneous because both partners choose their preferred location without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one partner moves first and the other moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is the first partner's decision node.
+# The second partner's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first partner's actions.
+
+# Step 5: Group the decision nodes in the same information set.
+# Since the partners move simultaneously, the second partner does not know the first partner's choice.
+# Therefore, the second partner's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players.
+# The players are "Fine Dining Lover" and "Cafe Enthusiast".
+g = gbt.Game.new_tree(players=["Fine Dining Lover", "Cafe Enthusiast"],
+                      title="Meeting Location Selection Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume "Fine Dining Lover" moves first and "Cafe Enthusiast" moves second.
+
+# Step 3: Define the actions for the first player, "Fine Dining Lover".
+# The actions are "Gourmet Heaven" and "Urban Buzz".
+g.append_move(g.root, "Fine Dining Lover", ["Gourmet Heaven", "Urban Buzz"])
+
+# Step 4: Define the actions for the second player, "Cafe Enthusiast".
+# The actions are also "Gourmet Heaven" and "Urban Buzz".
+# These actions are appended to the decision nodes of the first player's actions.
+g.append_move(g.root.children[0], "Cafe Enthusiast", ["Gourmet Heaven", "Urban Buzz"])
+g.append_move(g.root.children[1], "Cafe Enthusiast", ["Gourmet Heaven", "Urban Buzz"])
+
+# Step 5: Set the outcomes for each possible combination of actions.
+# If both choose "Gourmet Heaven", the payoffs are [2, 1].
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both at Gourmet Heaven"))
+
+# If "Fine Dining Lover" chooses "Gourmet Heaven" and "Cafe Enthusiast" chooses "Urban Buzz", the payoffs are [0, 0].
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Split Locations"))
+
+# If "Fine Dining Lover" chooses "Urban Buzz" and "Cafe Enthusiast" chooses "Gourmet Heaven", the payoffs are [0, 0].
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Split Locations"))
+
+# If both choose "Urban Buzz", the payoffs are [1, 2].
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both at Urban Buzz"))
+
+# Step 6: Group the decision nodes of the second player in the same information set.
+# This reflects the simultaneous nature of the game, where the second player does not know the first player's choice.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

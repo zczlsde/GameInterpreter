@@ -1,0 +1,54 @@
+```python
+# Step 1: Since Alexis and Beverley make their choices simultaneously, this game involves imperfect information.
+# Step 2: To model the game with a sequential structure, assume Alexis moves first and Beverley moves second.
+# Step 3: The starting node, g.root, is Alexis's decision node.
+# Step 4: Alexis has two actions, Bach and Stravinsky. So, Beverley's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Alexis's actions Bach and Stravinsky.
+# Step 5: Beverley, moving simultaneously, does not know which action Alexis has taken.
+# Step 6: Therefore, Beverley's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Alexis and Beverley.
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Step 2: Since Alexis and Beverley make their choices simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Alexis moves first and Beverley moves second.
+
+# Step 3: The starting node, g.root, is Alexis's decision node.
+# Alexis has two actions, Bach and Stravinsky.
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Step 4: Beverley's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Alexis's actions Bach and Stravinsky.
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Step 5: Beverley, moving simultaneously, does not know which action Alexis has taken.
+# Therefore, Beverley's decision nodes should be grouped in the same information set.
+# Use the identical code block provided to handle the imperfect information.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the payoffs for each outcome.
+# If both choose Bach, Alexis receives a higher payoff, and Beverley receives a lower payoff.
+# If both choose Stravinsky, Beverley receives a higher payoff, and Alexis receives a lower payoff.
+# If they choose different concerts, neither player receives any payoff.
+
+# Payoffs for both choosing Bach
+outcome_bach_bach = g.add_outcome([2, 1], label="Both choose Bach")
+g.set_outcome(g.root.children[0].children[0], outcome_bach_bach)
+
+# Payoffs for both choosing Stravinsky
+outcome_stravinsky_stravinsky = g.add_outcome([1, 2], label="Both choose Stravinsky")
+g.set_outcome(g.root.children[1].children[1], outcome_stravinsky_stravinsky)
+
+# Payoffs for choosing different concerts
+outcome_bach_stravinsky = g.add_outcome([0, 0], label="Different choices")
+g.set_outcome(g.root.children[0].children[1], outcome_bach_stravinsky)
+g.set_outcome(g.root.children[1].children[0], outcome_bach_stravinsky)
+
+# Save the EFG
+efg = g.write(format='native')
+```

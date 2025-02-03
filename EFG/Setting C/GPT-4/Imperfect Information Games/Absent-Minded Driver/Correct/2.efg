@@ -1,0 +1,8 @@
+EFG 2 R "Absent-minded driver game" { "Absent-minded driver" }
+""
+
+p "" 1 1 "" { "EXIT" "CONTINUE" } 0
+t "" 1 "Reach A" { 0 }
+p "" 1 1 "" { "EXIT" "CONTINUE" } 0
+t "" 2 "Reach B" { 4 }
+t "" 3 "Reach C" { 1 }

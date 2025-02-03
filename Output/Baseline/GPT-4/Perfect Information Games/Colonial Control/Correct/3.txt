@@ -1,0 +1,16 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Diplomacy and Conflict" { "Country A" "Country B" }
+p "" 2 1 "" { "Accept" "Rebel" } 0
+p "" 1 1 "" { "Tax" "Drop Taxes" } 0
+t "" 1 "Taxation" { 6, -2 }
+t "" 2 "No Tax" { 4, 0 }
+p "" 1 2 "" { "Grant Independence" "Suppress" } 0
+t "" 3 "Independence Granted" { 0, 3 }
+c "" 1 "" { "B Wins" 0.3 "A Wins" 0.7 } 0
+t "" 4 "B Wins War" { -1, -3 }
+t "" 5 "A Wins War" { -1, -5 }
+```
+
+This EFG representation follows the structure and rules outlined for creating an extensive form game file. It starts with the prologue, specifying the game's title and the players involved. The body of the file then describes the game tree, including player decision nodes (p), chance nodes (c), and terminal nodes (t), along with the outcomes and payoffs associated with each path through the game.

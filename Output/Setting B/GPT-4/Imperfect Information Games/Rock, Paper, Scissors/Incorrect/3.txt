@@ -1,0 +1,43 @@
+To model the Rock-Paper-Scissors game as an extensive form game (EFG) using the Pygambit library, we need to consider that the game involves simultaneous moves. In EFG representation, simultaneous moves can be modeled by introducing a chance move at the beginning that selects the combination of actions taken by the players. This approach transforms the simultaneous game into a sequential game from the perspective of the EFG representation, where the chance move effectively "decides" the actions of both players before the game outcome is determined.
+
+Here's how you can write the Python code to generate the EFG for Rock-Paper-Scissors using the Pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game with a title
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous decision
+# There are 9 possible outcomes: (Rock, Rock), (Rock, Paper), (Rock, Scissors),
+# (Paper, Rock), (Paper, Paper), (Paper, Scissors), (Scissors, Rock), (Scissors, Paper), (Scissors, Scissors)
+g.append_move(g.root, g.players.chance, ["RR", "RP", "RS", "PR", "PP", "PS", "SR", "SP", "SS"])
+
+# Set the probabilities for each outcome, each with equal probability
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes for each possible combination of actions
+# R beats S, S beats P, P beats R. Ties result in a draw.
+outcomes = {
+    "RR": [0, 0], "RP": [-1, 1], "RS": [1, -1],
+    "PR": [1, -1], "PP": [0, 0], "PS": [-1, 1],
+    "SR": [-1, 1], "SP": [1, -1], "SS": [0, 0]
+}
+
+# Looping is not allowed, but we can manually set outcomes for each chance node's child
+# This is a workaround for the instruction not to use loops or recursion
+g.set_outcome(g.root.children[0], g.add_outcome(outcomes["RR"], label="RR"))
+g.set_outcome(g.root.children[1], g.add_outcome(outcomes["RP"], label="RP"))
+g.set_outcome(g.root.children[2], g.add_outcome(outcomes["RS"], label="RS"))
+g.set_outcome(g.root.children[3], g.add_outcome(outcomes["PR"], label="PR"))
+g.set_outcome(g.root.children[4], g.add_outcome(outcomes["PP"], label="PP"))
+g.set_outcome(g.root.children[5], g.add_outcome(outcomes["PS"], label="PS"))
+g.set_outcome(g.root.children[6], g.add_outcome(outcomes["SR"], label="SR"))
+g.set_outcome(g.root.children[7], g.add_outcome(outcomes["SP"], label="SP"))
+g.set_outcome(g.root.children[8], g.add_outcome(outcomes["SS"], label="SS"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a Rock-Paper-Scissors game where the chance node represents the simultaneous move by both players. Each child of the chance node corresponds to one of the nine possible outcomes of the game, with outcomes set according to the rules of Rock-Paper-Scissors. The probabilities for each chance outcome are set to be equal, reflecting the random nature of the players' choices.

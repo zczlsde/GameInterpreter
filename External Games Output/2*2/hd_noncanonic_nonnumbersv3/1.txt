@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Party 1 and Party 2, and they move simultaneously.
+# Each player has two actions: Compromise or Hold Firm.
+
+# Step 2: Represent the game in a sequential structure.
+# Assume Party 1 moves first and Party 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Party 1's decision node.
+# Party 1 has two actions, Compromise and Hold Firm.
+# Party 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Party 1's actions Compromise and Hold Firm.
+
+# Step 4: Determine the information set for Party 2.
+# Since Party 2 moves simultaneously with Party 1, Party 2 does not know which action Party 1 has taken.
+# Therefore, Party 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Party 1 and Party 2.
+g = gbt.Game.new_tree(players=["Party 1", "Party 2"],
+                      title="Coalition Formation Game")
+
+# Step 2: Party 1 moves first. They have two actions: Compromise or Hold Firm.
+g.append_move(g.root, "Party 1", ["Compromise", "Hold Firm"])
+
+# Step 3: Party 2 moves second. They also have two actions: Compromise or Hold Firm.
+# Party 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Party 1's actions Compromise and Hold Firm.
+g.append_move(g.root.children[0], "Party 2", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Party 2", ["Compromise", "Hold Firm"])
+
+# Step 4: Since Party 2 moves simultaneously with Party 1, Party 2 does not know which action Party 1 has taken.
+# Therefore, Party 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both compromise, a moderate platform is developed.
+moderate_platform = g.add_outcome([1, 1], label="Moderate Platform")
+
+# If one party holds firm and the other compromises, the firm holder's policies dominate.
+party1_dominates = g.add_outcome([2, 0], label="Party 1 Dominates")
+party2_dominates = g.add_outcome([0, 2], label="Party 2 Dominates")
+
+# If both hold firm, no coalition is formed, leading to political instability.
+no_coalition = g.add_outcome([-1, -1], label="No Coalition")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], moderate_platform)  # Both compromise
+g.set_outcome(g.root.children[0].children[1], party2_dominates)   # Party 1 compromises, Party 2 holds firm
+g.set_outcome(g.root.children[1].children[0], party1_dominates)   # Party 1 holds firm, Party 2 compromises
+g.set_outcome(g.root.children[1].children[1], no_coalition)       # Both hold firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

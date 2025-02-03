@@ -1,0 +1,65 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two logging companies, which we can consider as two players.
+# Each player has two actions: adopt sustainable practices or not.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both companies decide their actions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one company moves first and the other moves second to represent the simultaneous nature.
+
+# Step 4: Identify the decision nodes.
+# The first company's decision node is the root.
+# The second company's decision nodes are the children of the root, corresponding to the first company's actions.
+
+# Step 5: Group the decision nodes of the second company in the same information set.
+# Since the second company does not know the first company's action, its decision nodes should be in the same information set.
+
+# Set the information set for the second company's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two logging companies, which we can consider as two players.
+# Each player has two actions: adopt sustainable practices or not.
+g = gbt.Game.new_tree(players=["Company 1", "Company 2"],
+                      title="Sustainable Logging Practices Game")
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both companies decide their actions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one company moves first and the other moves second to represent the simultaneous nature.
+g.append_move(g.root, "Company 1", ["Sustainable", "Not Sustainable"])
+
+# Step 4: Identify the decision nodes.
+# The first company's decision node is the root.
+# The second company's decision nodes are the children of the root, corresponding to the first company's actions.
+g.append_move(g.root.children[0], "Company 2", ["Sustainable", "Not Sustainable"])
+g.append_move(g.root.children[1], "Company 2", ["Sustainable", "Not Sustainable"])
+
+# Step 5: Group the decision nodes of the second company in the same information set.
+# Since the second company does not know the first company's action, its decision nodes should be in the same information set.
+# Set the information set for the second company's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Set the outcomes for each possible combination of actions.
+# Both adopt sustainable practices
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([7, 7], label="Both Sustainable"))
+
+# Company 1 adopts sustainable practices, Company 2 does not
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 4], label="Company 1 Sustainable"))
+
+# Company 1 does not adopt sustainable practices, Company 2 does
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Company 2 Sustainable"))
+
+# Neither adopts sustainable practices
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([3, 3], label="Neither Sustainable"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

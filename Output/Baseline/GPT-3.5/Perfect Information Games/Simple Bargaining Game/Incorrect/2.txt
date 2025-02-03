@@ -1,0 +1,11 @@
+EFG 2 R "Negotiation Game" { "A" "B" }
+p "" 1 1 "" { "Propose 5500 to A" } 0
+p "" 2 1 "" { "Accept" "Reject" } 0
+t "" 1 "A gets 5500, B gets 4500" { 5500, 4500 }
+p "" 2 2 "" { "Propose 5000 each" } 0
+p "" 1 1 "" { "Accept" "Reject" } 0
+t "" 2 "A and B get 4750 each" { 4750, 4750 }
+p "" 1 3 "" { "Propose 5200 to A" } 0
+p "" 2 1 "" { "Accept" } 0
+t "" 3 "A gets 5200, B gets 4800" { 5200, 4800 }
+t "" 4 "A gets 4693, B gets 4332" { 4693, 4332 }

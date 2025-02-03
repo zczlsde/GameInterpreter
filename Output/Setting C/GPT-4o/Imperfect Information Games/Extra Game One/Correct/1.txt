@@ -1,0 +1,125 @@
+```python
+# Step 1: Player 1 has three actions: A, B, C. 
+# Player 2 knows when action A was taken, but cannot distinguish between B and C.
+# Therefore, Player 2's decision nodes after B and C should be in the same information set.
+
+# Step 2: Player 2 has three options: D, E, F. 
+# If Player 2 chooses F, the game ends. 
+# If Player 2 chooses D or E, Player 1 has a choice between G and H.
+
+# Step 3: If Player 1 chooses G, Player 2 decides between Q and W.
+# The information set for Player 2 after B and C should be set.
+
+# Set the information set for Player 2's decision nodes after Player 1's actions B and C.
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Step 1: Player 1 has three actions: A, B, C.
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 2: Player 2 knows when action A was taken, but cannot distinguish between B and C.
+# Player 2 has three options: D, E, F. If Player 2 chooses F, the game ends.
+# If Player 2 chooses D or E, Player 1 has a choice between G and H.
+
+# Player 2's move after Player 1 chooses A
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+
+# Player 2's move after Player 1 chooses B
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Player 2's move after Player 1 chooses C
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Set the information set for Player 2's decision nodes after Player 1's actions B and C.
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Step 3: If Player 2 chooses D or E, Player 1 has a choice between G and H.
+# If Player 1 chooses G, Player 2 decides between Q and W.
+
+# Player 1's move after Player 2 chooses D after A
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+
+# Player 1's move after Player 2 chooses E after A
+g.append_move(g.root.children[0].children[1], "Player 1", ["G", "H"])
+
+# Player 1's move after Player 2 chooses D after B
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Player 1's move after Player 2 chooses E after B
+g.append_move(g.root.children[1].children[1], "Player 1", ["G", "H"])
+
+# Player 1's move after Player 2 chooses D after C
+g.append_move(g.root.children[2].children[0], "Player 1", ["G", "H"])
+
+# Player 1's move after Player 2 chooses E after C
+g.append_move(g.root.children[2].children[1], "Player 1", ["G", "H"])
+
+# Player 2's move after Player 1 chooses G after D after A
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+
+# Player 2's move after Player 1 chooses G after E after A
+g.append_move(g.root.children[0].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Player 2's move after Player 1 chooses G after D after B
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+
+# Player 2's move after Player 1 chooses G after E after B
+g.append_move(g.root.children[1].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Player 2's move after Player 1 chooses G after D after C
+g.append_move(g.root.children[2].children[0].children[0], "Player 2", ["Q", "W"])
+
+# Player 2's move after Player 1 chooses G after E after C
+g.append_move(g.root.children[2].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Set outcomes for the game
+# If Player 2 chooses F, the game ends with no payoff specified, so we assume 0 for both players
+outcome_f = g.add_outcome([0, 0], label="Game ends with F")
+
+# If Player 1 chooses H, Player 1 gets 2 and Player 2 gets -1
+outcome_h = g.add_outcome([2, -1], label="Player 1 chooses H")
+
+# If Player 2 chooses Q, both players get 3
+outcome_q = g.add_outcome([3, 3], label="Player 2 chooses Q")
+
+# If Player 2 chooses W, both players get 0
+outcome_w = g.add_outcome([0, 0], label="Player 2 chooses W")
+
+# Set outcomes for Player 2 choosing F
+g.set_outcome(g.root.children[0].children[2], outcome_f)
+g.set_outcome(g.root.children[1].children[2], outcome_f)
+g.set_outcome(g.root.children[2].children[2], outcome_f)
+
+# Set outcomes for Player 1 choosing H
+g.set_outcome(g.root.children[0].children[0].children[1], outcome_h)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_h)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome_h)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_h)
+g.set_outcome(g.root.children[2].children[0].children[1], outcome_h)
+g.set_outcome(g.root.children[2].children[1].children[1], outcome_h)
+
+# Set outcomes for Player 2 choosing Q
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], outcome_q)
+
+# Set outcomes for Player 2 choosing W
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Investment Game with Imperfect Information" { "Company A" "Company B" }
+""
+
+p "" 1 1 "" { "Invest" "Not Invest" } 0
+p "" 2 1 "" { "Invest" "Not Invest" } 0
+t "" 1 "Both Invest" { 2, 2 }
+t "" 2 "A Invests, B Not Invest" { -1, 3 }
+p "" 2 1 "" { "Invest" "Not Invest" } 0
+t "" 3 "B Invests, A Not Invest" { 3, -1 }
+t "" 4 "Neither Invest" { 1, 1 }

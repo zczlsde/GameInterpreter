@@ -1,0 +1,116 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[2].infoset)
+
+# Define the outcomes based on the decisions made
+a_accepts = g.add_outcome([5500, 4500], label="A accepts")
+b_accepts = g.add_outcome([4750, 4750], label="B accepts")
+b_rejects = g.add_outcome([5200, 4800], label="B rejects")
+
+# Set the outcomes based on the decisions made by the players
+g.set_outcome(g.root.children[0].children[0], a_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], b_rejects)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[2].infoset)
+
+# Define the outcomes based on the decisions made
+a_accepts = g.add_outcome([5500, 4500], label="A accepts")
+b_accepts = g.add_outcome([4750, 4750], label="B accepts")
+b_rejects = g.add_outcome([5200, 4800], label="B rejects")
+
+# Set the outcomes based on the decisions made by the players
+g.set_outcome(g.root.children[0].children[0], a_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], b_rejects)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[2].infoset)
+
+# Define the outcomes based on the decisions made
+a_accepts = g.add_outcome([5500, 4500], label="A accepts")
+b_accepts = g.add_outcome([4750, 4750], label="B accepts")
+b_rejects = g.add_outcome([5200, 4800], label="B rejects")
+
+# Set the outcomes based on the decisions made by the players
+g.set_outcome(g.root.children[0].children[0], a_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], b_rejects)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[2].infoset)
+
+# Define the outcomes based on the decisions made
+a_accepts = g.add_outcome([5500, 4500], label="A accepts")
+b_accepts = g.add_outcome([4750, 4750], label="B accepts")
+b_rejects = g.add_outcome([5200, 4800], label="B rejects")
+
+# Set the outcomes based on the decisions made by the players
+g.set_outcome(g.root.children[0].children[0], a_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1], b_rejects)
+
+# Save the EFG
+efg = g.write(format='native')

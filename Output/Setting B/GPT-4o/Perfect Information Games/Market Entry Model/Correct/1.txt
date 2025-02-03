@@ -1,0 +1,31 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                      title="Entry Deterrence Game")
+
+# Firm 2 moves first and decides whether to Enter or Stay Out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 decides to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs for each outcome
+# If Firm 2 stays out, Firm 1 earns more, and Firm 2 earns nothing
+stay_out_outcome = g.add_outcome([2, 0], label="Stay Out")
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn equally
+accommodate_outcome = g.add_outcome([1, 1], label="Accommodate")
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+fight_outcome = g.add_outcome([0, 1], label="Fight")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], stay_out_outcome)  # Firm 2 stays out
+g.set_outcome(g.root.children[0].children[0], fight_outcome)  # Firm 2 enters, Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], accommodate_outcome)  # Firm 2 enters, Firm 1 accommodates
+
+# Save the EFG
+efg = g.write(format='native')
+```

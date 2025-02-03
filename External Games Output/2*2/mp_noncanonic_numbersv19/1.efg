@@ -1,0 +1,10 @@
+EFG 2 R "Investment in Renewable Energy Projects" { "Renewable Startup" "Traditional Energy Company" }
+""
+
+p "" 2 1 "" { "Invest in Wind" "Invest in Solar" } 0
+p "" 1 1 "" { "Invest in Wind" "Invest in Solar" } 0
+t "" 1 "Both invest in Wind" { 5, -5 }
+t "" 2 "Traditional Wind, Renewable Solar" { -4, 4 }
+p "" 1 1 "" { "Invest in Wind" "Invest in Solar" } 0
+t "" 3 "Traditional Solar, Renewable Wind" { -4, 4 }
+t "" 4 "Both invest in Solar" { 5, -5 }

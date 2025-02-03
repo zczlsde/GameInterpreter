@@ -1,0 +1,46 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer competition game with imperfect information")
+
+# Add a chance node to represent the strength of the New Manufacturer
+g.append_move(g.root, g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Add a chance node to represent the signal sent by the New Manufacturer
+g.append_move(g.root.children[0], g.players.chance, ["Strong (S)", "Weak (W)"])
+g.append_move(g.root.children[1], g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Add decision nodes for the Current Manufacturer based on the signal received
+# If the signal indicates Strong (S)
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+
+# Add decision nodes for the Current Manufacturer based on the signal received
+# If the signal indicates Weak (W)
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+
+# Set information sets for nodes with identical information
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define outcomes for each scenario based on the strength and signal
+outcomes = {
+    "SS": [[1, 0], [3, 1]],
+    "SW": [[0, 0], [2, 1]],
+    "WS": [[0, 2], [2, 1]],
+    "WW": [[1, 2], [3, 1]]
+}
+
+# Set outcomes for each combination of strength and signal
+for i, strength in enumerate(["S", "W"]):
+    for j, signal in enumerate(["S", "W"]):
+        outcome_label = strength + signal
+        g.set_outcome(g.root.children[i].children[j].children[0], g.add_outcome(outcomes[outcome_label][0]))
+        g.set_outcome(g.root.children[i].children[j].children[1], g.add_outcome(outcomes[outcome_label][1]))
+
+# Save the EFG
+efg = g.write(format='native')
+```

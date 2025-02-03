@@ -1,0 +1,52 @@
+```python
+# Thought process:
+# In this game, there is no simultaneous move or hidden information. 
+# Each player knows the complete state of the board when making a move.
+# Therefore, there are no information sets to be set for imperfect information.
+# Each decision node is fully observable by the player making the move.
+# As a result, no set_infoset() function is needed for this game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: X and O
+g = gbt.Game.new_tree(players=["X", "O"], title="Tic-Tac-Toe Game")
+
+# Initial move by X, who can place the mark on (0, 0), (0, 2), or (1, 0)
+g.append_move(g.root, "X", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# If X places the mark on (0, 0)
+node_0_0 = g.root.children[0]
+g.append_move(node_0_0, "O", ["(0, 2)", "(1, 0)"])
+
+# If O places the mark on (0, 2), O wins
+g.set_outcome(node_0_0.children[0], g.add_outcome([-1, 1], label="O wins"))
+
+# If O places the mark on (1, 0)
+node_0_0_1_0 = node_0_0.children[1]
+g.append_move(node_0_0_1_0, "X", ["(0, 2)"])
+
+# If X places the mark on (0, 2), X wins
+g.set_outcome(node_0_0_1_0.children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If X places the mark on (0, 2), X wins
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If X places the mark on (1, 0)
+node_1_0 = g.root.children[2]
+g.append_move(node_1_0, "O", ["(0, 0)", "(0, 2)"])
+
+# If O places the mark on (0, 0)
+node_1_0_0_0 = node_1_0.children[0]
+g.append_move(node_1_0_0_0, "X", ["(0, 2)"])
+
+# If X places the mark on (0, 2), X wins
+g.set_outcome(node_1_0_0_0.children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If O places the mark on (0, 2), O wins
+g.set_outcome(node_1_0.children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

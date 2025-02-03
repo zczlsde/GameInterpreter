@@ -1,0 +1,60 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each deciding simultaneously whether to swerve or go straight.
+
+# Step 2: Recognize the imperfect information.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second for modeling purposes.
+
+# Step 4: Identify the decision nodes for Player 2.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Player 1's actions (swerve or go straight).
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 cannot distinguish between Player 1's actions when making their decision, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Driver 1 and Driver 2.
+g = gbt.Game.new_tree(players=["Driver 1", "Driver 2"], title="Chicken Game")
+
+# Step 2: Model the game with a sequential structure for simplicity.
+# Assume Driver 1 moves first and Driver 2 moves second.
+
+# Step 3: Define the actions for Driver 1.
+# Driver 1 can choose to either "Swerve" or "Go Straight".
+g.append_move(g.root, "Driver 1", ["Swerve", "Go Straight"])
+
+# Step 4: Define the actions for Driver 2 based on Driver 1's actions.
+# Driver 2 can also choose to either "Swerve" or "Go Straight".
+g.append_move(g.root.children[0], "Driver 2", ["Swerve", "Go Straight"])
+g.append_move(g.root.children[1], "Driver 2", ["Swerve", "Go Straight"])
+
+# Step 5: Set the outcomes for each possible combination of actions.
+# If both swerve, they avoid the crash and each gets a payoff of 0 units.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Both Swerve"))
+
+# If Driver 1 swerves and Driver 2 goes straight, Driver 1 gets -1 and Driver 2 gets 1.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Driver 1 Swerves"))
+
+# If Driver 1 goes straight and Driver 2 swerves, Driver 1 gets 1 and Driver 2 gets -1.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Driver 2 Swerves"))
+
+# If both go straight, they crash, resulting in a large negative payoff of -10 units for each.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([-10, -10], label="Both Go Straight"))
+
+# Step 6: Recognize the imperfect information.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of making their own decision.
+
+# Step 7: Group Driver 2's decision nodes in the same information set.
+# Since Driver 2 cannot distinguish between Driver 1's actions when making their decision, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

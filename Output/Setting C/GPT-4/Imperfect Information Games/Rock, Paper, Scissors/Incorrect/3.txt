@@ -1,0 +1,67 @@
+```python
+# Importing pygambit is assumed but not included in the code block as per instructions.
+# However, the import statement would typically be: import pygambit as gbt
+
+# Step 1: Initialize the game with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Simultaneous move game with imperfect information")
+
+# Step 2: Since both players move simultaneously, we model this by having a chance node decide the moves.
+# This is a common technique to represent simultaneous moves in a sequential game tree.
+g.append_move(g.root, g.players.chance, ["A_X", "A_Y", "B_X", "B_Y"])
+
+# Step 3: Define the outcomes based on the combinations of actions.
+# Since the game description does not specify outcomes, we assume generic outcomes for demonstration.
+# In a real scenario, these would be replaced with the actual game outcomes.
+g.set_outcome(g.root.children[0], g.add_outcome([1, -1], label="A chooses A, B chooses X"))
+g.set_outcome(g.root.children[1], g.add_outcome([-1, 1], label="A chooses A, B chooses Y"))
+g.set_outcome(g.root.children[2], g.add_outcome([1, -1], label="A chooses B, B chooses X"))
+g.set_outcome(g.root.children[3], g.add_outcome([-1, 1], label="A chooses B, B chooses Y"))
+
+# Step 4: Set the information sets for Alice and Bob.
+# Since both players move simultaneously, they do not know the other's move when they make their decision.
+# However, in this representation, we have a single chance node making the decision, so there's no need to explicitly set information sets for simultaneous moves.
+# If we were to model the game with explicit decision nodes for each player, we would group those decision nodes into information sets to represent the simultaneous nature of the game.
+
+# Note: The provided setup does not require the use of set_infoset() due to the modeling choice of using a chance node to represent simultaneous moves.
+# If the game were modeled with explicit decision nodes for each player, then we would use set_infoset() to group those nodes accordingly.
+
+# Save the EFG for further analysis or visualization
+efg = g.write(format='native')
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Initialize the game with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Rock, Paper, Scissors")
+
+# Step 2: Append a chance move to simulate simultaneous decisions by Alice and Bob.
+# The chance move will have outcomes representing all possible combinations of choices by Alice and Bob.
+actions = ["Rock", "Paper", "Scissors"]
+chance_actions = [f"{a}_{b}" for a in actions for b in actions]
+g.append_move(g.root, g.players.chance, chance_actions)
+
+# Step 3: Define the outcomes for each combination of actions.
+# The outcomes are determined by the rules of Rock, Paper, Scissors.
+# Rock blunts Scissors, Scissors cut Paper, and Paper covers Rock.
+# We assign payoffs according to the rules: win (1), lose (-1), tie (0).
+outcomes = {
+    "Rock_Scissors": [1, -1], "Scissors_Rock": [-1, 1],
+    "Scissors_Paper": [1, -1], "Paper_Scissors": [-1, 1],
+    "Paper_Rock": [1, -1], "Rock_Paper": [-1, 1],
+    "Rock_Rock": [0, 0], "Paper_Paper": [0, 0], "Scissors_Scissors": [0, 0]
+}
+
+# Assign outcomes to each chance action.
+for i, action in enumerate(chance_actions):
+    outcome_label = f"{action.split('_')[0]} vs {action.split('_')[1]}"
+    g.set_outcome(g.root.children[i], g.add_outcome(outcomes[action.split('_')[0] + "_" + action.split('_')[1]], label=outcome_label))
+
+# Step 4: Since the moves are simultaneous, there's no need to explicitly set information sets for Alice and Bob in this representation.
+# The chance node effectively simulates the simultaneous move aspect of the game.
+# If we were to model the game with explicit decision nodes for each player, then we would use set_infoset() to group those nodes accordingly.
+
+# Save the EFG for further analysis or visualization
+efg = g.write(format='native')
+```
+This code snippet creates an extensive-form game representation of Rock, Paper, Scissors using the pygambit library. The game is modeled with a chance node to simulate the simultaneous moves of Alice and Bob, with outcomes determined by the rules of Rock, Paper, Scissors.

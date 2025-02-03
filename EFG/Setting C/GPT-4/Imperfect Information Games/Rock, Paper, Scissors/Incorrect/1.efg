@@ -1,0 +1,13 @@
+EFG 2 R "Rock, Paper, Scissors Game" { "Alice" "Bob" }
+""
+
+c "" 1 "" { "Rock-Rock" 1/9 "Rock-Paper" 1/9 "Rock-Scissors" 1/9 "Paper-Rock" 1/9 "Paper-Paper" 1/9 "Paper-Scissors" 1/9 "Scissors-Rock" 1/9 "Scissors-Paper" 1/9 "Scissors-Scissors" 1/9 } 0
+t "" 1 "" { 0, 0 }
+t "" 2 "" { -1, 1 }
+t "" 3 "" { 1, -1 }
+t "" 4 "" { 1, -1 }
+t "" 5 "" { 0, 0 }
+t "" 6 "" { -1, 1 }
+t "" 7 "" { -1, 1 }
+t "" 8 "" { 1, -1 }
+t "" 9 "" { 0, 0 }

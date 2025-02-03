@@ -1,0 +1,52 @@
+```python
+import pygambit as gbt
+
+# Define the game with two players: Leader and Follower
+g = gbt.Game.new_tree(players=["Leader", "Follower"], title="Imperfect Information Game")
+
+# Define payoffs based on the ranking provided: E > A > F > W > B > D
+# Assign arbitrary values that respect the given ranking
+E, A, F, W, B, D = 6, 5, 4, 3, 2, 1
+
+# Leader makes the first move, choosing between "S" and "C"
+g.append_move(g.root, "Leader", ["S", "C"])
+
+# For each of Leader's choices, there's a chance node for Follower's interpretation
+# Adding chance moves for misinterpretation
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["Interpret S", "Interpret C"])
+
+# Setting the probabilities for correct interpretation and misinterpretation
+# 99% chance of correct interpretation, 1% chance of misinterpretation
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 100), gbt.Rational(99, 100)])
+
+# Follower makes a decision based on the interpretation of Leader's move
+# Adding moves for Follower's decision after interpreting Leader's choice as "S"
+g.append_move(g.root.children[0].children[0], "Follower", ["S", "C"])  # Correct interpretation of S
+g.append_move(g.root.children[0].children[1], "Follower", ["S", "C"])  # Misinterpretation as C
+# Adding moves for Follower's decision after interpreting Leader's choice as "C"
+g.append_move(g.root.children[1].children[0], "Follower", ["S", "C"])  # Misinterpretation as S
+g.append_move(g.root.children[1].children[1], "Follower", ["S", "C"])  # Correct interpretation of C
+
+# Setting outcomes based on the actual choices of Leader and Follower
+# Outcomes when Leader chooses "S"
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="SS misinterpreted"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="SC misinterpreted"))
+
+# Outcomes when Leader chooses "C"
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS misinterpreted"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC misinterpreted"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="CC"))
+
+# Since the Follower's decision is based on the interpretation of Leader's move, which is a chance event,
+# there's no need to set information sets for imperfect information as the game tree already captures the uncertainty.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game with imperfect information where the Leader's choice might be misinterpreted by the Follower. The game tree includes chance nodes to model the probability of misinterpretation. The payoffs are assigned based on the ranking provided, ensuring that the values respect the given hierarchy. The game is structured to reflect the sequential decisions and the impact of imperfect information on the Follower's choices.

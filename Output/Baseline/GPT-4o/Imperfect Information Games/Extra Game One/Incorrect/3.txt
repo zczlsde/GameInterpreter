@@ -1,0 +1,27 @@
+Certainly! Below is the EFG representation of the described game:
+
+```
+EFG 2 R "Three-stage game" { "Player 1" "Player 2" }
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" "F" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 1 "Outcome Q" { 3, 3 }
+t "" 2 "Outcome W" { 0, 0 }
+t "" 3 "Outcome H" { 2, -1 }
+p "" 2 3 "" { "D" "E" "F" } 0
+p "" 1 3 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 1 "Outcome Q" { 3, 3 }
+t "" 2 "Outcome W" { 0, 0 }
+t "" 3 "Outcome H" { 2, -1 }
+``` 
+
+Explanation:
+- The game starts with Player 1 choosing between actions A, B, or C.
+- If Player 1 chooses A, Player 2 knows this and chooses between D, E, or F.
+- If Player 2 chooses F, the game ends.
+- If Player 2 chooses D or E, Player 1 then chooses between G and H.
+- If Player 1 chooses H, the game ends with payoffs (2, -1).
+- If Player 1 chooses G, Player 2 chooses between Q and W, with payoffs (3, 3) for Q and (0, 0) for W.
+- If Player 1 chooses B or C, Player 2 cannot distinguish between them and chooses between D, E, or F, leading to similar outcomes as when Player 1 chooses A.

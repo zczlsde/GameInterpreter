@@ -1,0 +1,83 @@
+```python
+# In this game, all actions are observable, and there is no simultaneous move or hidden information.
+# Therefore, there are no information sets that group different nodes for a single player based on not knowing which node they are at.
+# Each decision is made with full knowledge of the previous actions, so there's no need to group nodes into information sets for representing imperfect information.
+# Since the game description does not introduce any uncertainty or simultaneous moves, we do not use g.set_infoset() in this scenario.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Initial move by Alice: she can either "take" or "push" the piles
+g.append_move(g.root, "Alice", ["take", "push"])
+
+# If Alice takes, the game ends with the current piles (4 for Alice, 1 for Bob)
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+bob_move = g.append_move(g.root.children[1], "Bob", ["take", "push"])
+
+# If Bob takes after the first push, he takes 8 and gives 2 to Alice
+g.set_outcome(bob_move.children[0], g.add_outcome([2, 8], label="Bob takes after first push"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+alice_second_move = g.append_move(bob_move.children[1], "Alice", ["take", "push"])
+
+# If Alice takes after the second push, she takes 16 and gives 4 to Bob
+g.set_outcome(alice_second_move.children[0], g.add_outcome([16, 4], label="Alice takes after second push"))
+
+# If Alice pushes again, the piles double and it's Bob's turn for the last time
+bob_second_move = g.append_move(alice_second_move.children[1], "Bob", ["take", "push"])
+
+# If Bob takes after the second push by Alice, he takes 32 and gives 8 to Alice
+g.set_outcome(bob_second_move.children[0], g.add_outcome([8, 32], label="Bob takes after second push by Alice"))
+
+# If Bob pushes for the last time, the piles double and the game ends with Alice taking the larger pile
+g.set_outcome(bob_second_move.children[1], g.add_outcome([64, 16], label="Final push, Alice takes larger pile"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the scenario with Alice and Bob and their decisions regarding the piles of coins. The game tree is built step by step, reflecting each player's choices and the consequences of those choices, including the doubling of the piles when pushed and the allocation of coins when taken. The game ends after a sequence of moves, with outcomes determined by the actions taken by Alice and Bob.
+=======================================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Initial move by Alice: she can either "take" or "push" the piles
+g.append_move(g.root, "Alice", ["take", "push"])
+
+# If Alice takes, the game ends with the current piles (4 for Alice, 1 for Bob)
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+g.append_move(g.root.children[1], "Bob", ["take", "push"])
+
+# If Bob takes after the first push, he takes 8 and gives 2 to Alice
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes after first push"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+g.append_move(g.root.children[1].children[1], "Alice", ["take", "push"])
+
+# If Alice takes after the second push, she takes 16 and gives 4 to Bob
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes after second push"))
+
+# If Alice pushes again, the piles double and it's Bob's turn for the last time
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["take", "push"])
+
+# If Bob takes after the second push by Alice, he takes 32 and gives 8 to Alice
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes after second push by Alice"))
+
+# If Bob pushes for the last time, the piles double and the game ends with Alice taking the larger pile
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push, Alice takes larger pile"))
+
+# Save the EFG
+efg = g.write(format='native')

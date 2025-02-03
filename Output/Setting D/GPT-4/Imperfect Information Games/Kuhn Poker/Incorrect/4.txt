@@ -1,0 +1,84 @@
+```python
+# Since Alice and Bob do not know each other's cards, we need to group decision nodes based on the information available to them.
+# For Alice, her decision nodes after the chance node are based on her card, but since she does not know Bob's card, all her decision nodes must be grouped by her card.
+# Similarly, for Bob, his decision nodes depend on Alice's actions but not on the specific card Alice has, so his decision nodes must be grouped by Alice's actions without regard to the specific cards.
+
+# Grouping Alice's decision nodes when she has to decide to check or bet, since she doesn't know Bob's card.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # JQ and JK, Alice knows she has a Jack
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # QJ and QK, Alice knows she has a Queen
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # KJ and KQ, Alice knows she has a King
+
+# Grouping Bob's decision nodes after Alice checks, since he doesn't know Alice's card.
+# Assuming Alice checks, Bob's decision nodes are based on his action to check or bet without knowing Alice's card.
+# For simplicity, let's assume the first child of each allocation represents Alice's action to check, and the second child represents Alice's action to bet.
+# Then, Bob's decision nodes after Alice checks are the first child of each of these nodes.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset) # JQ and JK, Bob knows Alice checked
+g.set_infoset(g.root.children[2].children[0], g.root.children[3].children[0].infoset) # QJ and QK, Bob knows Alice checked
+g.set_infoset(g.root.children[4].children[0], g.root.children[5].children[0].infoset) # KJ and KQ, Bob knows Alice checked
+
+# Grouping Bob's decision nodes after Alice bets, since he doesn't know Alice's card.
+# Similarly, Bob's decision nodes after Alice bets are the second child of each allocation's node.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset) # JQ and JK, Bob knows Alice bet
+g.set_infoset(g.root.children[2].children[1], g.root.children[3].children[1].infoset) # QJ and QK, Bob knows Alice bet
+g.set_infoset(g.root.children[4].children[1], g.root.children[5].children[1].infoset) # KJ and KQ, Bob knows Alice bet
+
+# Note: The actual implementation would require creating these nodes and actions explicitly before setting information sets as described.
+# This code block assumes that the game tree has been constructed with the chance node leading to Alice's decision nodes, which then lead to Bob's decision nodes based on Alice's actions.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Poker Game")
+
+# Append a chance move at the root for the card distribution
+# There are six possible allocations of the cards: JQ, JK, QJ, QK, KJ, KQ
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+# Set the probabilities for each allocation to be equal, 1/6
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# Append Alice's moves (check or bet) for each card allocation
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# Append Bob's moves (check or bet) after Alice checks, and (fold or call) after Alice bets
+for node in g.root.children:
+    # After Alice checks
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+    # After Alice bets
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+
+# Append Alice's moves (fold or call) after Bob bets
+for node in g.root.children:
+    # Only after Alice checks and Bob bets
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# Set outcomes based on the higher card winning, folding, or calling
+# This part is simplified and assumes specific payoffs for each action combination
+# For example, if Alice or Bob wins by having a higher card, the winner takes 2 from the loser
+# If someone folds, the other player takes 3 (winning 1 from the other player)
+# The actual implementation of outcomes would depend on the specific rules for determining the winner based on the cards
+
+# Since Alice and Bob do not know each other's cards, we need to group decision nodes based on the information available to them.
+# Grouping Alice's decision nodes when she has to decide to check or bet, since she doesn't know Bob's card.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset) # JQ and JK, Alice knows she has a Jack
+g.set_infoset(g.root.children[2], g.root.children[3].infoset) # QJ and QK, Alice knows she has a Queen
+g.set_infoset(g.root.children[4], g.root.children[5].infoset) # KJ and KQ, Alice knows she has a King
+
+# Grouping Bob's decision nodes after Alice checks, since he doesn't know Alice's card.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset) # JQ and JK, Bob knows Alice checked
+g.set_infoset(g.root.children[2].children[0], g.root.children[3].children[0].infoset) # QJ and QK, Bob knows Alice checked
+g.set_infoset(g.root.children[4].children[0], g.root.children[5].children[0].infoset) # KJ and KQ, Bob knows Alice checked
+
+# Grouping Bob's decision nodes after Alice bets, since he doesn't know Alice's card.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset) # JQ and JK, Bob knows Alice bet
+g.set_infoset(g.root.children[2].children[1], g.root.children[3].children[1].infoset) # QJ and QK, Bob knows Alice bet
+g.set_infoset(g.root.children[4].children[1], g.root.children[5].children[1].infoset) # KJ and KQ, Bob knows Alice bet
+
+# Note: The actual implementation of outcomes is omitted for brevity. It would involve setting outcomes for each terminal node based on the rules of the game.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code sets up the game tree for the three-card poker game described, including the chance node for card distribution, Alice's and Bob's decision nodes, and the information sets to handle imperfect information. The outcomes based on the game's rules need to be defined and assigned to the terminal nodes to complete the game model.

@@ -1,0 +1,52 @@
+To construct the Extensive Form Game (EFG) for the given game description using the PyGambit library, we'll follow the game's structure closely. The game involves three players and four stages, with some stages involving simultaneous moves. Here's how we can approach coding this game:
+
+1. **First Stage**: Player 1 chooses among actions A, B, and C.
+2. **Second Stage**: Player 2 chooses between D and E without knowing Player 1's choice, indicating a simultaneous move situation for Players 1 and 2.
+3. **Third Stage**: After observing Player 2's choice, Player 1 selects between F and G. This suggests that Player 1's third-stage decision is contingent on Player 2's choice, but since Player 2's decision was made without knowledge of Player 1's initial choice, we treat Player 2's move as a chance move to reflect the uncertainty.
+4. **Fourth Stage**: Player 3 decides between Q and W, with the payoffs determined by this final choice.
+
+Given the simultaneous move in the second stage, we'll model Player 2's decision as a chance move to simplify the representation, as PyGambit does not directly support simultaneous moves. This approach simplifies the game tree construction while maintaining the essence of the game's strategic interactions.
+
+Here's the Python code using PyGambit to generate the EFG for this game:
+
+```python
+import pygambit as gbt
+
+# Initialize the game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-Stage Game")
+
+# First Stage: Player 1's move
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second Stage: Player 2's move treated as a chance move for simplicity
+# We create a chance node for each of Player 1's actions
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["D", "E"])
+
+# Third Stage: Player 1's response to Player 2's move
+# We need to create moves for Player 1 after each of Player 2's decisions
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["F", "G"])
+
+# Fourth Stage: Player 3's decision
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.append_move(grandchild, "Player 3", ["Q", "W"])
+
+# Setting outcomes based on Player 3's decision
+# If Player 3 selects Q, all players receive a payoff of 3
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], g.add_outcome([3, 3, 3], label="All get 3"))
+            g.set_outcome(grandchild.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 get 2, P3 gets 3"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree step by step, following the game's stages and decisions. Note that we've simplified the representation of simultaneous moves by treating Player 2's decision as a chance move. This approach allows us to construct the game tree without directly modeling the simultaneous move, which is a limitation when using PyGambit for this specific game structure.

@@ -1,0 +1,12 @@
+EFG 2 R "Coin Piles Game" { "Alice" "Bob" }
+""
+
+p "" 1 1 "" { "Take" "Push" } 0
+t "" 1 "Alice takes initially" { 4, 1 }
+p "" 2 1 "" { "Take" "Push" } 0
+t "" 2 "Bob takes after first push" { 2, 8 }
+p "" 1 2 "" { "Take" "Push" } 0
+t "" 3 "Alice takes after second push" { 4, 16 }
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 4 "Bob takes after third push" { 8, 32 }
+t "" 5 "Final push, Alice gets larger pile" { 32, 16 }

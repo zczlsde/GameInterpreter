@@ -1,0 +1,62 @@
+```python
+# Thought process:
+# In this game, both players (the couple) must decide simultaneously whether to adopt environmentally friendly habits.
+# This simultaneous decision-making introduces imperfect information, as neither player knows the other's choice at the time of their decision.
+# To model this game with a sequential structure, we can assume one player moves first and the other moves second.
+# Let's assume Player 1 moves first and Player 2 moves second.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Player 1's actions (Adopt or Not Adopt).
+# Since Player 2 does not know Player 1's action when making their decision, Player 2's decision nodes should be grouped in the same information set.
+
+# Set the information set for Player 2's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Partner 1 and Partner 2
+g = gbt.Game.new_tree(players=["Partner 1", "Partner 2"],
+                      title="Environmentally Friendly Habits Decision Game")
+
+# Thought process:
+# In this game, both players (the couple) must decide simultaneously whether to adopt environmentally friendly habits.
+# This simultaneous decision-making introduces imperfect information, as neither player knows the other's choice at the time of their decision.
+# To model this game with a sequential structure, we can assume one player moves first and the other moves second.
+# Let's assume Partner 1 moves first and Partner 2 moves second.
+
+# Partner 1 makes the first move with two actions: Adopt or Not Adopt
+g.append_move(g.root, "Partner 1", ["Adopt", "Not Adopt"])
+
+# Partner 2 makes a move after Partner 1, with the same two actions: Adopt or Not Adopt
+# Partner 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Partner 1's actions (Adopt or Not Adopt)
+g.append_move(g.root.children[0], "Partner 2", ["Adopt", "Not Adopt"])
+g.append_move(g.root.children[1], "Partner 2", ["Adopt", "Not Adopt"])
+
+# Since Partner 2 does not know Partner 1's action when making their decision, Partner 2's decision nodes should be grouped in the same information set.
+# Set the information set for Partner 2's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Define the outcomes based on the decisions made by both partners
+# If both adopt, they share a sense of mutual accomplishment and avoid environmental guilt, each receiving a payoff of 5
+mutual_adoption = g.add_outcome([5, 5], label="Mutual Adoption")
+
+# If Partner 1 adopts and Partner 2 does not, Partner 1 feels betrayed and incurs higher costs, receiving a payoff of 2
+# Partner 2 avoids extra costs and gains a short-term advantage, receiving a payoff of 8
+partner1_adopts = g.add_outcome([2, 8], label="Partner 1 Adopts")
+
+# If Partner 2 adopts and Partner 1 does not, Partner 2 feels betrayed and incurs higher costs, receiving a payoff of 2
+# Partner 1 avoids extra costs and gains a short-term advantage, receiving a payoff of 8
+partner2_adopts = g.add_outcome([8, 2], label="Partner 2 Adopts")
+
+# If neither adopts, they avoid the higher costs but risk feeling collective guilt, each receiving a payoff of 3
+no_adoption = g.add_outcome([3, 3], label="No Adoption")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], mutual_adoption)
+g.set_outcome(g.root.children[0].children[1], partner1_adopts)
+g.set_outcome(g.root.children[1].children[0], partner2_adopts)
+g.set_outcome(g.root.children[1].children[1], no_adoption)
+
+# Save the EFG
+efg = g.write(format='native')
+```

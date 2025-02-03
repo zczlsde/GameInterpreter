@@ -1,0 +1,29 @@
+EFG 2 R "Sequential game with three players" { "Player 1" "Player 2" "Player 3" }
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All players receive 3" { 3, 3, 3 }
+t "" 2 "Player 1 and 2 receive 2, Player 3 receives 3" { 2, 2, 3 }

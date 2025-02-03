@@ -1,0 +1,10 @@
+EFG 2 R "Negotiation game" { "A" "B" }
+""
+
+p "" 1 1 "" { "Accept" "Reject" } 0
+t "" 0
+p "" 1 2 "" { "Accept" "Reject" } 0
+t "" 0
+p "" 1 2 "" { "Accept" "Reject" } 0
+t "" 0
+t "" 0

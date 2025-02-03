@@ -1,0 +1,13 @@
+EFG 2 R "Country A and Country B Game" { "Country A" "Country B" }
+""
+
+p "" 2 1 "" { "Accept" "Rebel" } 0
+p "" 1 1 "" { "Tax" "Drop Taxes" } 0
+t "" 1 "Country A Taxes" { 6, -2 }
+t "" 2 "Country A Drops Taxes" { 4, 0 }
+p "" 1 2 "" { "Grant Independence" "Suppress" } 0
+t "" 3 "Grant Independence" { 0, 3 }
+c "" 1 "" { "Country B Wins" 3/10 "Country B Loses" 7/10 } 0
+t "" 4 "Country B Wins War" { -1, -3 }
+t "" 5 "Country B Loses War" { -1, -5 }
+

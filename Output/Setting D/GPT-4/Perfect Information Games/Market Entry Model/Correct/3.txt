@@ -1,0 +1,48 @@
+```python
+# Since Firm 2 moves first by deciding whether to enter or out, and Firm 1 moves second by choosing to Fight or Accommodate,
+# there is no simultaneous move in this game structure. Therefore, there's no need to group decision nodes into the same information set
+# based on the inability of a player to distinguish between them. Each decision is made with perfect information about the previous actions.
+
+# However, to adhere to the instructions and focus on the representation of imperfect information using pygambit's API,
+# we note that if there were any simultaneous moves or hidden actions, we would group those decision nodes into the same information set.
+# In this game, since all moves are sequential and there are no hidden actions or simultaneous decisions, 
+# there's no need to use g.set_infoset() to group nodes into the same information set for representing imperfect information.
+
+# This means, in this specific game, the structure of the game itself does not necessitate the use of information sets to represent imperfect information,
+# as each player's decision is made with full knowledge of the prior moves within the game's sequence.
+```
+
+Given the game description, we can construct the extensive-form game using the pygambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and depending on Firm 2's decision, Firm 1 chooses how to compete. This game is sequential without simultaneous moves, and each player's decision is made with full knowledge of prior moves. Therefore, there's no need for information sets representing imperfect information in this specific game structure. Here's how you can code this game in Python using the pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Entry Deterrence Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# If Firm 2 enters, Firm 1 decides how to compete: Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the game description
+# Payoffs when Firm 2 stays out
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Out"))
+
+# Payoffs when Firm 2 enters and Firm 1 fights
+# Firm 2 earns more than Firm 1 if Firm 1 fights
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# Payoffs when Firm 2 enters and Firm 1 accommodates
+# Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Since the game is sequential with no hidden actions or simultaneous decisions,
+# there's no need to use information sets for representing imperfect information in this game structure.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game where Firm 2 decides first whether to enter the market or not. If Firm 2 enters, Firm 1 then decides how to respond. The payoffs are set according to the conditions provided in the game description. Since all decisions are made sequentially with full knowledge of prior moves, there's no need for information sets to represent imperfect information in this game.

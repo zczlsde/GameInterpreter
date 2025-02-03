@@ -1,0 +1,19 @@
+EFG 2 R "Three Players Game with Imperfect Information" { "Player 1" "Player 2" "Player 3" }
+""
+
+c "" 1 "" { "A" 1/2 "B" 1/2 } 0
+p "" 1 1 "" { "L" "R" } 0
+p "" 2 1 "" { "l" "r" } 0
+p "" 3 1 "" { "a" "b" } 0
+t "" 5 "Player 3 chooses a" { 3, 3, 3 }
+t "" 6 "Player 3 chooses b" { 3, 3, 3 }
+t "" 3 "Player 2 chooses r" { 2, 2, 2 }
+t "" 1 "Player 1 chooses R" { 1, 1, 1 }
+p "" 1 1 "" { "L" "R" } 0
+p "" 2 1 "" { "l" "r" } 0
+p "" 3 1 "" { "a" "b" } 0
+t "" 7 "Player 3 chooses a" { 3, 3, 3 }
+t "" 8 "Player 3 chooses b" { 3, 3, 3 }
+t "" 4 "Player 2 chooses r" { 2, 2, 2 }
+t "" 2 "Player 1 chooses R" { 1, 1, 1 }
+

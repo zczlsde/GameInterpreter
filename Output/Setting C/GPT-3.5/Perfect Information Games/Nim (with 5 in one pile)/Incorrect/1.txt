@@ -1,0 +1,52 @@
+```python
+# Step-by-step thought process:
+# 1. Alice starts the game with the decision to remove one or two stones.
+# 2. If Alice removes one stone, Bob has the decision to remove one or two stones.
+# 3. If Bob removes one stone, Alice again decides to remove one or two stones.
+# 4. If Alice removes one stone, Bob has the choice to remove one or two stones.
+# 5. If Bob removes one stone, Alice can remove one stone, leading to Alice losing the game.
+# 6. If Bob removes two stones, Bob loses the game.
+# 7. If Alice removes two stones, Bob can remove one stone, leading to Bob's loss.
+# 8. If Bob removes two stones, Alice can remove one or two stones.
+# 9. If Alice removes one stone, Bob can remove one stone, leading to Bob's loss.
+# 10. If Alice removes two stones, Alice loses the game.
+# 11. If Alice removes two stones initially, Bob has the option to remove one or two stones.
+# 12. If Bob removes one stone, Alice can remove one or two stones.
+# 13. If Alice removes one stone, Bob can remove one stone, leading to Bob's loss.
+# 14. If Alice removes two stones, Alice loses the game.
+# 15. If Bob removes two stones, Alice has only one stone left and loses.
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Stone Removal Game")
+
+# Alice's decision to remove one or two stones
+g.append_move(g.root, "Alice", ["Remove 1 stone", "Remove 2 stones"])
+
+# Bob's decision after Alice removes one stone
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+
+# Bob's decision after Alice removes two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+
+# Set information sets for Bob's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Stone Removal Game")
+
+# Alice's decision to remove one or two stones
+g.append_move(g.root, "Alice", ["Remove 1 stone", "Remove 2 stones"])
+
+# Bob's decision after Alice removes one stone
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+
+# Bob's decision after Alice removes two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+
+# Set information sets for Bob's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```

@@ -1,0 +1,26 @@
+Given the game description and the constraints on the payoffs, let's construct the EFG representation. Note that the specific values of A, B, C, D, E, F are not provided, but their relationship is given as E > A > F > C > B > D. For the purpose of this example, let's assume arbitrary values that satisfy these conditions, such as E=6, A=5, F=4, C=3, B=2, D=1. 
+
+EFG Representation:
+
+```
+EFG 2 R "Leader-Follower Game with Misinterpretation" { "Player 1" "Player 2" }
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "S perceived" 0.99 "C perceived" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both choose S" { 5, 2 }
+t "" 2 "S-C" { 3, 1 }
+c "" 2 "" { "S perceived" 0.01 "C perceived" 0.99 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "C-S" { 6, 3 }
+t "" 4 "Both choose C" { 4, 4 }
+```
+
+Explanation:
+
+1. Player 1 chooses between "S" and "C".
+2. A chance node represents the possibility of misinterpretation by Player 2. If Player 1 chooses "S", there's a 99% chance Player 2 correctly perceives "S" and a 1% chance they incorrectly perceive "C". The reverse probabilities apply if Player 1 chooses "C".
+3. Based on the perception, Player 2 then makes a choice between "S" and "C".
+4. The terminal nodes represent the outcomes of the game with the specified payoffs for each combination of choices.
+
+This representation assumes that Player 2 has separate information sets for perceiving "S" and "C" from Player 1, reflecting the chance of misinterpretation. The payoffs are assigned based on the given conditions and the assumed values for A, B, C, D, E, F.
+Iteration:  2

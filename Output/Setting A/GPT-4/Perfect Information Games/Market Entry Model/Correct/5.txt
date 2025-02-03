@@ -1,0 +1,29 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to fight or accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs for each outcome
+# Assuming specific payoff values for demonstration, these should be replaced with the actual values
+# Payoffs when Firm 2 stays out
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+# Payoffs when Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+# Payoffs when Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Since the game description does not specify any imperfect information, we do not use g.set_infoset() here.
+# If there were simultaneous moves or hidden actions, we would use g.set_infoset() to group nodes into information sets.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game where Firm 2 decides first whether to enter the market or not. If Firm 2 enters, then Firm 1 decides on its strategy (to fight or accommodate). The payoffs are set based on the outcomes of these decisions. Since the game description does not mention any simultaneous moves or hidden actions, there's no need to use `g.set_infoset()` for creating information sets for imperfect information scenarios.

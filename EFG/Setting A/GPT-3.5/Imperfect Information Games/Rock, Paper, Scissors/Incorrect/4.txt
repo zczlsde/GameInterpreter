@@ -1,0 +1,197 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Rock, Paper, Scissors game")
+
+# Player 1 and Player 2 simultaneously reveal one of three symbols: rock, paper, or scissors
+# Chance node to represent the simultaneous move
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Player 1's actions after the simultaneous move
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+# Player 2's actions after the simultaneous move
+g.append_move(g.root, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Set information set for Player 1 and Player 2 to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Define the outcomes based on the choices of Player 1 and Player 2
+rock_rock = g.add_outcome([0, 0], label="Both choose Rock")
+rock_paper = g.add_outcome([-1, 1], label="Player 1: Rock, Player 2: Paper")
+rock_scissors = g.add_outcome([1, -1], label="Player 1: Rock, Player 2: Scissors")
+paper_rock = g.add_outcome([1, -1], label="Player 1: Paper, Player 2: Rock")
+paper_paper = g.add_outcome([0, 0], label="Both choose Paper")
+paper_scissors = g.add_outcome([-1, 1], label="Player 1: Paper, Player 2: Scissors")
+scissors_rock = g.add_outcome([-1, 1], label="Player 1: Scissors, Player 2: Rock")
+scissors_paper = g.add_outcome([1, -1], label="Player 1: Scissors, Player 2: Paper")
+scissors_scissors = g.add_outcome([0, 0], label="Both choose Scissors")
+
+# Set outcomes for each combination of choices
+g.set_outcome(g.root.children[0].children[0], rock_rock)
+g.set_outcome(g.root.children[0].children[1], rock_paper)
+g.set_outcome(g.root.children[0].children[2], rock_scissors)
+g.set_outcome(g.root.children[1].children[0], paper_rock)
+g.set_outcome(g.root.children[1].children[1], paper_paper)
+g.set_outcome(g.root.children[1].children[2], paper_scissors)
+g.set_outcome(g.root.children[2].children[0], scissors_rock)
+g.set_outcome(g.root.children[2].children[1], scissors_paper)
+g.set_outcome(g.root.children[2].children[2], scissors_scissors)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Rock, Paper, Scissors game")
+
+# Player 1 and Player 2 simultaneously reveal one of three symbols: rock, paper, or scissors
+# Chance node to represent the simultaneous move
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Player 1's actions after the simultaneous move
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+# Player 2's actions after the simultaneous move
+g.append_move(g.root, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Set information set for Player 1 and Player 2 to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Define the outcomes based on the choices of Player 1 and Player 2
+outcomes = {
+    "Rock": {
+        "Rock": [0, 0],
+        "Paper": [-1, 1],
+        "Scissors": [1, -1]
+    },
+    "Paper": {
+        "Rock": [1, -1],
+        "Paper": [0, 0],
+        "Scissors": [-1, 1]
+    },
+    "Scissors": {
+        "Rock": [-1, 1],
+        "Paper": [1, -1],
+        "Scissors": [0, 0]
+    }
+}
+
+# Set outcomes for each combination of choices
+for i, action_player1 in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, action_player2 in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome = g.add_outcome(outcomes[action_player1][action_player2], label=f"Player 1: {action_player1}, Player 2: {action_player2}")
+        g.set_outcome(g.root.children[i].children[j], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Rock, Paper, Scissors game")
+
+# Player 1 and Player 2 simultaneously reveal one of three symbols: rock, paper, or scissors
+# Chance node to represent the simultaneous move
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Player 1's actions after the simultaneous move
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+# Player 2's actions after the simultaneous move
+g.append_move(g.root, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Set information set for Player 1 and Player 2 to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Define the outcomes based on the choices of Player 1 and Player 2
+outcomes = {
+    "Rock": {
+        "Rock": [0, 0],
+        "Paper": [-1, 1],
+        "Scissors": [1, -1]
+    },
+    "Paper": {
+        "Rock": [1, -1],
+        "Paper": [0, 0],
+        "Scissors": [-1, 1]
+    },
+    "Scissors": {
+        "Rock": [-1, 1],
+        "Paper": [1, -1],
+        "Scissors": [0, 0]
+    }
+}
+
+# Set outcomes for each combination of choices
+for i, action_player1 in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, action_player2 in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome = g.add_outcome(outcomes[action_player1][action_player2])
+        g.set_outcome(g.root.children[i].children[j], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Rock, Paper, Scissors game")
+
+# Player 1 and Player 2 simultaneously reveal one of three symbols: rock, paper, or scissors
+# Chance node to represent the simultaneous move
+g.append_move(g.root, g.players.chance, ["Rock", "Paper", "Scissors"])
+
+# Player 1's actions after the simultaneous move
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+# Player 2's actions after the simultaneous move
+g.append_move(g.root, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Set information set for Player 1 and Player 2 to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Define the outcomes based on the choices of Player 1 and Player 2
+outcomes = {
+    "Rock": {
+        "Rock": [0, 0],
+        "Paper": [-1, 1],
+        "Scissors": [1, -1]
+    },
+    "Paper": {
+        "Rock": [1, -1],
+        "Paper": [0, 0],
+        "Scissors": [-1, 1]
+    },
+    "Scissors": {
+        "Rock": [-1, 1],
+        "Paper": [1, -1],
+        "Scissors": [0, 0]
+    }
+}
+
+# Set outcomes for each combination of choices
+for i, action_player1 in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, action_player2 in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome = g.add_outcome(outcomes[action_player1][action_player2])
+        g.set_outcome(g.root.children[i].children[j], outcome)
+
+# Save the EFG
+efg = g.write(format='native')

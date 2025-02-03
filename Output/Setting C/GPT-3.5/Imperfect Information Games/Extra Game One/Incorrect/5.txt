@@ -1,0 +1,129 @@
+```python
+# Step-by-step thought process:
+# Player 1's decision nodes are g.root.children[0] (A), g.root.children[1] (B), and g.root.children[2] (C).
+# Player 2 knows when action A was taken, but cannot distinguish between B or C.
+# Player 2's decision nodes are g.root.children[0].children[0] (A and D), g.root.children[1].children[0] (B and E), and g.root.children[2].children[0] (C and F).
+# Player 2's decision nodes D and E lead to Player 1's decision nodes g.root.children[0].children[0].children[0] (A, D, and G) and g.root.children[1].children[0].children[0] (B, E, and H).
+# Player 2's decision node F leads to the end of the game.
+# Player 1's decision nodes G and H lead to Player 2's decision nodes g.root.children[0].children[0].children[0].children[0] (A, D, G, and Q) and g.root.children[1].children[0].children[0].children[0] (B, E, H, and W).
+# Group the decision nodes of Player 2 that cannot distinguish between B or C in the same information set.
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+
+outcome1 = g.add_outcome([3, 3], label="Both players get 3")
+outcome2 = g.add_outcome([0, 0], label="Both players get 0")
+outcome3 = g.add_outcome([2, -1], label="Player 1 gets 2, Player 2 gets -1")
+
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome3)
+
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+
+outcome1 = g.add_outcome([3, 3], label="Both players get 3")
+outcome2 = g.add_outcome([0, 0], label="Both players get 0")
+outcome3 = g.add_outcome([2, -1], label="Player 1 gets 2, Player 2 gets -1")
+
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome3)
+
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+
+outcome1 = g.add_outcome([3, 3], label="Both players get 3")
+outcome2 = g.add_outcome([0, 0], label="Both players get 0")
+outcome3 = g.add_outcome([2, -1], label="Player 1 gets 2, Player 2 gets -1")
+
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome3)
+
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+
+outcome1 = g.add_outcome([3, 3], label="Both players get 3")
+outcome2 = g.add_outcome([0, 0], label="Both players get 0")
+outcome3 = g.add_outcome([2, -1], label="Player 1 gets 2, Player 2 gets -1")
+
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome3)
+
+efg = g.write(format='native')

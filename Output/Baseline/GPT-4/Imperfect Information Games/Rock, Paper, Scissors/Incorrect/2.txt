@@ -1,0 +1,26 @@
+Certainly! Given the simultaneous nature of the game Rock-Paper-Scissors, we can represent it as an extensive form game where the players make their choices without knowledge of the other player's choice. This can be modeled by introducing a chance node at the beginning to represent the simultaneous move nature of the game. However, for simplicity and clarity, we can directly model the players' choices and outcomes without explicitly using a chance node, assuming the game starts with player 1's decision node, but keeping in mind that in reality, both players choose simultaneously.
+
+EFG Representation:
+
+```
+EFG 2 R "Rock-Paper-Scissors Game" { "Player1" "Player2" }
+p "" 1 1 "" { "Rock" "Paper" "Scissors" } 0
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 1 "Tie - Rock" { 0, 0 }
+t "" 2 "Paper beats Rock" { -1, 1 }
+t "" 3 "Rock beats Scissors" { 1, -1 }
+t "" 4 "Rock beats Scissors" { -1, 1 }
+t "" 5 "Tie - Paper" { 0, 0 }
+t "" 6 "Scissors beats Paper" { 1, -1 }
+t "" 7 "Paper beats Rock" { 1, -1 }
+t "" 8 "Scissors beats Paper" { -1, 1 }
+t "" 9 "Tie - Scissors" { 0, 0 }
+```
+
+Explanation:
+
+- The game starts with Player 1 choosing one of three actions: Rock, Paper, or Scissors. This is represented by the first personal (player) node for Player 1 with an information set containing the three actions.
+- Following Player 1's decision, Player 2 also chooses one of the three actions, represented by the second personal node for Player 2.
+- The terminal nodes (`t`) represent the outcomes of the game based on the combination of choices made by Player 1 and Player 2. Each outcome is associated with payoffs for both players, indicating the result of the game. A payoff of 1 indicates a win, -1 indicates a loss, and 0 indicates a tie.
+
+Note: In a more detailed representation, especially for games with simultaneous moves, a chance node could be used to more accurately represent the simultaneous decision-making process. However, for the Rock-Paper-Scissors game, where each player's strategy set is common knowledge and decisions are made simultaneously, the above representation provides a simplified view of the game's structure.

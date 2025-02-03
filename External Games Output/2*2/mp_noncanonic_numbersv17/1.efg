@@ -1,0 +1,10 @@
+EFG 2 R "Marketing Strategy Game" { "Boutique Agency" "Large Firm" }
+""
+
+p "" 2 1 "" { "Viral Campaign" "Influencer Partnership" } 0
+p "" 1 1 "" { "Viral Campaign" "Influencer Partnership" } 0
+t "" 1 "Same Strategy" { 4, -4 }
+t "" 2 "Different Strategy" { -6, 6 }
+p "" 1 1 "" { "Viral Campaign" "Influencer Partnership" } 0
+t "" 2 "Different Strategy" { -6, 6 }
+t "" 1 "Same Strategy" { 4, -4 }

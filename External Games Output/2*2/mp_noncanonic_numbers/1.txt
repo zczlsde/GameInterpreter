@@ -1,0 +1,48 @@
+```python
+# Step-by-step thought process:
+# 1. There are two players: the owner of the small gallery and the owner of the big gallery.
+# 2. Both players make their decisions simultaneously, which means they do not know the other player's choice when making their own decision.
+# 3. To model this game with a sequential structure, we can assume one player moves first and the other moves second.
+# 4. Let's assume the owner of the big gallery moves first and the owner of the small gallery moves second.
+# 5. The starting node, g.root, is the decision node for the owner of the big gallery.
+# 6. The owner of the big gallery has two actions: choose Painter 1 or Painter 2.
+# 7. The decision nodes for the owner of the small gallery are g.root.children[0] and g.root.children[1], corresponding to the big gallery's choices.
+# 8. Since the owner of the small gallery does not know the choice of the big gallery owner, these decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: the owner of the small gallery and the owner of the big gallery.
+g = gbt.Game.new_tree(players=["Small Gallery Owner", "Big Gallery Owner"],
+                      title="Gallery Promotion Game")
+
+# Step 2: Assume the owner of the big gallery moves first. The starting node, g.root, is the decision node for the owner of the big gallery.
+# The owner of the big gallery has two actions: choose Painter 1 or Painter 2.
+g.append_move(g.root, "Big Gallery Owner", ["Painter 1", "Painter 2"])
+
+# Step 3: The decision nodes for the owner of the small gallery are g.root.children[0] and g.root.children[1], corresponding to the big gallery's choices.
+# The owner of the small gallery also has two actions: choose Painter 1 or Painter 2.
+g.append_move(g.root.children[0], "Small Gallery Owner", ["Painter 1", "Painter 2"])
+g.append_move(g.root.children[1], "Small Gallery Owner", ["Painter 1", "Painter 2"])
+
+# Step 4: Since the owner of the small gallery does not know the choice of the big gallery owner, these decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes based on the choices of both players.
+# If their choices match, the owner of the small gallery wins 1 point, and the owner of the big gallery loses 1 point.
+# If their choices differ, the owner of the big gallery wins 1 point, and the owner of the small gallery loses 1 point.
+
+# Outcomes for the case where the big gallery owner chooses Painter 1
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, -1], label="Match: Painter 1"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Mismatch: Painter 1"))
+
+# Outcomes for the case where the big gallery owner chooses Painter 2
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([-1, 1], label="Mismatch: Painter 2"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, -1], label="Match: Painter 2"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

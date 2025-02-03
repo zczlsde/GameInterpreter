@@ -1,0 +1,37 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to fight or accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the game description
+# Assuming specific numeric values for the payoffs to match the description:
+# - Firm 1 earns more if Firm 2 stays out
+# - If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+# - If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+# Note: The actual numeric values are placeholders and should be adjusted based on further details
+
+# Payoffs when Firm 2 stays out
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# Payoffs when Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# Payoffs when Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Since the game description does not specify any simultaneous moves or imperfect information,
+# we do not need to use g.set_infoset() in this particular game setup.
+# However, if there were simultaneous moves or imperfect information, we would group nodes into information sets accordingly.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing a market entry scenario where Firm 1 is an established monopolist and Firm 2 is a potential entrant. The game tree is constructed with decisions for Firm 2 to enter or stay out of the market and for Firm 1 to fight or accommodate if Firm 2 enters. The payoffs are set according to the game description, with placeholders that can be adjusted to reflect specific values. Since the game does not involve simultaneous moves or imperfect information as described, there's no need to use `g.set_infoset()` in this setup.

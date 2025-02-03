@@ -1,0 +1,39 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+# This is the first move in the game, made by Firm 2
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, then Firm 1 must decide how to respond
+# This decision is represented as a move by Firm 1, with two possible actions: Fight or Accommodate
+# This move is contingent on Firm 2's decision to Enter
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs for each outcome
+# The payoffs are structured according to the game description
+# If Firm 2 stays out, Firm 1 earns more (represented by a higher payoff for Firm 1)
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+# The specific numeric values for these payoffs are not given in the description, so we will use placeholders
+# Let's assume the following payoff structure:
+# - Firm 1 earns 3 if Firm 2 stays out
+# - If Firm 2 enters and Firm 1 accommodates, both earn 2
+# - If Firm 2 enters and Firm 1 fights, Firm 1 earns 1 and Firm 2 earns 2
+
+# Set the outcomes based on the moves
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))  # Firm 2 stays out
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))  # Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))  # Firm 1 accommodates
+
+# Since the game description does not specify any simultaneous moves or imperfect information requiring the use of information sets,
+# we do not need to use g.set_infoset() in this particular game setup.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing the market entry scenario described. Firm 2 makes the initial decision to enter the market or stay out. If Firm 2 enters, Firm 1 chooses to fight or accommodate. The payoffs are set according to the outcomes of these decisions. Since the game description does not mention simultaneous moves or imperfect information that would necessitate grouping nodes into information sets, the `g.set_infoset()` function is not used in this setup.

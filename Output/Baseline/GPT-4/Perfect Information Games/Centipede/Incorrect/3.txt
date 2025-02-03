@@ -1,0 +1,22 @@
+Based on the game description provided, here is the EFG representation for the game involving Alice and Bob, with the doubling of coin piles and the option to either "take" or "push" the piles:
+
+```
+EFG 2 R "Doubling coin game" { "Alice" "Bob" }
+p "" 1 1 "" { "Push" "Take" } 0
+    p "" 2 1 "" { "Push" "Take" } 0
+        p "" 1 2 "" { "Push" "Take" } 0
+            p "" 2 2 "" { "Push" "Take" } 0
+                t "" 1 "Alice takes 16, Bob takes 4" { 16, 4 }
+                t "" 2 "Push, Alice takes 32, Bob takes 8" { 32, 8 }
+            t "" 3 "Bob takes 16, Alice takes 4" { 4, 16 }
+        t "" 4 "Push, Bob takes 8, Alice takes 2" { 2, 8 }
+    t "" 5 "Alice takes 8, Bob takes 2" { 8, 2 }
+    p "" 2 3 "" { "Push" "Take" } 0
+        p "" 1 3 "" { "Push" "Take" } 0
+            t "" 6 "Alice takes 4, Bob takes 1" { 4, 1 }
+            t "" 7 "Push, Alice takes 8, Bob takes 2" { 8, 2 }
+        t "" 8 "Bob takes 4, Alice takes 1" { 1, 4 }
+t "" 9 "Alice takes 4, Bob takes 1" { 4, 1 }
+```
+
+This EFG representation outlines the structure of the game, starting with Alice's decision to either "Push" or "Take" the piles of coins. Depending on the actions taken by Alice and Bob, the game progresses through various states, with the piles doubling when "Pushed" and players deciding whether to "Take" or "Push" at each step. The terminal nodes represent the outcomes of the game, including the final distribution of coins based on the decisions made by Alice and Bob throughout the game.

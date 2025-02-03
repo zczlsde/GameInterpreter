@@ -1,0 +1,10 @@
+EFG 2 R "Spy Exchange Game" { "Nation 1" "Nation 2" }
+""
+
+p "" 1 1 "" { "Agree" "Not agree" } 0
+p "" 2 1 "" { "Agree" "Not agree" } 0
+t "" 1 "Mutual Respect" { 1, 1 }
+t "" 2 "Nation 2 Advantage" { -1, 2 }
+p "" 2 1 "" { "Agree" "Not agree" } 0
+t "" 3 "Nation 1 Advantage" { 2, -1 }
+t "" 4 "Escalation" { 0, 0 }

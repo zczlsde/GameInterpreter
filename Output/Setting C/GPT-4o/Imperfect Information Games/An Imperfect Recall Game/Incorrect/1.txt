@@ -1,0 +1,194 @@
+```python
+# Step 1: The game starts with a chance node that randomly selects either "L" or "R".
+# Step 2: Player 1 observes the outcome of the chance node and selects either "l" or "r".
+# Step 3: In the third stage, Player 1 must choose between "A" and "B".
+# At this point, Player 1 has forgotten the outcome of the first stage and only remembers her decision from the second stage.
+# Therefore, Player 1's decision nodes in the third stage should be grouped in the same information set.
+
+# Grouping the decision nodes in the third stage for Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with one player and a chance player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect information")
+
+# Step 1: The game starts with a chance node that randomly selects either "L" or "R".
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 observes the outcome of the chance node and selects either "l" or "r".
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Step 3: In the third stage, Player 1 must choose between "A" and "B".
+# Player 1 has forgotten the outcome of the first stage and only remembers her decision from the second stage.
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Grouping the decision nodes in the third stage for Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Set the payoffs for all outcomes to 0
+outcome = g.add_outcome([0], label="Zero payoff")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with one player and a chance player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect information")
+
+# Step 1: The game starts with a chance node that randomly selects either "L" or "R".
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 observes the outcome of the chance node and selects either "l" or "r".
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Step 3: In the third stage, Player 1 must choose between "A" and "B".
+# Player 1 has forgotten the outcome of the first stage and only remembers her decision from the second stage.
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Grouping the decision nodes in the third stage for Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Set the payoffs for all outcomes to 0
+outcome = g.add_outcome([0], label="Zero payoff")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with one player and a chance player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect information")
+
+# Step 1: The game starts with a chance node that randomly selects either "L" or "R".
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 observes the outcome of the chance node and selects either "l" or "r".
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Step 3: In the third stage, Player 1 must choose between "A" and "B".
+# Player 1 has forgotten the outcome of the first stage and only remembers her decision from the second stage.
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Grouping the decision nodes in the third stage for Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Set the payoffs for all outcomes to 0
+outcome = g.add_outcome([0], label="Zero payoff")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with one player and a chance player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect information")
+
+# Step 1: The game starts with a chance node that randomly selects either "L" or "R".
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 observes the outcome of the chance node and selects either "l" or "r".
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Step 3: In the third stage, Player 1 must choose between "A" and "B".
+# Player 1 has forgotten the outcome of the first stage and only remembers her decision from the second stage.
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Grouping the decision nodes in the third stage for Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Set the payoffs for all outcomes to 0
+outcome = g.add_outcome([0], label="Zero payoff")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome)
+
+# Save the EFG
+efg = g.write(format='native')

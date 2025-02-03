@@ -1,0 +1,15 @@
+Given the game description, here's the EFG representation:
+
+```
+EFG 2 R "Doubling coins game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 }
+p "" 2 1 "" { "Take" "Push" } 0
+t "" 2 "Bob takes 8, Alice takes 2" { 2, 8 }
+p "" 1 2 "" { "Take" "Push" } 0
+t "" 3 "Alice takes 16, Bob takes 4" { 16, 4 }
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 4 "Bob takes 32, Alice takes 8" { 8, 32 }
+```
+
+This EFG representation outlines the structure of the game where Alice and Bob have the option to "Take" or "Push" the piles of coins. The game progresses through a series of moves where each player can either take the larger pile and give the smaller one to the opponent or push both piles to the other side, doubling their quantities. The terminal nodes represent the outcomes of the game based on the decisions made by Alice and Bob, including the final distribution of coins after the allowed moves.

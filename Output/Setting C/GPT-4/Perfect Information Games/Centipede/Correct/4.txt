@@ -1,0 +1,45 @@
+```python
+# Since all actions are observable and there's no simultaneous move or hidden information after the game starts,
+# there's no need to group any decision nodes into the same information set based on the game description provided.
+# Each move is based on the complete knowledge of the previous state of the game.
+# Therefore, no set_infoset() function is necessary for this game representation.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Doubling Coins Game")
+
+# Alice's first move: choose to "take" or "push" the initial piles of 4 and 1 coins
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice chooses to "Take", the game ends. Alice gets 4, Bob gets 1.
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice chooses to "Push", the piles double and it's Bob's turn with piles of 2 and 8 coins
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses to "Take" after Alice's "Push", Bob gets 8, Alice gets 2.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes after first push"))
+
+# If Bob chooses to "Push", the piles double again to 4 and 16, and it's Alice's turn
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice chooses to "Take" after Bob's "Push", Alice gets 16, Bob gets 4.
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes after second push"))
+
+# If Alice chooses to "Push" again, the piles double to 8 and 32, and it's Bob's final turn
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses to "Take" after the second "Push" by Alice, Bob gets 32, Alice gets 8.
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes after second push"))
+
+# If Bob chooses to "Push" for the final time, the piles double to 16 and 64, and the game ends with Alice taking the larger pile by default.
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game where Alice and Bob decide whether to "take" or "push" piles of coins across the table, with the quantities doubling each time they are pushed. The game progresses through a series of decisions, with the outcome determined by the players' choices. Each decision node represents a choice by either Alice or Bob, with the outcomes reflecting the final distribution of coins based on these choices.

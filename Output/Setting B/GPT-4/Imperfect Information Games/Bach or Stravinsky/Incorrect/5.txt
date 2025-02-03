@@ -1,0 +1,37 @@
+To model the "Bach or Stravinsky?" game using the Pygambit library, we need to represent the simultaneous decision-making process of Alexis and Beverley. In extensive form games, simultaneous moves are typically represented by introducing a chance move at the beginning, which leads to different information sets for each player, indicating that they make their decisions without knowing the other's choice. However, since the game description explicitly states that Alexis and Beverley make their decisions simultaneously and independently, we can simplify the model by directly creating information sets for each player's decision without introducing a chance move. Here's how you can do it:
+
+```python
+import pygambit as gbt
+
+# Create a new game instance
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky Game")
+
+# Since the moves are simultaneous, we start by creating a chance node to represent this.
+# However, as per the instructions, we're not using a chance node to model simultaneous moves directly.
+# Instead, we create separate information sets for each player's decision.
+
+# Append moves for Alexis
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+# Append moves for Beverley under each of Alexis's decisions to simulate simultaneous moves
+for node in g.root.children:
+    g.append_move(node, "Beverley", ["Bach", "Stravinsky"])
+
+# Now, we set the outcomes based on the game description
+# If both choose Bach
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both Bach"))
+# If Alexis chooses Bach and Beverley chooses Stravinsky
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Disagree"))
+# If Alexis chooses Stravinsky and Beverley chooses Bach
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Disagree"))
+# If both choose Stravinsky
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both Stravinsky"))
+
+# Since Alexis and Beverley make their decisions simultaneously, we need to ensure their moves are in separate information sets.
+# However, given the structure of the game tree we've built, each player's decision already falls into unique information sets implicitly.
+# Therefore, there's no need to manually set information sets for simulating simultaneous moves in this specific case.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a game tree for the "Bach or Stravinsky?" game, where Alexis and Beverley make their choices simultaneously. Each player has two options, leading to four possible outcomes. The payoffs are set according to the game description, with higher payoffs for attending the preferred concert together and no payoff if they choose different concerts.

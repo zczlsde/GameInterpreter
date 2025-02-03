@@ -1,0 +1,81 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the first plan: A receives 5,500 pounds, B receives 4,500 pounds
+g.append_move(g.root, "B", ["Accept", "Reject"])
+
+# If B accepts, the negotiation concludes with the proposed split
+g.set_outcome(g.root.children[0], g.add_outcome([5500, 4500], label="B accepts A's proposal"))
+
+# If B rejects, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[1], "A", ["Accept", "Reject"])
+
+# If A accepts B's offer, both receive 4,750 pounds
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's offer, A proposes a new split: A receives 5,200 pounds, B receives 4,800 pounds
+g.append_move(g.root.children[1].children[1], "B", ["Accept"])
+
+# B has no choice but to accept, resulting in a different payoff
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's second proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+
+1. **Game Setup**: We start by creating a new extensive-form game with two players, A and B.
+
+2. **First Move by A**: A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds. B has the choice to either accept or reject this proposal.
+
+3. **B's Decision**:
+   - If B accepts, the game ends with the proposed split, and the payoffs are set accordingly.
+   - If B rejects, B proposes an equal split of 5,000 pounds each.
+
+4. **A's Decision**:
+   - If A accepts B's proposal, both players receive 4,750 pounds.
+   - If A rejects, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds.
+
+5. **Final Move by B**: B has no choice but to accept A's second proposal, resulting in a different payoff.
+
+6. **Outcome Setting**: The outcomes are set at each terminal node based on the decisions made by the players.
+
+This code models the negotiation process as described, with each player's decisions leading to different outcomes.```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the initial distribution plan
+g.append_move(g.root, "A", ["Propose 5500/4500"])
+
+# B decides to accept or reject A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with payoffs 5500 for A and 4500 for B
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts A's Proposal"))
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000/5000"])
+
+# A decides to accept or reject B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with payoffs 4750 for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts B's Proposal"))
+
+# If A rejects B's proposal, A proposes a new plan
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200/4800"])
+
+# B must accept A's new proposal, ending the game with payoffs 4693 for A and 4332 for B
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B Must Accept A's New Proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the extensive-form game as described in the game description. The game starts with player A proposing a distribution plan, followed by player B's decision to accept or reject. If B rejects, B proposes an equal split, and A decides to accept or reject. If A rejects, A proposes a new plan that B must accept. The payoffs are set according to the outcomes of these decisions.

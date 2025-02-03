@@ -1,0 +1,10 @@
+EFG 2 R "Co-directing a High-Budget Film" { "Director 1" "Director 2" }
+""
+
+p "" 1 1 "" { "Commit" "Not Commit" } 0
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 1 "Critically Acclaimed" { 7, 7 }
+t "" 2 "Compromised Vision 1" { 0, 3 }
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 3 "Compromised Vision 2" { 3, 0 }
+t "" 4 "Average Movies" { 2, 2 }

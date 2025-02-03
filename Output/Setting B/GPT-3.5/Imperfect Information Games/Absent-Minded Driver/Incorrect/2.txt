@@ -1,0 +1,132 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add nodes for junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Add nodes for junction Y
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1].children[1].children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information sets for nodes at junction X and Y
+g.set_infoset(g.root.children[1], g.root.children[1].children[1])
+g.set_infoset(g.root.children[1].children[1], g.root.children[1])
+
+# Define outcomes for the game
+dest_A = g.add_outcome([0, 0], label="Destination A")
+dest_B = g.add_outcome([4, 0], label="Destination B")
+dest_C = g.add_outcome([0, 1], label="Destination C")
+
+# Set outcomes for the nodes
+g.set_outcome(g.root.children[0], dest_A)
+g.set_outcome(g.root.children[1].children[0], dest_B)
+g.set_outcome(g.root.children[1].children[1].children[0], dest_C)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add nodes for junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Add nodes for junction Y
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1].children[1].children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information sets for nodes at junction X and Y
+g.set_infoset(g.root.children[1], g.root.children[1].children[1])
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[1])
+
+# Define outcomes for the game
+dest_A = g.add_outcome([0, 0], label="Destination A")
+dest_B = g.add_outcome([4, 0], label="Destination B")
+dest_C = g.add_outcome([0, 1], label="Destination C")
+
+# Set outcomes for the nodes
+g.set_outcome(g.root.children[0], dest_A)
+g.set_outcome(g.root.children[1].children[0], dest_B)
+g.set_outcome(g.root.children[1].children[1].children[0], dest_C)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add nodes for junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Add nodes for junction Y
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1].children[1].children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information sets for nodes at junction X and Y
+g.set_infoset(g.root.children[1], g.root.children[1].children[1])
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[1])
+
+# Define outcomes for the game
+dest_A = g.add_outcome([0, 0], label="Destination A")
+dest_B = g.add_outcome([4, 0], label="Destination B")
+dest_C = g.add_outcome([0, 1], label="Destination C")
+
+# Set outcomes for the nodes
+g.set_outcome(g.root.children[0], dest_A)
+g.set_outcome(g.root.children[1].children[0], dest_B)
+g.set_outcome(g.root.children[1].children[1].children[1], dest_C)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add nodes for junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Add nodes for junction Y
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1].children[1].children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information sets for nodes at junction X and Y
+g.set_infoset(g.root.children[1], g.root.children[1].children[1])
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[1])
+
+# Define outcomes for the game
+dest_A = g.add_outcome([0, 0], label="Destination A")
+dest_B = g.add_outcome([4, 0], label="Destination B")
+dest_C = g.add_outcome([0, 1], label="Destination C")
+
+# Set outcomes for the nodes
+g.set_outcome(g.root.children[0], dest_A)
+g.set_outcome(g.root.children[1].children[0], dest_B)
+g.set_outcome(g.root.children[1].children[1].children[1], dest_C)
+
+# Save the EFG
+efg = g.write(format='native')

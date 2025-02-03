@@ -1,0 +1,22 @@
+EFG 2 R "Imperfect information game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" "F" } 0
+t "" 0
+t "" 0
+t "" 1 "End game F" { 0, 0 }
+p "" 2 2 "" { "D" "E" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 4 "" { "Q" "W" } 0
+t "" 4 "End game Q" { 3, 3 }
+t "" 0
+t "" 2 "End game H" { 2, -1 }
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 4 "" { "Q" "W" } 0
+t "" 5 "End game Q" { 3, 3 }
+t "" 0
+t "" 3 "End game H" { 2, -1 }
+p "" 2 3 "" { "D" "E" } 0
+t "" 0
+t "" 0

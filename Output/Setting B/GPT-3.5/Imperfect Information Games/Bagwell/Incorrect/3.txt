@@ -1,0 +1,214 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (leader) and Player 2 (follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Player 1 (leader) makes the first move by selecting either "S" or "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 (follower) then tries to interpret Player 1's choice with a small probability of misinterpretation
+# Create a chance node to represent the misinterpretation
+g.append_move(g.root, g.players.chance, ["Correct", "Misinterpret"])
+
+# Set the probabilities for the chance node
+gbt.Rational(1, 100) # 1% chance of misinterpretation
+
+# Player 2 (follower) makes a move based on their interpretation of Player 1's choice
+# If Player 2 correctly interprets Player 1's choice
+correct_interpretation = g.root.children[0]
+g.append_move(correct_interpretation, "Player 2", ["S", "C"])
+# If Player 2 misinterprets Player 1's choice
+misinterpretation = g.root.children[1]
+g.append_move(misinterpretation, "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on their interpretation
+# Player 2's information set for correct interpretation
+g.set_infoset(correct_interpretation.children[0], correct_interpretation.children[1].infoset)
+# Player 2's information set for misinterpretation
+g.set_infoset(misinterpretation.children[0], misinterpretation.children[1].infoset)
+
+# Define the payoffs for each combination of choices
+payoffs = {
+    ("S", "S"): (A, B),
+    ("S", "C"): (W, D),
+    ("C", "S"): (E, W),
+    ("C", "C"): (F, F)
+}
+
+# Assign values to the payoffs
+A = 3
+B = 2
+W = 1
+D = 0
+E = 4
+F = -1
+
+# Set outcomes for each combination of choices
+for node in g.root.children:
+    for action_player1 in node.children:
+        for action_player2 in action_player1.children:
+            payoff = payoffs[(node.label, action_player2.label)]
+            g.set_outcome(action_player2, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (leader) and Player 2 (follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Player 1 (leader) makes the first move by selecting either "S" or "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 (follower) then tries to interpret Player 1's choice with a small probability of misinterpretation
+# Create a chance node to represent the misinterpretation
+chance_node = g.append_move(g.root, g.players.chance, ["Correct", "Misinterpret"])
+
+# Set the probabilities for the chance node
+gbt.Rational(1, 100) # 1% chance of misinterpretation
+
+# Player 2 (follower) makes a move based on their interpretation of Player 1's choice
+# If Player 2 correctly interprets Player 1's choice
+correct_interpretation = chance_node.children[0]
+correct_interpretation_player2 = g.append_move(correct_interpretation, "Player 2", ["S", "C"])
+# If Player 2 misinterprets Player 1's choice
+misinterpretation = chance_node.children[1]
+misinterpretation_player2 = g.append_move(misinterpretation, "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on their interpretation
+# Player 2's information set for correct interpretation
+g.set_infoset(correct_interpretation_player2, correct_interpretation_player2.infoset)
+# Player 2's information set for misinterpretation
+g.set_infoset(misinterpretation_player2, misinterpretation_player2.infoset)
+
+# Define the payoffs for each combination of choices
+payoffs = {
+    ("S", "S"): (3, 2),
+    ("S", "C"): (1, 0),
+    ("C", "S"): (4, 1),
+    ("C", "C"): (-1, -1)
+}
+
+# Set outcomes for each combination of choices
+for action_player1 in g.root.children:
+    for action_player2 in action_player1.children[0].children:
+        payoff = payoffs[(action_player1.label, action_player2.label)]
+        g.set_outcome(action_player2, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (leader) and Player 2 (follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Player 1 (leader) makes the first move by selecting either "S" or "C"
+player1_node = g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 (follower) then tries to interpret Player 1's choice with a small probability of misinterpretation
+# Create a chance node to represent the misinterpretation
+chance_node = g.append_move(player1_node, g.players.chance, ["Correct", "Misinterpret"])
+
+# Set the probabilities for the chance node
+gbt.Rational(1, 100) # 1% chance of misinterpretation
+
+# Player 2 (follower) makes a move based on their interpretation of Player 1's choice
+# If Player 2 correctly interprets Player 1's choice
+correct_interpretation = chance_node.children[0]
+correct_interpretation_player2 = g.append_move(correct_interpretation, "Player 2", ["S", "C"])
+# If Player 2 misinterprets Player 1's choice
+misinterpretation = chance_node.children[1]
+misinterpretation_player2 = g.append_move(misinterpretation, "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on their interpretation
+# Player 2's information set for correct interpretation
+g.set_infoset(correct_interpretation_player2, correct_interpretation_player2.infoset)
+# Player 2's information set for misinterpretation
+g.set_infoset(misinterpretation_player2, misinterpretation_player2.infoset)
+
+# Define the payoffs for each combination of choices
+payoffs = {
+    ("S", "S"): (3, 2),
+    ("S", "C"): (1, 0),
+    ("C", "S"): (4, 1),
+    ("C", "C"): (-1, -1)
+}
+
+# Set outcomes for each combination of choices
+for action_player1 in player1_node.children:
+    for action_player2 in action_player1.children[0].children:
+        payoff = payoffs[(action_player1.label, action_player2.label)]
+        g.set_outcome(action_player2, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): nodes must be Node or str, not NoneType
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (leader) and Player 2 (follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game")
+
+# Player 1 (leader) makes the first move by selecting either "S" or "C"
+player1_node = g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 (follower) then tries to interpret Player 1's choice with a small probability of misinterpretation
+# Create a chance node to represent the misinterpretation
+chance_node = g.append_move(player1_node, g.players.chance, ["Correct", "Misinterpret"])
+
+# Set the probabilities for the chance node
+gbt.Rational(1, 100) # 1% chance of misinterpretation
+
+# Player 2 (follower) makes a move based on their interpretation of Player 1's choice
+# If Player 2 correctly interprets Player 1's choice
+correct_interpretation = chance_node.children[0]
+correct_interpretation_player2 = g.append_move(correct_interpretation, "Player 2", ["S", "C"])
+# If Player 2 misinterprets Player 1's choice
+misinterpretation = chance_node.children[1]
+misinterpretation_player2 = g.append_move(misinterpretation, "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on their interpretation
+# Player 2's information set for correct interpretation
+g.set_infoset(correct_interpretation_player2, correct_interpretation_player2.infoset)
+# Player 2's information set for misinterpretation
+g.set_infoset(misinterpretation_player2, misinterpretation_player2.infoset)
+
+# Define the payoffs for each combination of choices
+payoffs = {
+    ("S", "S"): (3, 2),
+    ("S", "C"): (1, 0),
+    ("C", "S"): (4, 1),
+    ("C", "C"): (-1, -1)
+}
+
+# Set outcomes for each combination of choices
+for action_player1 in player1_node.children:
+    for action_player2 in correct_interpretation_player2.children:
+        payoff = payoffs[(action_player1.label, action_player2.label)]
+        g.set_outcome(action_player2, g.add_outcome(payoff))
+
+for action_player1 in player1_node.children:
+    for action_player2 in misinterpretation_player2.children:
+        payoff = payoffs[(action_player1.label, action_player2.label)]
+        g.set_outcome(action_player2, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')

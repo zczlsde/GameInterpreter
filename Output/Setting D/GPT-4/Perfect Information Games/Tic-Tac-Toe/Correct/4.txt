@@ -1,0 +1,79 @@
+```python
+# Since "x" and "o" take turns and the game tree branches based on their moves, 
+# each decision node for "o" after "x" makes a move is a different information set because "o" knows where "x" has placed its mark.
+# However, when "x" is to move after "o", "x" has perfect information about the board state, so each of "x"'s decision nodes is unique and does not need grouping in information sets.
+# There is no need to group nodes into the same information set for "x" because "x" has perfect information when it is their turn to move.
+# Similarly, "o" has perfect information when it is their turn to move, so there is no need to group "o"'s decision nodes into information sets.
+# This game does not have simultaneous moves or hidden information after the game starts, so each player's decision node is based on the visible state of the board, leading to no imperfect information scenarios that require grouping nodes into the same information set.
+
+# Therefore, in this specific scenario, there's no need to use set_infoset() to group nodes into the same information set based on the given game description and the current board state.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "X" and "O"
+g = gbt.Game.new_tree(players=["X", "O"], title="Tic-Tac-Toe")
+
+# The initial board state is given, with "X" to move next.
+# The possible moves for "X" are at positions (0, 0), (0, 2), and (1, 0).
+
+# First move by "X"
+x_first_move = g.append_move(g.root, "X", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# If "X" places the mark on (0, 0)
+o_moves_after_00 = g.append_move(x_first_move.children[0], "O", ["(0, 2)", "(1, 0)"])
+# If "O" places the mark on (0, 2), "O" wins
+g.set_outcome(o_moves_after_00.children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "O" places the mark on (1, 0), then "X" can place the mark on (0, 2) and "X" wins
+x_moves_after_00_10 = g.append_move(o_moves_after_00.children[1], "X", ["(0, 2)"])
+g.set_outcome(x_moves_after_00_10.children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (0, 2), "X" wins directly
+g.set_outcome(x_first_move.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (1, 0)
+o_moves_after_10 = g.append_move(x_first_move.children[2], "O", ["(0, 0)", "(0, 2)"])
+# If "O" places the mark on (0, 0), then "X" can place the mark on (0, 2) and "X" wins
+x_moves_after_10_00 = g.append_move(o_moves_after_10.children[0], "X", ["(0, 2)"])
+g.set_outcome(x_moves_after_10_00.children[0], g.add_outcome([1, -1], label="X wins"))
+# If "O" places the mark on (0, 2), "O" wins directly
+g.set_outcome(o_moves_after_10.children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs the extensive-form game representation of the given Tic-Tac-Toe scenario using the PyGambit library. It explicitly models the decision nodes for each player based on the current board state and the sequence of moves. Each decision node corresponds to a player's turn, with outcomes determined by the rules of Tic-Tac-Toe (winning, losing, or continuing the game). The game tree branches according to the possible moves "X" can make, followed by "O"'s responses, and finally the outcomes based on these moves.
+=======================================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players: "X" and "O"
+g = gbt.Game.new_tree(players=["X", "O"], title="Tic-Tac-Toe")
+
+# Append the first move for "X"
+g.append_move(g.root, "X", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Handling moves after "X" places the mark on (0, 0)
+g.append_move(g.root.children[0], "O", ["(0, 2)", "(1, 0)"])
+# If "O" places the mark on (0, 2), "O" wins
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "O" places the mark on (1, 0), then "X" can place the mark on (0, 2) and "X" wins
+g.append_move(g.root.children[0].children[1], "X", ["(0, 2)"])
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (0, 2), "X" wins directly
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# Handling moves after "X" places the mark on (1, 0)
+g.append_move(g.root.children[2], "O", ["(0, 0)", "(0, 2)"])
+# If "O" places the mark on (0, 0), then "X" can place the mark on (0, 2) and "X" wins
+g.append_move(g.root.children[2].children[0], "X", ["(0, 2)"])
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="X wins"))
+# If "O" places the mark on (0, 2), "O" wins directly
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')

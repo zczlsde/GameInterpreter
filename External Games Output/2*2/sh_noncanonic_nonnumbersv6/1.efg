@@ -1,0 +1,10 @@
+EFG 2 R "Generals' Coordination Game" { "General 1" "General 2" }
+""
+
+p "" 1 1 "" { "Joint Attack" "Independent Mission" } 0
+p "" 2 1 "" { "Joint Attack" "Independent Mission" } 0
+t "" 1 "Decisive Victory" { 3, 3 }
+t "" 2 "General 1 Exposed" { 0, 2 }
+p "" 2 1 "" { "Joint Attack" "Independent Mission" } 0
+t "" 3 "General 2 Exposed" { 2, 0 }
+t "" 4 "Minor Successes" { 1, 1 }

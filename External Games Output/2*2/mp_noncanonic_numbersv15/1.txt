@@ -1,0 +1,70 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the small sports apparel company and the large multinational sports brand.
+# Both players decide independently and simultaneously whether to sponsor a soccer tournament or a basketball tournament.
+
+# Step 2: Determine the imperfect information structure.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of making their decision.
+# To model this in a sequential structure, we can assume one player moves first and the other moves second.
+# However, the second player does not know the first player's choice, so their decision nodes must be in the same information set.
+
+# Step 3: Set the information set for the second player.
+# Assume the large multinational sports brand moves first and the small sports apparel company moves second.
+# The small sports apparel company has two decision nodes corresponding to the large brand's choices.
+# These nodes should be grouped in the same information set because the small company does not know the large brand's choice.
+
+# Set the information set for the small sports apparel company's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Small Company and Large Brand.
+g = gbt.Game.new_tree(players=["Small Company", "Large Brand"],
+                      title="Sponsorship Game")
+
+# Step 2: Model the simultaneous decision-making process.
+# We assume the Large Brand moves first and the Small Company moves second.
+# However, the Small Company does not know the Large Brand's choice, so their decision nodes must be in the same information set.
+
+# Step 3: Add moves for the Large Brand.
+# The Large Brand can choose to sponsor either a Soccer or Basketball tournament.
+g.append_move(g.root, "Large Brand", ["Soccer", "Basketball"])
+
+# Step 4: Add moves for the Small Company.
+# The Small Company can also choose to sponsor either a Soccer or Basketball tournament.
+# These moves are added to the nodes resulting from the Large Brand's choices.
+g.append_move(g.root.children[0], "Small Company", ["Soccer", "Basketball"])
+g.append_move(g.root.children[1], "Small Company", ["Soccer", "Basketball"])
+
+# Step 5: Set the information set for the Small Company's decision nodes.
+# Since the Small Company does not know the Large Brand's choice, the decision nodes must be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the players' choices.
+# If both choose the same sport, the Small Company wins 3 points, and the Large Brand loses 3 points.
+# If their choices differ, the Large Brand wins 5 points, and the Small Company loses 5 points.
+
+# Outcomes when both choose the same sport.
+same_sport_outcome = g.add_outcome([3, -3], label="Same Sport")
+
+# Outcomes when they choose different sports.
+different_sport_outcome = g.add_outcome([-5, 5], label="Different Sport")
+
+# Step 7: Set the outcomes for each terminal node.
+# Large Brand chooses Soccer, Small Company chooses Soccer
+g.set_outcome(g.root.children[0].children[0], same_sport_outcome)
+
+# Large Brand chooses Soccer, Small Company chooses Basketball
+g.set_outcome(g.root.children[0].children[1], different_sport_outcome)
+
+# Large Brand chooses Basketball, Small Company chooses Soccer
+g.set_outcome(g.root.children[1].children[0], different_sport_outcome)
+
+# Large Brand chooses Basketball, Small Company chooses Basketball
+g.set_outcome(g.root.children[1].children[1], same_sport_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

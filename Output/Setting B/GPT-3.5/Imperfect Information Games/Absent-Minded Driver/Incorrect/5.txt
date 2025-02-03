@@ -1,0 +1,128 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add the first decision node at junction X for the Driver
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add the chance node at junction Y for Nature
+g.append_move(g.root.children[1], g.players.chance, ["EXIT", "CONTINUE"])
+
+# Set the probabilities for the chance node at junction Y
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Add the second decision node at junction Y for the Driver
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Create information sets for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].infoset)
+
+# Define the outcomes for each terminal node
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 0], label="Driver exits at C"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add the first decision node at junction X for the Driver
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add the chance node at junction Y for Nature
+g.append_move(g.root.children[1], g.players.chance, ["EXIT", "CONTINUE"])
+
+# Set the probabilities for the chance node at junction Y
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Add the second decision node at junction Y for the Driver
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Create information sets for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each terminal node
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 0], label="Driver exits at C"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add the first decision node at junction X for the Driver
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add the chance node at junction Y for Nature
+g.append_move(g.root.children[1], g.players.chance, ["EXIT", "CONTINUE"])
+
+# Set the probabilities for the chance node at junction Y
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Add the second decision node at junction Y for the Driver
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Create information sets for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Define the outcomes for each terminal node
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 0], label="Driver exits at C"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Driver", "Nature"], title="Absent-minded driver game")
+
+# Add the first decision node at junction X for the Driver
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add the chance node at junction Y for Nature
+g.append_move(g.root.children[1], g.players.chance, ["EXIT", "CONTINUE"])
+
+# Set the probabilities for the chance node at junction Y
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Add the second decision node at junction Y for the Driver
+g.append_move(g.root.children[1].children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Create information sets for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Define the outcomes for each terminal node
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([1, 0], label="Driver exits at C"))
+
+# Save the EFG
+efg = g.write(format='native')

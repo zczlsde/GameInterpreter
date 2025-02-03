@@ -1,0 +1,51 @@
+```python
+# Thought process:
+# 1. Alice moves first and has two actions: "take" or "push".
+# 2. If Alice "pushes", Bob then has two actions: "take" or "push".
+# 3. If Bob "pushes", Alice again has two actions: "take" or "push".
+# 4. If Alice "pushes" again, Bob has the final two actions: "take" or "push".
+# 5. All actions are observable, meaning there is no imperfect information in this game.
+# 6. Since all actions are observable, there are no information sets to be set for this game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Doubling Game")
+
+# Alice's first move: she can either "take" the larger pile or "push" the piles to Bob
+g.append_move(g.root, "Alice", ["take", "push"])
+
+# If Alice chooses to "take", the game ends with Alice taking the larger pile (4 coins) and Bob taking the smaller pile (1 coin)
+alice_takes = g.add_outcome([4, 1], label="Alice takes first")
+g.set_outcome(g.root.children[0], alice_takes)
+
+# If Alice chooses to "push", the piles double and Bob has the next move
+g.append_move(g.root.children[1], "Bob", ["take", "push"])
+
+# If Bob chooses to "take", the game ends with Bob taking the larger pile (8 coins) and Alice taking the smaller pile (2 coins)
+bob_takes = g.add_outcome([2, 8], label="Bob takes first")
+g.set_outcome(g.root.children[1].children[0], bob_takes)
+
+# If Bob chooses to "push", the piles double again and Alice has the next move
+g.append_move(g.root.children[1].children[1], "Alice", ["take", "push"])
+
+# If Alice chooses to "take", the game ends with Alice taking the larger pile (16 coins) and Bob taking the smaller pile (4 coins)
+alice_takes_again = g.add_outcome([16, 4], label="Alice takes second")
+g.set_outcome(g.root.children[1].children[1].children[0], alice_takes_again)
+
+# If Alice chooses to "push", the piles double again and Bob has the final move
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["take", "push"])
+
+# If Bob chooses to "take", the game ends with Bob taking the larger pile (32 coins) and Alice taking the smaller pile (8 coins)
+bob_takes_again = g.add_outcome([8, 32], label="Bob takes second")
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], bob_takes_again)
+
+# If Bob chooses to "push", the piles double one last time and the game ends with Alice taking the larger pile (64 coins) and Bob taking the smaller pile (16 coins)
+final_push = g.add_outcome([64, 16], label="Final push")
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], final_push)
+
+# Save the EFG
+efg = g.write(format='native')
+```

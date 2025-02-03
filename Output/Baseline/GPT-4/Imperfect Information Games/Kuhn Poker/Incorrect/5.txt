@@ -1,0 +1,20 @@
+Given the game description, here's an EFG representation for the two-player card game between Alice and Bob:
+
+```
+EFG 2 R "Three-card game with Alice and Bob" { "Alice" "Bob" }
+c "" 1 "" { "JQ" 1/6 "JK" 1/6 "QJ" 1/6 "QK" 1/6 "KJ" 1/6 "KQ" 1/6 } 0
+p "" 1 1 "" { "Check" "Bet" } 0
+    p "" 2 1 "" { "Check" "Bet" } 0
+        t "" 1 "Higher card wins 1" { 1, -1 }
+        t "" 2 "Higher card wins 1" { -1, 1 }
+        p "" 1 2 "" { "Fold" "Call" } 0
+            t "" 3 "Bob wins 1" { -1, 1 }
+            t "" 4 "Higher card wins 2" { 2, -2 }
+            t "" 5 "Higher card wins 2" { -2, 2 }
+    p "" 2 2 "" { "Fold" "Call" } 0
+        t "" 6 "Alice wins 1" { 1, -1 }
+        t "" 7 "Higher card wins 2" { 2, -2 }
+        t "" 8 "Higher card wins 2" { -2, 2 }
+```
+
+This representation captures the essence of the game, including the chance node for the card distribution, the decision nodes for Alice and Bob's actions (check, bet, fold, or call), and the terminal nodes with the outcomes based on the actions taken by Alice and Bob. The payoffs are simplified to reflect the net gain or loss for each player, assuming that the higher card wins the pot, and the specific outcomes depend on the actions taken by the players during the game.

@@ -1,0 +1,14 @@
+EFG 2 R "Crisis Escalation Game" { "Country A" "Country B" }
+""
+
+p "" 1 1 "" { "E" "I" } 0
+p "" 2 1 "" { "B" "E" } 0
+t "" 2 "Back Down" { 2, -1 }
+p "" 1 2 "" { "R" "D" } 0
+p "" 2 2 "" { "R" "D" } 0
+t "" 6 "Mutual Retreat" { -1, -1 }
+t "" 3 "A Retreats, B Detonates" { -5, 5 }
+p "" 2 2 "" { "R" "D" } 0
+t "" 4 "A Detonates, B Retreats" { 5, -5 }
+t "" 5 "Mutual Detonation" { -10, -10 }
+t "" 1 "Ignore" { 1, 1 }

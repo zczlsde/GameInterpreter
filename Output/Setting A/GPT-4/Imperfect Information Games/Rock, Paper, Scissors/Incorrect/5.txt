@@ -1,0 +1,189 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors")
+
+# Since both players reveal their choices simultaneously, we model this by having a chance node first
+# This chance node will represent all possible combinations of choices by both players
+# There are 9 possible combinations since each player can choose from 3 options: Rock, Paper, or Scissors
+g.append_move(g.root, g.players.chance, ["R-R", "R-P", "R-S", "P-R", "P-P", "P-S", "S-R", "S-P", "S-S"])
+
+# Set the probabilities for each outcome at the chance node
+# Since each combination is equally likely, each has a probability of 1/9
+probabilities = [gbt.Rational(1, 9) for _ in range(9)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Define the outcomes for each combination
+# The outcomes are based on the rules: Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# The payoffs are set as follows: win (1), lose (-1), tie (0)
+outcomes = {
+    "R-R": [0, 0], "R-P": [-1, 1], "R-S": [1, -1],
+    "P-R": [1, -1], "P-P": [0, 0], "P-S": [-1, 1],
+    "S-R": [-1, 1], "S-P": [1, -1], "S-S": [0, 0]
+}
+
+# Assign outcomes to each terminal node
+for i, node in enumerate(g.root.children):
+    outcome_label = f"Outcome {i+1}"
+    g.set_outcome(node, g.add_outcome(outcomes[node.move.label], label=outcome_label))
+
+# Since the game involves simultaneous moves, we don't need to set information sets for imperfect information
+# The chance node already models the simultaneous nature of the game
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representation of Rock, Paper, Scissors using the pygambit library. The game is modeled with a chance node to represent the simultaneous move nature of the game, where each player's choice is made without knowledge of the other's choice. The outcomes are determined based on the rules of Rock, Paper, Scissors, with payoffs assigned accordingly. Since the moves are simultaneous and modeled through a chance node, there's no need for additional handling of imperfect information through information sets.
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by creating a chance node that represents all possible outcomes
+# Each player has three options: Rock, Paper, Scissors. Therefore, we have 9 possible outcomes when both players reveal their choices
+g.append_move(g.root, g.players.chance, ["Rock-Rock", "Rock-Paper", "Rock-Scissors", 
+                                         "Paper-Rock", "Paper-Paper", "Paper-Scissors", 
+                                         "Scissors-Rock", "Scissors-Paper", "Scissors-Scissors"])
+
+# Assign equal probabilities to each outcome since each combination is equally likely in a fair game
+# Each outcome has a probability of 1/9
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes and their corresponding payoffs
+# The payoff matrix is based on the game rules:
+# Rock blunts Scissors (Rock wins), Scissors cut Paper (Scissors wins), Paper covers Rock (Paper wins)
+# Payoffs are: Win = 1, Lose = -1, Tie = 0
+outcomes = {
+    "Rock-Rock": [0, 0], "Rock-Paper": [-1, 1], "Rock-Scissors": [1, -1],
+    "Paper-Rock": [1, -1], "Paper-Paper": [0, 0], "Paper-Scissors": [-1, 1],
+    "Scissors-Rock": [-1, 1], "Scissors-Paper": [1, -1], "Scissors-Scissors": [0, 0]
+}
+
+# Loop through each child of the root node (each possible outcome) and set the outcome with the corresponding payoffs
+for i, child in enumerate(g.root.children):
+    outcome_label = f"Outcome {i+1}"
+    g.set_outcome(child, g.add_outcome(outcomes[child.move.label], label=outcome_label))
+
+# Since the moves are simultaneous and represented through a chance node, there's no need for further handling of imperfect information
+# The game is fully defined at this point
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by creating a chance node
+# that represents all possible outcomes of the simultaneous move.
+# However, to simplify, we first create moves for each player under the assumption they move sequentially,
+# and then we will correct this by setting information sets to reflect the simultaneous nature.
+
+# Append moves for Player 1
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's moves, append Player 2's moves
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Now, we correct the sequential assumption by setting information sets for Player 1 and Player 2's moves
+# to reflect that they actually choose simultaneously without knowledge of the other's choice.
+# We use the identical code as instructed for handling imperfect information.
+for node1, node2 in zip(g.root.children[0].children, g.root.children[1].children):
+    g.set_infoset(node1, node2.infoset)
+for node1, node2 in zip(g.root.children[0].children, g.root.children[2].children):
+    g.set_infoset(node1, node2.infoset)
+
+# Define the outcomes based on the game rules
+# Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+outcomes = {
+    ("Rock", "Scissors"): [1, -1],
+    ("Scissors", "Paper"): [1, -1],
+    ("Paper", "Rock"): [1, -1],
+    ("Scissors", "Rock"): [-1, 1],
+    ("Paper", "Scissors"): [-1, 1],
+    ("Rock", "Paper"): [-1, 1],
+    ("Rock", "Rock"): [0, 0],
+    ("Paper", "Paper"): [0, 0],
+    ("Scissors", "Scissors"): [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions chosen by Player 1 and Player 2
+for p1_move in g.root.children:
+    for p2_move in p1_move.children:
+        outcome_key = (p1_move.move.label, p2_move.move.label)
+        g.set_outcome(p2_move, g.add_outcome(outcomes[outcome_key]))
+
+# Since the game involves simultaneous moves, the information sets have been adjusted accordingly
+# to reflect the players' lack of knowledge about the other's move, making it a game of imperfect information.
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model this by creating a chance node
+# that represents all possible outcomes of the game. However, to simulate simultaneous moves,
+# we first create moves for each player under a hypothetical initial node and then adjust for imperfect information.
+
+# Append moves for Player 1
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's moves, append Player 2's moves
+for child in g.root.children:
+    g.append_move(child, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Now, we need to set the outcomes based on the game rules
+# Rock beats Scissors, Scissors beats Paper, and Paper beats Rock
+# The outcomes are symmetric for both players
+outcomes = {
+    ("Rock", "Scissors"): [1, -1],
+    ("Scissors", "Paper"): [1, -1],
+    ("Paper", "Rock"): [1, -1],
+    ("Scissors", "Rock"): [-1, 1],
+    ("Paper", "Scissors"): [-1, 1],
+    ("Rock", "Paper"): [-1, 1],
+    ("Rock", "Rock"): [0, 0],
+    ("Paper", "Paper"): [0, 0],
+    ("Scissors", "Scissors"): [0, 0]
+}
+
+# Assign outcomes to each combination of moves
+for p1_move in g.root.children:
+    for p2_move in p1_move.children:
+        outcome_label = f"{p1_move.move.label}-{p2_move.move.label}"
+        g.set_outcome(p2_move, g.add_outcome(outcomes[(p1_move.move.label, p2_move.move.label)], label=outcome_label))
+
+# Since the moves are simultaneous, we need to adjust for imperfect information
+# We do this by creating information sets for Player 2's moves that are indistinguishable
+for p1_move in g.root.children:
+    for i, p2_move in enumerate(p1_move.children):
+        if i == 0:  # Use the first move's infoset as the reference
+            reference_infoset = p2_move.infoset
+        else:
+            # Assign all subsequent moves to the same infoset as the first move
+            g.set_infoset(p2_move, reference_infoset)
+
+# Note: The above approach for handling imperfect information assumes that Player 2 cannot distinguish
+# between the moves made by Player 1, which accurately reflects the simultaneous move aspect of the game.
+
+# Save the EFG
+efg = g.write(format='native')

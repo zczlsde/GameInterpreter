@@ -1,0 +1,176 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                      title="Three-card game")
+
+# Add a chance node to represent the allocation of the three cards with equal probability
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# For each possible allocation of the cards, define the game structure
+for node in g.root.children:
+    # Alice's decision node to check or bet 1
+    g.append_move(node, "Alice", ["Check", "Bet 1"])
+    
+    # Bob's decision node after Alice checks
+    g.append_move(node.children[0], "Bob", ["Check", "Bet 1"])
+    g.set_infoset(node.children[0], node.children[1].infoset)  # Grouping nodes in the same information set
+    
+    # Bob's decision node after Alice bets
+    g.append_move(node.children[1].children[1], "Bob", ["Fold", "Call"])
+    g.set_infoset(node.children[1].children[1], node.children[1].children[0].infoset)  # Grouping nodes in the same information set
+    
+    # Alice's decision node after Bob bets
+    g.append_move(node.children[1].children[1].children[1], "Alice", ["Fold", "Call"])
+    g.set_infoset(node.children[1].children[1].children[1], node.children[1].children[1].children[0].infoset)  # Grouping nodes in the same information set
+    
+    # Define outcomes for different paths in the game
+    alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+    alice_wins = g.add_outcome([1, -1], label="Alice wins")
+    bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+    bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+    
+    g.set_outcome(node.children[0].children[0], alice_winsbig)  # Bob checks after Alice checks
+    g.set_outcome(node.children[0].children[1].children[0], bob_wins)  # Bob folds after Alice bets
+    g.set_outcome(node.children[0].children[1].children[1], alice_wins)  # Bob calls after Alice bets
+    g.set_outcome(node.children[1].children[1].children[0], alice_wins)  # Alice folds after Bob bets
+    g.set_outcome(node.children[1].children[1].children[1], bob_wins)  # Alice calls after Bob bets
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                      title="Three-card game")
+
+# Add a chance node to represent the allocation of the three cards with equal probability
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# For each possible allocation of the cards, define the game structure
+for i in range(6):
+    # Alice's decision node to check or bet 1
+    alice_check = g.append_move(g.root.children[i], "Alice", ["Check", "Bet 1"])
+    
+    # Bob's decision node after Alice checks
+    bob_check = g.append_move(alice_check.children[0], "Bob", ["Check", "Bet 1"])
+    g.set_infoset(bob_check, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Bob's decision node after Alice bets
+    bob_bet = g.append_move(alice_check.children[1], "Bob", ["Fold", "Call"])
+    g.set_infoset(bob_bet, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Alice's decision node after Bob bets
+    alice_bet = g.append_move(bob_bet.children[1], "Alice", ["Fold", "Call"])
+    g.set_infoset(alice_bet, bob_bet.infoset)  # Grouping nodes in the same information set
+    
+    # Define outcomes for different paths in the game
+    alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+    alice_wins = g.add_outcome([1, -1], label="Alice wins")
+    bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+    bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+    
+    g.set_outcome(bob_check.children[0], alice_winsbig)  # Bob checks after Alice checks
+    g.set_outcome(bob_bet.children[0], bob_wins)  # Bob folds after Alice bets
+    g.set_outcome(bob_bet.children[1], alice_wins)  # Bob calls after Alice bets
+    g.set_outcome(alice_bet.children[0], alice_wins)  # Alice folds after Bob bets
+    g.set_outcome(alice_bet.children[1], bob_wins)  # Alice calls after Bob bets
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                      title="Three-card game")
+
+# Add a chance node to represent the allocation of the three cards with equal probability
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# For each possible allocation of the cards, define the game structure
+for i in range(6):
+    # Alice's decision node to check or bet 1
+    alice_check = g.append_move(g.root.children[i], "Alice", ["Check", "Bet 1"])
+    
+    # Bob's decision node after Alice checks
+    bob_check = g.append_move(alice_check, "Bob", ["Check", "Bet 1"])
+    g.set_infoset(bob_check, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Bob's decision node after Alice bets
+    bob_bet = g.append_move(alice_check, "Bob", ["Fold", "Call"])
+    g.set_infoset(bob_bet, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Alice's decision node after Bob bets
+    alice_bet = g.append_move(bob_bet, "Alice", ["Fold", "Call"])
+    g.set_infoset(alice_bet, bob_bet.infoset)  # Grouping nodes in the same information set
+    
+    # Define outcomes for different paths in the game
+    alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+    alice_wins = g.add_outcome([1, -1], label="Alice wins")
+    bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+    bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+    
+    g.set_outcome(bob_check, alice_winsbig)  # Bob checks after Alice checks
+    g.set_outcome(bob_bet.children[0], bob_wins)  # Bob folds after Alice bets
+    g.set_outcome(bob_bet.children[1], alice_wins)  # Bob calls after Alice bets
+    g.set_outcome(alice_bet.children[0], alice_wins)  # Alice folds after Bob bets
+    g.set_outcome(alice_bet.children[1], bob_wins)  # Alice calls after Bob bets
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): nodes must be Node or str, not NoneType
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                      title="Three-card game")
+
+# Add a chance node to represent the allocation of the three cards with equal probability
+chance_node = g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# For each possible allocation of the cards, define the game structure
+for i in range(6):
+    # Alice's decision node to check or bet 1
+    alice_check = g.append_move(chance_node.children[i], "Alice", ["Check", "Bet 1"])
+    
+    # Bob's decision node after Alice checks
+    bob_check = g.append_move(alice_check, "Bob", ["Check", "Bet 1"])
+    g.set_infoset(bob_check, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Bob's decision node after Alice bets
+    bob_bet = g.append_move(alice_check, "Bob", ["Fold", "Call"])
+    g.set_infoset(bob_bet, alice_check.infoset)  # Grouping nodes in the same information set
+    
+    # Alice's decision node after Bob bets
+    alice_bet = g.append_move(bob_bet, "Alice", ["Fold", "Call"])
+    g.set_infoset(alice_bet, bob_bet.infoset)  # Grouping nodes in the same information set
+    
+    # Define outcomes for different paths in the game
+    alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+    alice_wins = g.add_outcome([1, -1], label="Alice wins")
+    bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+    bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+    
+    g.set_outcome(bob_check, alice_winsbig)  # Bob checks after Alice checks
+    g.set_outcome(bob_bet.children[0], bob_wins)  # Bob folds after Alice bets
+    g.set_outcome(bob_bet.children[1], alice_wins)  # Bob calls after Alice bets
+    g.set_outcome(alice_bet.children[0], alice_wins)  # Alice folds after Bob bets
+    g.set_outcome(alice_bet.children[1], bob_wins)  # Alice calls after Bob bets
+
+# Save the EFG
+efg = g.write(format='native')

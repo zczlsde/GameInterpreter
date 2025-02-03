@@ -1,0 +1,18 @@
+EFG 2 R "Two-player card game" { "Alice" "Bob" }
+c "" 1 "" { "JQ" 1/6 "JK" 1/6 "QJ" 1/6 "QK" 1/6 "KJ" 1/6 "KQ" 1/6 } 0
+p "" 1 1 "" { "Check" "Bet" } 0
+p "" 2 1 "" { "Check" "Bet" } 0
+p "" 1 2 "" { "Fold" "Call" } 0
+p "" 2 2 "" { "Fold" "Call" } 0
+t "" 1 "Alice wins" { 2, -2 }
+t "" 2 "Bob wins" { -2, 2 }
+t "" 3 "Bob wins" { -1, 1 }
+t "" 4 "Alice wins" { 1, -1 }
+t "" 5 "Bob wins" { -1, 1 }
+t "" 6 "Alice wins" { 1, -1 }
+t "" 7 "Bob wins" { -1, 1 }
+t "" 8 "Alice wins" { 1, -1 }
+t "" 9 "Bob wins" { -1, 1 }
+t "" 10 "Alice wins" { 1, -1 }
+t "" 11 "Bob wins" { -1, 1 }
+t "" 12 "Alice wins" { 1, -1 }

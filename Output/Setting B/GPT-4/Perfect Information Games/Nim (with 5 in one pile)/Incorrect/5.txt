@@ -1,0 +1,58 @@
+To generate the Extensive Form Game (EFG) for the described game using the PyGambit library, we'll follow the game's structure closely. The game is sequential, starting with Alice, and involves no simultaneous moves. Each player can take either one or two stones from the pile, with the objective of not taking the last stone to win. We'll construct the game tree step by step, ensuring to capture all possible moves and outcomes.
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Initial move by Alice, who can take either one or two stones
+g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone after Alice takes 1, Alice can again take 1 or 2 stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone now, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Take 1", "Take 2"])
+
+# Outcomes if Bob takes 1 stone then Alice takes 1 stone (Alice loses)
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Outcomes if Bob takes 2 stones (Bob loses)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones after Bob takes 1, Bob can only take 1 stone (Bob loses)
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Bob takes 2 stones initially after Alice takes 1, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[1], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can only take 1 stone (Bob loses)
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones, Alice loses
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice initially takes 2 stones, Bob can take 1 or 2 stones
+g.append_move(g.root.children[1], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 or 2 stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can only take 1 stone (Bob loses)
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones, Alice loses
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Bob takes 2 stones after Alice takes 2, Alice can only take 1 stone (Alice loses)
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree for the described game, explicitly detailing each player's moves and the resulting outcomes. The game tree is built step by step, ensuring that all possible game paths are covered. Each terminal node in the tree represents a game outcome, with payoffs assigned according to whether Alice or Bob wins or loses the game.

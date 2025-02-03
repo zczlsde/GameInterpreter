@@ -1,0 +1,54 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both deciding simultaneously between two actions: Action Movie or Romantic Comedy.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: Assume Player 1 moves first and Player 2 moves second.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 1's actions (Action Movie and Romantic Comedy).
+
+# Step 4: Since Player 2 does not know which action Player 1 has taken, Player 2's decision nodes should be grouped in the same information set.
+
+# Set the information set for Player 2's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Movie Buff 1 and Movie Buff 2.
+g = gbt.Game.new_tree(players=["Movie Buff 1", "Movie Buff 2"],
+                      title="Movie Selection Game")
+
+# Step 2: Movie Buff 1 moves first and chooses between "Action Movie" and "Romantic Comedy".
+g.append_move(g.root, "Movie Buff 1", ["Action Movie", "Romantic Comedy"])
+
+# Step 3: Movie Buff 2 moves second and also chooses between "Action Movie" and "Romantic Comedy".
+# Movie Buff 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Movie Buff 1's actions.
+g.append_move(g.root.children[0], "Movie Buff 2", ["Action Movie", "Romantic Comedy"])
+g.append_move(g.root.children[1], "Movie Buff 2", ["Action Movie", "Romantic Comedy"])
+
+# Step 4: Since Movie Buff 2 does not know which action Movie Buff 1 has taken, Movie Buff 2's decision nodes should be grouped in the same information set.
+# Set the information set for Movie Buff 2's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# If both choose "Action Movie", Movie Buff 1 gets a higher payoff, Movie Buff 2 gets a lower payoff.
+action_movie_outcome = g.add_outcome([2, 1], label="Both choose Action Movie")
+
+# If both choose "Romantic Comedy", Movie Buff 2 gets a higher payoff, Movie Buff 1 gets a lower payoff.
+romantic_comedy_outcome = g.add_outcome([1, 2], label="Both choose Romantic Comedy")
+
+# If they choose different movies, they both get no payoff.
+no_payoff_outcome = g.add_outcome([0, 0], label="Different Movies")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], action_movie_outcome)  # Both choose Action Movie
+g.set_outcome(g.root.children[0].children[1], no_payoff_outcome)     # Different Movies
+g.set_outcome(g.root.children[1].children[0], no_payoff_outcome)     # Different Movies
+g.set_outcome(g.root.children[1].children[1], romantic_comedy_outcome)  # Both choose Romantic Comedy
+
+# Save the EFG
+efg = g.write(format='native')
+```

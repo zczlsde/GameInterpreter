@@ -1,0 +1,50 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (Leader) and Player 2 (Follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Misinterpretation Game")
+
+# Player 1 makes the first move, choosing between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# After Player 1's move, Player 2 tries to interpret Player 1's choice
+# There is a chance node representing the misinterpretation probability
+# If Player 1 chooses "S", Player 2 perceives it as "S" with 99% probability and "C" with 1% probability
+g.append_move(g.root.children[0], g.players.chance, ["Perceive S", "Perceive C"])
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# If Player 1 chooses "C", Player 2 perceives it as "C" with 99% probability and "S" with 1% probability
+g.append_move(g.root.children[1], g.players.chance, ["Perceive C", "Perceive S"])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2 then makes a decision based on their perception, choosing between "S" and "C"
+g.append_move(g.root.children[0].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["S", "C"])
+
+# Set the information sets for Player 2's moves to reflect imperfect information
+# Player 2 cannot distinguish between the nodes where they perceive "S" or "C" due to misinterpretation
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+
+# Define the payoffs for each outcome based on Player 1's actual choice and Player 2's action
+# Assign values to the payoffs: E = 5, A = 4, F = 3, W = 2, B = 1, D = 0
+payoff_A_B = g.add_outcome([4, 1], label="Both choose S")
+payoff_W_D = g.add_outcome([2, 0], label="P1 chooses S, P2 chooses C")
+payoff_E_W = g.add_outcome([5, 2], label="P1 chooses C, P2 chooses S")
+payoff_F_F = g.add_outcome([3, 3], label="Both choose C")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0].children[0], payoff_A_B)
+g.set_outcome(g.root.children[0].children[0].children[1], payoff_W_D)
+g.set_outcome(g.root.children[0].children[1].children[0], payoff_A_B)
+g.set_outcome(g.root.children[0].children[1].children[1], payoff_W_D)
+g.set_outcome(g.root.children[1].children[0].children[0], payoff_E_W)
+g.set_outcome(g.root.children[1].children[0].children[1], payoff_F_F)
+g.set_outcome(g.root.children[1].children[1].children[0], payoff_E_W)
+g.set_outcome(g.root.children[1].children[1].children[1], payoff_F_F)
+
+# Save the EFG
+efg = g.write(format='native')
+```

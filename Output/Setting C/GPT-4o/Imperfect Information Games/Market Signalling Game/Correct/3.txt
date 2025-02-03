@@ -1,0 +1,78 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game begins with a chance node that determines the strength of the new manufacturer: strong (S) or weak (W).
+# 2. The new manufacturer sends a signal, either strong (S) or weak (W), which is observed by the existing manufacturer.
+# 3. The existing manufacturer does not know the actual strength of the new manufacturer, only the signal.
+# 4. The existing manufacturer must decide to either compete aggressively (F) or accommodate (A) based on the signal.
+# 5. Since the existing manufacturer cannot distinguish between the actual strength of the new manufacturer, 
+#    the decision nodes for the existing manufacturer should be grouped in the same information set.
+
+# Grouping the decision nodes for the existing manufacturer based on the signal received:
+# - The existing manufacturer receives a strong signal, but the new manufacturer could be either strong or weak.
+# - The existing manufacturer receives a weak signal, but the new manufacturer could be either strong or weak.
+
+# Therefore, we need to group the decision nodes for the existing manufacturer based on the signal received.
+
+# Group the decision nodes for the existing manufacturer when the signal is strong:
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# Group the decision nodes for the existing manufacturer when the signal is weak:
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: New Manufacturer and Existing Manufacturer
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game with Signaling")
+
+# Step 1: The game begins with a chance node that determines the strength of the new manufacturer: strong (S) or weak (W).
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Set the probabilities for the chance node: 2/3 for Strong and 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: The new manufacturer sends a signal, either strong (S) or weak (W).
+# For both strength types, the new manufacturer can send either a strong or weak signal.
+for node in g.root.children:
+    g.append_move(node, "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# Step 3: The existing manufacturer observes the signal and must decide to either compete aggressively (F) or accommodate (A).
+# The existing manufacturer does not know the actual strength of the new manufacturer, only the signal.
+# Therefore, we need to group the decision nodes for the existing manufacturer based on the signal received.
+
+# Append moves for the existing manufacturer based on the signal received
+for node in g.root.children[0].children:
+    g.append_move(node, "Existing Manufacturer", ["Fight", "Accommodate"])
+
+for node in g.root.children[1].children:
+    g.append_move(node, "Existing Manufacturer", ["Fight", "Accommodate"])
+
+# Group the decision nodes for the existing manufacturer when the signal is strong:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Group the decision nodes for the existing manufacturer when the signal is weak:
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Step 4: Set the payoffs for each scenario based on the actions taken by the players
+# Strong manufacturer sends strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong-Signal-Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong-Signal-Accommodate"))
+
+# Strong manufacturer sends weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Weak-Signal-Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Weak-Signal-Accommodate"))
+
+# Weak manufacturer sends strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Strong-Signal-Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Strong-Signal-Accommodate"))
+
+# Weak manufacturer sends weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak-Signal-Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak-Signal-Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

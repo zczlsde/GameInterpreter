@@ -1,0 +1,21 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Three-player sequential game with incomplete information" { "Player1" "Player2" "Player3" }
+c "" 1 "" { "A" 1/2 "B" 1/2 } 0
+p "" 1 1 "" { "L" "R" } 0
+t "" 1 "End with R" { 1, 1, 1 }
+p "" 2 1 "" { "l" "r" } 0
+t "" 2 "End with r" { 2, 2, 2 }
+p "" 3 1 "" { "a" "b" } 0
+t "" 3 "End with a or b" { 3, 3, 3 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with a chance node (`c`) that decides between "A" or "B" with equal probability.
+- Player 1 (`p`) then makes a decision without knowing the outcome of the chance node, choosing between "L" or "R". Choosing "R" leads directly to a terminal node (`t`) with payoffs of (1, 1, 1).
+- If Player 1 chooses "L", the decision moves to Player 2, who also does not know the previous actions. Player 2 chooses between "l" or "r". Choosing "r" leads to a terminal node with payoffs of (2, 2, 2).
+- If Player 2 chooses "l", the decision moves to Player 3, who, like the others, does not know the previous actions. Player 3 chooses between "a" or "b", and either choice leads to a terminal node with payoffs of (3, 3, 3).
+
+This representation assumes that each player's decision node is in a separate information set, reflecting that they do not observe the actions taken in previous stages by other players or the outcome of the chance node.

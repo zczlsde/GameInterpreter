@@ -1,0 +1,10 @@
+EFG 2 R "Bookstore Display Game" { "Independent Bookstore" "Major Bookstore Chain" }
+""
+
+p "" 2 1 "" { "Mystery" "Romance" } 0
+p "" 1 1 "" { "Mystery" "Romance" } 0
+t "" 1 "Match Mystery" { 1, -1 }
+t "" 2 "Differ Chain Mystery" { -1, 1 }
+p "" 1 1 "" { "Mystery" "Romance" } 0
+t "" 3 "Differ Chain Romance" { -1, 1 }
+t "" 4 "Match Romance" { 1, -1 }

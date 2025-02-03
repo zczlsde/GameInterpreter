@@ -1,0 +1,74 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Candidate A and Candidate B.
+# Both players have two actions: focus on Economic policies or Social issues.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both candidates decide their focus independently.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Candidate B moves first and Candidate A moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Candidate B's decision node.
+# Candidate B has two actions, Economic and Social.
+# Candidate A's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Candidate B's actions Economic and Social.
+
+# Step 5: Determine the information set for Candidate A.
+# Since Candidate A moves simultaneously with Candidate B, Candidate A does not know which action Candidate B has taken.
+# Therefore, Candidate A's decision nodes should be grouped in the same information set.
+
+# Set the information set for Candidate A's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Candidate A and Candidate B.
+# Both players have two actions: focus on Economic policies or Social issues.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both candidates decide their focus independently.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Candidate B moves first and Candidate A moves second.
+
+# Create a new extensive-form game with two players: Candidate A and Candidate B.
+g = gbt.Game.new_tree(players=["Candidate A", "Candidate B"],
+                      title="Political Campaign Focus Game")
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Candidate B's decision node.
+# Candidate B has two actions, Economic and Social.
+g.append_move(g.root, "Candidate B", ["Economic", "Social"])
+
+# Candidate A's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Candidate B's actions Economic and Social.
+g.append_move(g.root.children[0], "Candidate A", ["Economic", "Social"])
+g.append_move(g.root.children[1], "Candidate A", ["Economic", "Social"])
+
+# Step 5: Determine the information set for Candidate A.
+# Since Candidate A moves simultaneously with Candidate B, Candidate A does not know which action Candidate B has taken.
+# Therefore, Candidate A's decision nodes should be grouped in the same information set.
+
+# Set the information set for Candidate A's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the game description.
+# If both candidates choose the same focus, Candidate A gains 5% and Candidate B loses 5%.
+# If their campaign focuses differ, Candidate B gains 4% and Candidate A loses 4%.
+
+# Define the outcomes for each possible combination of actions.
+outcome_same_focus = g.add_outcome([5, -5], label="Same Focus")
+outcome_different_focus = g.add_outcome([-4, 4], label="Different Focus")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_same_focus)  # Both choose Economic
+g.set_outcome(g.root.children[0].children[1], outcome_different_focus)  # B: Economic, A: Social
+g.set_outcome(g.root.children[1].children[0], outcome_different_focus)  # B: Social, A: Economic
+g.set_outcome(g.root.children[1].children[1], outcome_same_focus)  # Both choose Social
+
+# Save the EFG
+efg = g.write(format='native')
+```

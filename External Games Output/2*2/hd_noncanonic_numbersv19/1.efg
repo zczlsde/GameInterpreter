@@ -1,0 +1,10 @@
+EFG 2 R "Strategic Match Game" { "Team 1" "Team 2" }
+""
+
+p "" 1 1 "" { "Aggressive" "Defensive" } 0
+p "" 2 1 "" { "Aggressive" "Defensive" } 0
+t "" 1 "Both Aggressive" { -3, -3 }
+t "" 2 "Team 1 Wins" { 6, -6 }
+p "" 2 1 "" { "Aggressive" "Defensive" } 0
+t "" 3 "Team 2 Wins" { -6, 6 }
+t "" 4 "Both Defensive" { 0, 0 }

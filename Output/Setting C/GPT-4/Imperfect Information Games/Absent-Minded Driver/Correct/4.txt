@@ -1,0 +1,56 @@
+```python
+# Since the driver cannot distinguish between junction X and Y, 
+# the decision nodes at both junctions X and Y belong to the same information set.
+# Let's assume the game starts at junction X (root node), and then moves to junction Y.
+# At junction X, the driver has two actions: EXIT (leading to A with payoff 0) or CONTINUE (leading to Y).
+# At junction Y, similarly, the driver has two actions: EXIT (leading to B with payoff 4) or CONTINUE (leading to C with payoff 1).
+# The decision nodes at X and Y for the action CONTINUE must be grouped in the same information set 
+# because the driver cannot distinguish between being at X or Y.
+
+# Assuming g.root is the starting node at junction X, and g.root.children[1] is the node after choosing CONTINUE,
+# leading to junction Y. Then, g.root.children[1].children[0] and g.root.children[1].children[1] are the decision nodes at Y.
+# We need to group g.root (decision at X for CONTINUE) and g.root.children[1] (decision at Y) in the same information set.
+
+g.set_infoset(g.root.children[1], g.root.infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with a single player representing the absent-minded driver
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver at junctions X and Y")
+
+# At junction X (root node), the driver has two actions: EXIT or CONTINUE
+# EXIT leads to A with a payoff of 0, CONTINUE leads to junction Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Setting the outcome for EXIT at junction X (leading to A with payoff 0)
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="A"))
+
+# At junction Y, after choosing CONTINUE at X, the driver again has two actions: EXIT or CONTINUE
+# EXIT leads to B with a payoff of 4, CONTINUE leads to C with a payoff of 1
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Setting the outcomes for the actions at junction Y
+# EXIT at Y leads to B with a payoff of 4
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="B"))
+# CONTINUE at Y leads to C with a payoff of 1
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="C"))
+
+# Since the driver cannot distinguish between junction X and Y, 
+# the decision nodes at both junctions X and Y belong to the same information set.
+# Let's assume the game starts at junction X (root node), and then moves to junction Y.
+# At junction X, the driver has two actions: EXIT (leading to A with payoff 0) or CONTINUE (leading to Y).
+# At junction Y, similarly, the driver has two actions: EXIT (leading to B with payoff 4) or CONTINUE (leading to C with payoff 1).
+# The decision nodes at X and Y for the action CONTINUE must be grouped in the same information set 
+# because the driver cannot distinguish between being at X or Y.
+
+# Assuming g.root is the starting node at junction X, and g.root.children[1] is the node after choosing CONTINUE,
+# leading to junction Y. Then, g.root.children[1].children[0] and g.root.children[1].children[1] are the decision nodes at Y.
+# We need to group g.root (decision at X for CONTINUE) and g.root.children[1] (decision at Y) in the same information set.
+
+g.set_infoset(g.root.children[1], g.root.infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

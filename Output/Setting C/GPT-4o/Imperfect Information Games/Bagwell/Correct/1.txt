@@ -1,0 +1,98 @@
+```python
+# Step 1: Player 1, the leader, makes a choice between "S" and "C".
+# Step 2: Player 2, the follower, tries to interpret Player 1's choice.
+# Due to the misinterpretation probability, Player 2's decision nodes are based on what they perceive Player 1 chose.
+# Step 3: Player 2's decision nodes are grouped into information sets based on their perception, not the actual choice of Player 1.
+
+# Assuming the game tree is structured such that:
+# g.root.children[0] corresponds to Player 1 choosing "S"
+# g.root.children[1] corresponds to Player 1 choosing "C"
+
+# Player 2 perceives Player 1's choice:
+# g.root.children[0].children[0] corresponds to Player 2 perceiving "S" when Player 1 chose "S"
+# g.root.children[0].children[1] corresponds to Player 2 perceiving "C" when Player 1 chose "S"
+# g.root.children[1].children[0] corresponds to Player 2 perceiving "S" when Player 1 chose "C"
+# g.root.children[1].children[1] corresponds to Player 2 perceiving "C" when Player 1 chose "C"
+
+# Since Player 2 cannot distinguish between the actual choice of Player 1 and their perception,
+# we need to group the decision nodes where Player 2 perceives "S" together and where Player 2 perceives "C" together.
+
+# Grouping Player 2's decision nodes where they perceive "S"
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Grouping Player 2's decision nodes where they perceive "C"
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 (Leader) and Player 2 (Follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Step 1: Player 1, the leader, makes a choice between "S" and "C".
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Step 2: Player 2, the follower, tries to interpret Player 1's choice.
+# Due to the misinterpretation probability, Player 2's decision nodes are based on what they perceive Player 1 chose.
+# We will use a chance node to model the misinterpretation.
+
+# If Player 1 chooses "S", Player 2 perceives it with a small probability of misinterpretation
+g.append_move(g.root.children[0], g.players.chance, ["Perceive S", "Perceive C"])
+# Set the probabilities for the chance node: 99% perceive correctly, 1% misinterpret
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# If Player 1 chooses "C", Player 2 perceives it with a small probability of misinterpretation
+g.append_move(g.root.children[1], g.players.chance, ["Perceive S", "Perceive C"])
+# Set the probabilities for the chance node: 1% misinterpret, 99% perceive correctly
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(1, 100), gbt.Rational(99, 100)])
+
+# Step 3: Player 2's decision nodes are grouped into information sets based on their perception, not the actual choice of Player 1.
+# Player 2 makes a decision based on their perception
+g.append_move(g.root.children[0].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["S", "C"])
+
+# Grouping Player 2's decision nodes where they perceive "S"
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Grouping Player 2's decision nodes where they perceive "C"
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Assign values to each of the payoffs based on the ranking provided
+E = 5  # Highest
+A = 4
+F = 3
+W = 2
+B = 1
+D = 0  # Lowest
+
+# Set the outcomes based on the actual choices of Player 1 and Player 2
+# If both choose S
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="Both choose S"))
+
+# If Player 1 chooses S and Player 2 chooses C
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="Player 1 S, Player 2 C"))
+
+# If Player 1 chooses S and Player 2 misinterprets as C
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="Player 1 S, Player 2 misinterprets as C"))
+
+# If Player 1 chooses S and Player 2 chooses C
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="Player 1 S, Player 2 C"))
+
+# If Player 1 chooses C and Player 2 chooses S
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="Player 1 C, Player 2 S"))
+
+# If Player 1 chooses C and Player 2 chooses C
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="Both choose C"))
+
+# If Player 1 chooses C and Player 2 misinterprets as S
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="Player 1 C, Player 2 misinterprets as S"))
+
+# If both choose C
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="Both choose C"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,16 @@
+EFG 2 R "Market Entry Game with Signals" { "Nature" "New Manufacturer" "Existing Manufacturer" }
+c "" 1 "" { "Strong" 2/3 "Weak" 1/3 } 0
+    p "" 2 1 "" { "Signal Strong" "Signal Weak" } 0
+        p "" 3 1 "" { "Fight" "Adapt" } 0
+            t "" 1 "Strong-Signal Strong-Fight" { 1, 0 }
+            t "" 2 "Strong-Signal Strong-Adapt" { 3, 1 }
+        p "" 3 2 "" { "Fight" "Adapt" } 0
+            t "" 3 "Strong-Signal Weak-Fight" { 0, 0 }
+            t "" 4 "Strong-Signal Weak-Adapt" { 2, 1 }
+    p "" 2 2 "" { "Signal Strong" "Signal Weak" } 0
+        p "" 3 3 "" { "Fight" "Adapt" } 0
+            t "" 5 "Weak-Signal Strong-Fight" { 0, 2 }
+            t "" 6 "Weak-Signal Strong-Adapt" { 2, 1 }
+        p "" 3 4 "" { "Fight" "Adapt" } 0
+            t "" 7 "Weak-Signal Weak-Fight" { 1, 2 }
+            t "" 8 "Weak-Signal Weak-Adapt" { 3, 1 }

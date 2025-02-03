@@ -1,0 +1,10 @@
+EFG 2 R "Co-writing Book Genre Decision" { "Fantasy Enthusiast" "Historical Fiction Enthusiast" }
+""
+
+p "" 1 1 "" { "Fantasy" "Historical Fiction" } 0
+p "" 2 1 "" { "Fantasy" "Historical Fiction" } 0
+t "" 1 "Both choose Fantasy" { 2, 1 }
+t "" 3 "Different genres" { 0, 0 }
+p "" 2 1 "" { "Fantasy" "Historical Fiction" } 0
+t "" 3 "Different genres" { 0, 0 }
+t "" 2 "Both choose Historical Fiction" { 1, 2 }

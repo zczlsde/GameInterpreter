@@ -1,0 +1,208 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="International Relations Game")
+
+# Append moves for Country B at the root node with actions "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Append moves for Country A based on Country B's decision to "Accept" or "Rebel"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for Country A's decision nodes based on Country B's decision to "Accept" or "Rebel"
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="International Relations Game")
+
+# Append moves for Country B at the root node with actions "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Append moves for Country A based on Country B's decision to "Accept" or "Rebel"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for Country A's decision nodes based on Country B's decision to "Accept" or "Rebel"
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set the outcomes for different paths in the game
+tax_outcome = g.add_outcome([6, -2], label="Country A taxes, Country B loses")
+drop_taxes_outcome = g.add_outcome([4, 0], label="Country A drops taxes, Country B breaks even")
+grant_independence_outcome = g.add_outcome([0, 3], label="Country A grants independence, Country B gains")
+war_outcome = g.add_outcome([-1, -1], label="War outcome")
+war_win_outcome = g.add_outcome([-1, -3], label="Country B wins the war")
+war_loss_outcome = g.add_outcome([-1, -5], label="Country B loses the war")
+
+# Set outcomes for Country A's decisions based on Country B's decision
+g.set_outcome(g.root.children[0].children[0], tax_outcome)  # Country A taxes
+g.set_outcome(g.root.children[0].children[1], drop_taxes_outcome)  # Country A drops taxes
+g.set_outcome(g.root.children[1].children[0], grant_independence_outcome)  # Country A grants independence
+
+# Append moves for the chance node representing the war outcome
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Loss"])
+
+# Set the information set for the chance node based on Country A's decision to "Suppress"
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[0].infoset)
+
+# Set the probabilities for the chance node representing the war outcome
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war outcome based on the chance node
+g.set_outcome(g.root.children[1].children[1].children[0], war_win_outcome)  # Country B wins the war
+g.set_outcome(g.root.children[1].children[1].children[1], war_loss_outcome)  # Country B loses the war
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="International Relations Game")
+
+# Append moves for Country B at the root node with actions "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Append moves for Country A based on Country B's decision to "Accept" or "Rebel"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for Country A's decision nodes based on Country B's decision to "Accept" or "Rebel"
+g.set_infoset(g.root.children[0], g.root.children[1])
+
+# Set the outcomes for different paths in the game
+tax_outcome = g.add_outcome([6, -2], label="Country A taxes, Country B loses")
+drop_taxes_outcome = g.add_outcome([4, 0], label="Country A drops taxes, Country B breaks even")
+grant_independence_outcome = g.add_outcome([0, 3], label="Country A grants independence, Country B gains")
+war_outcome = g.add_outcome([-1, -1], label="War outcome")
+war_win_outcome = g.add_outcome([-1, -3], label="Country B wins the war")
+war_loss_outcome = g.add_outcome([-1, -5], label="Country B loses the war")
+
+# Set outcomes for Country A's decisions based on Country B's decision
+g.set_outcome(g.root.children[0].children[0], tax_outcome)  # Country A taxes
+g.set_outcome(g.root.children[0].children[1], drop_taxes_outcome)  # Country A drops taxes
+g.set_outcome(g.root.children[1].children[0], grant_independence_outcome)  # Country A grants independence
+
+# Append moves for the chance node representing the war outcome
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Loss"])
+
+# Set the information set for the chance node based on Country A's decision to "Suppress"
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[0])
+
+# Set the probabilities for the chance node representing the war outcome
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war outcome based on the chance node
+g.set_outcome(g.root.children[1].children[1].children[0], war_win_outcome)  # Country B wins the war
+g.set_outcome(g.root.children[1].children[1].children[1], war_loss_outcome)  # Country B loses the war
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="International Relations Game")
+
+# Append moves for Country B at the root node with actions "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Append moves for Country A based on Country B's decision to "Accept" or "Rebel"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for Country A's decision nodes based on Country B's decision to "Accept" or "Rebel"
+g.set_infoset(g.root.children[0], g.root.children[1])
+
+# Set the outcomes for different paths in the game
+tax_outcome = g.add_outcome([6, -2], label="Country A taxes, Country B loses")
+drop_taxes_outcome = g.add_outcome([4, 0], label="Country A drops taxes, Country B breaks even")
+grant_independence_outcome = g.add_outcome([0, 3], label="Country A grants independence, Country B gains")
+war_outcome = g.add_outcome([-1, -1], label="War outcome")
+war_win_outcome = g.add_outcome([-1, -3], label="Country B wins the war")
+war_loss_outcome = g.add_outcome([-1, -5], label="Country B loses the war")
+
+# Set outcomes for Country A's decisions based on Country B's decision
+g.set_outcome(g.root.children[0].children[0], tax_outcome)  # Country A taxes
+g.set_outcome(g.root.children[0].children[1], drop_taxes_outcome)  # Country A drops taxes
+g.set_outcome(g.root.children[1].children[0], grant_independence_outcome)  # Country A grants independence
+
+# Append moves for the chance node representing the war outcome
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Loss"])
+
+# Set the information set for the chance node based on Country A's decision to "Suppress"
+g.set_infoset(g.root.children[1].children[1], g.root.children[1])
+
+# Set the probabilities for the chance node representing the war outcome
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war outcome based on the chance node
+g.set_outcome(g.root.children[1].children[1].children[0], war_win_outcome)  # Country B wins the war
+g.set_outcome(g.root.children[1].children[1].children[1], war_loss_outcome)  # Country B loses the war
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="International Relations Game")
+
+# Append moves for Country B at the root node with actions "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Append moves for Country A based on Country B's decision to "Accept" or "Rebel"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for Country A's decision nodes based on Country B's decision to "Accept" or "Rebel"
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set the outcomes for different paths in the game
+tax_outcome = g.add_outcome([6, -2], label="Country A taxes, Country B loses")
+drop_taxes_outcome = g.add_outcome([4, 0], label="Country A drops taxes, Country B breaks even")
+grant_independence_outcome = g.add_outcome([0, 3], label="Country A grants independence, Country B gains")
+war_outcome = g.add_outcome([-1, -1], label="War outcome")
+war_win_outcome = g.add_outcome([-1, -3], label="Country B wins the war")
+war_loss_outcome = g.add_outcome([-1, -5], label="Country B loses the war")
+
+# Set outcomes for Country A's decisions based on Country B's decision
+g.set_outcome(g.root.children[0].children[0], tax_outcome)  # Country A taxes
+g.set_outcome(g.root.children[0].children[1], drop_taxes_outcome)  # Country A drops taxes
+g.set_outcome(g.root.children[1].children[0], grant_independence_outcome)  # Country A grants independence
+
+# Append moves for the chance node representing the war outcome
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Loss"])
+
+# Set the information set for the chance node based on Country A's decision to "Suppress"
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+
+# Set the probabilities for the chance node representing the war outcome
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war outcome based on the chance node
+g.set_outcome(g.root.children[1].children[1].children[0], war_win_outcome)  # Country B wins the war
+g.set_outcome(g.root.children[1].children[1].children[1], war_loss_outcome)  # Country B loses the war
+
+# Save the EFG
+efg = g.write(format='native')

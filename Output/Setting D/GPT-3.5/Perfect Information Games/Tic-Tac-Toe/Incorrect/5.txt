@@ -1,0 +1,137 @@
+```python
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state as a chance node
+g.append_move(g.root, g.players.chance, ["(0,0)", "(0,2)", "(1,0)"])
+
+# Player "x" can place the mark on (0,0), (0,2), and (1,0)
+# Group the decision nodes for player "x" in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# If "x" places the mark on (0,0)
+# Player "o" can place the mark on (0,2) and (1,0)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# If "x" places the mark on (0,2), "x" wins
+# If "x" places the mark on (1,0)
+# Player "o" can place the mark on (0,0) and (0,2)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state as a chance node
+g.append_move(g.root, g.players.chance, ["(0,0)", "(0,2)", "(1,0)"])
+
+# Player "x" can place the mark on (0,0), (0,2), and (1,0)
+# Group the decision nodes for player "x" in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# If "x" places the mark on (0,0)
+# Player "o" can place the mark on (0,2) and (1,0)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# If "x" places the mark on (0,2), "x" wins
+# If "x" places the mark on (1,0)
+# Player "o" can place the mark on (0,0) and (0,2)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state as a chance node
+g.append_move(g.root, g.players.chance, ["(0,0)", "(0,2)", "(1,0)"])
+
+# Player "x" can place the mark on (0,0), (0,2), and (1,0)
+# Group the decision nodes for player "x" in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# If "x" places the mark on (0,0)
+# Player "o" can place the mark on (0,2) and (1,0)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# If "x" places the mark on (0,2), "x" wins
+# If "x" places the mark on (1,0)
+# Player "o" can place the mark on (0,0) and (0,2)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state as a chance node
+g.append_move(g.root, g.players.chance, ["(0,0)", "(0,2)", "(1,0)"])
+
+# Player "x" can place the mark on (0,0), (0,2), and (1,0)
+# Group the decision nodes for player "x" in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# If "x" places the mark on (0,0)
+# Player "o" can place the mark on (0,2) and (1,0)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# If "x" places the mark on (0,2), "x" wins
+# If "x" places the mark on (1,0)
+# Player "o" can place the mark on (0,0) and (0,2)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state as a chance node
+g.append_move(g.root, g.players.chance, ["(0,0)", "(0,2)", "(1,0)"])
+
+# Player "x" can place the mark on (0,0), (0,2), and (1,0)
+# Group the decision nodes for player "x" in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# If "x" places the mark on (0,0)
+# Player "o" can place the mark on (0,2) and (1,0)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)
+
+# If "x" places the mark on (0,2), "x" wins
+# If "x" places the mark on (1,0)
+# Player "o" can place the mark on (0,0) and (0,2)
+# Group the decision nodes for player "o" in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)

@@ -1,0 +1,48 @@
+```python
+# Step 1: A proposes a plan to B (A's move)
+# Step 2: B decides to accept or reject A's first proposal (B's move)
+# Since B's decision is directly influenced by A's proposal and there's no simultaneous move or hidden information at this stage, there's no need for an information set here.
+
+# Step 3: If B rejects, B proposes an equal split (B's move, but it's a predetermined action, so no decision for B here)
+# Step 4: A decides to accept or reject B's proposal (A's move)
+# Since A's decision is based on B's proposal which is known, there's no need for an information set here either.
+
+# Step 5: If A rejects B's proposal, A proposes a new split (A's move, again predetermined, so no decision for A here)
+# Step 6: B has to accept A's final proposal (B's move, but since B has no choice, it's not a decision node)
+
+# Conclusion:
+# In this negotiation game, each decision is made with full information of the previous actions. There are no simultaneous moves or hidden information that would require grouping decision nodes into information sets. Therefore, no set_infoset() function is necessary for this game representation.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's move: Propose 5500 for A, 4500 for B
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides to accept or reject A's first proposal
+# B's move: Accept or Reject
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with A getting 5500 and B getting 4500
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial"))
+
+# If B rejects, we move to B proposing an equal split
+# Since B's proposal is predetermined, we directly move to A's decision
+g.append_move(g.root.children[0].children[1], "A", ["Accept Equal Split", "Reject Equal Split"])
+
+# If A accepts B's equal split proposal, both get 4750
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="A Accepts Equal Split"))
+
+# If A rejects B's proposal, A proposes a new split
+# Since A's new proposal is predetermined, we directly move to the outcome
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([4693, 4332], label="A Proposes Final Split"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs an extensive-form game representation of the negotiation scenario between players A and B using the pygambit library. The game is structured as a sequential move game where each player's decision is based on the previous actions, and there are no simultaneous moves or hidden information that would necessitate the use of information sets.

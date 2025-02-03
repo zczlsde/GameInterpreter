@@ -1,0 +1,58 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Chance and Sequential Moves Game")
+
+# Step 1: Add a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Set the probabilities for the chance node outcomes
+# Assuming equal probabilities for simplicity
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4)])
+
+# Step 2: Player 1 moves after observing the chance outcome
+# Player 1 has three actions: E, F, G
+g.append_move(g.root.children[0], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[3], "Player 1", ["E", "F", "G"])
+
+# Step 3: Player 2 moves after observing Player 1's choice
+# Player 2 has two actions: Q, W
+g.append_move(g.root.children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[2], "Player 2", ["Q", "W"])
+
+g.append_move(g.root.children[1].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[2], "Player 2", ["Q", "W"])
+
+g.append_move(g.root.children[2].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[2], "Player 2", ["Q", "W"])
+
+g.append_move(g.root.children[3].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[3].children[2], "Player 2", ["Q", "W"])
+
+# Step 4: Set the payoffs for each outcome
+# Under A
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, -1], label="A, Q"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -2], label="A, W"))
+
+# Under B
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([3, -3], label="B, Q"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-3, 3], label="B, W"))
+
+# Under C
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([0, 0], label="C, Q"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([-1, 1], label="C, W"))
+
+# Under D
+g.set_outcome(g.root.children[3].children[0].children[0], g.add_outcome([4, -4], label="D, Q"))
+g.set_outcome(g.root.children[3].children[0].children[1], g.add_outcome([-4, 4], label="D, W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

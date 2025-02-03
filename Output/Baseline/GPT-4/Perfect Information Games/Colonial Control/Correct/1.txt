@@ -1,0 +1,22 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Diplomacy and Conflict Game" { "Country A" "Country B" }
+p "" 2 1 "" { "Accept" "Rebel" } 0
+p "" 1 1 "" { "Tax" "Drop Taxes" } 0
+t "" 1 "Taxation" { 6, -2 }
+t "" 2 "No Tax" { 4, 0 }
+p "" 1 2 "" { "Grant Independence" "Suppress" } 0
+t "" 3 "Independence Granted" { 0, 3 }
+c "" 1 "" { "B Wins" 0.3 "A Wins" 0.7 } 0
+t "" 4 "B Wins War" { -1, -3 }
+t "" 5 "A Wins War" { -1, -5 }
+```
+
+This EFG representation follows the structure of the game as described:
+
+- Country B decides whether to "Accept" the status quo or "Rebel" against it.
+- If Country B accepts, Country A can choose to "Tax" or "Drop Taxes", leading to different payoffs.
+- If Country B rebels, Country A has the choice to "Grant Independence" or "Suppress" the rebellion.
+- The suppression attempt leads to a chance node representing the outcome of the war, with probabilities for Country B winning or losing.
+- The terminal nodes represent the final outcomes and payoffs for both countries based on the decisions made throughout the game.

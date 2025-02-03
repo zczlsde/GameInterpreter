@@ -1,0 +1,6 @@
+This is a game with three players.
+In the first stage, a chance event determines either "A" or "B" with equal probability (1/2 for each). 
+In the second stage, player 1 chooses between "L" and "R" without knowing the outcome of the chance event. If player 1 selects "R," the game ends with a payoff of (1, 1, 1) to all players. 
+In the third stage, if player 1 chooses "L", then player 2 can select either "l" or "r." Player 2 does not see player 1's choice from the previous stage. If player 2 chooses "r," the game ends with a payoff of (2, 2, 2) to all players.
+In the fourth stage, if player 2 selects "l," then player 3 can choose between "a" and "b." Player 3 does not know player 2's prior choice. The game concludes with a payoff of (3, 3, 3) once player 3 makes a decision.
+Throughout the game, none of the players have knowledge of the previous moves of other players or the chance event.

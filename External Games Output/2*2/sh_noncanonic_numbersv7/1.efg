@@ -1,0 +1,10 @@
+EFG 2 R "Community Garden Game" { "Neighbor 1" "Neighbor 2" }
+""
+
+p "" 1 1 "" { "Contribute" "Not contribute" } 0
+p "" 2 1 "" { "Contribute" "Not contribute" } 0
+t "" 1 "Both contribute" { 6, 6 }
+t "" 2 "N1 contributes, N2 does not" { 0, 3 }
+p "" 2 1 "" { "Contribute" "Not contribute" } 0
+t "" 3 "N1 does not contribute, N2 contributes" { 3, 0 }
+t "" 4 "Neither contributes" { -1, -1 }

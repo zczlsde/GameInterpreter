@@ -1,0 +1,63 @@
+```python
+# Thought process:
+# 1. This is a simultaneous move game where both the landlord and the tenant decide whether to compromise or hold firm.
+# 2. Since both players make their decisions simultaneously, they do not know the other player's decision at the time of making their own decision.
+# 3. To model this in a sequential structure, we can assume one player moves first, but the other player does not know the first player's action.
+# 4. Therefore, both decision nodes for the second player should be in the same information set, as they cannot distinguish between the actions of the first player.
+
+# Assuming the landlord moves first and the tenant moves second:
+# The tenant's decision nodes are g.root.children[0] (landlord compromises) and g.root.children[1] (landlord holds firm).
+# The tenant cannot distinguish between these two nodes, so they should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Landlord and Tenant
+g = gbt.Game.new_tree(players=["Landlord", "Tenant"],
+                      title="Lease Renewal Negotiation")
+
+# Thought process:
+# 1. This is a simultaneous move game where both the landlord and the tenant decide whether to compromise or hold firm.
+# 2. Since both players make their decisions simultaneously, they do not know the other player's decision at the time of making their own decision.
+# 3. To model this in a sequential structure, we can assume one player moves first, but the other player does not know the first player's action.
+# 4. Therefore, both decision nodes for the second player should be in the same information set, as they cannot distinguish between the actions of the first player.
+
+# Assume the landlord moves first and the tenant moves second
+# The landlord has two actions: Compromise or Hold Firm
+g.append_move(g.root, "Landlord", ["Compromise", "Hold Firm"])
+
+# The tenant also has two actions: Compromise or Hold Firm
+# Append moves for the tenant at both nodes resulting from the landlord's actions
+g.append_move(g.root.children[0], "Tenant", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Tenant", ["Compromise", "Hold Firm"])
+
+# Set the information set for the tenant's decision nodes
+# The tenant's decision nodes are g.root.children[0] (landlord compromises) and g.root.children[1] (landlord holds firm).
+# The tenant cannot distinguish between these two nodes, so they should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Define the outcomes for each possible combination of actions
+# Both compromise: moderate rent increase
+moderate_increase = g.add_outcome([1, 1], label="Moderate Rent Increase")
+
+# Landlord holds firm, tenant compromises: landlord gets desired rent
+landlord_wins = g.add_outcome([2, 0], label="Landlord Wins")
+
+# Tenant holds firm, landlord compromises: tenant gets desired lease terms
+tenant_wins = g.add_outcome([0, 2], label="Tenant Wins")
+
+# Both hold firm: lease not renewed, tenant moves out
+no_renewal = g.add_outcome([-1, -1], label="No Renewal")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], moderate_increase)  # Both compromise
+g.set_outcome(g.root.children[0].children[1], tenant_wins)         # Tenant holds firm, landlord compromises
+g.set_outcome(g.root.children[1].children[0], landlord_wins)       # Landlord holds firm, tenant compromises
+g.set_outcome(g.root.children[1].children[1], no_renewal)          # Both hold firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

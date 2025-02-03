@@ -1,0 +1,104 @@
+```python
+# Step-by-step thought process:
+# 1. A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds.
+# 2. If B accepts, the negotiation concludes with A getting 5,500 pounds and B getting 4,500 pounds.
+# 3. If B rejects, B then proposes an equal split of 5,000 pounds each.
+# 4. If A accepts B’s offer, both players finalize the negotiation with each receiving 4,750 pounds.
+# 5. If A rejects B’s offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds.
+# 6. B has no choice but to accept, resulting in A receiving 4,693 pounds and B receiving 4,332 pounds.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Split Game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.set_outcome(g.root.children[0], g.add_outcome([5500, 4500], label="A proposes 5500 for A, 4500 for B"))
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4750, 4750], label="B proposes 5000 for each"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([5200, 4800], label="B proposes 5200 for A, 4800 for B"))
+
+# B has no choice but to accept the final proposal
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Split Game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.set_outcome(g.root.children[0], g.add_outcome([5500, 4500], label="A proposes 5500 for A, 4500 for B"))
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4750, 4750], label="B proposes 5000 for each"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([5200, 4800], label="B proposes 5200 for A, 4800 for B"))
+
+# Set the information set for the imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Split Game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.set_outcome(g.root.children[0], g.add_outcome([5500, 4500], label="A proposes 5500 for A, 4500 for B"))
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4750, 4750], label="B proposes 5000 for each"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([5200, 4800], label="B proposes 5200 for A, 4800 for B"))
+
+# B has no choice but to accept the final proposal
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Split Game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.set_outcome(g.root.children[0], g.add_outcome([5500, 4500], label="A proposes 5500 for A, 4500 for B"))
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4750, 4750], label="B proposes 5000 for each"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([5200, 4800], label="B proposes 5200 for A, 4800 for B"))
+
+# B has no choice but to accept the final proposal
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,42 @@
+```python
+# Step-by-step thought process:
+# 1. In this game, Player A moves first and chooses between Cooperate (C) or Defect (D).
+# 2. Player B moves second and is aware of Player A's decision, so there is no imperfect information for Player B.
+# 3. Since Player B knows Player A's decision, there are no information sets to be set for Player B.
+# 4. Therefore, there is no need to set any information sets in this game as there is no imperfect information.
+
+# No set_infoset() function is needed because Player B knows Player A's decision.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player A and Player B
+g = gbt.Game.new_tree(players=["Player A", "Player B"], title="Sequential Game")
+
+# Step 1: Player A moves first and chooses between Cooperate (C) or Defect (D)
+g.append_move(g.root, "Player A", ["Cooperate", "Defect"])
+
+# Step 2: Player B moves second and is aware of Player A's decision
+# Player B's decision nodes are based on Player A's previous move
+g.append_move(g.root.children[0], "Player B", ["Cooperate", "Defect"])
+g.append_move(g.root.children[1], "Player B", ["Cooperate", "Defect"])
+
+# Step 3: Set the outcomes for each possible combination of actions
+# If both cooperate, they each receive 3 points
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([3, 3], label="Both Cooperate"))
+
+# If Player A cooperates but Player B defects, Player A gets 0 points and Player B gets 5 points
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 5], label="A Cooperates, B Defects"))
+
+# If Player A defects and Player B cooperates, Player A gets 5 points and Player B gets 0 points
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([5, 0], label="A Defects, B Cooperates"))
+
+# If both defect, they each receive 1 point
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1], label="Both Defect"))
+
+# No set_infoset() function is needed because Player B knows Player A's decision.
+
+# Save the EFG
+efg = g.write(format='native')
+```

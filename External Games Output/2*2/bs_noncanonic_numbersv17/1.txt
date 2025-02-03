@@ -1,0 +1,67 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both deciding simultaneously on the vacation location.
+# Each player has two actions: choose Disneyland or choose Yellowstone.
+
+# Step 2: Recognize the imperfect information.
+# Since the players decide simultaneously, neither player knows the other's choice at the time of their decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one player moves first, and the other moves second, but the second player does not know the first player's choice.
+
+# Step 4: Define the decision nodes.
+# The starting node, g.root, is the decision node for the first player.
+# The second player's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first player's actions.
+
+# Step 5: Group the second player's decision nodes in the same information set.
+# Since the second player cannot distinguish between the first player's actions, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Sibling1 and Sibling2.
+g = gbt.Game.new_tree(players=["Sibling1", "Sibling2"],
+                      title="Family Vacation Decision Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Sibling1 moves first, and Sibling2 moves second, but Sibling2 does not know Sibling1's choice.
+
+# Step 3: Define the decision nodes.
+# The starting node, g.root, is the decision node for Sibling1.
+# Sibling1 has two actions: choose Disneyland or choose Yellowstone.
+g.append_move(g.root, "Sibling1", ["Disneyland", "Yellowstone"])
+
+# Step 4: Define the decision nodes for Sibling2.
+# Sibling2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Sibling1's actions.
+# Sibling2 also has two actions: choose Disneyland or choose Yellowstone.
+g.append_move(g.root.children[0], "Sibling2", ["Disneyland", "Yellowstone"])
+g.append_move(g.root.children[1], "Sibling2", ["Disneyland", "Yellowstone"])
+
+# Step 5: Group Sibling2's decision nodes in the same information set.
+# Since Sibling2 cannot distinguish between Sibling1's actions, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the choices of both siblings.
+# If both choose Disneyland, the amusement park fan earns 2 points, and the nature lover gets 1 point.
+# If both choose Yellowstone, the nature enthusiast gets 2 points, and the thrill-seeker gets 1 point.
+# If they choose different places, they don't have a family vacation, both scoring 0 points.
+
+# Outcome for both choosing Disneyland
+outcome_disneyland = g.add_outcome([2, 1], label="Both choose Disneyland")
+g.set_outcome(g.root.children[0].children[0], outcome_disneyland)
+
+# Outcome for both choosing Yellowstone
+outcome_yellowstone = g.add_outcome([1, 2], label="Both choose Yellowstone")
+g.set_outcome(g.root.children[1].children[1], outcome_yellowstone)
+
+# Outcome for choosing different places
+outcome_different = g.add_outcome([0, 0], label="Different choices")
+g.set_outcome(g.root.children[0].children[1], outcome_different)
+g.set_outcome(g.root.children[1].children[0], outcome_different)
+
+# Save the EFG
+efg = g.write(format='native')
+```

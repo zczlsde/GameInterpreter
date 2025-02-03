@@ -1,0 +1,10 @@
+EFG 2 R "Sustainable Practices Decision Game" { "Corporation 1" "Corporation 2" }
+""
+
+p "" 1 1 "" { "Adopt" "Not adopt" } 0
+p "" 2 1 "" { "Adopt" "Not adopt" } 0
+t "" 1 "Both Adopt" { 2, 2 }
+t "" 2 "Corp1 Adopts, Corp2 Not" { -1, 3 }
+p "" 2 1 "" { "Adopt" "Not adopt" } 0
+t "" 3 "Corp2 Adopts, Corp1 Not" { 3, -1 }
+t "" 4 "Neither Adopts" { 1, 1 }

@@ -1,0 +1,181 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with 3 players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add moves for Player 1 at the root node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Add moves for Player 2 at the children of the root node
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Add moves for Player 1 at the grandchildren of the root node
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Add moves for Player 3 at the great-grandchildren of the root node
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set the information sets for Player 1's decision nodes
+# Group Player 1's decision nodes based on their corresponding Player 2's actions
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+g.set_infoset(g.root.children[1], g.root.children[3].infoset)
+g.set_infoset(g.root.children[1], g.root.children[4].infoset)
+g.set_infoset(g.root.children[2], g.root.children[5].infoset)
+g.set_infoset(g.root.children[2], g.root.children[6].infoset)
+
+# Set the information sets for Player 2's decision nodes
+# Group Player 2's decision nodes based on their corresponding Player 1's actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[3].children[1].infoset)
+g.set_infoset(g.root.children[4].children[0], g.root.children[4].children[1].infoset)
+g.set_infoset(g.root.children[5].children[0], g.root.children[5].children[1].infoset)
+
+# Set the information sets for Player 3's decision nodes
+# Group Player 3's decision nodes based on their corresponding Player 1 and Player 2's actions
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[0], g.root.children[2].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1].children[0], g.root.children[2].children[1].children[1].infoset)
+g.set_infoset(g.root.children[3].children[0].children[0], g.root.children[3].children[0].children[1].infoset)
+g.set_infoset(g.root.children[3].children[1].children[0], g.root.children[3].children[1].children[1].infoset)
+g.set_infoset(g.root.children[4].children[0].children[0], g.root.children[4].children[0].children[1].infoset)
+g.set_infoset(g.root.children[4].children[1].children[0], g.root.children[4].children[1].children[1].infoset)
+g.set_infoset(g.root.children[5].children[0].children[0], g.root.children[5].children[0].children[1].infoset)
+g.set_infoset(g.root.children[5].children[1].children[0], g.root.children[5].children[1].children[1].infoset)
+```
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with 3 players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add moves for Player 1 at the root node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Add moves for Player 2 at the children of the root node
+g.append_move(g.root, "Player 2", ["D", "E"])
+
+# Add moves for Player 1 at the grandchildren of the root node
+g.append_move(g.root.children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["F", "G"])
+
+# Add moves for Player 3 at the great-grandchildren of the root node
+g.append_move(g.root.children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1], "Player 3", ["Q", "W"])
+
+# Set the information sets for Player 1's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Set the information sets for Player 2's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set the information sets for Player 3's decision nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+
+# Set the outcomes for Player 3's decision nodes
+outcome_Q = g.add_outcome([3, 3, 3], label="Player 3 chooses Q")
+outcome_W = g.add_outcome([2, 2, 3], label="Player 3 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_W)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_W)
+g.set_outcome(g.root.children[2].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[2].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[2].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[2].children[1].children[1], outcome_W)
+```
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with 3 players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add moves for Player 1 at the root node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Add moves for Player 2 at the children of the root node
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Add moves for Player 1 at the grandchildren of the root node
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Add moves for Player 3 at the great-grandchildren of the root node
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set the information sets for Player 1's decision nodes
+# Group Player 1's decision nodes based on their corresponding Player 2's actions
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Set the information sets for Player 2's decision nodes
+# Group Player 2's decision nodes based on their corresponding Player 1's actions
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+
+# Set the information sets for Player 3's decision nodes
+# Group Player 3's decision nodes based on their corresponding Player 1 and Player 2's actions
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[0], g.root.children[2].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1].children[0], g.root.children[2].children[1].children[1].infoset)
+
+# Set the outcomes for Player 3's decision nodes
+outcome_Q = g.add_outcome([3, 3, 3], label="Player 3 chooses Q")
+outcome_W = g.add_outcome([2, 2, 3], label="Player 3 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_W)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_W)
+g.set_outcome(g.root.children[2].children[0].children[0], outcome_Q)
+g.set_outcome(g.root.children[2].children[0].children[1], outcome_W)
+g.set_outcome(g.root.children[2].children[1].children[0], outcome_Q)
+g.set_outcome(g.root.children[2].children[1].children[1], outcome_W)

@@ -1,0 +1,75 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the new designer and the established designer.
+# Both players have two actions: showcase a classical collection or an avant-garde collection.
+
+# Step 2: Determine the structure of the game.
+# Since the designers choose independently, this is a simultaneous move game.
+# To model it sequentially, assume one designer moves first and the other moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is the decision node for the first designer.
+# The second designer's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first designer's actions.
+
+# Step 4: Determine the information sets.
+# The second designer does not know the first designer's choice when making their decision.
+# Therefore, the second designer's decision nodes should be grouped in the same information set.
+
+# Set the information set for the second designer's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players: the new designer and the established designer.
+# Both players have two actions: showcase a classical collection or an avant-garde collection.
+
+# Step 2: Determine the structure of the game.
+# Since the designers choose independently, this is a simultaneous move game.
+# To model it sequentially, assume the new designer moves first and the established designer moves second.
+
+# Step 3: Create the game tree.
+g = gbt.Game.new_tree(players=["New Designer", "Established Designer"],
+                      title="Fashion Week Showcase Game")
+
+# Step 4: Append moves for the new designer.
+# The new designer makes the first move at the root node.
+g.append_move(g.root, "New Designer", ["Classical", "Avant-garde"])
+
+# Step 5: Append moves for the established designer.
+# The established designer makes a move after the new designer.
+# The established designer's decision nodes are g.root.children[0] and g.root.children[1],
+# corresponding to the new designer's actions.
+g.append_move(g.root.children[0], "Established Designer", ["Classical", "Avant-garde"])
+g.append_move(g.root.children[1], "Established Designer", ["Classical", "Avant-garde"])
+
+# Step 6: Determine the information sets.
+# The established designer does not know the new designer's choice when making their decision.
+# Therefore, the established designer's decision nodes should be grouped in the same information set.
+
+# Set the information set for the established designer's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 7: Define the outcomes.
+# If their choices match, the new designer gains attention and acclaim.
+# If they differ, the established designer reaffirms their position.
+
+# Outcomes when choices match
+new_designer_gains = g.add_outcome([1, -1], label="New Designer Gains")
+# Outcomes when choices differ
+established_designer_reaffirms = g.add_outcome([-1, 1], label="Established Designer Reaffirms")
+
+# Step 8: Set the outcomes for each terminal node.
+# Matching choices
+g.set_outcome(g.root.children[0].children[0], new_designer_gains)  # Both choose Classical
+g.set_outcome(g.root.children[1].children[1], new_designer_gains)  # Both choose Avant-garde
+
+# Differing choices
+g.set_outcome(g.root.children[0].children[1], established_designer_reaffirms)  # New: Classical, Established: Avant-garde
+g.set_outcome(g.root.children[1].children[0], established_designer_reaffirms)  # New: Avant-garde, Established: Classical
+
+# Save the EFG
+efg = g.write(format='native')
+```

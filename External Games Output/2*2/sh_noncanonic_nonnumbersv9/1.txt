@@ -1,0 +1,70 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two pharmaceutical companies, let's call them Company A and Company B.
+# Both companies have two actions: Collaborate or Focus on Independent Projects.
+
+# Step 2: Determine the sequence of moves.
+# The game involves simultaneous moves, which means both companies make their decisions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Company A moves first and Company B moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Company A's decision node.
+# Company A has two actions, Collaborate and Focus on Independent Projects.
+# Company B's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Company A's actions Collaborate and Focus on Independent Projects.
+
+# Step 5: Group the decision nodes in the same information set.
+# Since Company B does not know which action Company A has taken, Company B's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two pharmaceutical companies, let's call them Company A and Company B.
+# Both companies have two actions: Collaborate or Focus on Independent Projects.
+
+# Step 2: Determine the sequence of moves.
+# The game involves simultaneous moves, which means both companies make their decisions without knowing the other's choice.
+# For modeling purposes, we assume Company A moves first and Company B moves second.
+
+# Step 3: Create a new extensive-form game with the players.
+g = gbt.Game.new_tree(players=["Company A", "Company B"],
+                      title="Pharmaceutical Partnership Game")
+
+# Step 4: Model the game with a sequential structure.
+# Company A's decision node is the root of the game tree.
+g.append_move(g.root, "Company A", ["Collaborate", "Focus on Independent Projects"])
+
+# Company B's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to Company A's actions Collaborate and Focus on Independent Projects.
+g.append_move(g.root.children[0], "Company B", ["Collaborate", "Focus on Independent Projects"])
+g.append_move(g.root.children[1], "Company B", ["Collaborate", "Focus on Independent Projects"])
+
+# Step 5: Group the decision nodes in the same information set.
+# Since Company B does not know which action Company A has taken, Company B's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes and payoffs for each terminal node.
+# If both companies collaborate, they receive massive profits.
+collaborate_outcome = g.add_outcome([3, 3], label="Blockbuster Success")
+
+# If one collaborates and the other focuses on independent projects, the collaborator risks losses, while the other enjoys moderate gains.
+risk_loss_outcome = g.add_outcome([-1, 2], label="Risk Loss for Collaborator")
+moderate_gain_outcome = g.add_outcome([2, -1], label="Moderate Gain for Independent")
+
+# If both focus on independent projects, they produce small advancements with limited returns.
+small_advancement_outcome = g.add_outcome([1, 1], label="Small Advancements")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], collaborate_outcome)
+g.set_outcome(g.root.children[0].children[1], risk_loss_outcome)
+g.set_outcome(g.root.children[1].children[0], moderate_gain_outcome)
+g.set_outcome(g.root.children[1].children[1], small_advancement_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

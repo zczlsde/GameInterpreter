@@ -1,0 +1,45 @@
+```python
+# Since Alexis and Beverley make their decisions simultaneously, we model this as if one player moves first and the other second for representation.
+# However, the second player (in our sequential representation) does not know what the first player chose because the decisions are made simultaneously in reality.
+# Therefore, all decision nodes of the second player belong to the same information set as they cannot distinguish between the actions taken by the first player.
+
+# Assuming Alexis moves first in our representation and chooses between Bach and Stravinsky, we create two decision nodes for Alexis.
+# Then, for each of Alexis's decisions, Beverley makes her choice between Bach and Stravinsky, leading to four outcomes.
+# Beverley, moving "second" in this sequential representation, cannot observe Alexis's choice, implying her decision nodes must be grouped in the same information set.
+
+# Group Beverley's decision nodes into the same information set to represent her imperfect information.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Alexis moves first in our representation for the purpose of constructing the game tree.
+# Alexis has two choices: Bach or Stravinsky.
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# For each of Alexis's choices, Beverley will make her choice between Bach and Stravinsky.
+# This results in four possible outcomes.
+for node in g.root.children:
+    g.append_move(node, "Beverley", ["Bach", "Stravinsky"])
+
+# Define the payoffs for each outcome:
+# If both choose Bach: Alexis (Bach lover) gets a higher payoff, Beverley (Stravinsky lover) gets a lower payoff.
+# If both choose Stravinsky: Beverley gets a higher payoff, Alexis gets a lower payoff.
+# If they choose differently: both get no payoff.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Alexis Bach, Beverley Stravinsky"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Alexis Stravinsky, Beverley Bach"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+
+# Since Alexis and Beverley make their decisions simultaneously, Beverley's decision nodes must be grouped into the same information set
+# to represent her imperfect information about Alexis's choice.
+# Group Beverley's decision nodes into the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

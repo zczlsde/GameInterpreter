@@ -1,0 +1,164 @@
+```python
+# Step 1: A proposes a plan to B, B has two choices: Accept or Reject.
+# Step 2: If B rejects, B proposes an equal split to A, A has two choices: Accept or Reject.
+# Step 3: If A rejects B's proposal, A proposes a new split, and B has to accept.
+
+# Since the game involves sequential moves with each player being perfectly informed of the previous actions, there's no need for setting information sets based on imperfect information.
+# However, to adhere to the task's requirements and considering the negotiation process as a sequence of proposals (where each proposal could be considered as a move in a game with perfect information), we would not group any nodes in the same information set based on the game's description. Each decision is made with full knowledge of the previous actions.
+
+# Therefore, no set_infoset() function is necessary for this game as described, because there is no point in the game where a player has to make a decision without knowing the full history of actions up to that point.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's move: Propose 5500 for A and 4500 for B
+a_proposal_1 = g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# B's response to A's first proposal
+# B can either accept or reject A's first proposal
+b_response_to_a1 = g.append_move(a_proposal_1, "B", ["Accept", "Reject"])
+
+# If B accepts A's first proposal, the game ends with the specified payoffs
+g.set_outcome(b_response_to_a1.children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects A's first proposal, B proposes an equal split
+# Step 2: B proposes an equal split of 5000 each
+b_proposal = g.append_move(b_response_to_a1.children[1], "B", ["Propose 5000-5000"])
+
+# A's response to B's proposal
+# A can either accept or reject B's proposal
+a_response_to_b = g.append_move(b_proposal, "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the specified payoffs
+g.set_outcome(a_response_to_b.children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new split
+# Step 3: A proposes a new split of 5200 for A and 4800 for B
+# Since B has no choice but to accept, we directly set the outcome
+g.set_outcome(a_response_to_b.children[1], g.add_outcome([4693, 4332], label="A's final proposal accepted by B"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B. The game is sequential, with each player making decisions based on the previous actions. The game starts with player A proposing a split of the money. Depending on B's response, the game can follow different paths, each leading to a different outcome. The final payoffs are set according to the negotiation results at each decision point.
+===================
+append_move(): nodes must be Node or str, not NoneType
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's move: Propose 5500 for A and 4500 for B
+a_proposal_1 = g.append_move(g.root, "A", ["Propose 5500-4500", "Propose 5000-5000"])
+
+# B's response to A's first proposal
+# B can either accept or reject A's first proposal
+b_response_to_a1 = g.append_move(a_proposal_1.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts A's first proposal, the game ends with the specified payoffs
+g.set_outcome(b_response_to_a1.children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects A's first proposal, B proposes an equal split
+# Step 2: B proposes an equal split of 5000 each
+b_proposal = g.append_move(b_response_to_a1.children[1], "B", ["Propose 5000-5000"])
+
+# A's response to B's proposal
+# A can either accept or reject B's proposal
+a_response_to_b = g.append_move(b_proposal, "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the specified payoffs
+g.set_outcome(a_response_to_b.children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new split
+# Step 3: A proposes a new split of 5200 for A and 4800 for B
+a_final_proposal = g.append_move(a_response_to_b.children[1], "A", ["Propose 5200-4800"])
+
+# Since B has no choice but to accept, we directly set the outcome for A's final proposal
+g.set_outcome(a_final_proposal.children[0], g.add_outcome([4693, 4332], label="A's final proposal accepted by B"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's move: Propose 5500 for A and 4500 for B
+a_proposal_1 = g.append_move(g.root, "A", ["Propose 5500-4500", "Propose 5000-5000"])
+
+# B's response to A's first proposal
+# B can either accept or reject A's first proposal
+b_response_to_a1 = g.append_move(a_proposal_1.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts A's first proposal, the game ends with the specified payoffs
+g.set_outcome(b_response_to_a1.children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects A's first proposal, B proposes an equal split
+# B's move: Propose 5000-5000
+# Since this is a direct response to rejection, we simulate B's proposal as A's acceptance or rejection
+a_response_to_b_proposal = g.append_move(b_response_to_a1.children[1], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the specified payoffs
+g.set_outcome(a_response_to_b_proposal.children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new split
+# A's final proposal: 5200 for A and 4800 for B, which B has to accept
+# Since B has no choice but to accept, we directly set the outcome for A's rejection of B's proposal
+g.set_outcome(a_response_to_b_proposal.children[1], g.add_outcome([4693, 4332], label="A's final proposal accepted by B"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a plan to B
+# A's move: Propose 5500 for A and 4500 for B
+a_proposal_1 = g.append_move(g.root, "A", ["Propose 5500-4500", "Propose 5000-5000"])
+
+# B's response to A's first proposal
+# B can either accept or reject A's first proposal
+b_response_to_a1 = g.append_move(a_proposal_1.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts A's first proposal, the game ends with the specified payoffs
+g.set_outcome(b_response_to_a1.children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects A's first proposal, B proposes an equal split
+# B's move: Propose 5000 for A and 5000 for B
+# Since this is a direct consequence of rejection, we move to A's response to B's proposal
+
+# A's response to B's proposal
+# A can either accept or reject B's proposal
+a_response_to_b = g.append_move(b_response_to_a1.children[1], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the specified payoffs
+g.set_outcome(a_response_to_b.children[0], g.add_outcome([5000, 5000], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new split
+# A's final proposal: 5200 for A and 4800 for B
+# Since B has no choice but to accept, we directly set the outcome
+g.set_outcome(a_response_to_b.children[1], g.add_outcome([4693, 4332], label="A's final proposal accepted by B"))
+
+# Save the EFG
+efg = g.write(format='native')

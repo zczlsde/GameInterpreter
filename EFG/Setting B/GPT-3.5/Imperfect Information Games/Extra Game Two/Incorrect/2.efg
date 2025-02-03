@@ -1,0 +1,49 @@
+EFG 2 R "Imperfect information game" { "Player 1" "Player 2" "Player 3" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "Q selected" { 3, 3, 3 }
+t "" 2 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 3 "W selected" { 2, 2, 3 }
+t "" 4 "W selected" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 5 "W selected" { 2, 2, 3 }
+t "" 6 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 7 "W selected" { 2, 2, 3 }
+t "" 8 "W selected" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 9 "W selected" { 2, 2, 3 }
+t "" 10 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 11 "W selected" { 2, 2, 3 }
+t "" 12 "W selected" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 13 "W selected" { 2, 2, 3 }
+t "" 14 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 15 "W selected" { 2, 2, 3 }
+t "" 16 "W selected" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 17 "W selected" { 2, 2, 3 }
+t "" 18 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 19 "W selected" { 2, 2, 3 }
+t "" 20 "W selected" { 2, 2, 3 }
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 21 "W selected" { 2, 2, 3 }
+t "" 22 "W selected" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 23 "W selected" { 2, 2, 3 }
+t "" 24 "W selected" { 2, 2, 3 }

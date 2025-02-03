@@ -1,0 +1,51 @@
+```python
+# Since Alexis and Beverley make their decisions simultaneously, we model this as if one player moves first and the other second for representation.
+# However, the second player (in our sequential representation) does not know the action of the first player due to the simultaneous move nature of the game.
+# Therefore, all decision nodes of the second player belong to the same information set as they cannot distinguish which action the first player has taken.
+
+# Assuming Alexis moves first in our representation and chooses between Bach or Stravinsky, we create two decision nodes for Beverley under each of Alexis's decisions.
+# These nodes for Beverley are indistinguishable from her perspective, representing the imperfect information in the game.
+# We group these nodes into the same information set to reflect that Beverley knows she is at one of these nodes but not exactly which one.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Although Alexis and Beverley make their decisions simultaneously, for the purpose of modeling in pygambit,
+# we represent the game as if Alexis moves first and chooses between Bach or Stravinsky.
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# For each of Alexis's choices, we create decision nodes for Beverley.
+# These nodes represent Beverley's choices after Alexis has chosen Bach or Stravinsky.
+# Since the game is simultaneous, Beverley does not know Alexis's choice when making her decision.
+# Therefore, we will later set these nodes to be in the same information set.
+for node in g.root.children:
+    g.append_move(node, "Beverley", ["Bach", "Stravinsky"])
+
+# Define the outcomes based on the game description.
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff.
+# If both choose Stravinsky, Beverley gets a higher payoff, and Alexis gets a lower payoff.
+# If they choose differently, they both get no payoff.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Alexis Bach, Beverley Stravinsky"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Alexis Stravinsky, Beverley Bach"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+
+# Since Alexis and Beverley make their decisions simultaneously, we model this as if one player moves first and the other second for representation.
+# However, the second player (in our sequential representation) does not know the action of the first player due to the simultaneous move nature of the game.
+# Therefore, all decision nodes of the second player belong to the same information set as they cannot distinguish which action the first player has taken.
+
+# Assuming Alexis moves first in our representation and chooses between Bach or Stravinsky, we create two decision nodes for Beverley under each of Alexis's decisions.
+# These nodes for Beverley are indistinguishable from her perspective, representing the imperfect information in the game.
+# We group these nodes into the same information set to reflect that Beverley knows she is at one of these nodes but not exactly which one.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

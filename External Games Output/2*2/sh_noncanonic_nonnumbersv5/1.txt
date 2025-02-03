@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Organization 1 and Organization 2.
+# Both players have two actions: Collaborate or Work Independently.
+
+# Step 2: Determine the structure of the game.
+# Since the players' decisions are made simultaneously, this involves imperfect information.
+# To model this with a sequential structure, assume Organization 1 moves first and Organization 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Organization 1's decision node.
+# Organization 1 has two actions, Collaborate and Work Independently.
+# Organization 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Organization 1's actions Collaborate and Work Independently.
+
+# Step 4: Group the decision nodes into information sets.
+# Organization 2, moving simultaneously, does not know which action Organization 1 has taken.
+# Therefore, Organization 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players, Organization 1 and Organization 2.
+# Both players have two actions: Collaborate or Work Independently.
+
+# Step 2: Determine the structure of the game.
+# Since the players' decisions are made simultaneously, this involves imperfect information.
+# To model this with a sequential structure, assume Organization 1 moves first and Organization 2 moves second.
+
+# Create a new game with the two organizations as players.
+g = gbt.Game.new_tree(players=["Organization 1", "Organization 2"],
+                      title="Conservation Collaboration Game")
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Organization 1's decision node.
+# Organization 1 has two actions, Collaborate and Work Independently.
+g.append_move(g.root, "Organization 1", ["Collaborate", "Work Independently"])
+
+# Organization 2's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to Organization 1's actions Collaborate and Work Independently.
+g.append_move(g.root.children[0], "Organization 2", ["Collaborate", "Work Independently"])
+g.append_move(g.root.children[1], "Organization 2", ["Collaborate", "Work Independently"])
+
+# Step 4: Group the decision nodes into information sets.
+# Organization 2, moving simultaneously, does not know which action Organization 1 has taken.
+# Therefore, Organization 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and payoffs.
+# If both collaborate, they achieve a high reward.
+high_reward = g.add_outcome([3, 3], label="High Reward")
+# If one collaborates and the other works independently, the collaborator's effort is wasted.
+moderate_reward_1 = g.add_outcome([0, 2], label="Moderate Reward for Org 2")
+moderate_reward_2 = g.add_outcome([2, 0], label="Moderate Reward for Org 1")
+# If both work independently, they achieve smaller successes.
+small_success = g.add_outcome([1, 1], label="Small Success")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], high_reward)
+g.set_outcome(g.root.children[0].children[1], moderate_reward_1)
+g.set_outcome(g.root.children[1].children[0], moderate_reward_2)
+g.set_outcome(g.root.children[1].children[1], small_success)
+
+# Save the EFG
+efg = g.write(format='native')
+```

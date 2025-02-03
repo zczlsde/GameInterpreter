@@ -1,0 +1,221 @@
+```python
+# Since both players choose their actions simultaneously, we model this as a sequential game where one player (say Player 1) moves first without knowing the other's choice, and then Player 2 moves. However, since their moves are actually simultaneous, Player 1 does not know Player 2's move when making their decision. This is represented by grouping Player 1's decision nodes under different Player 2's actions into the same information set.
+
+# Assuming Player 1 is represented as choosing between Rock, Paper, or Scissors first, and then Player 2 chooses among the same options. We model the game as if Player 2 moves after Player 1, but Player 2's decision nodes, based on Player 1's actions, are in the same information set because Player 2 does not know Player 1's action when choosing.
+
+# For Player 1, there are no information sets to define because Player 1 moves first without any prior moves. 
+
+# For Player 2, we need to group the decision nodes following each of Player 1's actions (Rock, Paper, Scissors) into the same information set because Player 2 chooses without knowing Player 1's choice.
+
+# Let's assume the game tree is constructed in a way that g.root.children[0], g.root.children[1], and g.root.children[2] correspond to Player 1's choice of Rock, Paper, and Scissors respectively. Each of these nodes then branches into three more nodes for Player 2's choices (Rock, Paper, Scissors) in response to Player 1's action.
+
+# Therefore, we need to set the information set for Player 2's decision nodes following each of Player 1's actions to indicate that Player 2's decision is made without knowledge of Player 1's choice.
+
+# Grouping Player 2's decision nodes following Player 1's choice of Rock into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[0].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Paper into the same information set.
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[1].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Scissors into the same information set.
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[2].children[2], g.root.children[2].children[1].infoset)
+
+# This setup ensures that all of Player 2's decisions are grouped correctly to reflect the simultaneous nature of the game, where Player 2's choice is made without knowledge of Player 1's choice.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Player 1's move: choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, Player 2 responds by choosing Rock, Paper, or Scissors
+# This is done sequentially for modeling purposes, but will be treated as simultaneous in the game analysis
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes for each combination of choices
+# The outcomes are defined based on the rules: Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# The payoffs are set as follows: a win yields a payoff of 1, a loss yields a payoff of -1, and a tie yields 0 for both players
+outcomes = {
+    "RockRock": [0, 0], "RockPaper": [-1, 1], "RockScissors": [1, -1],
+    "PaperRock": [1, -1], "PaperPaper": [0, 0], "PaperScissors": [-1, 1],
+    "ScissorsRock": [-1, 1], "ScissorsPaper": [1, -1], "ScissorsScissors": [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions leading to it
+for i, p1_choice in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, p2_choice in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome_label = p1_choice + p2_choice
+        g.set_outcome(g.root.children[i].children[j], g.add_outcome(outcomes[outcome_label], label=outcome_label))
+
+# Since both players choose their actions simultaneously, we model this as a sequential game where one player (say Player 1) moves first without knowing the other's choice, and then Player 2 moves. However, since their moves are actually simultaneous, Player 1 does not know Player 2's move when making their decision. This is represented by grouping Player 1's decision nodes under different Player 2's actions into the same information set.
+
+# For Player 2, we need to group the decision nodes following each of Player 1's actions (Rock, Paper, Scissors) into the same information set because Player 2 chooses without knowing Player 1's choice.
+
+# Grouping Player 2's decision nodes following Player 1's choice of Rock into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[0].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Paper into the same information set.
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[1].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Scissors into the same information set.
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[2].children[2], g.root.children[2].children[1].infoset)
+
+# This setup ensures that all of Player 2's decisions are grouped correctly to reflect the simultaneous nature of the game, where Player 2's choice is made without knowledge of Player 1's choice.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Player 1's move: choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, Player 2 responds by choosing Rock, Paper, or Scissors
+# This is done sequentially for modeling purposes, but will be treated as simultaneous in the game analysis
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes for each combination of choices
+# The outcomes are defined based on the rules: Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# The payoffs are set as follows: a win yields a payoff of 1, a loss yields a payoff of -1, and a tie yields 0 for both players
+outcomes = {
+    "RockRock": [0, 0], "RockPaper": [-1, 1], "RockScissors": [1, -1],
+    "PaperRock": [1, -1], "PaperPaper": [0, 0], "PaperScissors": [-1, 1],
+    "ScissorsRock": [-1, 1], "ScissorsPaper": [1, -1], "ScissorsScissors": [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions leading to it
+for i, p1_choice in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, p2_choice in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome_label = p1_choice + p2_choice
+        g.set_outcome(g.root.children[i].children[j], g.add_outcome(outcomes[outcome_label], label=outcome_label))
+
+# Correcting the information set assignments to avoid the "node not defined" error
+# Grouping Player 2's decision nodes following Player 1's choice of Rock into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Paper into the same information set.
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[2].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Scissors into the same information set.
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[2].infoset)
+
+# This setup ensures that all of Player 2's decisions are grouped correctly to reflect the simultaneous nature of the game, where Player 2's choice is made without knowledge of Player 1's choice.
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Player 1's move: choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, Player 2 responds by choosing Rock, Paper, or Scissors
+# This is done sequentially for modeling purposes, but will be treated as simultaneous in the game analysis
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes for each combination of choices
+# The outcomes are defined based on the rules: Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# The payoffs are set as follows: a win yields a payoff of 1, a loss yields a payoff of -1, and a tie yields 0 for both players
+outcomes = {
+    "RockRock": [0, 0], "RockPaper": [-1, 1], "RockScissors": [1, -1],
+    "PaperRock": [1, -1], "PaperPaper": [0, 0], "PaperScissors": [-1, 1],
+    "ScissorsRock": [-1, 1], "ScissorsPaper": [1, -1], "ScissorsScissors": [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions leading to it
+for i, p1_choice in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, p2_choice in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome_label = p1_choice + p2_choice
+        g.set_outcome(g.root.children[i].children[j], g.add_outcome(outcomes[outcome_label], label=outcome_label))
+
+# Correcting the information set assignments to avoid the "node not defined" error
+# Grouping Player 2's decision nodes following Player 1's choice of Rock into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[0].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Paper into the same information set.
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[1].children[1].infoset)
+
+# Grouping Player 2's decision nodes following Player 1's choice of Scissors into the same information set.
+g.set_infoset(g.root.children[2].children[0], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[2].children[2], g.root.children[2].children[1].infoset)
+
+# This setup ensures that all of Player 2's decisions are grouped correctly to reflect the simultaneous nature of the game, where Player 2's choice is made without knowledge of Player 1's choice.
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Player 1's move: choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, Player 2 responds by choosing Rock, Paper, or Scissors
+# This is done sequentially for modeling purposes, but will be treated as simultaneous in the game analysis
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes for each combination of choices
+# The outcomes are defined based on the rules: Rock blunts Scissors, Scissors cut Paper, Paper covers Rock
+# The payoffs are set as follows: a win yields a payoff of 1, a loss yields a payoff of -1, and a tie yields 0 for both players
+outcomes = {
+    "RockRock": [0, 0], "RockPaper": [-1, 1], "RockScissors": [1, -1],
+    "PaperRock": [1, -1], "PaperPaper": [0, 0], "PaperScissors": [-1, 1],
+    "ScissorsRock": [-1, 1], "ScissorsPaper": [1, -1], "ScissorsScissors": [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions leading to it
+for i, p1_choice in enumerate(["Rock", "Paper", "Scissors"]):
+    for j, p2_choice in enumerate(["Rock", "Paper", "Scissors"]):
+        outcome_label = p1_choice + p2_choice
+        g.set_outcome(g.root.children[i].children[j], g.add_outcome(outcomes[outcome_label], label=outcome_label))
+
+# Correcting the information set assignments to properly reflect simultaneous moves
+# Since Player 2's moves are simultaneous to Player 1's, all of Player 2's decision nodes following each of Player 1's actions should be in the same information set.
+# This means that for each of Player 1's actions, the subsequent Player 2's actions are indistinguishable from each other.
+
+# Correctly setting the information sets for Player 2's decisions
+for i in range(3):  # For each of Player 1's actions
+    for j in range(1, 3):  # For each of Player 2's responses, except the first one, set the same infoset
+        g.set_infoset(g.root.children[i].children[j], g.root.children[i].children[0].infoset)
+
+# This setup ensures that all of Player 2's decisions are grouped correctly to reflect the simultaneous nature of the game, where Player 2's choice is made without knowledge of Player 1's choice.
+
+# Save the EFG
+efg = g.write(format='native')

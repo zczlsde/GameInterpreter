@@ -1,0 +1,54 @@
+```python
+# Step-by-step thought process:
+# 1. The game involves two players making decisions simultaneously, which means there is imperfect information.
+# 2. To model this game with a sequential structure, assume one player moves first and the other moves second.
+# 3. Let's assume the fantasy enthusiast moves first and the historical fiction enthusiast moves second.
+# 4. The starting node, g.root, is the fantasy enthusiast's decision node.
+# 5. The fantasy enthusiast has two actions: choose Fantasy or Historical Fiction.
+# 6. The historical fiction enthusiast's decision nodes are g.root.children[0] (Fantasy) and g.root.children[1] (Historical Fiction).
+# 7. Since the historical fiction enthusiast cannot distinguish between the fantasy enthusiast choosing Fantasy or Historical Fiction, 
+#    these decision nodes should be grouped in the same information set.
+
+# Set the information set for the historical fiction enthusiast's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Fantasy Enthusiast and Historical Fiction Enthusiast.
+g = gbt.Game.new_tree(players=["Fantasy Enthusiast", "Historical Fiction Enthusiast"],
+                      title="Co-writing Book Genre Decision")
+
+# Step 2: Assume the Fantasy Enthusiast moves first. They have two actions: "Fantasy" and "Historical Fiction".
+g.append_move(g.root, "Fantasy Enthusiast", ["Fantasy", "Historical Fiction"])
+
+# Step 3: The Historical Fiction Enthusiast moves second. They also have two actions: "Fantasy" and "Historical Fiction".
+# Append moves for the Historical Fiction Enthusiast at both decision nodes created by the Fantasy Enthusiast's actions.
+g.append_move(g.root.children[0], "Historical Fiction Enthusiast", ["Fantasy", "Historical Fiction"])
+g.append_move(g.root.children[1], "Historical Fiction Enthusiast", ["Fantasy", "Historical Fiction"])
+
+# Step 4: Set the information set for the Historical Fiction Enthusiast's decision nodes to reflect imperfect information.
+# The Historical Fiction Enthusiast cannot distinguish between the Fantasy Enthusiast choosing "Fantasy" or "Historical Fiction".
+# Use the provided code block to set the information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# If both choose "Fantasy", the Fantasy Enthusiast gets a higher payoff, and the Historical Fiction Enthusiast gets a lower payoff.
+fantasy_outcome = g.add_outcome([2, 1], label="Both choose Fantasy")
+
+# If both choose "Historical Fiction", the Historical Fiction Enthusiast gets a higher payoff, and the Fantasy Enthusiast gets a lower payoff.
+historical_outcome = g.add_outcome([1, 2], label="Both choose Historical Fiction")
+
+# If they choose different genres, they both get no payoff.
+no_payoff_outcome = g.add_outcome([0, 0], label="Different genres")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], fantasy_outcome)  # Both choose Fantasy
+g.set_outcome(g.root.children[0].children[1], no_payoff_outcome)  # Different genres
+g.set_outcome(g.root.children[1].children[0], no_payoff_outcome)  # Different genres
+g.set_outcome(g.root.children[1].children[1], historical_outcome)  # Both choose Historical Fiction
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Lease Renewal Negotiation" { "Landlord" "Tenant" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Moderate Rent Increase" { 1, 1 }
+t "" 3 "Tenant Wins" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Landlord Wins" { 2, 0 }
+t "" 4 "No Renewal" { -1, -1 }

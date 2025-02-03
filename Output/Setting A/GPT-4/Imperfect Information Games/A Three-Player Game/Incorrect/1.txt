@@ -1,0 +1,41 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-Player Game with Chance Event")
+
+# First stage: a chance event with equal probability for "A" or "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Second stage: Player 1 chooses between "L" and "R" without knowing the outcome of the chance event
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+    # If Player 1 selects "R", the game ends with a payoff of (1, 1, 1) to all players
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1]))
+
+# Third stage: If Player 1 chooses "L", then Player 2 can select either "l" or "r"
+# without knowing Player 1's choice from the previous stage
+for node in [child.children[0] for child in g.root.children]:
+    g.append_move(node, "Player 2", ["l", "r"])
+    # If Player 2 chooses "r", the game ends with a payoff of (2, 2, 2) to all players
+    g.set_outcome(node.children[1], g.add_outcome([2, 2, 2]))
+
+# Fourth stage: If Player 2 selects "l", then Player 3 can choose between "a" and "b"
+# Player 3 does not know Player 2's prior choice
+for node in [child.children[0] for child in [child.children[0] for child in g.root.children]]:
+    g.append_move(node, "Player 3", ["a", "b"])
+    # The game concludes with a payoff of (3, 3, 3) once Player 3 makes a decision
+    g.set_outcome(node.children[0], g.add_outcome([3, 3, 3]))
+    g.set_outcome(node.children[1], g.add_outcome([3, 3, 3]))
+
+# Since none of the players have knowledge of the previous moves of other players or the chance event,
+# we need to set the information sets accordingly to reflect the imperfect information structure.
+# However, in this specific setup, each player's move is already in separate information sets due to the game's structure.
+# Therefore, explicit calls to g.set_infoset() to group nodes into the same information set are not necessary in this case.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs the extensive-form game as described, with a chance node at the beginning and sequential moves by three players. The game's structure inherently ensures that players make decisions without knowledge of previous moves or the chance event outcome, aligning with the requirement for imperfect information.

@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, the comedy enthusiast and the action lover.
+# Both players have two actions: choose Comedy or choose Action.
+
+# Step 2: Determine the structure of the game.
+# Since both players are deciding simultaneously, this involves imperfect information.
+# To model this in a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: Identify the decision nodes for each player.
+# Assume the comedy enthusiast moves first, and the action lover moves second.
+# The starting node, g.root, is the comedy enthusiast's decision node.
+# The action lover's decision nodes are g.root.children[0] (Comedy) and g.root.children[1] (Action).
+
+# Step 4: Group the decision nodes in the same information set.
+# The action lover does not know the choice of the comedy enthusiast.
+# Therefore, the action lover's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game with two players: Comedy Enthusiast and Action Lover.
+g = gbt.Game.new_tree(players=["Comedy Enthusiast", "Action Lover"],
+                      title="Roommates Movie Choice Game")
+
+# Step 2: Model the game structure.
+# Assume the Comedy Enthusiast moves first, choosing between Comedy and Action.
+g.append_move(g.root, "Comedy Enthusiast", ["Comedy", "Action"])
+
+# Step 3: The Action Lover moves second, choosing between Comedy and Action.
+# The Action Lover's decision nodes are g.root.children[0] (Comedy) and g.root.children[1] (Action).
+g.append_move(g.root.children[0], "Action Lover", ["Comedy", "Action"])
+g.append_move(g.root.children[1], "Action Lover", ["Comedy", "Action"])
+
+# Step 4: Set the information set for the Action Lover.
+# The Action Lover does not know the choice of the Comedy Enthusiast.
+# Therefore, the Action Lover's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes based on their choices.
+# If both choose Comedy, Comedy Enthusiast gets 2 points, Action Lover gets 1 point.
+comedy_agreement = g.add_outcome([2, 1], label="Both choose Comedy")
+# If both choose Action, Action Lover gets 2 points, Comedy Enthusiast gets 1 point.
+action_agreement = g.add_outcome([1, 2], label="Both choose Action")
+# If they choose different genres, neither watches a movie, and they both score 0 points.
+disagreement = g.add_outcome([0, 0], label="Different choices")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], comedy_agreement)  # Both choose Comedy
+g.set_outcome(g.root.children[0].children[1], disagreement)      # Comedy Enthusiast chooses Comedy, Action Lover chooses Action
+g.set_outcome(g.root.children[1].children[0], disagreement)      # Comedy Enthusiast chooses Action, Action Lover chooses Comedy
+g.set_outcome(g.root.children[1].children[1], action_agreement)  # Both choose Action
+
+# Save the EFG
+efg = g.write(format='native')
+```

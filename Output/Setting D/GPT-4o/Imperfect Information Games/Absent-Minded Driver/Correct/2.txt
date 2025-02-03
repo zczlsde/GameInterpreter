@@ -1,0 +1,77 @@
+```python
+# The game involves a driver who cannot distinguish between junctions X and Y.
+# This means the decision nodes at X and Y should be in the same information set.
+
+# Assume the game starts at a chance node where the driver is at junction X.
+# The driver can either EXIT or CONTINUE at X.
+# If the driver CONTINUES, he reaches junction Y.
+# At Y, the driver again can either EXIT or CONTINUE.
+
+# Since the driver cannot distinguish between X and Y, the decision nodes at X and Y should be grouped in the same information set.
+
+# Set the information set for the decision nodes at X and Y.
+g.set_infoset(g.root, g.root.children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with a single player, the driver.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver Game")
+
+# The game starts at a chance node where the driver is at junction X.
+# The driver can either EXIT or CONTINUE at X.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at X, he reaches A with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Reached A"))
+
+# If the driver chooses to CONTINUE at X, he reaches junction Y.
+# At Y, the driver again can either EXIT or CONTINUE.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at Y, he reaches B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Reached B"))
+
+# If the driver chooses to CONTINUE at Y, he reaches C with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Reached C"))
+
+# Since the driver cannot distinguish between X and Y, the decision nodes at X and Y should be grouped in the same information set.
+# Set the information set for the decision nodes at X and Y.
+g.set_infoset(g.root, g.root.children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with a single player, the driver.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver Game")
+
+# The game starts at a decision node where the driver is at junction X.
+# The driver can either EXIT or CONTINUE at X.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at X, he reaches A with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Reached A"))
+
+# If the driver chooses to CONTINUE at X, he reaches junction Y.
+# At Y, the driver again can either EXIT or CONTINUE.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at Y, he reaches B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Reached B"))
+
+# If the driver chooses to CONTINUE at Y, he reaches C with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Reached C"))
+
+# Since the driver cannot distinguish between X and Y, the decision nodes at X and Y should be grouped in the same information set.
+# Set the information set for the decision nodes at X and Y.
+g.set_infoset(g.root.children[1], g.root.infoset)
+
+# Save the EFG
+efg = g.write(format='native')

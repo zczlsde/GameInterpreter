@@ -1,0 +1,9 @@
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Bach" 1/2 "Stravinsky" 1/2 } 0
+    p "" 1 1 "" { "Bach" "Stravinsky" } 0
+        p "" 2 1 "" { "Bach" "Stravinsky" } 0
+            t "" 1 "Both choose Bach" { 2, 1 }
+            t "" 2 "Disagreement" { 0, 0 }
+        p "" 2 2 "" { "Bach" "Stravinsky" } 0
+            t "" 3 "Disagreement" { 0, 0 }
+            t "" 4 "Both choose Stravinsky" { 1, 2 }

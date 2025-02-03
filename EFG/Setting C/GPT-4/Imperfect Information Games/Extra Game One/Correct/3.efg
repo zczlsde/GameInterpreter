@@ -1,0 +1,40 @@
+EFG 2 R "Three-stage game with imperfect information" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" "F" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 10 "Q chosen" { 3, 3 }
+t "" 11 "W chosen" { 0, 0 }
+t "" 4 "H chosen" { 2, -1 }
+p "" 1 3 "" { "G" "H" } 0
+p "" 2 3 "" { "Q" "W" } 0
+t "" 12 "Q chosen" { 3, 3 }
+t "" 13 "W chosen" { 0, 0 }
+t "" 5 "H chosen" { 2, -1 }
+t "" 1 "F chosen" { 0, 0 }
+p "" 2 6 "" { "D" "E" "F" } 0
+p "" 1 4 "" { "G" "H" } 0
+p "" 2 4 "" { "Q" "W" } 0
+t "" 14 "Q chosen" { 3, 3 }
+t "" 15 "W chosen" { 0, 0 }
+t "" 6 "H chosen" { 2, -1 }
+p "" 1 5 "" { "G" "H" } 0
+p "" 2 5 "" { "Q" "W" } 0
+t "" 16 "Q chosen" { 3, 3 }
+t "" 17 "W chosen" { 0, 0 }
+t "" 7 "H chosen" { 2, -1 }
+t "" 2 "F chosen" { 0, 0 }
+p "" 2 6 "" { "D" "E" "F" } 0
+p "" 1 6 "" { "G" "H" } 0
+p "" 2 7 "" { "Q" "W" } 0
+t "" 18 "Q chosen" { 3, 3 }
+t "" 19 "W chosen" { 0, 0 }
+t "" 8 "H chosen" { 2, -1 }
+p "" 1 7 "" { "G" "H" } 0
+p "" 2 8 "" { "Q" "W" } 0
+t "" 20 "Q chosen" { 3, 3 }
+t "" 21 "W chosen" { 0, 0 }
+t "" 9 "H chosen" { 2, -1 }
+t "" 3 "F chosen" { 0, 0 }

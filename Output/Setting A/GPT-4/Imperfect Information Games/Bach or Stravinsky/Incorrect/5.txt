@@ -1,0 +1,40 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Since Alexis and Beverley make their choices simultaneously, we model this by introducing a chance move at the root.
+# This chance move will lead to four outcomes, representing the four possible combinations of choices.
+g.append_move(g.root, g.players.chance, ["Bach_Bach", "Bach_Stravinsky", "Stravinsky_Bach", "Stravinsky_Stravinsky"])
+
+# Set the probabilities for each outcome to be equal, as the game is symmetric and choices are made independently.
+# Since there are four outcomes, each outcome has a probability of 1/4.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# Now, we define the outcomes for each of the four scenarios:
+# 1. Both choose Bach: Alexis gets a higher payoff, Beverley gets a lower payoff.
+# 2. Both choose Stravinsky: Beverley gets a higher payoff, Alexis gets a lower payoff.
+# 3. Alexis chooses Bach, Beverley chooses Stravinsky: Neither gets any payoff.
+# 4. Alexis chooses Stravinsky, Beverley chooses Bach: Neither gets any payoff.
+
+# Add outcomes to the game
+both_bach = g.add_outcome([2, 1], label="Both choose Bach")
+both_stravinsky = g.add_outcome([1, 2], label="Both choose Stravinsky")
+different_choices_1 = g.add_outcome([0, 0], label="Alexis Bach, Beverley Stravinsky")
+different_choices_2 = g.add_outcome([0, 0], label="Alexis Stravinsky, Beverley Bach")
+
+# Assign outcomes to the respective branches of the chance move
+g.set_outcome(g.root.children[0], both_bach)
+g.set_outcome(g.root.children[1], different_choices_1)
+g.set_outcome(g.root.children[2], different_choices_2)
+g.set_outcome(g.root.children[3], both_stravinsky)
+
+# Since the moves are simultaneous, there's no need to use g.set_infoset() for this game structure.
+# The game is fully defined by the chance move and the outcomes.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+In this code, we model the simultaneous move game "Bach or Stravinsky?" by introducing a chance move at the beginning to represent the simultaneous decision-making process of Alexis and Beverley. Each outcome of the chance move corresponds to one of the four possible scenarios of the game. Since the decisions are made independently and simultaneously, we assign equal probabilities to each scenario. The payoffs are then assigned based on the preferences of Alexis and Beverley for Bach and Stravinsky, respectively. This approach allows us to model the game without needing to explicitly handle imperfect information through information sets, as the chance move implicitly captures the simultaneous nature of the decisions.

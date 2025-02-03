@@ -1,0 +1,61 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two warlords, each deciding independently to either attack or defend.
+
+# Step 2: Recognize the simultaneous nature of the decisions.
+# Since both warlords decide independently and simultaneously, they do not know the other's decision.
+
+# Step 3: Model the game with a sequential structure for representation.
+# Assume one warlord moves first and the other moves second.
+
+# Step 4: Identify the decision nodes for the second warlord.
+# The second warlord's decision nodes correspond to the first warlord's actions (attack or defend).
+
+# Step 5: Group the decision nodes of the second warlord in the same information set.
+# Since the second warlord does not know the first warlord's decision, their decision nodes should be in the same information set.
+
+# Assuming Warlord 1 moves first and Warlord 2 moves second:
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Warlord 1 and Warlord 2.
+g = gbt.Game.new_tree(players=["Warlord 1", "Warlord 2"],
+                      title="Strategic Outpost Conflict")
+
+# Step 2: Model the game with a sequential structure for representation.
+# Assume Warlord 1 moves first and Warlord 2 moves second.
+
+# Step 3: Warlord 1 has two actions: Attack or Defend.
+g.append_move(g.root, "Warlord 1", ["Attack", "Defend"])
+
+# Step 4: Warlord 2 also has two actions: Attack or Defend.
+# Warlord 2's decision nodes correspond to Warlord 1's actions.
+g.append_move(g.root.children[0], "Warlord 2", ["Attack", "Defend"])
+g.append_move(g.root.children[1], "Warlord 2", ["Attack", "Defend"])
+
+# Step 5: Group the decision nodes of Warlord 2 in the same information set.
+# Since Warlord 2 does not know Warlord 1's decision, their decision nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the strategies chosen by the warlords.
+# If both decide to attack or both to defend, the weaker warlord gains a strategic advantage.
+# If their strategies differ, the stronger warlord consolidates their power.
+
+# Assume Warlord 1 is the stronger warlord.
+# Both attack or both defend: Warlord 2 gains advantage.
+warlord2_advantage = g.add_outcome([-1, 1], label="Warlord 2 gains advantage")
+# Different strategies: Warlord 1 consolidates power.
+warlord1_consolidates = g.add_outcome([1, -1], label="Warlord 1 consolidates power")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], warlord2_advantage)  # Both attack
+g.set_outcome(g.root.children[0].children[1], warlord1_consolidates)  # Warlord 1 attacks, Warlord 2 defends
+g.set_outcome(g.root.children[1].children[0], warlord1_consolidates)  # Warlord 1 defends, Warlord 2 attacks
+g.set_outcome(g.root.children[1].children[1], warlord2_advantage)  # Both defend
+
+# Save the EFG
+efg = g.write(format='native')
+```

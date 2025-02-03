@@ -1,0 +1,83 @@
+```python
+import pygambit as gbt
+
+# Create a new game with a title indicating it's a three-stage game with imperfect recall
+g = gbt.Game.new_tree(players=["Chance", "Player 1"],
+                      title="Three-stage game with imperfect recall")
+
+# Stage 1: A chance event decides between "L" or "R", each with a probability of 1/2.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance moves
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of the chance event and chooses between "l" or "r".
+# Append moves for Player 1 after each outcome of the chance event
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses between "A" and "B" without remembering the outcome of the first stage.
+# However, she remembers her decision from the second stage.
+# Append moves for Player 1's second decision, which is made without recall of the first stage's outcome.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["A", "B"])
+
+# Since Player 1 forgets the outcome of the first stage but remembers her second-stage decision,
+# nodes corresponding to the same second-stage decision ("l" or "r") should be in the same information set.
+# Group nodes based on the second-stage decision.
+# Use the IDENTICAL CODE for handling imperfect information as instructed.
+for i in range(2):  # Iterate over the second-stage decisions ("l" or "r")
+    g.set_infoset(g.root.children[0].children[i], g.root.children[1].children[i].infoset)
+
+# Set all outcomes to have payoffs of 0, as specified in the game description.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs the extensive-form game as described, with a chance node at the beginning, followed by Player 1's decisions with imperfect recall in the third stage. The use of `g.set_infoset()` after `g.append_move()` ensures that the information sets are correctly assigned to represent the player's imperfect recall.
+===================
+add_outcome(): number of payoffs must equal number of players
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with a chance player and Player 1
+g = gbt.Game.new_tree(players=["Chance", "Player 1"], title="Three-stage Game with Imperfect Recall")
+
+# First stage: Chance node decides between "L" or "R" with equal probability
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance moves to 1/2 each
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Second stage: Player 1 observes the outcome and chooses between "l" or "r"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Third stage: Player 1 chooses between "A" and "B" without remembering the first stage's outcome
+# but remembering her second stage choice. This requires creating new moves for Player 1 under each
+# of the second stage decisions, and then grouping them into information sets based on the second stage decision.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["A", "B"])
+
+# Since Player 1 forgets the outcome of the first stage but remembers her decision from the second stage,
+# nodes corresponding to the same second-stage decision ("l" or "r") should be in the same information set.
+# This is achieved by setting the information set for nodes corresponding to the same decision.
+# Use the IDENTICAL CODE for handling imperfect information as instructed.
+# Group nodes based on the second-stage decision.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Set all outcomes to have payoffs of 0, as specified in the game description.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0, 0]))
+
+# Save the EFG
+efg = g.write(format='native')

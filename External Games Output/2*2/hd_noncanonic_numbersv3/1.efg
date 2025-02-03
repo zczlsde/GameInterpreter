@@ -1,0 +1,10 @@
+EFG 2 R "Profit Allocation Game" { "Partner 1" "Partner 2" }
+""
+
+p "" 1 1 "" { "Agree" "Demand" } 0
+p "" 2 1 "" { "Agree" "Demand" } 0
+t "" 1 "Equal Split" { 0, 0 }
+t "" 3 "Demand Loses" { -2, 2 }
+p "" 2 1 "" { "Agree" "Demand" } 0
+t "" 2 "Demand Wins" { 2, -2 }
+t "" 4 "Negotiation Breakdown" { -25, -25 }

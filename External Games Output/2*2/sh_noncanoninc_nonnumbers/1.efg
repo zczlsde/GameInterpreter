@@ -1,0 +1,10 @@
+EFG 2 R "Cooking Show Competition" { "Chef 1" "Chef 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Work Independently" } 0
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 1 "Both Collaborate" { 3, 3 }
+t "" 2 "Chef 1 Collaborates, Chef 2 Independent" { 0, 2 }
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 3 "Chef 2 Collaborates, Chef 1 Independent" { 2, 0 }
+t "" 4 "Both Work Independently" { 1, 1 }

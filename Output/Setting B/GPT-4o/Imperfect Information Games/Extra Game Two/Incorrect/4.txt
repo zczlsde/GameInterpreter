@@ -1,0 +1,318 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential Game with Three Players")
+
+# Stage 1: Player 1 makes a move with options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 makes a move without knowing Player 1's choice
+# We need to create separate nodes for Player 2's move after each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to indicate they are simultaneous
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+
+# Stage 3: Player 1 makes another move after observing Player 2's choice
+# This move is made for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 makes a decision between Q and W
+# This decision is made for each of Player 1's actions in Stage 3
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Define the outcomes based on Player 3's decision
+outcome_q = g.add_outcome([3, 3, 3], label="All win equally")
+outcome_w = g.add_outcome([2, 2, 3], label="Player 3 wins more")
+
+# Set the outcomes for each of Player 3's decisions
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[1].children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential Game with Three Players")
+
+# Stage 1: Player 1 makes a move with options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 makes a move without knowing Player 1's choice
+# We need to create separate nodes for Player 2's move after each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to indicate they are simultaneous
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+
+# Stage 3: Player 1 makes another move after observing Player 2's choice
+# This move is made for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 makes a decision between Q and W
+# This decision is made for each of Player 1's actions in Stage 3
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Define the outcomes based on Player 3's decision
+outcome_q = g.add_outcome([3, 3, 3], label="All win equally")
+outcome_w = g.add_outcome([2, 2, 3], label="Player 3 wins more")
+
+# Set the outcomes for each of Player 3's decisions
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[1].children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential Game with Three Players")
+
+# Stage 1: Player 1 makes a move with options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 makes a move without knowing Player 1's choice
+# We need to create separate nodes for Player 2's move after each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to indicate they are simultaneous
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Stage 3: Player 1 makes another move after observing Player 2's choice
+# This move is made for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 makes a decision between Q and W
+# This decision is made for each of Player 1's actions in Stage 3
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Define the outcomes based on Player 3's decision
+outcome_q = g.add_outcome([3, 3, 3], label="All win equally")
+outcome_w = g.add_outcome([2, 2, 3], label="Player 3 wins more")
+
+# Set the outcomes for each of Player 3's decisions
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[1].children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential Game with Three Players")
+
+# Stage 1: Player 1 makes a move with options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 makes a move without knowing Player 1's choice
+# We need to create separate nodes for Player 2's move after each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to indicate they are simultaneous
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Stage 3: Player 1 makes another move after observing Player 2's choice
+# This move is made for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 makes a decision between Q and W
+# This decision is made for each of Player 1's actions in Stage 3
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Define the outcomes based on Player 3's decision
+outcome_q = g.add_outcome([3, 3, 3], label="All win equally")
+outcome_w = g.add_outcome([2, 2, 3], label="Player 3 wins more")
+
+# Set the outcomes for each of Player 3's decisions
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], outcome_w)
+g.set_outcome(g.root.children[2].children[1].children[1].children[0], outcome_q)
+g.set_outcome(g.root.children[2].children[1].children[1].children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')

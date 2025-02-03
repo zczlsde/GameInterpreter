@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each with two actions: support the healthcare bill or the education reform bill.
+
+# Step 2: Determine the structure of the game.
+# Since both players are deciding simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one player moves first and the other moves second.
+
+# Step 4: Identify the decision nodes for each player.
+# The starting node, g.root, is the first player's decision node.
+# The second player's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first player's actions.
+
+# Step 5: Group the second player's decision nodes in the same information set.
+# Since the second player does not know the first player's action, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Politician 1 and Politician 2.
+g = gbt.Game.new_tree(players=["Politician 1", "Politician 2"],
+                      title="Politicians' Decision on Bills")
+
+# Step 2: Politician 1 moves first, choosing between supporting the healthcare bill or the education reform bill.
+g.append_move(g.root, "Politician 1", ["Support Healthcare", "Support Education"])
+
+# Step 3: Politician 2 moves next, but does not know Politician 1's choice. 
+# Politician 2 also chooses between supporting the healthcare bill or the education reform bill.
+g.append_move(g.root.children[0], "Politician 2", ["Support Healthcare", "Support Education"])
+g.append_move(g.root.children[1], "Politician 2", ["Support Healthcare", "Support Education"])
+
+# Step 4: Set the information set for Politician 2's decision nodes to reflect imperfect information.
+# Politician 2 does not know Politician 1's action, so both decision nodes are in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# If both support the healthcare bill, Politician 1 (healthcare advocate) gets a higher payoff.
+healthcare_outcome = g.add_outcome([2, 1], label="Both Support Healthcare")
+
+# If both support the education bill, Politician 2 (education advocate) gets a higher payoff.
+education_outcome = g.add_outcome([1, 2], label="Both Support Education")
+
+# If they choose different bills, they both get no payoff.
+no_payoff_outcome = g.add_outcome([0, 0], label="Different Bills")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], healthcare_outcome)  # Both support healthcare
+g.set_outcome(g.root.children[0].children[1], no_payoff_outcome)   # Different bills
+g.set_outcome(g.root.children[1].children[0], no_payoff_outcome)   # Different bills
+g.set_outcome(g.root.children[1].children[1], education_outcome)   # Both support education
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,159 @@
+```python
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append possible moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Player "x" places the mark on (0, 0)
+# Append possible moves for player "o" at the child node corresponding to (0, 0)
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+
+# Player "o" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "o"
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Player "o" places the mark on (1, 0)
+# Append possible moves for player "x" at the child node corresponding to (1, 0)
+g.append_move(g.root.children[0].children[1], "x", [(0, 2)])
+
+# Player "x" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "x"
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[0].children[0].infoset)
+
+# Player "x" places the mark on (0, 2)
+# No further moves needed as the game ends with "x" winning
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append possible moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Player "x" places the mark on (0, 0)
+# Append possible moves for player "o" at the child node corresponding to (0, 0)
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+
+# Player "o" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "o"
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Player "o" places the mark on (1, 0)
+# Append possible moves for player "x" at the child node corresponding to (1, 0)
+g.append_move(g.root.children[0].children[1], "x", [(0, 2)])
+
+# Player "x" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "x"
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[0].children[0].infoset)
+
+# Player "x" places the mark on (0, 2)
+# No further moves needed as the game ends with "x" winning
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append possible moves for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0, 0)
+# Append possible moves for player "o" at the child node corresponding to (0, 0)
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Player "o" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "o"
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Player "o" places the mark on (1, 0)
+# Append possible moves for player "x" at the child node corresponding to (1, 0)
+g.append_move(g.root.children[0].children[1], "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "x"
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[0].infoset)
+
+# Player "x" places the mark on (0, 2)
+# No further moves needed as the game ends with "x" winning
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append possible moves for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0, 0)
+# Append possible moves for player "o" at the child node corresponding to (0, 0)
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Player "o" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "o"
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Player "o" places the mark on (1, 0)
+# Append possible moves for player "x" at the child node corresponding to (1, 0)
+g.append_move(g.root.children[0].children[1], "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "x"
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[0].infoset)
+
+# Player "x" places the mark on (0, 2)
+# No further moves needed as the game ends with "x" winning
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append possible moves for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0, 0)
+# Append possible moves for player "o" at the child node corresponding to (0, 0)
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Player "o" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "o"
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Player "o" places the mark on (1, 0)
+# Append possible moves for player "x" at the child node corresponding to (1, 0)
+g.append_move(g.root.children[0].children[1], "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0, 2)
+# Set the information set for the child nodes of (0, 2) for player "x"
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[0].infoset)
+
+# Player "x" places the mark on (0, 2)
+# No further moves needed as the game ends with "x" winning
+
+# Save the EFG
+efg = g.write(format='native')

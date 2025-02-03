@@ -1,0 +1,44 @@
+Certainly! In the game of Rock-Paper-Scissors, both players choose their moves simultaneously. However, in extensive form games (EFGs), we need to represent the game in a sequential manner. To model simultaneous moves in an EFG, we introduce a "chance" player who makes the first move by selecting one of the possible outcomes of the simultaneous move. This chance move effectively represents the combination of choices made by the two players. Since there are three symbols (Rock, Paper, Scissors) and two players, there are 3x3=9 possible outcomes.
+
+Here's how you can generate the EFG for Rock-Paper-Scissors using the Pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous decision
+# The chance move will have 9 outcomes representing all possible combinations of choices
+g.append_move(g.root, g.players.chance, ["R-R", "R-P", "R-S", "P-R", "P-P", "P-S", "S-R", "S-P", "S-S"])
+
+# Set the probabilities for each outcome of the chance move
+# Since all outcomes are equally likely, each has a probability of 1/9
+probabilities = [gbt.Rational(1, 9) for _ in range(9)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Define the outcomes for each combination
+# R-R, P-P, S-S are ties, so both players get a payoff of 0
+# R-S, P-R, S-P are wins for Player 1, so Player 1 gets 1, Player 2 gets -1
+# R-P, P-S, S-R are wins for Player 2, so Player 1 gets -1, Player 2 gets 1
+outcomes = {
+    "R-R": [0, 0],
+    "R-P": [-1, 1],
+    "R-S": [1, -1],
+    "P-R": [1, -1],
+    "P-P": [0, 0],
+    "P-S": [-1, 1],
+    "S-R": [-1, 1],
+    "S-P": [1, -1],
+    "S-S": [0, 0]
+}
+
+# Set the outcomes for each chance move
+for i, outcome_label in enumerate(["R-R", "R-P", "R-S", "P-R", "P-P", "P-S", "S-R", "S-P", "S-S"]):
+    g.set_outcome(g.root.children[i], g.add_outcome(outcomes[outcome_label], label=outcome_label))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form representation of the Rock-Paper-Scissors game. It starts with a chance node to simulate the simultaneous move nature of the game, assigns equal probabilities to each possible outcome of the simultaneous move, and then sets the payoffs based on the rules of Rock-Paper-Scissors.

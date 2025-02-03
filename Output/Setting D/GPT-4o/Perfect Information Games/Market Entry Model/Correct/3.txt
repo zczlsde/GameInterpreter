@@ -1,0 +1,46 @@
+```python
+# Step 1: Firm 2 decides whether to enter or stay out. This is Firm 2's decision node.
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate. This is Firm 1's decision node.
+# Step 3: Since Firm 1's decision is contingent on Firm 2 entering, there is no simultaneous move or hidden information.
+# Therefore, there is no need to set any information sets in this game as there is no imperfect information.
+
+# No set_infoset() function is needed because there is no imperfect information in this sequential game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Entry Deterrence Game")
+
+# Step 1: Firm 2 decides whether to enter or stay out.
+# Firm 2's actions are "Enter" and "Out"
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate.
+# This decision is only relevant if Firm 2 chooses to enter.
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs based on the conditions provided:
+# 1. Firm 1 earns more if Firm 2 does not enter.
+# 2. If Firm 2 enters, Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+# 3. If Firm 2 enters, Firm 2 earns more than Firm 1 if Firm 1 fights.
+
+# Payoffs for the outcomes:
+# - If Firm 2 chooses "Out", Firm 1 earns more (e.g., 3) and Firm 2 earns 0.
+out_payoff = g.add_outcome([3, 0], label="Firm 2 Out")
+
+# - If Firm 2 chooses "Enter" and Firm 1 chooses "Fight", Firm 1 earns less (e.g., 1) and Firm 2 earns more (e.g., 2).
+fight_payoff = g.add_outcome([1, 2], label="Firm 1 Fights")
+
+# - If Firm 2 chooses "Enter" and Firm 1 chooses "Accommodate", both firms earn the same amount (e.g., 2).
+accommodate_payoff = g.add_outcome([2, 2], label="Firm 1 Accommodates")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], out_payoff)  # Firm 2 chooses "Out"
+g.set_outcome(g.root.children[0].children[0], fight_payoff)  # Firm 2 "Enter", Firm 1 "Fight"
+g.set_outcome(g.root.children[0].children[1], accommodate_payoff)  # Firm 2 "Enter", Firm 1 "Accommodate"
+
+# Save the EFG
+efg = g.write(format='native')
+```

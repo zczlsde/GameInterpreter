@@ -1,0 +1,102 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Stage 1: Chance event with equal probability of "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+probabilities = [gbt.Rational(1, 2), gbt.Rational(1, 2)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Stage 2: Player 1 chooses between "L" and "R"
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Stage 3: Player 2 chooses between "l" and "r" after Player 1 chooses "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Stage 4: Player 3 chooses between "a" and "b" after Player 2 chooses "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+
+# Set outcomes for each possible path in the game
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1], label="All players choose R"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="Player 3 chooses b"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Stage 1: Chance event with equal probability of "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+probabilities = [gbt.Rational(1, 2), gbt.Rational(1, 2)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Stage 2: Player 1 chooses between "L" and "R"
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Stage 3: Player 2 chooses between "l" and "r" after Player 1 chooses "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["l", "r"])
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Stage 4: Player 3 chooses between "a" and "b" after Player 2 chooses "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["a", "b"])
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+
+# Set outcomes for each possible path in the game
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1], label="All players choose R"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([3, 3, 3], label="Player 3 chooses a"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Stage 1: Chance event with equal probability of "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+probabilities = [gbt.Rational(1, 2), gbt.Rational(1, 2)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Stage 2: Player 1 chooses between "L" and "R"
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Stage 3: Player 2 chooses between "l" and "r" after Player 1 chooses "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["l", "r"])
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Stage 4: Player 3 chooses between "a" and "b" after Player 2 chooses "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["a", "b"])
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+
+# Set outcomes for each possible path in the game
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1], label="All players choose R"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="Player 3 chooses b"))
+
+# Save the EFG
+efg = g.write(format='native')

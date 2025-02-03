@@ -1,0 +1,40 @@
+To model the Rock-Paper-Scissors game as an extensive form game (EFG) using the Pygambit library, we need to consider that the game involves simultaneous moves, which can be represented by introducing a chance move at the beginning. This chance move will cover all possible outcomes of the players choosing their strategies simultaneously. Since Rock-Paper-Scissors is a symmetric game where both players have the same set of strategies (Rock, Paper, Scissors) and the outcome depends on the combination of strategies chosen, we can model the game as follows:
+
+1. Start with a chance node that leads to all possible combinations of player choices.
+2. Since there are 3 strategies for each of the 2 players, there are 3x3=9 possible outcomes.
+3. Assign probabilities to these outcomes. Since all outcomes are equally likely in a fair game, each outcome has a probability of 1/9.
+4. Determine the payoffs based on the rules: Rock beats Scissors, Scissors beat Paper, and Paper beats Rock. If both players choose the same strategy, the game is a draw.
+
+Here's how you can write the Python code using the Pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous move
+# The actions are combinations of both players' moves
+actions = ["R-R", "R-P", "R-S", "P-R", "P-P", "P-S", "S-R", "S-P", "S-S"]
+g.append_move(g.root, g.players.chance, actions)
+
+# Set the probabilities for each action, all equal since it's a fair game
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in actions])
+
+# Define the outcomes based on the game rules
+# Payoffs are in the form [Player 1 payoff, Player 2 payoff]
+outcomes = {
+    "R-R": [0, 0], "R-P": [-1, 1], "R-S": [1, -1],
+    "P-R": [1, -1], "P-P": [0, 0], "P-S": [-1, 1],
+    "S-R": [-1, 1], "S-P": [1, -1], "S-S": [0, 0]
+}
+
+# Assign outcomes to each terminal node based on the actions
+for i, action in enumerate(actions):
+    g.set_outcome(g.root.children[i], g.add_outcome(outcomes[action]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form representation of the Rock-Paper-Scissors game, where the game starts with a chance move that leads to all possible outcomes of the game. Each outcome is assigned a payoff based on the rules of Rock-Paper-Scissors, with the payoffs reflecting the result of each combination of strategies.

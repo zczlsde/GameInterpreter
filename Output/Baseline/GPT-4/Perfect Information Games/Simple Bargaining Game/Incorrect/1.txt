@@ -1,0 +1,23 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Negotiation Game" { "A" "B" }
+p "" 1 1 "" { "Propose 5500-4500" } 0
+p "" 2 1 "" { "Accept" "Reject" } 0
+t "" 1 "B accepts A's first proposal" { 5500, 4500 }
+p "" 1 2 "" { "Accept B's proposal" } 0
+t "" 2 "A accepts B's proposal" { 4750, 4750 }
+p "" 1 3 "" { "Propose 5200-4800" } 0
+t "" 3 "Final agreement" { 4693, 4332 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with player A proposing a distribution plan where A gets 5500 and B gets 4500. This is represented as a personal player node for player A with the action "Propose 5500-4500".
+- B then decides whether to accept or reject A's proposal. This decision is represented as a personal player node for player B with the actions "Accept" and "Reject".
+- If B accepts, the game ends with the terminal node indicating the payoffs for both players as per A's initial proposal.
+- If B rejects, the game moves to a new decision node for player A, where A can only accept B's counterproposal of an equal split (5000 each), but with a twist in the narrative, both players actually receive 4750 due to negotiation costs or similar rationale not explicitly mentioned in the description but implied by the final payoffs.
+- After A accepts B's proposal, the game moves to a final decision node for player A, where A proposes a new plan (5200-4800). Since B has no right to reject this final proposal, the game ends with the terminal node indicating the final payoffs for both players as per A's last proposal, adjusted to 4693 for A and 4332 for B, reflecting perhaps negotiation costs or other factors not explicitly detailed in the description.
+
+This EFG representation captures the sequential nature of the negotiation game, the decisions made by each player, and the outcomes of those decisions.
+Iteration:  2

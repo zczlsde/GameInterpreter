@@ -1,0 +1,5 @@
+Consider a three-stage game. 
+In the first stage, a chance event randomly selects either "L" or "R", each with a probability of 1/2. 
+In the second stage, Player 1 observes this outcome and then selects either l or r. 
+By the third stage, Player 1 must choose between "A", and "B", but at this point, she has forgotten the outcome of the first stage and only remembers her decision from the second stage. 
+The payoffs in all outcomes are set to 0.

@@ -1,0 +1,50 @@
+```python
+# Since all actions are visible to both players and there's no simultaneous move or hidden information after the game starts,
+# there's no need to group any decision nodes into the same information set based on the game's description.
+# Every move is made with full knowledge of the previous moves, so each player knows exactly where they are in the game tree.
+# Therefore, no set_infoset() function is necessary for this game scenario.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Initial move by Alice: she can either take the piles or push them
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice takes, the game ends, and the payoffs are determined by the initial piles
+# Alice gets 4 coins, Bob gets 1 coin
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+# Bob now faces 2 and 8 coins
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after the first push, he gets 8 coins, Alice gets 2 coins
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes after first push"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+# Alice now faces 4 and 16 coins
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice takes after the second push, she gets 16 coins, Bob gets 4 coins
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes after second push"))
+
+# If Alice pushes for the second time, the piles double for the last time and it's Bob's turn
+# However, the description specifies the last push will not double the coins, so it remains 4 and 16 coins
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after the second push, he gets 16 coins, Alice gets 4 coins
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([4, 16], label="Bob takes after second push"))
+
+# If Bob pushes for the last time, Alice gets the larger pile by default, and Bob gets the smaller one
+# Since the last push does not double the coins, the outcome remains the same as if Bob had taken the larger pile
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([4, 16], label="Bob pushes, game ends"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs an extensive-form game representing the scenario with Alice and Bob and their decisions regarding the piles of coins. Each decision node correctly reflects the state of the game following the rules provided, including the doubling of piles when pushed and the final allocation of coins based on the players' choices. The game tree is fully specified with outcomes reflecting the payoffs for each possible sequence of actions.

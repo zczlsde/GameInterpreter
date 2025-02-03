@@ -1,0 +1,54 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A makes the first move: escalate (E) or ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to ignore, both countries receive a small positive payoff
+ignore_outcome = g.add_outcome([1, 1], label="Ignore Provocation")
+g.set_outcome(g.root.children[1], ignore_outcome)
+
+# If Country A escalates, Country B must decide to back down (B) or escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B backs down, Country A gains a small payoff, and Country B loses a small payoff
+back_down_outcome = g.add_outcome([2, -1], label="Back Down")
+g.set_outcome(g.root.children[0].children[0], back_down_outcome)
+
+# If both escalate, a nuclear crisis occurs
+# Country A decides to retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# Country B, unaware of Country A's decision, also decides to retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1].children[0], "Country B", ["Retreat", "Detonate"])
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["Retreat", "Detonate"])
+
+# Set the information set for Country B's decision, as it is unaware of Country A's choice
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+
+# Outcomes for the nuclear crisis scenarios
+# Both retreat, small negative payoff for both
+both_retreat_outcome = g.add_outcome([-1, -1], label="Both Retreat")
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], both_retreat_outcome)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], both_retreat_outcome)
+
+# Country A detonates, Country B retreats
+a_detonates_outcome = g.add_outcome([10, -10], label="A Detonates")
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], a_detonates_outcome)
+
+# Country B detonates, Country A retreats
+b_detonates_outcome = g.add_outcome([-10, 10], label="B Detonates")
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], b_detonates_outcome)
+
+# Both detonate, catastrophic outcome
+catastrophic_outcome = g.add_outcome([-100, -100], label="Catastrophic Disaster")
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], catastrophic_outcome)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], catastrophic_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

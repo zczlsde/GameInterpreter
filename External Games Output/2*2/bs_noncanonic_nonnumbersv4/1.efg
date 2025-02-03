@@ -1,0 +1,10 @@
+EFG 2 R "Vacation Decision Game" { "Beach Lover" "Mountain Lover" }
+""
+
+p "" 1 1 "" { "Beach" "Mountain" } 0
+p "" 2 1 "" { "Beach" "Mountain" } 0
+t "" 1 "Both choose Beach" { 2, 1 }
+t "" 3 "Different destinations" { 0, 0 }
+p "" 2 1 "" { "Beach" "Mountain" } 0
+t "" 3 "Different destinations" { 0, 0 }
+t "" 2 "Both choose Mountain" { 1, 2 }

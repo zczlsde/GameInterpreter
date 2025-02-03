@@ -1,0 +1,10 @@
+EFG 2 R "Gallery Promotion Game" { "Small Gallery Owner" "Big Gallery Owner" }
+""
+
+p "" 2 1 "" { "Painter 1" "Painter 2" } 0
+p "" 1 1 "" { "Painter 1" "Painter 2" } 0
+t "" 1 "Match: Painter 1" { 1, -1 }
+t "" 2 "Mismatch: Painter 1" { -1, 1 }
+p "" 1 1 "" { "Painter 1" "Painter 2" } 0
+t "" 3 "Mismatch: Painter 2" { -1, 1 }
+t "" 4 "Match: Painter 2" { 1, -1 }

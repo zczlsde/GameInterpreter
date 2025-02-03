@@ -1,0 +1,7 @@
+In the first stage, Player 1 can choose among three actions: A, B, or C. 
+In the second stage, Player 2 knows when action A was taken, but otherwise cannot tell whether B or C was taken. 
+At this point, Player 2 has three options: D, E, and F. 
+Selecting F ends the game. 
+If Player 2 chooses either D or E, the game advances to the third stage, where Player 1 has a choice between actions G and H. 
+Selecting H ends the game and player 1 gets payoff 2 and player 2 gets payoff -1. 
+If Player 1 instead chooses G, Player 2 then decides between actions Q and W, with both players getting 3 after Q, and both players getting 0 after W.

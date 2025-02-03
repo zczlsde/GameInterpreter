@@ -1,0 +1,44 @@
+```python
+# Step 1: Firm 2 decides whether to enter the market or stay out. This is a decision node for Firm 2.
+# Step 2: If Firm 2 enters, Firm 1 decides to Fight or Accommodate. This is a decision node for Firm 1.
+# Since Firm 2's decision is known to Firm 1 when Firm 1 is making their decision, there is no imperfect information between these steps.
+# However, the game description implies simultaneous moves or hidden actions are not present in this specific game setup.
+# Therefore, there are no nodes that need to be grouped in the same information set based on the given game structure.
+# This game is a sequential game without simultaneous moves, hence no need for setting information sets for imperfect information.
+```
+
+Given the game description, we will construct an extensive-form game using the PyGambit library. The game involves two firms, where Firm 2 decides whether to enter the market, followed by Firm 1's decision on how to react if Firm 2 enters. This is a sequential game without simultaneous moves or imperfect information, so we won't need to group nodes into the same information set.
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Step 1: Firm 2 decides whether to enter the market or stay out
+# This creates a decision node for Firm 2 with two actions: "Enter" and "Stay Out"
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 stays out, the game ends. We need to set the payoffs for this outcome.
+# Assuming Firm 1 earns more if Firm 2 stays out, let's say the payoffs are (2, 0) where Firm 1 gets 2 and Firm 2 gets 0.
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Stay Out"))
+
+# Step 2: If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate
+# This creates a decision node for Firm 1 with two actions: "Fight" and "Accommodate"
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Setting payoffs based on the game description:
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount. Let's say the payoffs are (1, 1).
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1], label="Accommodate"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1. Let's say the payoffs are (0, 2).
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 2], label="Fight"))
+
+# Since the game is sequential and there are no simultaneous moves, we do not need to set any information sets for imperfect information.
+# The game tree is fully specified with the moves and outcomes defined above.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs the extensive-form game for the market entry scenario described. It specifies the moves available to each player at their respective decision points and assigns the outcomes based on the decisions made. Since this game is sequential and lacks simultaneous moves, there's no need to handle imperfect information through information sets.

@@ -1,0 +1,68 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the renewable energy startup and the traditional energy company.
+# Both players decide simultaneously whether to invest in wind power or solar power.
+
+# Step 2: Recognize the simultaneous move nature of the game.
+# Since both players make their decisions simultaneously, this game involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the traditional energy company moves first and the renewable startup moves second.
+
+# Step 4: Identify the decision nodes for the renewable startup.
+# The starting node, g.root, is the traditional energy company's decision node.
+# The traditional energy company has two actions: invest in wind power or solar power.
+# The renewable startup's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the traditional energy company's actions.
+
+# Step 5: Group the renewable startup's decision nodes in the same information set.
+# Since the renewable startup does not know which action the traditional energy company has taken, these nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Renewable Startup and Traditional Energy Company.
+g = gbt.Game.new_tree(players=["Renewable Startup", "Traditional Energy Company"],
+                      title="Investment in Renewable Energy Projects")
+
+# Step 2: Model the game with a sequential structure.
+# Assume the Traditional Energy Company moves first and the Renewable Startup moves second.
+
+# Step 3: Add the move for the Traditional Energy Company.
+# The Traditional Energy Company has two actions: invest in wind power or solar power.
+g.append_move(g.root, "Traditional Energy Company", ["Invest in Wind", "Invest in Solar"])
+
+# Step 4: Add the move for the Renewable Startup.
+# The Renewable Startup also has two actions: invest in wind power or solar power.
+g.append_move(g.root.children[0], "Renewable Startup", ["Invest in Wind", "Invest in Solar"])
+g.append_move(g.root.children[1], "Renewable Startup", ["Invest in Wind", "Invest in Solar"])
+
+# Step 5: Group the Renewable Startup's decision nodes in the same information set.
+# Since the Renewable Startup does not know which action the Traditional Energy Company has taken, these nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the players' actions.
+# If both invest in the same type of project, the Renewable Startup wins 5 points, and the Traditional Energy Company loses 5 points.
+# If their investments differ, the Traditional Energy Company wins 4 points, and the Renewable Startup loses 4 points.
+
+# Both invest in Wind
+outcome_same_wind = g.add_outcome([5, -5], label="Both invest in Wind")
+g.set_outcome(g.root.children[0].children[0], outcome_same_wind)
+
+# Traditional Energy Company invests in Wind, Renewable Startup invests in Solar
+outcome_diff_wind_solar = g.add_outcome([-4, 4], label="Traditional Wind, Renewable Solar")
+g.set_outcome(g.root.children[0].children[1], outcome_diff_wind_solar)
+
+# Traditional Energy Company invests in Solar, Renewable Startup invests in Wind
+outcome_diff_solar_wind = g.add_outcome([-4, 4], label="Traditional Solar, Renewable Wind")
+g.set_outcome(g.root.children[1].children[0], outcome_diff_solar_wind)
+
+# Both invest in Solar
+outcome_same_solar = g.add_outcome([5, -5], label="Both invest in Solar")
+g.set_outcome(g.root.children[1].children[1], outcome_same_solar)
+
+# Save the EFG
+efg = g.write(format='native')
+```

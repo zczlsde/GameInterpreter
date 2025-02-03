@@ -1,0 +1,10 @@
+EFG 2 R "Pharmaceutical Partnership Game" { "Company A" "Company B" }
+""
+
+p "" 1 1 "" { "Collaborate" "Focus on Independent Projects" } 0
+p "" 2 1 "" { "Collaborate" "Focus on Independent Projects" } 0
+t "" 1 "Blockbuster Success" { 3, 3 }
+t "" 2 "Risk Loss for Collaborator" { -1, 2 }
+p "" 2 1 "" { "Collaborate" "Focus on Independent Projects" } 0
+t "" 3 "Moderate Gain for Independent" { 2, -1 }
+t "" 4 "Small Advancements" { 1, 1 }

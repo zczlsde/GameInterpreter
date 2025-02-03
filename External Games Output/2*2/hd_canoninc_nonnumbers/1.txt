@@ -1,0 +1,60 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each deciding simultaneously whether to swerve or go straight.
+
+# Step 2: Recognize the imperfect information.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of their decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second.
+
+# Step 4: Identify the decision nodes for Player 2.
+# Player 2's decision nodes are g.root.children[0] (Player 1 swerves) and g.root.children[1] (Player 1 goes straight).
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 cannot distinguish between Player 1's actions, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Driver 1 and Driver 2.
+g = gbt.Game.new_tree(players=["Driver 1", "Driver 2"], title="Chicken Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Driver 1 moves first and Driver 2 moves second.
+
+# Step 3: Driver 1's move: Swerve or Go Straight
+g.append_move(g.root, "Driver 1", ["Swerve", "Go Straight"])
+
+# Step 4: Driver 2's move: Swerve or Go Straight
+# Driver 2's decision nodes are g.root.children[0] (Driver 1 swerves) and g.root.children[1] (Driver 1 goes straight).
+g.append_move(g.root.children[0], "Driver 2", ["Swerve", "Go Straight"])
+g.append_move(g.root.children[1], "Driver 2", ["Swerve", "Go Straight"])
+
+# Step 5: Group Driver 2's decision nodes in the same information set.
+# Since Driver 2 cannot distinguish between Driver 1's actions, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the payoffs for each outcome.
+# Both swerve: neutral payoff (0, 0)
+# One swerves, the other goes straight: (-1, 1) or (1, -1)
+# Both go straight: large negative payoff (-10, -10)
+
+# Both swerve
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Both Swerve"))
+
+# Driver 1 swerves, Driver 2 goes straight
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Driver 1 Swerves"))
+
+# Driver 1 goes straight, Driver 2 swerves
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Driver 2 Swerves"))
+
+# Both go straight
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([-10, -10], label="Both Go Straight"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

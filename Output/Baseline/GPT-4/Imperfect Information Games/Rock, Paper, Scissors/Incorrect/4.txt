@@ -1,0 +1,25 @@
+Given the simultaneous nature of the game Rock-Paper-Scissors, we can represent it in an extensive form game format (EFG) by considering a chance node at the beginning to account for the simultaneous moves. This node will lead to all possible outcomes based on the combinations of choices made by the two players. Let's denote the two players as Player 1 and Player 2.
+
+EFG Representation:
+
+```
+EFG 2 R "Rock-Paper-Scissors Game" { "Player 1" "Player 2" }
+c "" 1 "" { "R-R" 1/9 "R-P" 1/9 "R-S" 1/9 "P-R" 1/9 "P-P" 1/9 "P-S" 1/9 "S-R" 1/9 "S-P" 1/9 "S-S" 1/9 } 0
+t "" 1 "R-R Draw" { 0, 0 }
+t "" 2 "R-P P2 Wins" { -1, 1 }
+t "" 3 "R-S P1 Wins" { 1, -1 }
+t "" 4 "P-R P1 Wins" { 1, -1 }
+t "" 5 "P-P Draw" { 0, 0 }
+t "" 6 "P-S P2 Wins" { -1, 1 }
+t "" 7 "S-R P2 Wins" { -1, 1 }
+t "" 8 "S-P P1 Wins" { 1, -1 }
+t "" 9 "S-S Draw" { 0, 0 }
+```
+
+Explanation:
+
+- The game starts with a chance node (denoted by `c`), which represents the simultaneous move nature of the game. This node does not belong to either player but rather to "nature" or chance, which randomly selects one of the nine possible outcomes (combinations of Rock (R), Paper (P), and Scissors (S) chosen by the two players). Each combination has an equal probability of 1/9.
+- Following the chance node, there are terminal nodes (denoted by `t`) for each possible outcome of the game. Each terminal node specifies the outcome name, the outcome number, and the payoffs to each player. In Rock-Paper-Scissors, a win awards a player 1 point, a loss awards -1 point, and a draw awards 0 points to both players.
+- The outcomes are labeled to reflect the choices made by Player 1 and Player 2 (e.g., "R-P" means Player 1 chooses Rock and Player 2 chooses Paper) and the result of the game (e.g., "P2 Wins" means Player 2 wins).
+
+This representation captures the essence of the Rock-Paper-Scissors game in an extensive form, suitable for analysis with game theory tools.

@@ -1,0 +1,74 @@
+```python
+# Since "x" and "o" take turns and the game evolves based on their decisions, 
+# each decision point for "o" after "x" makes a move is an information set for "o", 
+# and vice versa, because each player knows the state of the game when making their decision.
+
+# However, in this specific scenario, we are only focusing on the next move by "x" and the subsequent moves by "o".
+# "x" has three possible moves: (0, 0), (0, 2), and (1, 0). 
+# After "x" chooses, "o" has to decide without knowing the outcome of "x"'s choice, 
+# but since "o"'s moves directly follow "x"'s, and the game state is fully observable, 
+# "o" will know where "x" placed their mark. Thus, each of "o"'s decision nodes is unique and does not require grouping into information sets based on "x"'s actions.
+
+# However, for the sake of illustrating the use of set_infoset in a situation where it might be needed:
+# If there were a scenario where "o" had to make a decision without knowing "x"'s exact move (which is not the case here given the game's sequential and fully observable nature), 
+# we would group "o"'s decision nodes following each of "x"'s possible moves into information sets if "o" couldn't observe "x"'s move.
+
+# In this game, since "o" observes "x"'s move before making their own, there's no need to group "o"'s decision nodes into information sets based on imperfect information.
+# Similarly, "x"'s decision nodes do not require grouping into information sets for the same reason.
+
+# Therefore, in this specific game description, there's no need to use set_infoset() to group nodes into information sets based on the provided game dynamics.
+# This code block intentionally remains empty to reflect that understanding based on the game's fully observable sequential moves.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic-Tac-Toe")
+
+# The initial move is by "x", with three possible moves based on the current board state.
+# These moves are placing an "x" at (0, 0), (0, 2), and (1, 0).
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# If "x" places the mark on (0, 0), "o" has two possible responses: (0, 2) and (1, 0).
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+# If "o" places the mark on (0, 2), "o" wins.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="o wins"))
+# If "o" places the mark on (1, 0), "x" can place the mark on (0, 2) and "x" wins.
+g.append_move(g.root.children[0].children[1], "x", ["(0, 2)"])
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="x wins"))
+
+# If "x" places the mark on (0, 2), "x" wins directly.
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="x wins"))
+
+# If "x" places the mark on (1, 0), "o" has two possible responses: (0, 0) and (0, 2).
+g.append_move(g.root.children[2], "o", ["(0, 0)", "(0, 2)"])
+# If "o" places the mark on (0, 0), "x" can place the mark on (0, 2) and "x" wins.
+g.append_move(g.root.children[2].children[0], "x", ["(0, 2)"])
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="x wins"))
+# If "o" places the mark on (0, 2), "o" wins directly.
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="o wins"))
+
+# Since "x" and "o" take turns and the game evolves based on their decisions, 
+# each decision point for "o" after "x" makes a move is an information set for "o", 
+# and vice versa, because each player knows the state of the game when making their decision.
+
+# However, in this specific scenario, we are only focusing on the next move by "x" and the subsequent moves by "o".
+# "x" has three possible moves: (0, 0), (0, 2), and (1, 0). 
+# After "x" chooses, "o" has to decide without knowing the outcome of "x"'s choice, 
+# but since "o"'s moves directly follow "x"'s, and the game state is fully observable, 
+# "o" will know where "x" placed their mark. Thus, each of "o"'s decision nodes is unique and does not require grouping into information sets based on "x"'s actions.
+
+# However, for the sake of illustrating the use of set_infoset in a situation where it might be needed:
+# If there were a scenario where "o" had to make a decision without knowing "x"'s exact move (which is not the case here given the game's sequential and fully observable nature), 
+# we would group "o"'s decision nodes following each of "x"'s possible moves into information sets if "o" couldn't observe "x"'s move.
+
+# In this game, since "o" observes "x"'s move before making their own, there's no need to group "o"'s decision nodes into information sets based on imperfect information.
+# Similarly, "x"'s decision nodes do not require grouping into information sets for the same reason.
+
+# Therefore, in this specific game description, there's no need to use set_infoset() to group nodes into information sets based on the provided game dynamics.
+# This code block intentionally remains empty to reflect that understanding based on the game's fully observable sequential moves.
+
+# Save the EFG
+efg = g.write(format='native')
+```

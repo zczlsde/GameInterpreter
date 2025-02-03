@@ -1,0 +1,167 @@
+```python
+# Step 1: Identify the chance node outcomes
+# There are six possible outcomes for the chance node: JQ, JK, QJ, QK, KJ, KQ.
+
+# Step 2: Determine Alice's decision nodes
+# Alice can check or bet, and she does not know the allocation of the chance node.
+# Group Alice's decision nodes based on her card, which she knows:
+# - JQ (g.root.children[0]) and JK (g.root.children[1]) are grouped together.
+# - QJ (g.root.children[2]) and QK (g.root.children[3]) are grouped together.
+# - KJ (g.root.children[4]) and KQ (g.root.children[5]) are grouped together.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)
+
+# Step 3: Determine Bob's decision nodes when Alice checks
+# Bob can check or bet, and he does not know Alice's card.
+# Group Bob's decision nodes based on the card he knows:
+# - QJ (g.root.children[2].children[0]) and KJ (g.root.children[4].children[0]) are grouped together.
+# - JQ (g.root.children[0].children[0]) and KQ (g.root.children[5].children[0]) are grouped together.
+# - JK (g.root.children[1].children[0]) and QK (g.root.children[3].children[0]) are grouped together.
+
+g.set_infoset(g.root.children[2].children[0], g.root.children[4].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[5].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)
+
+# Step 4: Determine Alice's decision nodes when Bob bets after Alice checks
+# Alice can fold or call, and she does not know Bob's card.
+# Group Alice's decision nodes based on her card, which she knows:
+# - JQ (g.root.children[0].children[0].children[1]) and JK (g.root.children[1].children[0].children[1]) are grouped together.
+# - QJ (g.root.children[2].children[0].children[1]) and QK (g.root.children[3].children[0].children[1]) are grouped together.
+# - KJ (g.root.children[4].children[0].children[1]) and KQ (g.root.children[5].children[0].children[1]) are grouped together.
+
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[1], g.root.children[3].children[0].children[1].infoset)
+g.set_infoset(g.root.children[4].children[0].children[1], g.root.children[5].children[0].children[1].infoset)
+
+# Step 5: Determine Bob's decision nodes when Alice bets
+# Bob can fold or call, and he does not know Alice's card.
+# Group Bob's decision nodes based on the card he knows:
+# - QJ (g.root.children[2].children[1]) and KJ (g.root.children[4].children[1]) are grouped together.
+# - JQ (g.root.children[0].children[1]) and KQ (g.root.children[5].children[1]) are grouped together.
+# - JK (g.root.children[1].children[1]) and QK (g.root.children[3].children[1]) are grouped together.
+
+g.set_infoset(g.root.children[2].children[1], g.root.children[4].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[5].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[3].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Two-player card game")
+
+# Step 1: Add a chance node for the card allocations
+# There are six possible outcomes for the chance node: JQ, JK, QJ, QK, KJ, KQ.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# Set the probabilities for the chance node, each with probability 1/6
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6)] * 6)
+
+# Step 2: Alice's decision nodes
+# Alice can check or bet, and she does not know the allocation of the chance node.
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# Step 3: Bob's decision nodes when Alice checks
+# Bob can check or bet, and he does not know Alice's card.
+for node in g.root.children:
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+
+# Step 4: Alice's decision nodes when Bob bets after Alice checks
+# Alice can fold or call, and she does not know Bob's card.
+for node in g.root.children:
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# Step 5: Bob's decision nodes when Alice bets
+# Bob can fold or call, and he does not know Alice's card.
+for node in g.root.children:
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+
+# Set the information sets for Alice and Bob to handle imperfect information
+# Use the provided code block to set the information sets
+
+# Step 2: Determine Alice's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)
+
+# Step 3: Determine Bob's decision nodes when Alice checks
+g.set_infoset(g.root.children[2].children[0], g.root.children[4].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[5].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)
+
+# Step 4: Determine Alice's decision nodes when Bob bets after Alice checks
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[2].children[0].children[1], g.root.children[3].children[0].children[1].infoset)
+g.set_infoset(g.root.children[4].children[0].children[1], g.root.children[5].children[0].children[1].infoset)
+
+# Step 5: Determine Bob's decision nodes when Alice bets
+g.set_infoset(g.root.children[2].children[1], g.root.children[4].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[5].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[3].children[1].infoset)
+
+# Define the outcomes for the game
+# Higher card wins 1 if both check, wins 2 if one bets and the other calls, or wins 3 if the other folds
+# Outcomes are defined based on the card rankings: K > Q > J
+
+# Outcomes when both check
+outcome_check = g.add_outcome([1, -1], label="Higher card wins 1")
+outcome_check_reverse = g.add_outcome([-1, 1], label="Higher card wins 1")
+
+# Outcomes when one bets and the other folds
+outcome_fold = g.add_outcome([-1, 1], label="Bob wins 3")
+outcome_fold_reverse = g.add_outcome([1, -1], label="Alice wins 3")
+
+# Outcomes when one bets and the other calls
+outcome_call = g.add_outcome([2, -2], label="Higher card wins 2")
+outcome_call_reverse = g.add_outcome([-2, 2], label="Higher card wins 2")
+
+# Set outcomes for each possible scenario
+# JQ: Alice has J, Bob has Q
+g.set_outcome(g.root.children[0].children[0].children[0], outcome_check_reverse)  # Both check
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome_call_reverse)  # Alice calls
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_call_reverse)  # Bob calls
+
+# JK: Alice has J, Bob has K
+g.set_outcome(g.root.children[1].children[0].children[0], outcome_check_reverse)  # Both check
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome_call_reverse)  # Alice calls
+g.set_outcome(g.root.children[1].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_call_reverse)  # Bob calls
+
+# QJ: Alice has Q, Bob has J
+g.set_outcome(g.root.children[2].children[0].children[0], outcome_check)  # Both check
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], outcome_call)  # Alice calls
+g.set_outcome(g.root.children[2].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[2].children[1].children[1], outcome_call)  # Bob calls
+
+# QK: Alice has Q, Bob has K
+g.set_outcome(g.root.children[3].children[0].children[0], outcome_check_reverse)  # Both check
+g.set_outcome(g.root.children[3].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[3].children[0].children[1].children[1], outcome_call_reverse)  # Alice calls
+g.set_outcome(g.root.children[3].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[3].children[1].children[1], outcome_call_reverse)  # Bob calls
+
+# KJ: Alice has K, Bob has J
+g.set_outcome(g.root.children[4].children[0].children[0], outcome_check)  # Both check
+g.set_outcome(g.root.children[4].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[4].children[0].children[1].children[1], outcome_call)  # Alice calls
+g.set_outcome(g.root.children[4].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[4].children[1].children[1], outcome_call)  # Bob calls
+
+# KQ: Alice has K, Bob has Q
+g.set_outcome(g.root.children[5].children[0].children[0], outcome_check)  # Both check
+g.set_outcome(g.root.children[5].children[0].children[1].children[0], outcome_fold)  # Alice folds
+g.set_outcome(g.root.children[5].children[0].children[1].children[1], outcome_call)  # Alice calls
+g.set_outcome(g.root.children[5].children[1].children[0], outcome_fold_reverse)  # Bob folds
+g.set_outcome(g.root.children[5].children[1].children[1], outcome_call)  # Bob calls
+
+# Save the EFG
+efg = g.write(format='native')
+```

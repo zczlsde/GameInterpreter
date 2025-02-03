@@ -1,0 +1,41 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Doubling Game")
+
+# Alice makes the first move: she can either "take" or "push"
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice chooses "Take", the game ends with Alice taking the larger pile (4 coins) and Bob taking the smaller pile (1 coin)
+take_outcome = g.add_outcome([4, 1], label="Alice takes 4, Bob takes 1")
+g.set_outcome(g.root.children[0], take_outcome)
+
+# If Alice chooses "Push", Bob gets to move next with doubled piles: 2 and 8
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses "Take", the game ends with Bob taking the larger pile (8 coins) and Alice taking the smaller pile (2 coins)
+bob_take_outcome = g.add_outcome([2, 8], label="Bob takes 8, Alice takes 2")
+g.set_outcome(g.root.children[1].children[0], bob_take_outcome)
+
+# If Bob chooses "Push", Alice gets to move again with doubled piles: 4 and 16
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice chooses "Take", the game ends with Alice taking the larger pile (16 coins) and Bob taking the smaller pile (4 coins)
+alice_take_outcome = g.add_outcome([16, 4], label="Alice takes 16, Bob takes 4")
+g.set_outcome(g.root.children[1].children[1].children[0], alice_take_outcome)
+
+# If Alice chooses "Push", Bob gets to move again with doubled piles: 8 and 32
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses "Take", the game ends with Bob taking the larger pile (32 coins) and Alice taking the smaller pile (8 coins)
+bob_final_take_outcome = g.add_outcome([8, 32], label="Bob takes 32, Alice takes 8")
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], bob_final_take_outcome)
+
+# If Bob chooses "Push", the game ends with Alice taking the larger pile (64 coins) and Bob taking the smaller pile (16 coins)
+final_push_outcome = g.add_outcome([64, 16], label="Alice takes 64, Bob takes 16")
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], final_push_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

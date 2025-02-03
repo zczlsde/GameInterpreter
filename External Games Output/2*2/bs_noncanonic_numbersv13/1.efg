@@ -1,0 +1,10 @@
+EFG 2 R "Friends deciding on a live event to watch" { "Friend1" "Friend2" }
+""
+
+p "" 1 1 "" { "Basketball" "Soccer" } 0
+p "" 2 1 "" { "Basketball" "Soccer" } 0
+t "" 1 "Both choose Basketball" { 2, 1 }
+t "" 3 "Different choices" { 0, 0 }
+p "" 2 1 "" { "Basketball" "Soccer" } 0
+t "" 3 "Different choices" { 0, 0 }
+t "" 2 "Both choose Soccer" { 1, 2 }

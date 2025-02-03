@@ -1,0 +1,216 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Step 1: Add a chance node at the root with equal probabilities for "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 moves after the chance event, choosing between "L" and "R"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+
+# Step 3: Set the outcome if Player 1 chooses "R" (game ends with payoff (1, 1, 1))
+for node in g.root.children:
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+
+# Step 4: Player 2 moves if Player 1 chooses "L", choosing between "l" and "r"
+for node in g.root.children:
+    g.append_move(node.children[0], "Player 2", ["l", "r"])
+
+# Step 5: Set the outcome if Player 2 chooses "r" (game ends with payoff (2, 2, 2))
+for node in g.root.children:
+    g.set_outcome(node.children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+
+# Step 6: Player 3 moves if Player 2 chooses "l", choosing between "a" and "b"
+for node in g.root.children:
+    g.append_move(node.children[0].children[0], "Player 3", ["a", "b"])
+
+# Step 7: Set the outcome for Player 3's decision (game ends with payoff (3, 3, 3))
+for node in g.root.children:
+    for child in node.children[0].children[0].children:
+        g.set_outcome(child, g.add_outcome([3, 3, 3], label="Player 3 makes a decision"))
+
+# Step 8: Set the information sets for imperfect information
+# Player 1 does not know the outcome of the chance event
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Player 2 does not know Player 1's choice
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# Player 3 does not know Player 2's choice
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0].children[1], g.root.children[1].children[0].children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Step 1: Add a chance node at the root with equal probabilities for "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 moves after the chance event, choosing between "L" and "R"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+
+# Step 3: Set the outcome if Player 1 chooses "R" (game ends with payoff (1, 1, 1))
+for node in g.root.children:
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+
+# Step 4: Player 2 moves if Player 1 chooses "L", choosing between "l" and "r"
+for node in g.root.children:
+    g.append_move(node.children[0], "Player 2", ["l", "r"])
+
+# Step 5: Set the outcome if Player 2 chooses "r" (game ends with payoff (2, 2, 2))
+for node in g.root.children:
+    g.set_outcome(node.children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+
+# Step 6: Player 3 moves if Player 2 chooses "l", choosing between "a" and "b"
+for node in g.root.children:
+    g.append_move(node.children[0].children[0], "Player 3", ["a", "b"])
+
+# Step 7: Set the outcome for Player 3's decision (game ends with payoff (3, 3, 3))
+for node in g.root.children:
+    for child in node.children[0].children[0].children:
+        g.set_outcome(child, g.add_outcome([3, 3, 3], label="Player 3 makes a decision"))
+
+# Step 8: Set the information sets for imperfect information
+# Player 1 does not know the outcome of the chance event
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Player 2 does not know Player 1's choice
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[1].children[0].infoset)
+
+# Player 3 does not know Player 2's choice
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Step 1: Add a chance node at the root with equal probabilities for "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 moves after the chance event, choosing between "L" and "R"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+
+# Step 3: Set the outcome if Player 1 chooses "R" (game ends with payoff (1, 1, 1))
+for node in g.root.children:
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+
+# Step 4: Player 2 moves if Player 1 chooses "L", choosing between "l" and "r"
+for node in g.root.children:
+    g.append_move(node.children[0], "Player 2", ["l", "r"])
+
+# Step 5: Set the outcome if Player 2 chooses "r" (game ends with payoff (2, 2, 2))
+for node in g.root.children:
+    g.set_outcome(node.children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+
+# Step 6: Player 3 moves if Player 2 chooses "l", choosing between "a" and "b"
+for node in g.root.children:
+    g.append_move(node.children[0].children[0], "Player 3", ["a", "b"])
+
+# Step 7: Set the outcome for Player 3's decision (game ends with payoff (3, 3, 3))
+for node in g.root.children:
+    for child in node.children[0].children[0].children:
+        g.set_outcome(child, g.add_outcome([3, 3, 3], label="Player 3 makes a decision"))
+
+# Step 8: Set the information sets for imperfect information
+# Player 1 does not know the outcome of the chance event
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Player 2 does not know Player 1's choice
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[1].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[1].children[0].infoset)
+
+# Player 3 does not know Player 2's choice
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-player imperfect information game")
+
+# Step 1: Add a chance node at the root with equal probabilities for "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 moves after the chance event, choosing between "L" and "R"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+
+# Step 3: Set the outcome if Player 1 chooses "R" (game ends with payoff (1, 1, 1))
+for node in g.root.children:
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1], label="Player 1 chooses R"))
+
+# Step 4: Player 2 moves if Player 1 chooses "L", choosing between "l" and "r"
+for node in g.root.children:
+    g.append_move(node.children[0], "Player 2", ["l", "r"])
+
+# Step 5: Set the outcome if Player 2 chooses "r" (game ends with payoff (2, 2, 2))
+for node in g.root.children:
+    g.set_outcome(node.children[0].children[1], g.add_outcome([2, 2, 2], label="Player 2 chooses r"))
+
+# Step 6: Player 3 moves if Player 2 chooses "l", choosing between "a" and "b"
+for node in g.root.children:
+    g.append_move(node.children[0].children[0], "Player 3", ["a", "b"])
+
+# Step 7: Set the outcome for Player 3's decision (game ends with payoff (3, 3, 3))
+for node in g.root.children:
+    for child in node.children[0].children[0].children:
+        g.set_outcome(child, g.add_outcome([3, 3, 3], label="Player 3 makes a decision"))
+
+# Step 8: Set the information sets for imperfect information
+# Player 1 does not know the outcome of the chance event
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Player 2 does not know Player 1's choice
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# Player 3 does not know Player 2's choice
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0].children[1], g.root.children[1].children[0].children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

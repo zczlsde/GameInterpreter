@@ -1,0 +1,142 @@
+```python
+# Step 1: Identify the chance node outcomes
+# There are six possible allocations of the cards: JQ, JK, QJ, QK, KJ, and KQ.
+# These are represented as g.root.children[0] to g.root.children[5].
+
+# Step 2: Determine Alice's decision nodes
+# Alice can check or bet without knowing the allocation of the chance node.
+# Alice's decision nodes are grouped based on her card, which she knows:
+# - JQ (g.root.children[0]) and JK (g.root.children[1]) are grouped together.
+# - QJ (g.root.children[2]) and QK (g.root.children[3]) are grouped together.
+# - KJ (g.root.children[4]) and KQ (g.root.children[5]) are grouped together.
+
+# Step 3: Set information sets for Alice's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Group JQ and JK
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Group QJ and QK
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Group KJ and KQ
+
+# Step 4: Determine Bob's decision nodes
+# Bob can check or bet without knowing Alice's card.
+# Bob's decision nodes are grouped based on his card, which he knows:
+# - QJ (g.root.children[2]) and KJ (g.root.children[4]) are grouped together.
+# - JQ (g.root.children[0]) and KQ (g.root.children[5]) are grouped together.
+# - JK (g.root.children[1]) and QK (g.root.children[3]) are grouped together.
+
+# Step 5: Set information sets for Bob's decision nodes
+# Note: Bob's decision nodes are not explicitly set here because the problem only asks for Alice's information sets.
+# If needed, similar logic can be applied to set Bob's information sets.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three-card poker game")
+
+# Step 1: Identify the chance node outcomes
+# There are six possible allocations of the cards: JQ, JK, QJ, QK, KJ, and KQ.
+# These are represented as g.root.children[0] to g.root.children[5].
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# Set the probabilities for the chance node
+probabilities = [gbt.Rational(1, 6)] * 6
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Step 2: Determine Alice's decision nodes
+# Alice can check or bet without knowing the allocation of the chance node.
+# Alice's decision nodes are grouped based on her card, which she knows:
+# - JQ (g.root.children[0]) and JK (g.root.children[1]) are grouped together.
+# - QJ (g.root.children[2]) and QK (g.root.children[3]) are grouped together.
+# - KJ (g.root.children[4]) and KQ (g.root.children[5]) are grouped together.
+
+# Append moves for Alice's decision
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# Step 3: Set information sets for Alice's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Group JQ and JK
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Group QJ and QK
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Group KJ and KQ
+
+# Step 4: Determine Bob's decision nodes
+# Bob can check or bet without knowing Alice's card.
+# Bob's decision nodes are grouped based on his card, which he knows:
+# - QJ (g.root.children[2]) and KJ (g.root.children[4]) are grouped together.
+# - JQ (g.root.children[0]) and KQ (g.root.children[5]) are grouped together.
+# - JK (g.root.children[1]) and QK (g.root.children[3]) are grouped together.
+
+# Append moves for Bob's decision after Alice checks
+for node in [g.root.children[0].children[0], g.root.children[1].children[0],
+             g.root.children[2].children[0], g.root.children[3].children[0],
+             g.root.children[4].children[0], g.root.children[5].children[0]]:
+    g.append_move(node, "Bob", ["Check", "Bet"])
+
+# Append moves for Alice's decision after Bob bets
+for node in [g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1],
+             g.root.children[2].children[0].children[1], g.root.children[3].children[0].children[1],
+             g.root.children[4].children[0].children[1], g.root.children[5].children[0].children[1]]:
+    g.append_move(node, "Alice", ["Fold", "Call"])
+
+# Append moves for Bob's decision after Alice bets
+for node in [g.root.children[0].children[1], g.root.children[1].children[1],
+             g.root.children[2].children[1], g.root.children[3].children[1],
+             g.root.children[4].children[1], g.root.children[5].children[1]]:
+    g.append_move(node, "Bob", ["Fold", "Call"])
+
+# Step 5: Set outcomes for the game
+# Outcomes are based on the higher card winning
+# Alice wins 1 if Bob folds after Alice bets or if Bob checks after Alice checks
+# Bob wins 1 if Alice folds after Bob bets
+# Alice wins 2 if she calls and has a higher card
+# Bob wins 2 if he calls and has a higher card
+
+# Define outcomes
+alice_wins_1 = g.add_outcome([1, -1], label="Alice wins 1")
+bob_wins_1 = g.add_outcome([-1, 1], label="Bob wins 1")
+alice_wins_2 = g.add_outcome([2, -2], label="Alice wins 2")
+bob_wins_2 = g.add_outcome([-2, 2], label="Bob wins 2")
+
+# Set outcomes for each possible scenario
+# Alice checks, Bob checks
+g.set_outcome(g.root.children[0].children[0].children[0], bob_wins_1)  # JQ, Bob wins
+g.set_outcome(g.root.children[1].children[0].children[0], alice_wins_1)  # JK, Alice wins
+g.set_outcome(g.root.children[2].children[0].children[0], alice_wins_1)  # QJ, Alice wins
+g.set_outcome(g.root.children[3].children[0].children[0], bob_wins_1)  # QK, Bob wins
+g.set_outcome(g.root.children[4].children[0].children[0], bob_wins_1)  # KJ, Bob wins
+g.set_outcome(g.root.children[5].children[0].children[0], alice_wins_1)  # KQ, Alice wins
+
+# Alice checks, Bob bets, Alice folds
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], bob_wins_1)  # JQ, Bob wins
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], bob_wins_1)  # JK, Bob wins
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], bob_wins_1)  # QJ, Bob wins
+g.set_outcome(g.root.children[3].children[0].children[1].children[0], bob_wins_1)  # QK, Bob wins
+g.set_outcome(g.root.children[4].children[0].children[1].children[0], bob_wins_1)  # KJ, Bob wins
+g.set_outcome(g.root.children[5].children[0].children[1].children[0], bob_wins_1)  # KQ, Bob wins
+
+# Alice checks, Bob bets, Alice calls
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], bob_wins_2)  # JQ, Bob wins
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], alice_wins_2)  # JK, Alice wins
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], alice_wins_2)  # QJ, Alice wins
+g.set_outcome(g.root.children[3].children[0].children[1].children[1], bob_wins_2)  # QK, Bob wins
+g.set_outcome(g.root.children[4].children[0].children[1].children[1], bob_wins_2)  # KJ, Bob wins
+g.set_outcome(g.root.children[5].children[0].children[1].children[1], alice_wins_2)  # KQ, Alice wins
+
+# Alice bets, Bob folds
+g.set_outcome(g.root.children[0].children[1].children[0], alice_wins_1)  # JQ, Alice wins
+g.set_outcome(g.root.children[1].children[1].children[0], alice_wins_1)  # JK, Alice wins
+g.set_outcome(g.root.children[2].children[1].children[0], alice_wins_1)  # QJ, Alice wins
+g.set_outcome(g.root.children[3].children[1].children[0], alice_wins_1)  # QK, Alice wins
+g.set_outcome(g.root.children[4].children[1].children[0], alice_wins_1)  # KJ, Alice wins
+g.set_outcome(g.root.children[5].children[1].children[0], alice_wins_1)  # KQ, Alice wins
+
+# Alice bets, Bob calls
+g.set_outcome(g.root.children[0].children[1].children[1], bob_wins_2)  # JQ, Bob wins
+g.set_outcome(g.root.children[1].children[1].children[1], alice_wins_2)  # JK, Alice wins
+g.set_outcome(g.root.children[2].children[1].children[1], alice_wins_2)  # QJ, Alice wins
+g.set_outcome(g.root.children[3].children[1].children[1], bob_wins_2)  # QK, Bob wins
+g.set_outcome(g.root.children[4].children[1].children[1], bob_wins_2)  # KJ, Bob wins
+g.set_outcome(g.root.children[5].children[1].children[1], alice_wins_2)  # KQ, Alice wins
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,12 @@
+EFG 2 R "Coin Pile Game" { "Alice" "Bob" }
+""
+
+p "" 1 1 "" { "Take" "Push" } 0
+p "" 1 2 "" { "Take" "Push" } 0
+t "" 1 "Alice takes 1 coin" { 1, -1 }
+p "" 2 1 "" { "Take" "Push" } 0
+t "" 2 "Alice takes 8 coins" { 8, -8 }
+p "" 2 1 "" { "Take" "Push" } 0
+t "" 3 "Bob takes 2 coins" { -2, 2 }
+t "" 4 "Bob takes 16 coins" { -16, 16 }
+t "" 0

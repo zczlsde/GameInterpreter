@@ -1,0 +1,10 @@
+EFG 2 R "Pollution Control Game" { "Country 1" "Country 2" }
+""
+
+p "" 1 1 "" { "Implement" "Not Implement" } 0
+p "" 2 1 "" { "Implement" "Not Implement" } 0
+t "" 1 "Both Implement" { 7, 7 }
+t "" 2 "Country 1 Implements, Country 2 Does Not" { 3, 10 }
+p "" 2 1 "" { "Implement" "Not Implement" } 0
+t "" 3 "Country 1 Does Not Implement, Country 2 Implements" { 10, 3 }
+t "" 4 "Neither Implement" { 5, 5 }

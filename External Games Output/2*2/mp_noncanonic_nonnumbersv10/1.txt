@@ -1,0 +1,64 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the coach from the lesser-known college and the coach from the top university.
+# Both players choose their strategies simultaneously, which means they have imperfect information about each other's choices.
+
+# Step 2: Model the game with a sequential structure.
+# Assume the coach from the top university moves first, and the coach from the lesser-known college moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is the decision node for the top university's coach.
+# The top university's coach has two actions: "Aggressive Offense" and "Strong Defense".
+# The decision nodes for the lesser-known college's coach are g.root.children[0] and g.root.children[1], corresponding to the top university's coach's actions.
+
+# Step 4: Group the decision nodes in the same information set.
+# Since the lesser-known college's coach does not know which action the top university's coach has taken, 
+# the decision nodes for the lesser-known college's coach should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: the coach from the lesser-known college and the coach from the top university.
+g = gbt.Game.new_tree(players=["Lesser-known College Coach", "Top University Coach"],
+                      title="Strategic Basketball Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume the coach from the top university moves first, and the coach from the lesser-known college moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is the decision node for the top university's coach.
+# The top university's coach has two actions: "Aggressive Offense" and "Strong Defense".
+g.append_move(g.root, "Top University Coach", ["Aggressive Offense", "Strong Defense"])
+
+# The decision nodes for the lesser-known college's coach are g.root.children[0] and g.root.children[1], 
+# corresponding to the top university's coach's actions.
+g.append_move(g.root.children[0], "Lesser-known College Coach", ["Aggressive Offense", "Strong Defense"])
+g.append_move(g.root.children[1], "Lesser-known College Coach", ["Aggressive Offense", "Strong Defense"])
+
+# Step 4: Group the decision nodes in the same information set.
+# Since the lesser-known college's coach does not know which action the top university's coach has taken, 
+# the decision nodes for the lesser-known college's coach should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes based on the strategies chosen by both coaches.
+# If their strategies match, the lesser-known team's coach outsmarts the competition and their team gains notoriety.
+# If the strategies differ, the top university’s team uses their superior resources to dominate the game.
+
+# Matching strategies: Lesser-known team gains notoriety
+lesser_known_wins = g.add_outcome([1, -1], label="Lesser-known team gains notoriety")
+
+# Different strategies: Top university team dominates
+top_university_wins = g.add_outcome([-1, 1], label="Top university team dominates")
+
+# Set the outcomes for each possible combination of strategies
+g.set_outcome(g.root.children[0].children[0], lesser_known_wins)  # Both choose Aggressive Offense
+g.set_outcome(g.root.children[0].children[1], top_university_wins)  # Top chooses Aggressive Offense, Lesser-known chooses Strong Defense
+g.set_outcome(g.root.children[1].children[0], top_university_wins)  # Top chooses Strong Defense, Lesser-known chooses Aggressive Offense
+g.set_outcome(g.root.children[1].children[1], lesser_known_wins)  # Both choose Strong Defense
+
+# Save the EFG
+efg = g.write(format='native')
+```

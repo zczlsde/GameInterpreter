@@ -1,0 +1,10 @@
+EFG 2 R "Cold War Nuclear Arms Decision Game" { "Nation 1" "Nation 2" }
+""
+
+p "" 1 1 "" { "Build" "Disarm" } 0
+p "" 2 1 "" { "Build" "Disarm" } 0
+t "" 1 "Both Build" { 4, 4 }
+t "" 2 "N1 Builds, N2 Disarms" { 7, 1 }
+p "" 2 1 "" { "Build" "Disarm" } 0
+t "" 3 "N1 Disarms, N2 Builds" { 1, 7 }
+t "" 4 "Both Disarm" { 6, 6 }

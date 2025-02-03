@@ -1,0 +1,10 @@
+EFG 2 R "Collaborative Research Game" { "Scientist 1" "Scientist 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Work Independently" } 0
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 1 "Groundbreaking Discovery" { 3, 3 }
+t "" 2 "Moderate Publication for Scientist 2" { 0, 2 }
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 3 "Moderate Publication for Scientist 1" { 2, 0 }
+t "" 4 "Incremental Findings" { 1, 1 }

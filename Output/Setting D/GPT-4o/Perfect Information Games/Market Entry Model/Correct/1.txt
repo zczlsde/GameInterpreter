@@ -1,0 +1,47 @@
+```python
+# Step 1: Firm 2 decides whether to enter or stay out. This is Firm 2's decision node.
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate. 
+# Firm 1's decision nodes are g.root.children[0] (Enter) and g.root.children[1] (Out).
+# Step 3: Since Firm 1's decision is contingent on Firm 2 entering, and Firm 1 knows if Firm 2 has entered, 
+# there is no imperfect information for Firm 1. Therefore, no information set is needed for Firm 1.
+# In this game, there is no simultaneous move or hidden information that requires an information set.
+
+# No set_infoset() function is needed because there is no imperfect information in this sequential game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Entry Deterrence Game")
+
+# Step 1: Firm 2 decides whether to enter or stay out. This is Firm 2's decision node.
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate.
+# Firm 1's decision nodes are g.root.children[0] (Enter) and g.root.children[1] (Out).
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Step 3: Set the payoffs according to the conditions given in the problem statement.
+# Firm 1 earns more if Firm 2 does not enter.
+# If Firm 2 enters, Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+# If Firm 2 enters, Firm 2 earns more than firm 1 if Firm 1 fights.
+
+# Payoffs for the outcomes
+# Outcome when Firm 2 chooses "Out"
+outcome_out = g.add_outcome([3, 0], label="Firm 2 Out")
+# Outcome when Firm 2 chooses "Enter" and Firm 1 chooses "Fight"
+outcome_fight = g.add_outcome([1, 2], label="Firm 2 Enters, Firm 1 Fights")
+# Outcome when Firm 2 chooses "Enter" and Firm 1 chooses "Accommodate"
+outcome_accommodate = g.add_outcome([2, 2], label="Firm 2 Enters, Firm 1 Accommodates")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], outcome_out)
+g.set_outcome(g.root.children[0].children[0], outcome_fight)
+g.set_outcome(g.root.children[0].children[1], outcome_accommodate)
+
+# No set_infoset() function is needed because there is no imperfect information in this sequential game.
+
+# Save the EFG
+efg = g.write(format='native')
+```

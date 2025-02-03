@@ -1,0 +1,26 @@
+EFG 2 R "Stone removal game" { "Alice" "Bob" }
+""
+
+c "" 1 "" { "Alice 1" 1/2 "Alice 2" 1/2 } 0
+p "" 2 1 "" { "Bob 1" "Bob 2" } 0
+p "" 1 1 "" { "Alice 1" "Alice 2" } 0
+p "" 2 2 "" { "Bob 1" "Bob 2" } 0
+p "" 1 2 "" { "Alice 1" "Alice 2" } 0
+p "" 2 3 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0
+p "" 2 3 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0
+p "" 2 4 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0
+p "" 2 5 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0
+p "" 2 5 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0
+p "" 2 6 "" { "Bob 1" "Bob 2" } 0
+t "" 0
+t "" 0

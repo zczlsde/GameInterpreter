@@ -1,0 +1,35 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the initial distribution plan
+g.append_move(g.root, "A", ["Propose 5500/4500"])
+
+# B decides to accept or reject A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with payoffs 5500 for A and 4500 for B
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B accepts A's proposal"))
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000/5000"])
+
+# A decides to accept or reject B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with payoffs 4750 for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new plan
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200/4800"])
+
+# B must accept A's new proposal, ending the game with payoffs 4693 for A and 4332 for B
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the extensive-form game as described in the game description. The game tree is built step by step, with each player's decision point and the corresponding outcomes. The payoffs are set according to the final amounts each player receives in each scenario.

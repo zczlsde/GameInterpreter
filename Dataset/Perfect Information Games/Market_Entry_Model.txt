@@ -1,0 +1,5 @@
+Firm 1 is a monopolist already established in the market. Firm 2, a potential competitor, can choose to enter the market or stay out (if it stays out, the game ends). If Firm 2 enters, Firm 1 must decide whether to compete aggressively (Fight) or allow some market share to Firm 2 (Accommodate). This game only lasts for one round.
+The payoffs are structured as follows:
+Firm 1 earns more if Firm 2 decides not to enter.
+If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount.
+If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1.

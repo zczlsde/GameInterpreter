@@ -1,0 +1,53 @@
+```python
+# Step-by-step thought process:
+# 1. The game involves two generals making decisions simultaneously, which implies imperfect information.
+# 2. To model this game sequentially, assume one general moves first and the other moves second.
+# 3. The starting node, g.root, is the decision node for the first general.
+# 4. The first general has two actions: "North Ridge" and "South Valley".
+# 5. The second general's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first general's actions.
+# 6. Since the generals move simultaneously, the second general does not know which action the first general has taken.
+# 7. Therefore, the second general's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: General North and General South
+g = gbt.Game.new_tree(players=["General North", "General South"],
+                      title="Two Generals Coordination Game")
+
+# Step 1: Assume General North moves first
+# General North has two actions: "North Ridge" and "South Valley"
+g.append_move(g.root, "General North", ["North Ridge", "South Valley"])
+
+# Step 2: General South moves second
+# General South's decision nodes are g.root.children[0] and g.root.children[1]
+# These correspond to General North's actions
+
+# General South has the same two actions: "North Ridge" and "South Valley"
+g.append_move(g.root.children[0], "General South", ["North Ridge", "South Valley"])
+g.append_move(g.root.children[1], "General South", ["North Ridge", "South Valley"])
+
+# Step 3: Since the generals move simultaneously, General South does not know which action General North has taken
+# Therefore, General South's decision nodes should be grouped in the same information set
+# Use the provided code block to handle the imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Set the outcomes based on the game description
+# If both choose "North Ridge", General North gets 2 points, General South gets 1 point
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both North Ridge"))
+
+# If General North chooses "North Ridge" and General South chooses "South Valley", both get 0 points
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="North Ridge/South Valley"))
+
+# If General North chooses "South Valley" and General South chooses "North Ridge", both get 0 points
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="South Valley/North Ridge"))
+
+# If both choose "South Valley", General South gets 2 points, General North gets 1 point
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both South Valley"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

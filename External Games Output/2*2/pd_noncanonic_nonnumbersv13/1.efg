@@ -1,0 +1,10 @@
+EFG 2 R "Tax Reporting Game" { "Neighbor 1" "Neighbor 2" }
+""
+
+p "" 1 1 "" { "Report Truthfully" "Underreport" } 0
+p "" 2 1 "" { "Report Truthfully" "Underreport" } 0
+t "" 1 "Fair Contribution" { 1, 1 }
+t "" 2 "Neighbor 1 Cheated" { -1, 2 }
+p "" 2 1 "" { "Report Truthfully" "Underreport" } 0
+t "" 3 "Neighbor 2 Cheated" { 2, -1 }
+t "" 4 "Both Cheat" { 0, 0 }

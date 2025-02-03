@@ -1,0 +1,56 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, Alice and Bob.
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Poker Game")
+
+# Append a chance move at the root for the six possible allocations of cards.
+# Each allocation has a probability of 1/6.
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each allocation, append moves for Alice to check or bet.
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's actions, append moves for Bob.
+# When Alice checks:
+for node in [child.children[0] for child in g.root.children]:  # Alice checks
+    g.append_move(node, "Bob", ["Check", "Bet"])
+    # When Bob checks, the game ends, and the higher card wins 1.
+    # When Bob bets, Alice can fold or call.
+    g.append_move(node.children[1], "Alice", ["Fold", "Call"])
+
+# When Alice bets:
+for node in [child.children[1] for child in g.root.children]:  # Alice bets
+    g.append_move(node, "Bob", ["Fold", "Call"])
+
+# Define outcomes based on the higher card winning, and the pot size changes.
+# Note: The actual card comparison logic to determine the winner is not implemented here.
+# This is a simplification for the purpose of demonstrating the game tree structure.
+# In a real implementation, you would need to compare the cards to determine the winner.
+higher_card_wins_1 = g.add_outcome([1, -1], label="Higher card wins 1")
+higher_card_wins_2 = g.add_outcome([2, -2], label="Higher card wins 2")
+alice_wins_1 = g.add_outcome([1, -1], label="Alice wins 1")
+bob_wins_1 = g.add_outcome([-1, 1], label="Bob wins 1")
+alice_takes_pot = g.add_outcome([1, -1], label="Alice takes pot")
+bob_takes_pot = g.add_outcome([-1, 1], label="Bob takes pot")
+
+# Set outcomes for each terminal node.
+for allocation in g.root.children:
+    # When Alice checks and Bob checks.
+    g.set_outcome(allocation.children[0].children[0], higher_card_wins_1)
+    # When Alice checks and Bob bets, then Alice folds.
+    g.set_outcome(allocation.children[0].children[1].children[0], bob_takes_pot)
+    # When Alice checks and Bob bets, then Alice calls.
+    g.set_outcome(allocation.children[0].children[1].children[1], higher_card_wins_2)
+    # When Alice bets and Bob folds.
+    g.set_outcome(allocation.children[1].children[0], alice_takes_pot)
+    # When Alice bets and Bob calls.
+    g.set_outcome(allocation.children[1].children[1], higher_card_wins_2)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code generates an Extensive Form Game (EFG) for a simplified three-card poker game between Alice and Bob using the PyGambit library. The game tree is constructed step by step, starting from the chance node that determines the card allocation, followed by Alice's and Bob's decisions to check, bet, fold, or call. The outcomes are simplified to reflect the pot changes without implementing the actual card comparison logic. This example demonstrates how to structure a game tree with chance moves and strategic decisions in PyGambit.

@@ -1,0 +1,18 @@
+EFG 2 R "Manufacturer competition game with imperfect information" { "Current Manufacturer" "New Manufacturer" }
+""
+
+c "" 1 "" { "Strong (S)" 1/2 "Weak (W)" 1/2 } 0
+c "" 2 "" { "Strong (S)" 1/2 "Weak (W)" 1/2 } 0
+p "" 1 1 "" { "Fight (F)" "Adapt (A)" } 0
+t "" 1 "" { 1, 0 }
+t "" 2 "" { 3, 1 }
+p "" 1 1 "" { "Fight (F)" "Adapt (A)" } 0
+t "" 3 "" { 0, 0 }
+t "" 4 "" { 2, 1 }
+c "" 3 "" { "Strong (S)" 1/2 "Weak (W)" 1/2 } 0
+p "" 1 2 "" { "Fight (F)" "Adapt (A)" } 0
+t "" 5 "" { 0, 2 }
+t "" 6 "" { 2, 1 }
+p "" 1 2 "" { "Fight (F)" "Adapt (A)" } 0
+t "" 7 "" { 1, 2 }
+t "" 8 "" { 3, 1 }

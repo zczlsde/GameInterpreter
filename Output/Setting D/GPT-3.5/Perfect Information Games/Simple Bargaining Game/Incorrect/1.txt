@@ -1,0 +1,124 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the nodes where B has to make a decision
+# Group the decision nodes where B has to accept or reject A's proposal in the same information set
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the nodes where B has to make a decision
+# Group the decision nodes where B has to accept or reject A's proposal in the same information set
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the nodes where B has to make a decision
+# Group the decision nodes where B has to accept or reject A's proposal in the same information set
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the nodes where B has to make a decision
+# Group the decision nodes where B has to accept or reject A's proposal in the same information set
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If A's proposal is rejected, B proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the nodes where B has to make a decision
+# Group the decision nodes where B has to accept or reject A's proposal in the same information set
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1])
+
+# Save the EFG
+efg = g.write(format='native')

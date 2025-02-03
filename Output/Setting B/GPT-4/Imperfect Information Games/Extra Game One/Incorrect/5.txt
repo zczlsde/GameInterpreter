@@ -1,0 +1,212 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Sequential Game with Information Set")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's move depends on Player 1's action
+# If Player 1 chooses A, Player 2 knows and can choose D, E, or F
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# If Player 1 chooses B or C, Player 2 cannot distinguish between these actions but can still choose D, E, or F
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Since Player 2 cannot distinguish between B or C, we set an information set for these nodes
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 gets to choose between G and H
+# We need to append moves for both D and E choices across all branches where they occur
+for d_node in [g.root.children[0].children[0], g.root.children[1].children[0], g.root.children[2].children[0]]:
+    g.append_move(d_node, "Player 1", ["G", "H"])
+for e_node in [g.root.children[0].children[1], g.root.children[1].children[1], g.root.children[2].children[1]]:
+    g.append_move(e_node, "Player 1", ["G", "H"])
+
+# Setting outcomes for all terminal nodes
+# If Player 2 chooses F anywhere, the game ends
+for f_node in [g.root.children[0].children[2], g.root.children[1].children[2], g.root.children[2].children[2]]:
+    g.set_outcome(f_node, g.add_outcome([0, 0], label="End Game"))
+
+# If Player 1 chooses H after D or E, Player 1 gets 2, Player 2 gets -1
+for h_node in [node.children[1] for node in g.root.children[0].children[:2] + g.root.children[1].children[:2] + g.root.children[2].children[:2]]:
+    g.set_outcome(h_node, g.add_outcome([2, -1], label="Player 1 wins"))
+
+# If Player 1 chooses G, then Player 2 decides between Q and W
+for g_node in [node.children[0] for node in g.root.children[0].children[:2] + g.root.children[1].children[:2] + g.root.children[2].children[:2]]:
+    g.append_move(g_node, "Player 2", ["Q", "W"])
+    # Setting outcomes for Q and W
+    g.set_outcome(g_node.children[0], g.add_outcome([3, 3], label="Cooperation"))
+    g.set_outcome(g_node.children[1], g.add_outcome([0, 0], label="No Deal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs the extensive form game (EFG) based on the given description. It carefully sets up the game tree, including the information sets that represent Player 2's inability to distinguish between actions B and C taken by Player 1. The outcomes are assigned based on the final actions taken by the players, reflecting the payoffs associated with each terminal node in the game tree.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Sequential Game with Information Set")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's move depends on Player 1's action
+# If Player 1 chooses A, Player 2 knows and can choose D, E, or F
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# If Player 1 chooses B or C, Player 2 cannot distinguish between these actions but can still choose D, E, or F
+# Append moves for B and C, and then set information sets
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Setting information sets for B and C
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 gets to choose between G and H
+# Append moves for D and E choices across all branches where they occur
+for child in g.root.children:
+    for d_node in child.children[0:2]:  # For D and E choices
+        g.append_move(d_node, "Player 1", ["G", "H"])
+
+# Setting outcomes for all terminal nodes
+# If Player 2 chooses F anywhere, the game ends
+for child in g.root.children:
+    g.set_outcome(child.children[2], g.add_outcome([0, 0], label="End Game"))
+
+# If Player 1 chooses H after D or E, Player 1 gets 2, Player 2 gets -1
+for child in g.root.children:
+    for d_node in child.children[0:2]:  # For D and E choices
+        g.set_outcome(d_node.children[1], g.add_outcome([2, -1], label="Player 1 wins"))
+
+# If Player 1 chooses G, then Player 2 decides between Q and W
+for child in g.root.children:
+    for d_node in child.children[0:2]:  # For D and E choices
+        g.append_move(d_node.children[0], "Player 2", ["Q", "W"])
+        # Setting outcomes for Q and W
+        g.set_outcome(d_node.children[0].children[0], g.add_outcome([3, 3], label="Cooperation"))
+        g.set_outcome(d_node.children[0].children[1], g.add_outcome([0, 0], label="No Deal"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Sequential Game with Information Set")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's move depends on Player 1's action
+# If Player 1 chooses A, Player 2 knows and can choose D, E, or F
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# If Player 1 chooses B or C, Player 2 cannot distinguish between these actions but can still choose D, E, or F
+# Append moves for B and C, and then set information sets
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Setting information sets for B and C
+# Correcting the approach to set information sets after moves have been appended
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 gets to choose between G and H
+# Correcting the loop to append moves for D and E choices across all branches where they occur
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.append_move(g.root.children[i].children[j], "Player 1", ["G", "H"])
+
+# Setting outcomes for all terminal nodes
+# If Player 2 chooses F anywhere, the game ends
+for i in range(3):  # For each of Player 1's initial choices
+    g.set_outcome(g.root.children[i].children[2], g.add_outcome([0, 0], label="End Game"))
+
+# If Player 1 chooses H after D or E, Player 1 gets 2, Player 2 gets -1
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.set_outcome(g.root.children[i].children[j].children[1], g.add_outcome([2, -1], label="Player 1 wins"))
+
+# If Player 1 chooses G, then Player 2 decides between Q and W
+for i in range(3):  # For each of Player 1's initial choices
+    for j in range(2):  # For Player 2's choices D and E
+        g.append_move(g.root.children[i].children[j].children[0], "Player 2", ["Q", "W"])
+        # Setting outcomes for Q and W
+        g.set_outcome(g.root.children[i].children[j].children[0].children[0], g.add_outcome([3, 3], label="Cooperation"))
+        g.set_outcome(g.root.children[i].children[j].children[0].children[1], g.add_outcome([0, 0], label="No Deal"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Sequential Game with Information Set")
+
+# First stage: Player 1 chooses among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's move depends on Player 1's action
+# If Player 1 chooses A, Player 2 knows and can choose D, E, or F
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# If Player 1 chooses B or C, Player 2 cannot distinguish between these actions but can still choose D, E, or F
+# Append moves for B and C, and then set information sets
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Setting information sets for B and C
+# Correcting the approach to set information sets after moves have been appended
+# This time, ensuring we don't reference an undefined 'node' variable
+# and correctly regenerate paths for node1 and node2 in g.set_infoset(node1, node2.infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[2].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[2].children[1].infoset)
+g.set_infoset(g.root.children[1].children[2], g.root.children[2].children[2].infoset)
+
+# Third stage: If Player 2 chooses D or E, Player 1 gets to choose between G and H
+# Correcting the loop to append moves for D and E choices across all branches where they occur
+# Ensuring we append moves to the terminal nodes of the previous player's actions
+for i in range(2):  # For Player 2's choices D and E in response to A
+    g.append_move(g.root.children[0].children[i], "Player 1", ["G", "H"])
+
+# For B and C, since Player 2's choices cannot distinguish between them, we handle them together
+for i in range(3):  # For A, B, C
+    for j in range(2):  # For D, E
+        if i > 0:  # Only for B and C
+            g.append_move(g.root.children[i].children[j], "Player 1", ["G", "H"])
+
+# Setting outcomes for all terminal nodes
+# If Player 2 chooses F anywhere, the game ends
+for i in range(3):  # For A, B, C
+    g.set_outcome(g.root.children[i].children[2], g.add_outcome([0, 0], label="End Game"))
+
+# If Player 1 chooses H after D or E, Player 1 gets 2, Player 2 gets -1
+for i in range(3):  # For A, B, C
+    for j in range(2):  # For D, E
+        g.set_outcome(g.root.children[i].children[j].children[1], g.add_outcome([2, -1], label="Player 1 wins"))
+
+# If Player 1 chooses G, then Player 2 decides between Q and W
+for i in range(3):  # For A, B, C
+    for j in range(2):  # For D, E
+        g.append_move(g.root.children[i].children[j].children[0], "Player 2", ["Q", "W"])
+        # Setting outcomes for Q and W
+        g.set_outcome(g.root.children[i].children[j].children[0].children[0], g.add_outcome([3, 3], label="Cooperation"))
+        g.set_outcome(g.root.children[i].children[j].children[0].children[1], g.add_outcome([0, 0], label="No Deal"))
+
+# Save the EFG
+efg = g.write(format='native')

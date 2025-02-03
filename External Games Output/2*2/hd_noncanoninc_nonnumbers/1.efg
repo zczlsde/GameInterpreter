@@ -1,0 +1,10 @@
+EFG 2 R "Family Budget Negotiation" { "Husband" "Wife" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold firm" } 0
+p "" 2 1 "" { "Compromise" "Hold firm" } 0
+t "" 1 "Moderate Budget" { 1, 1 }
+t "" 3 "Wife's Priorities" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold firm" } 0
+t "" 2 "Husband's Priorities" { 2, 0 }
+t "" 4 "Budget Fails" { -1, -1 }

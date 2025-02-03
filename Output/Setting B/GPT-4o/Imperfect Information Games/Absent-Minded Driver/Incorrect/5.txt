@@ -1,0 +1,107 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players and title
+g = gbt.Game.new_tree(players=["Driver", "Nature"],
+                      title="Absent-minded driver at road junctions X and Y")
+
+# Add moves for the Driver at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add moves for the Nature at junction Y
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information set for the Driver at both junctions X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set outcomes for the game
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 1], label="Driver continues to C")
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+'(' was never closed (<string>, line 20)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players and title
+g = gbt.Game.new_tree(players=["Driver", "Nature"],
+                      title="Absent-minded driver at road junctions X and Y")
+
+# Add moves for the Driver at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add moves for the Nature at junction Y
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information set for the Driver at junction X
+g.set_infoset(g.root.children[0], g.root.children[1].children[0].infoset)
+
+# Set information set for the Driver at junction Y
+g.set_infoset(g.root.children[1], g.root.children[1].children[1].infoset)
+
+# Set outcomes for the game
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 1], label="Driver continues to C"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players and title
+g = gbt.Game.new_tree(players=["Driver", "Nature"],
+                      title="Absent-minded driver at road junctions X and Y")
+
+# Add moves for the Driver at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add moves for the Nature at junction Y
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information set for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].children[0])
+g.set_infoset(g.root.children[0], g.root.children[1].children[1])
+
+# Set outcomes for the game
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 1], label="Driver continues to C"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players and title
+g = gbt.Game.new_tree(players=["Driver", "Nature"],
+                      title="Absent-minded driver at road junctions X and Y")
+
+# Add moves for the Driver at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Add moves for the Nature at junction Y
+g.append_move(g.root.children[1], "Nature", ["EXIT", "CONTINUE"])
+
+# Set information set for the Driver at junction X and Y
+g.set_infoset(g.root.children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0], g.root.children[1].children[1].infoset)
+
+# Set outcomes for the game
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Driver exits at X"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4, 0], label="Driver exits at Y"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 1], label="Driver continues to C"))
+
+# Save the EFG
+efg = g.write(format='native')

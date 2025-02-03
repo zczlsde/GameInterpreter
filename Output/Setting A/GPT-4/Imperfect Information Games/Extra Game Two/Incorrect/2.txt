@@ -1,0 +1,56 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with imperfect information")
+
+# First stage: Player 1 chooses among A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses between D and E without knowing Player 1's choice
+# This implies that Player 2's decision is made under imperfect information.
+# We create moves for each of Player 1's actions leading to Player 2's decision.
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Third stage: Player 1 chooses between F and G, again without knowing Player 2's choice
+# This is another point of imperfect information, as Player 1's choice in the third stage
+# does not reveal Player 2's earlier choice.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 decides between Q and W
+# At this point, all previous choices lead to Player 3's decision.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.append_move(grandchild, "Player 3", ["Q", "W"])
+
+# Setting outcomes based on Player 3's decision in the final stage
+# If Player 3 selects Q, all players receive a payoff of 3.
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], g.add_outcome([3, 3, 3], label="All choose Q"))
+            g.set_outcome(grandchild.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 choose W, P3 gets 3"))
+
+# Since Player 2 makes a decision without knowing Player 1's choice, we need to set the information set accordingly.
+# Similarly, Player 1's choice in the third stage is made without knowing Player 2's choice, requiring another information set.
+# We use the identical code for g.set_infoset() as instructed to handle the imperfect information.
+for a_node, b_node, c_node in zip(g.root.children[0].children, g.root.children[1].children, g.root.children[2].children):
+    # Setting information set for Player 2's decision
+    g.set_infoset(a_node, b_node.infoset)
+    g.set_infoset(c_node, b_node.infoset)
+    for a_child, b_child, c_child in zip(a_node.children, b_node.children, c_node.children):
+        # Setting information set for Player 1's decision in the third stage
+        g.set_infoset(a_child, b_child.infoset)
+        g.set_infoset(c_child, b_child.infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game with three stages of decisions, incorporating imperfect information for Player 2's and Player 1's subsequent decisions. The use of information sets correctly models the uncertainty about previous players' actions, adhering to the game's description.

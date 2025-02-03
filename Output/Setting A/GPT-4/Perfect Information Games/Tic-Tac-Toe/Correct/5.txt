@@ -1,0 +1,35 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "X" and "O"
+g = gbt.Game.new_tree(players=["X", "O"], title="Tic-Tac-Toe Game")
+
+# The initial move by "X" at the root of the game tree
+g.append_move(g.root, "X", ["(0,0)", "(0,2)", "(1,0)"])
+
+# If "X" places the mark on (0,0)
+g.append_move(g.root.children[0], "O", ["(0,2)", "(1,0)"])
+# If "O" places the mark on (0,2), "O" wins
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "O" places the mark on (1,0)
+g.append_move(g.root.children[0].children[1], "X", ["(0,2)"])
+# If "X" places the mark on (0,2), "X" wins
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (0,2), "X" wins directly
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (1,0)
+g.append_move(g.root.children[2], "O", ["(0,0)", "(0,2)"])
+# If "O" places the mark on (0,0)
+g.append_move(g.root.children[2].children[0], "X", ["(0,2)"])
+# If "X" places the mark on (0,2), "X" wins
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="X wins"))
+# If "O" places the mark on (0,2), "O" wins
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representation of a Tic-Tac-Toe game scenario using the pygambit library. The game tree is explicitly defined for the given board state and possible moves. Each node in the tree represents a state where a player must make a decision, and the outcomes are determined by the rules of Tic-Tac-Toe, where achieving three in a row, column, or diagonal results in a win. The payoffs are set to 1 for a win and -1 for a loss, reflecting the objective of winning the game.

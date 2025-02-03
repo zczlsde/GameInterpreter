@@ -1,0 +1,10 @@
+EFG 2 R "Advertising Strategy Game" { "Company 1" "Company 2" }
+""
+
+p "" 1 1 "" { "Aggressive" "Moderate" } 0
+p "" 2 1 "" { "Aggressive" "Moderate" } 0
+t "" 1 "Both Aggressive" { -20, -20 }
+t "" 2 "Aggressive vs Moderate" { 4, -4 }
+p "" 2 1 "" { "Aggressive" "Moderate" } 0
+t "" 3 "Moderate vs Aggressive" { -4, 4 }
+t "" 4 "Both Moderate" { 0, 0 }

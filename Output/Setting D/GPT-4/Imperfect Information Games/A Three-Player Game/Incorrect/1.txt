@@ -1,0 +1,68 @@
+```python
+# Step 1: Chance node decides 'A' or 'B', but subsequent players do not observe this.
+# Step 2: Player 1 chooses 'L' or 'R' without knowing the chance node's decision.
+# Since Player 1's decision does not depend on the chance node's outcome, there's no need to set an information set for Player 1 based on the chance node's outcome.
+# However, it's implied that Player 1's decision creates different game states that are not directly observable by Players 2 and 3.
+
+# Step 3: Player 2's decision ('l' or 'r') is made without observing Player 1's action.
+# This implies all of Player 2's decision nodes (after Player 1 chooses 'L') are in the same information set.
+# However, since the game description does not specify multiple nodes for Player 2's decision that need to be grouped, 
+# and Player 2's action only follows Player 1's 'L', there's no explicit need to set an information set for Player 2 based on the provided structure.
+
+# Step 4: Player 3's decision ('a' or 'b') is made without observing Player 2's action.
+# Similar to Player 2, Player 3's decision nodes (after Player 2 chooses 'l') are in the same information set.
+# Again, since the game description does not specify multiple nodes for Player 3's decision that need to be grouped,
+# and Player 3's action only follows Player 2's 'l', there's no explicit need to set an information set for Player 3 based on the provided structure.
+
+# In summary, the game's description implies imperfect information for each player regarding the actions of others,
+# but the structure of the game and the task instructions do not necessitate the explicit grouping of nodes into information sets beyond what's described.
+# Therefore, no set_infoset() function calls are required based on the task's instructions and the provided game structure.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Imperfect Information")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the chance node's decision
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+
+# Since Player 1's decision does not depend on the chance node's outcome, there's no need to set an information set for Player 1 based on the chance node's outcome.
+# However, it's implied that Player 1's decision creates different game states that are not directly observable by Players 2 and 3.
+
+# Stage 3: Player 2 can choose 'l' or 'r' only after Player 1 chooses 'L'
+# Player 2's decision is made without observing Player 1's action.
+for node in [g.root.children[0].children[0], g.root.children[1].children[0]]:
+    g.append_move(node, "Player 2", ["l", "r"])
+
+# Stage 4: Player 3 can choose 'a' or 'b' only after Player 2 chooses 'l'
+# Player 3's decision is made without observing Player 2's action.
+for node in [g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0]]:
+    g.append_move(node, "Player 3", ["a", "b"])
+
+# Set outcomes
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1]))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1, 1]))
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2]))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 2, 2]))
+
+# After Player 3's decision, the game ends with a payoff (3, 3, 3)
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code constructs the extensive-form game as described, with a chance node at the beginning, followed by decisions from Player 1, Player 2, and Player 3. The game incorporates imperfect information as players make decisions without observing the actions of the chance node or the previous players. The outcomes are set based on the decisions made at each stage of the game.

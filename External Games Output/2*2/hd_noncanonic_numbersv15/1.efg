@@ -1,0 +1,10 @@
+EFG 2 R "Promotion Competition Game" { "Colleague 1" "Colleague 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Self-promote" } 0
+p "" 2 1 "" { "Collaborate" "Self-promote" } 0
+t "" 1 "Both Collaborate" { 0, 0 }
+t "" 3 "Colleague 2 Self-promotes" { -5, 5 }
+p "" 2 1 "" { "Collaborate" "Self-promote" } 0
+t "" 2 "Colleague 1 Self-promotes" { 5, -5 }
+t "" 4 "Both Self-promote" { -3, -3 }

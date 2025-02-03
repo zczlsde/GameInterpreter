@@ -1,0 +1,55 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with imperfect information")
+
+# First stage: Player 1 chooses among A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses between D and E without knowing Player 1's choice
+# This creates a situation of imperfect information for Player 2
+# We create moves for each of Player 1's actions
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Third stage: Player 1 chooses between F and G, again without knowing Player 2's choice
+# This creates another layer of imperfect information
+# We create moves for each of Player 2's actions under each of Player 1's initial choices
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 decides between Q and W
+# At this point, Player 3's decision is based on the sequence of moves, but for simplicity, we assume Player 3 knows the history
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.append_move(grandchild, "Player 3", ["Q", "W"])
+
+# Setting outcomes based on Player 3's choices
+# If Player 3 selects Q, all players receive a payoff of 3
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], g.add_outcome([3, 3, 3], label="All get 3"))
+            g.set_outcome(grandchild.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 get 2, P3 gets 3"))
+
+# Handling imperfect information
+# Player 2 does not know Player 1's choice between A, B, and C
+# Player 1 does not know Player 2's choice between D and E when making the second decision between F and G
+# We group the nodes where Player 2's and Player 1's decisions are made under imperfect information
+for i in range(3):  # For each of Player 1's initial choices
+    # Grouping Player 2's decision nodes under each of Player 1's choices to reflect imperfect information
+    g.set_infoset(g.root.children[i].children[0], g.root.children[i].children[1].infoset)
+    for j in range(2):  # For each of Player 2's choices
+        # Grouping Player 1's second decision nodes to reflect imperfect information
+        g.set_infoset(g.root.children[i].children[j].children[0], g.root.children[i].children[j].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs an extensive-form game with three players where the game progresses through four stages with decisions made by different players at each stage. The game incorporates imperfect information by grouping decision nodes for Player 2 and Player 1's second decision under each of Player 1's initial choices, reflecting that Player 2 does not know Player 1's initial choice and Player 1 does not know Player 2's choice when making their second decision.

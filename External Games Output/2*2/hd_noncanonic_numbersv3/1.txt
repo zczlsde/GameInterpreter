@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Partner 1 and Partner 2, who can either "Agree" or "Demand".
+
+# Step 2: Determine the sequence of moves.
+# The game is simultaneous, meaning both players make their decisions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Partner 1 moves first and Partner 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Partner 1's decision node.
+# Partner 1 has two actions: "Agree" and "Demand".
+# Partner 2's decision nodes are g.root.children[0] (Partner 1 chooses "Agree") and g.root.children[1] (Partner 1 chooses "Demand").
+
+# Step 5: Group the decision nodes into information sets.
+# Since Partner 2 moves simultaneously with Partner 1, Partner 2 does not know which action Partner 1 has taken.
+# Therefore, Partner 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Partner 1 and Partner 2.
+g = gbt.Game.new_tree(players=["Partner 1", "Partner 2"],
+                      title="Profit Allocation Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Partner 1 moves first and Partner 2 moves second.
+
+# Step 3: Partner 1's decision node is the root of the game tree.
+# Partner 1 has two actions: "Agree" and "Demand".
+g.append_move(g.root, "Partner 1", ["Agree", "Demand"])
+
+# Step 4: Partner 2's decision nodes are based on Partner 1's actions.
+# If Partner 1 chooses "Agree", Partner 2 has a decision node.
+# If Partner 1 chooses "Demand", Partner 2 has another decision node.
+g.append_move(g.root.children[0], "Partner 2", ["Agree", "Demand"])
+g.append_move(g.root.children[1], "Partner 2", ["Agree", "Demand"])
+
+# Step 5: Group the decision nodes into information sets.
+# Since Partner 2 moves simultaneously with Partner 1, Partner 2 does not know which action Partner 1 has taken.
+# Therefore, Partner 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# If both agree to split equally, each partner receives 50 units of profit, resulting in 0 payoff points.
+equal_split = g.add_outcome([0, 0], label="Equal Split")
+
+# If one demands a larger share and the other agrees to equal split, the demanding partner gets 80 units (gaining 2 points),
+# while the agreeable partner receives just 20 units (losing –2 points).
+demand_wins = g.add_outcome([2, -2], label="Demand Wins")
+demand_loses = g.add_outcome([-2, 2], label="Demand Loses")
+
+# If both demand larger shares, negotiations break down, and they lose potential profits due to delay,
+# with each suffering a payoff of –25 points.
+negotiation_breakdown = g.add_outcome([-25, -25], label="Negotiation Breakdown")
+
+# Step 7: Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], equal_split)  # Both agree
+g.set_outcome(g.root.children[0].children[1], demand_loses)  # Partner 1 agrees, Partner 2 demands
+g.set_outcome(g.root.children[1].children[0], demand_wins)  # Partner 1 demands, Partner 2 agrees
+g.set_outcome(g.root.children[1].children[1], negotiation_breakdown)  # Both demand
+
+# Save the EFG
+efg = g.write(format='native')
+```

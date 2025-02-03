@@ -1,0 +1,367 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Avoid the last stone game")
+
+# Alice removes one stone
+g.append_move(g.root, "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root, "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1], "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[1].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Bob removes two stones
+g.append_move(g.root.children[1].children[1], "Bob", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Avoid the last stone game")
+
+# Alice removes one stone
+g.append_move(g.root, "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root, "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1], "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[1].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Bob removes two stones
+g.append_move(g.root.children[1].children[1], "Bob", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Avoid the last stone game")
+
+# Alice removes one stone
+g.append_move(g.root, "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root, "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+g.set_infoset(g.root.children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+g.set_infoset(g.root.children[0].children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone"])
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1], "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[1].children[0].children[0], "Bob", ["Remove 1 stone"])
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 2 stones"])
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Bob removes two stones
+g.append_move(g.root.children[1].children[1], "Bob", ["Remove 2 stones"])
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Avoid the last stone game")
+
+# Alice removes one stone
+g.append_move(g.root, "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root, "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one or two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[1].infoset)
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[0].children[1].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 1 stone"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1], "Alice", ["Remove 2 stones"])
+# Bob removes one or two stones
+g.append_move(g.root.children[1].children[0], "Bob", ["Remove 1 stone", "Remove 2 stones"])
+# Set information set for Bob's decision
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Alice removes one stone
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 1 stone"])
+# Bob removes one stone
+g.append_move(g.root.children[1].children[0].children[0], "Bob", ["Remove 1 stone"])
+# Set outcome for Bob losing the game
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# Alice removes two stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Bob removes two stones
+g.append_move(g.root.children[1].children[1], "Bob", ["Remove 2 stones"])
+# Set outcome for Alice losing the game
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')

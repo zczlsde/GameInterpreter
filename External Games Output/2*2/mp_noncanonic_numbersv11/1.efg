@@ -1,0 +1,10 @@
+EFG 2 R "Bookstore Promotion Game" { "Independent Bookstore" "National Bookstore Chain" }
+""
+
+p "" 2 1 "" { "Promote Fiction" "Promote Non-Fiction" } 0
+p "" 1 1 "" { "Promote Fiction" "Promote Non-Fiction" } 0
+t "" 1 "Same Genre Promotion" { 2, -2 }
+t "" 3 "Different Genre Promotion" { -3, 3 }
+p "" 1 1 "" { "Promote Fiction" "Promote Non-Fiction" } 0
+t "" 3 "Different Genre Promotion" { -3, 3 }
+t "" 2 "Same Genre Promotion" { 2, -2 }

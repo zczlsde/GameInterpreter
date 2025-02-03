@@ -1,0 +1,49 @@
+```python
+# Step-by-step thought process:
+# 1. The game involves two players, Alexis and Beverley, making decisions simultaneously.
+# 2. Since they make decisions simultaneously, this introduces imperfect information.
+# 3. To model this game with a sequential structure, assume one player moves first, say Alexis, and Beverley moves second.
+# 4. The starting node, g.root, is Alexis's decision node.
+# 5. Alexis has two actions: Bach and Stravinsky.
+# 6. Beverley's decision nodes are g.root.children[0] (Alexis chooses Bach) and g.root.children[1] (Alexis chooses Stravinsky).
+# 7. Beverley, moving simultaneously, does not know which action Alexis has taken.
+# 8. Therefore, Beverley's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky Game")
+
+# Step 1: Alexis makes the first move with two actions: Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Step 2: Beverley makes her move after Alexis, but she does not know Alexis's choice
+# Beverley's decision nodes are g.root.children[0] (Alexis chooses Bach) and g.root.children[1] (Alexis chooses Stravinsky)
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Step 3: Since Beverley moves simultaneously and independently, her decision nodes should be in the same information set
+# This models the imperfect information in the game
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the payoffs for each outcome
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, Beverley gets a lower payoff
+bach_bach_outcome = g.add_outcome([2, 1], label="Both choose Bach")
+# If both choose Stravinsky, Beverley (Stravinsky lover) gets a higher payoff, Alexis gets a lower payoff
+stravinsky_stravinsky_outcome = g.add_outcome([1, 2], label="Both choose Stravinsky")
+# If they choose different events, both get no payoffs
+different_outcome = g.add_outcome([0, 0], label="Different choices")
+
+# Step 5: Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], bach_bach_outcome)  # Both choose Bach
+g.set_outcome(g.root.children[0].children[1], different_outcome)  # Alexis chooses Bach, Beverley chooses Stravinsky
+g.set_outcome(g.root.children[1].children[0], different_outcome)  # Alexis chooses Stravinsky, Beverley chooses Bach
+g.set_outcome(g.root.children[1].children[1], stravinsky_stravinsky_outcome)  # Both choose Stravinsky
+
+# Save the EFG
+efg = g.write(format='native')
+```

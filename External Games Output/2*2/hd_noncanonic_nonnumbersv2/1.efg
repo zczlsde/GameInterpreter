@@ -1,0 +1,10 @@
+EFG 2 R "Business Expansion Strategy Negotiation" { "Partner 1" "Partner 2" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Balanced Expansion" { 1, 1 }
+t "" 3 "Partner 2 Prioritized" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Partner 1 Prioritized" { 2, 0 }
+t "" 4 "Lost Opportunities" { -1, -1 }

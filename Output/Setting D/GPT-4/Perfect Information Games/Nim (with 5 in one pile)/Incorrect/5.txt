@@ -1,0 +1,109 @@
+```python
+# Since Alice and Bob take turns and each has perfect information on the previous moves, there's no need for information sets based on imperfect information.
+# However, to represent the game accurately, we would typically model each decision point for both players.
+# This game does not involve hidden information or simultaneous moves, so each player knows the state of the game when making a decision.
+# Therefore, there are no set_infoset() calls necessary for this game description.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Five Stones Game")
+
+# Alice starts the game by taking either one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes one stone, Bob can take one or two stones
+bob_after_alice_takes_1 = g.append_move(alice_start.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes one stone after Alice takes one, Alice can take one or two stones again
+alice_after_bob_takes_1 = g.append_move(bob_after_alice_takes_1.children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes one stone now, Bob can take one or two stones
+bob_after_alice_takes_1_again = g.append_move(alice_after_bob_takes_1.children[0], "Bob", ["Take 1", "Take 2"])
+
+# Outcomes if Bob takes one or two stones after Alice takes one stone again
+g.set_outcome(bob_after_alice_takes_1_again.children[0], g.add_outcome([-1, 1], label="Bob wins"))
+g.set_outcome(bob_after_alice_takes_1_again.children[1], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Alice takes two stones after Bob takes one, Bob can only take one stone
+bob_after_alice_takes_2 = g.append_move(alice_after_bob_takes_1.children[1], "Bob", ["Take 1"])
+g.set_outcome(bob_after_alice_takes_2.children[0], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Bob takes two stones after Alice takes one, Alice can take one or two stones
+alice_after_bob_takes_2 = g.append_move(bob_after_alice_takes_1.children[1], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes one or two stones after Bob takes two
+g.set_outcome(alice_after_bob_takes_2.children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(alice_after_bob_takes_2.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Alice takes two stones initially, Bob can take one or two stones
+bob_after_alice_takes_2_initially = g.append_move(alice_start.children[1], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes one stone after Alice takes two initially, Alice can take one or two stones
+alice_after_bob_takes_1_initially = g.append_move(bob_after_alice_takes_2_initially.children[0], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes one or two stones after Bob takes one initially
+g.set_outcome(alice_after_bob_takes_1_initially.children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(alice_after_bob_takes_1_initially.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Bob takes two stones after Alice takes two initially, Alice can only take one stone
+alice_after_bob_takes_2_initially = g.append_move(bob_after_alice_takes_2_initially.children[1], "Alice", ["Take 1"])
+g.set_outcome(alice_after_bob_takes_2_initially.children[0], g.add_outcome([-1, 1], label="Bob wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Five Stones Game")
+
+# Alice starts the game by taking either one or two stones
+g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes one stone, Bob can take one or two stones
+g.append_move(g.root.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes one stone after Alice takes one, Alice can take one or two stones again
+g.append_move(g.root.children[0].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes one stone now, Bob can take one or two stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Take 1", "Take 2"])
+
+# Outcomes if Bob takes one or two stones after Alice takes one stone again
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Bob wins"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Alice takes two stones after Bob takes one, Bob can only take one stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Take 1"])
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Bob takes two stones after Alice takes one, Alice can take one or two stones
+g.append_move(g.root.children[0].children[1], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes one or two stones after Bob takes two
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Alice takes two stones initially, Bob can take one or two stones
+g.append_move(g.root.children[1], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes one stone after Alice takes two initially, Alice can take one or two stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes one or two stones after Bob takes one initially
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Bob takes two stones after Alice takes two initially, Alice can only take one stone
+g.append_move(g.root.children[1].children[1], "Alice", ["Take 1"])
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Bob wins"))
+
+# Save the EFG
+efg = g.write(format='native')

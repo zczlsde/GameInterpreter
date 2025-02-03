@@ -1,0 +1,21 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Entry Deterrence Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Fights" { x, y }  // x < y, Firm 2 earns more than Firm 1 if Firm 1 fights
+t "" 2 "Firm 1 Accommodates" { z, z }  // Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates
+t "" 3 "Firm 2 Stays Out" { w, 0 }  // w > z, Firm 1 earns more if Firm 2 does not enter
+```
+
+In this representation:
+- `x`, `y`, `z`, and `w` are placeholders for the actual payoffs, which should satisfy the conditions described in the game description. Specifically:
+  - `w` should be greater than `z` to reflect that Firm 1 earns more if Firm 2 does not enter.
+  - `z` is the payoff for both firms when Firm 1 accommodates, indicating they earn the same amount.
+  - `x` is less than `y`, reflecting that Firm 2 earns more than Firm 1 if Firm 1 decides to fight.
+- The game starts with Firm 2 deciding whether to Enter or Out. This is a decision node for Firm 2.
+- If Firm 2 enters, Firm 1 chooses how to compete: Fight or Accommodate. This is a decision node for Firm 1.
+- The game has three terminal nodes: one for each of Firm 1's strategies (Fight or Accommodate) if Firm 2 enters, and one for the scenario where Firm 2 stays out.
+
+Please note that the actual values for `x`, `y`, `z`, and `w` need to be determined based on the specific payoffs you want to assign, ensuring they satisfy the conditions given in the game description.

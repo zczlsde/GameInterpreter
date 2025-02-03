@@ -1,0 +1,10 @@
+EFG 2 R "Conference vs Seminar Decision Game" { "Tech Enthusiast" "Market Trends Enthusiast" }
+""
+
+p "" 1 1 "" { "Technology Conference" "Market Trends Seminar" } 0
+p "" 2 1 "" { "Technology Conference" "Market Trends Seminar" } 0
+t "" 1 "Both choose Technology Conference" { 2, 1 }
+t "" 3 "Different choices" { 0, 0 }
+p "" 2 1 "" { "Technology Conference" "Market Trends Seminar" } 0
+t "" 3 "Different choices" { 0, 0 }
+t "" 2 "Both choose Market Trends Seminar" { 1, 2 }

@@ -1,0 +1,57 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, a tech enthusiast and a marketing specialist.
+# Both players have two actions: attend the tech conference or attend the marketing summit.
+
+# Step 2: Determine the imperfect information structure.
+# Since the players make their decisions simultaneously, neither player knows the other's choice at the time of their decision.
+# This means that each player's decision nodes should be grouped in the same information set.
+
+# Step 3: Assume a sequential structure for modeling.
+# Assume the tech enthusiast moves first and the marketing specialist moves second.
+# The starting node, g.root, is the tech enthusiast's decision node.
+# The marketing specialist's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the tech enthusiast's actions.
+
+# Step 4: Group the marketing specialist's decision nodes in the same information set.
+# The marketing specialist cannot distinguish between the tech enthusiast attending the tech conference or the marketing summit.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Tech Enthusiast and Marketing Specialist.
+g = gbt.Game.new_tree(players=["Tech Enthusiast", "Marketing Specialist"],
+                      title="Conference Attendance Game")
+
+# Step 2: Assume a sequential structure for modeling.
+# The Tech Enthusiast moves first, choosing between attending the Tech Conference or the Marketing Summit.
+g.append_move(g.root, "Tech Enthusiast", ["Attend Tech Conference", "Attend Marketing Summit"])
+
+# Step 3: The Marketing Specialist moves second, choosing between attending the Tech Conference or the Marketing Summit.
+# The Marketing Specialist's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the Tech Enthusiast's actions.
+g.append_move(g.root.children[0], "Marketing Specialist", ["Attend Tech Conference", "Attend Marketing Summit"])
+g.append_move(g.root.children[1], "Marketing Specialist", ["Attend Tech Conference", "Attend Marketing Summit"])
+
+# Step 4: Group the Marketing Specialist's decision nodes in the same information set.
+# Since the players make their decisions simultaneously, neither player knows the other's choice at the time of their decision.
+# This means that each player's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes based on the players' choices.
+# If both attend the Tech Conference, the Tech Enthusiast gets 2 points, and the Marketing Specialist gets 1 point.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both Attend Tech Conference"))
+
+# If the Tech Enthusiast attends the Tech Conference and the Marketing Specialist attends the Marketing Summit, both get 0 points.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Different Conferences"))
+
+# If the Tech Enthusiast attends the Marketing Summit and the Marketing Specialist attends the Tech Conference, both get 0 points.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Different Conferences"))
+
+# If both attend the Marketing Summit, the Marketing Specialist gets 2 points, and the Tech Enthusiast gets 1 point.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both Attend Marketing Summit"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

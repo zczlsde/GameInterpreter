@@ -1,0 +1,19 @@
+Based on the game description provided, here is the EFG representation of the game involving Firm 1 and Firm 2, where Firm 2 decides whether to enter the market or not, and Firm 1 chooses how to respond if Firm 2 enters.
+
+```
+EFG 2 R "Market Entry Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Fights" { 1, 3 }
+t "" 2 "Firm 1 Accommodates" { 2, 2 }
+t "" 3 "Firm 2 Outs" { 3, 0 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with Firm 2 deciding whether to enter the market or stay out. This is represented by a player node (p) for Firm 2 with two actions: "Enter" and "Out".
+- If Firm 2 decides to enter, the decision moves to Firm 1, which can choose to "Fight" or "Accommodate". This is another player node (p) for Firm 1.
+- The outcomes are as follows:
+  - If Firm 1 fights, Firm 2 earns more than Firm 1. This is represented by the terminal node (t) with payoffs {1, 3}.
+  - If Firm 1 accommodates, both firms earn the same amount. This is represented by the terminal node (t) with payoffs {2, 2}.
+  - If Firm 2 decides to stay out, the game ends with Firm 1 earning more than in any other scenario, represented by the terminal node (t) with payoffs {3, 0}.

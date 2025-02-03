@@ -1,0 +1,10 @@
+EFG 2 R "Newspaper Front Page Decision Game" { "Local Newspaper" "National Newspaper" }
+""
+
+p "" 1 1 "" { "Local Event" "International Story" } 0
+p "" 2 1 "" { "Local Event" "International Story" } 0
+t "" 1 "Local Gains" { 1, -1 }
+t "" 3 "National Gains" { -1, 1 }
+p "" 2 1 "" { "Local Event" "International Story" } 0
+t "" 4 "National Gains Again" { -1, 1 }
+t "" 2 "Local Gains Again" { 1, -1 }

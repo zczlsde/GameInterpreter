@@ -1,0 +1,235 @@
+```python
+# Step 1: Create a new game tree with players Player1, Player2, and Player3
+g = gbt.Game.new_tree(players=["Player1", "Player2", "Player3"],
+                    title="Multi-stage game with imperfect information")
+
+# Step 2: Add moves for Player1 at the first decision node
+g.append_move(g.root, "Player1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player2 at the second decision node
+for node in g.root.children:
+    g.append_move(node, "Player2", ["D", "E"])
+
+# Step 4: Add moves for Player1 at the third decision node
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player1", ["F", "G"])
+
+# Step 5: Add moves for Player3 at the fourth decision node
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player3", ["Q", "W"])
+
+# Step 6: Group decision nodes for Player1 based on their actions at the first decision node
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Step 7: Group decision nodes for Player2 based on their actions at the second decision node
+for node in g.root.children:
+    g.set_infoset(node.children[0], node.children[1].infoset)
+
+# Step 8: Group decision nodes for Player1 based on their actions at the third decision node
+for node in g.root.children:
+    for child_node in node.children:
+        g.set_infoset(child_node.children[0], child_node.children[1].infoset)
+
+# Step 9: Group decision nodes for Player3 based on their actions at the fourth decision node
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.set_infoset(grandchild_node.children[0], grandchild_node.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game tree with players Player1, Player2, and Player3
+g = gbt.Game.new_tree(players=["Player1", "Player2", "Player3"],
+                    title="Multi-stage game with imperfect information")
+
+# Step 2: Add moves for Player1 at the first decision node
+g.append_move(g.root, "Player1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player2 at the second decision node
+g.append_move(g.root.children[0], "Player2", ["D", "E"])
+g.append_move(g.root.children[1], "Player2", ["D", "E"])
+g.append_move(g.root.children[2], "Player2", ["D", "E"])
+
+# Step 4: Add moves for Player1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[2], "Player1", ["F", "G"])
+
+# Step 5: Add moves for Player3 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[1], "Player3", ["Q", "W"])
+
+# Step 6: Group decision nodes for Player1 based on their actions at the first decision node
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Step 7: Group decision nodes for Player2 based on their actions at the second decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 8: Group decision nodes for Player1 based on their actions at the third decision node
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2].children[0], g.root.children[0].children[2].children[1].infoset)
+
+# Step 9: Group decision nodes for Player3 based on their actions at the fourth decision node
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1].children[0], g.root.children[0].children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0].children[0], g.root.children[0].children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1].children[0], g.root.children[0].children[1].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2].children[0].children[0], g.root.children[0].children[2].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2].children[1].children[0], g.root.children[0].children[2].children[1].children[1].infoset)
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Step 1: Create a new game tree with players Player1, Player2, and Player3
+g = gbt.Game.new_tree(players=["Player1", "Player2", "Player3"],
+                    title="Multi-stage game with imperfect information")
+
+# Step 2: Add moves for Player1 at the first decision node
+g.append_move(g.root, "Player1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player2 at the second decision node
+g.append_move(g.root.children[0], "Player2", ["D", "E"])
+g.append_move(g.root.children[1], "Player2", ["D", "E"])
+g.append_move(g.root.children[2], "Player2", ["D", "E"])
+
+# Step 4: Add moves for Player1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[2], "Player1", ["F", "G"])
+
+# Step 5: Add moves for Player3 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[1], "Player3", ["Q", "W"])
+
+# Step 6: Group decision nodes for Player1 based on their actions at the first decision node
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Step 7: Group decision nodes for Player2 based on their actions at the second decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 8: Group decision nodes for Player1 based on their actions at the third decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[2].infoset)
+
+# Step 9: Group decision nodes for Player3 based on their actions at the fourth decision node
+for i in range(2):
+    g.set_infoset(g.root.children[0].children[0].children[i], g.root.children[0].children[1].children[i].infoset)
+    g.set_infoset(g.root.children[0].children[1].children[i], g.root.children[0].children[2].children[i].infoset)
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Step 1: Create a new game tree with players Player1, Player2, and Player3
+g = gbt.Game.new_tree(players=["Player1", "Player2", "Player3"],
+                    title="Multi-stage game with imperfect information")
+
+# Step 2: Add moves for Player1 at the first decision node
+g.append_move(g.root, "Player1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player2 at the second decision node
+g.append_move(g.root.children[0], "Player2", ["D", "E"])
+g.append_move(g.root.children[1], "Player2", ["D", "E"])
+g.append_move(g.root.children[2], "Player2", ["D", "E"])
+
+# Step 4: Add moves for Player1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[2], "Player1", ["F", "G"])
+
+# Step 5: Add moves for Player3 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[1], "Player3", ["Q", "W"])
+
+# Step 6: Group decision nodes for Player1 based on their actions at the first decision node
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Step 7: Group decision nodes for Player2 based on their actions at the second decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 8: Group decision nodes for Player1 based on their actions at the third decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 9: Group decision nodes for Player3 based on their actions at the fourth decision node
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2].children[0], g.root.children[0].children[2].children[1].infoset)
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Step 1: Create a new game tree with players Player1, Player2, and Player3
+g = gbt.Game.new_tree(players=["Player1", "Player2", "Player3"],
+                    title="Multi-stage game with imperfect information")
+
+# Step 2: Add moves for Player1 at the first decision node
+g.append_move(g.root, "Player1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player2 at the second decision node
+g.append_move(g.root.children[0], "Player2", ["D", "E"])
+g.append_move(g.root.children[1], "Player2", ["D", "E"])
+g.append_move(g.root.children[2], "Player2", ["D", "E"])
+
+# Step 4: Add moves for Player1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player1", ["F", "G"])
+g.append_move(g.root.children[0].children[2], "Player1", ["F", "G"])
+
+# Step 5: Add moves for Player3 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[0], "Player3", ["Q", "W"])
+g.append_move(g.root.children[0].children[2].children[1], "Player3", ["Q", "W"])
+
+# Step 6: Group decision nodes for Player1 based on their actions at the first decision node
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Step 7: Group decision nodes for Player2 based on their actions at the second decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 8: Group decision nodes for Player1 based on their actions at the third decision node
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[2].infoset)
+
+# Step 9: Group decision nodes for Player3 based on their actions at the fourth decision node
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2].children[0], g.root.children[0].children[2].children[1].infoset)

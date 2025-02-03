@@ -1,0 +1,6 @@
+EFG 2 R "Entry Deterrence Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Accommodates" { x, x }  ; Assuming x is the payoff when Firm 1 accommodates and Firm 2 enters
+t "" 2 "Firm 1 Fights" { y, z }  ; Assuming y < z, y is Firm 1's payoff, z is Firm 2's payoff when Firm 1 fights
+t "" 3 "Firm 2 Stays Out" { w, 0 }  ; w > x, Firm 1's payoff when Firm 2 does not enter

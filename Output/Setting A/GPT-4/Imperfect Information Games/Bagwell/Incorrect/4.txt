@@ -1,0 +1,51 @@
+```python
+import pygambit as gbt
+
+# Define the game with two players: Player 1 (the leader) and Player 2 (the follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Assign values to each of the payoffs based on the ranking provided: E > A > F > W > B > D
+# Since specific values are not provided, we choose arbitrary values respecting the given ranking.
+E, A, F, W, B, D = 6, 5, 4, 3, 2, 1
+
+# Player 1 moves first, choosing between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's choices, there is a chance node representing the small probability of misinterpretation by Player 2
+# We use a chance node with actions ["S perceived", "C perceived"] for each of Player 1's actions
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["S perceived", "C perceived"])
+    # Set the probabilities for correct interpretation and misinterpretation
+    # Assuming a 1% chance of misinterpretation
+    g.set_chance_probs(node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Now, for each perception of Player 1's action by Player 2, Player 2 makes a choice between "S" and "C"
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 2", ["S", "C"])
+
+# Set the outcomes based on the actual choice of Player 1 and the choice of Player 2
+# The outcomes are based on Player 1's actual selection, not Player 2's interpretation
+# Player 1 chooses S
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="SS misperceived"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="SC misperceived"))
+
+# Player 1 chooses C
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="CS misperceived"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="CC misperceived"))
+
+# Since the game involves imperfect information due to the misinterpretation by Player 2,
+# we need to set the information set for Player 2's moves to reflect that they do not know
+# the actual choice of Player 1 but only their perception of it.
+# However, in this setup, each decision by Player 2 is already uniquely linked to their perception,
+# so additional information set assignments are not needed to reflect imperfect information.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs an extensive-form game with imperfect information, where Player 1's choice can be misinterpreted by Player 2 with a small probability. The game tree includes chance nodes to model the probability of misinterpretation. The outcomes are determined by Player 1's actual choices and Player 2's responses, with payoffs assigned based on the given ranking.

@@ -1,0 +1,10 @@
+EFG 2 R "Environmentally Friendly Habits Decision Game" { "Partner 1" "Partner 2" }
+""
+
+p "" 1 1 "" { "Adopt" "Not Adopt" } 0
+p "" 2 1 "" { "Adopt" "Not Adopt" } 0
+t "" 1 "Mutual Adoption" { 5, 5 }
+t "" 2 "Partner 1 Adopts" { 2, 8 }
+p "" 2 1 "" { "Adopt" "Not Adopt" } 0
+t "" 3 "Partner 2 Adopts" { 8, 2 }
+t "" 4 "No Adoption" { 3, 3 }

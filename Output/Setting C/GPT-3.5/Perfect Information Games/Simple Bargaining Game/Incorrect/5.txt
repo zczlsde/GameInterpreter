@@ -1,0 +1,149 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes the initial split, B can accept or reject
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Accept: 5000/5000", "Reject"])
+
+# If B accepts A's initial proposal, negotiation concludes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's proposal accepted"))
+
+# If B rejects A's initial proposal and proposes an equal split
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's proposal accepted"))
+
+# If B rejects A's initial proposal and rejects an equal split, A proposes a new split
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 5200/4800"])
+
+# B has no choice but to accept A's new proposal
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Set information sets for nodes where players have the same information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes the initial split, B can accept or reject
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Accept: 5000/5000", "Reject"])
+
+# If B accepts A's initial proposal, negotiation concludes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's proposal accepted"))
+
+# If B rejects A's initial proposal and proposes an equal split
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's proposal accepted"))
+
+# If B rejects A's initial proposal and rejects an equal split, A proposes a new split
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 5200/4800"])
+
+# B has no choice but to accept A's new proposal
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Set information sets for nodes where players have the same information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes the initial split, B can accept or reject
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Accept: 5000/5000", "Reject"])
+
+# If B accepts A's initial proposal, negotiation concludes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's proposal accepted"))
+
+# If B rejects A's initial proposal and proposes an equal split
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's proposal accepted"))
+
+# If B rejects A's initial proposal and rejects an equal split, A proposes a new split
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 5200/4800"])
+
+# B has no choice but to accept A's new proposal
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Set information sets for nodes where players have the same information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes the initial split, B can accept or reject
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Accept: 5000/5000", "Reject"])
+
+# If B accepts A's initial proposal, negotiation concludes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's proposal accepted"))
+
+# If B rejects A's initial proposal and proposes an equal split
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's proposal accepted"))
+
+# If B rejects A's initial proposal and rejects an equal split, A proposes a new split
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 5200/4800"])
+
+# B has no choice but to accept A's new proposal
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Set information sets for nodes where players have the same information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes the initial split, B can accept or reject
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Accept: 5000/5000", "Reject"])
+
+# If B accepts A's initial proposal, negotiation concludes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's proposal accepted"))
+
+# If B rejects A's initial proposal and proposes an equal split
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's proposal accepted"))
+
+# If B rejects A's initial proposal and rejects an equal split, A proposes a new split
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 5200/4800"])
+
+# B has no choice but to accept A's new proposal
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's new proposal"))
+
+# Set information sets for nodes where players have the same information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)

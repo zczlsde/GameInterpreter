@@ -1,0 +1,72 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the small electric vehicle company and the large traditional car manufacturer.
+# Both players decide simultaneously whether to invest in developing a new electric sedan or a new electric SUV.
+
+# Step 2: Recognize the simultaneous move nature of the game.
+# Since both players make their decisions simultaneously, this game involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the large manufacturer moves first and the small company moves second.
+# The starting node, g.root, is the large manufacturer's decision node.
+
+# Step 4: Define the decision nodes for the small company.
+# The large manufacturer has two actions: sedan and SUV.
+# The small company's decision nodes are g.root.children[0] (sedan) and g.root.children[1] (SUV).
+
+# Step 5: Group the small company's decision nodes in the same information set.
+# The small company, moving simultaneously, does not know which action the large manufacturer has taken.
+# Therefore, the small company's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: the small electric vehicle company and the large traditional car manufacturer.
+g = gbt.Game.new_tree(players=["Small Company", "Large Manufacturer"],
+                      title="Electric Vehicle Market Share Game")
+
+# Step 2: Model the game with a sequential structure to handle the simultaneous move nature.
+# Assume the large manufacturer moves first and the small company moves second.
+# The starting node, g.root, is the large manufacturer's decision node.
+
+# Step 3: Define the decision nodes for the large manufacturer.
+# The large manufacturer has two actions: sedan and SUV.
+g.append_move(g.root, "Large Manufacturer", ["Sedan", "SUV"])
+
+# Step 4: Define the decision nodes for the small company.
+# The small company also has two actions: sedan and SUV.
+# The small company's decision nodes are g.root.children[0] (sedan) and g.root.children[1] (SUV).
+g.append_move(g.root.children[0], "Small Company", ["Sedan", "SUV"])
+g.append_move(g.root.children[1], "Small Company", ["Sedan", "SUV"])
+
+# Step 5: Group the small company's decision nodes in the same information set.
+# The small company, moving simultaneously, does not know which action the large manufacturer has taken.
+# Therefore, the small company's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the players' actions.
+# If both companies decide on the same type of vehicle, the small company gains a 10% market share, and the large manufacturer loses 10%.
+# If their choices differ, the large manufacturer gains a 15% market share, and the small company loses 15%.
+
+# Both choose Sedan
+outcome_same_sedan = g.add_outcome([10, -10], label="Both choose Sedan")
+g.set_outcome(g.root.children[0].children[0], outcome_same_sedan)
+
+# Large chooses Sedan, Small chooses SUV
+outcome_diff_sedan_suv = g.add_outcome([-15, 15], label="Large Sedan, Small SUV")
+g.set_outcome(g.root.children[0].children[1], outcome_diff_sedan_suv)
+
+# Large chooses SUV, Small chooses Sedan
+outcome_diff_suv_sedan = g.add_outcome([-15, 15], label="Large SUV, Small Sedan")
+g.set_outcome(g.root.children[1].children[0], outcome_diff_suv_sedan)
+
+# Both choose SUV
+outcome_same_suv = g.add_outcome([10, -10], label="Both choose SUV")
+g.set_outcome(g.root.children[1].children[1], outcome_same_suv)
+
+# Save the EFG
+efg = g.write(format='native')
+```

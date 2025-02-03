@@ -1,0 +1,14 @@
+EFG 2 R "Rock-Paper-Scissors" { "Player 1" "Player 2" }
+""
+
+c "" 1 "" { "RR" 1/9 "RP" 1/9 "RS" 1/9 "PR" 1/9 "PP" 1/9 "PS" 1/9 "SR" 1/9 "SP" 1/9 "SS" 1/9 } 0
+t "" 1 "Tie - RR" { 0, 0 }
+t "" 2 "P1 loses - RP" { -1, 1 }
+t "" 3 "P1 wins - RS" { 1, -1 }
+t "" 4 "P1 wins - PR" { 1, -1 }
+t "" 5 "Tie - PP" { 0, 0 }
+t "" 6 "P1 loses - PS" { -1, 1 }
+t "" 7 "P1 loses - SR" { -1, 1 }
+t "" 8 "P1 wins - SP" { 1, -1 }
+t "" 9 "Tie - SS" { 0, 0 }
+

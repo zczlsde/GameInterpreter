@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Sibling 1 and Sibling 2, who make decisions simultaneously.
+
+# Step 2: Determine the decision nodes for each player.
+# Since the players move simultaneously, we can model the game as if one player moves first and the other moves second.
+# Let's assume Sibling 1 moves first and Sibling 2 moves second.
+
+# Step 3: Identify the decision nodes for Sibling 2.
+# Sibling 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Sibling 1's actions (Agree or Demand).
+
+# Step 4: Group Sibling 2's decision nodes in the same information set.
+# Sibling 2 cannot distinguish between Sibling 1's actions, so these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Sibling 1 and Sibling 2.
+g = gbt.Game.new_tree(players=["Sibling 1", "Sibling 2"],
+                      title="Inheritance Division Game")
+
+# Step 2: Model the simultaneous decision-making by assuming Sibling 1 moves first.
+# Sibling 1 has two actions: Agree or Demand.
+g.append_move(g.root, "Sibling 1", ["Agree", "Demand"])
+
+# Step 3: Sibling 2 also has two actions: Agree or Demand.
+# We append moves for Sibling 2 at both decision nodes of Sibling 1.
+g.append_move(g.root.children[0], "Sibling 2", ["Agree", "Demand"])
+g.append_move(g.root.children[1], "Sibling 2", ["Agree", "Demand"])
+
+# Step 4: Group Sibling 2's decision nodes in the same information set.
+# Sibling 2 cannot distinguish between Sibling 1's actions, so these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both agree, they each get 0 points.
+outcome_fair_split = g.add_outcome([0, 0], label="Fair Split")
+
+# If Sibling 1 demands and Sibling 2 agrees, Sibling 1 gets 3 points, Sibling 2 gets -3 points.
+outcome_sibling1_demands = g.add_outcome([3, -3], label="Sibling 1 Demands")
+
+# If Sibling 2 demands and Sibling 1 agrees, Sibling 2 gets 3 points, Sibling 1 gets -3 points.
+outcome_sibling2_demands = g.add_outcome([-3, 3], label="Sibling 2 Demands")
+
+# If both demand, they each get -5 points due to a legal battle.
+outcome_legal_battle = g.add_outcome([-5, -5], label="Legal Battle")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_fair_split)  # Both agree
+g.set_outcome(g.root.children[0].children[1], outcome_sibling2_demands)  # Sibling 2 demands
+g.set_outcome(g.root.children[1].children[0], outcome_sibling1_demands)  # Sibling 1 demands
+g.set_outcome(g.root.children[1].children[1], outcome_legal_battle)  # Both demand
+
+# Save the EFG
+efg = g.write(format='native')
+```

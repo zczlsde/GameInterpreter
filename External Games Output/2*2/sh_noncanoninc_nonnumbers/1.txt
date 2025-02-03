@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two chefs, Chef 1 and Chef 2, who can either Collaborate or Work Independently.
+
+# Step 2: Determine the nature of the game.
+# The game involves simultaneous moves, which means there is imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Chef 1 moves first and Chef 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Chef 1's decision node.
+# Chef 1 has two actions: Collaborate and Work Independently.
+# Chef 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Chef 1's actions.
+
+# Step 5: Group Chef 2's decision nodes in the same information set.
+# Since Chef 2 does not know Chef 1's action, Chef 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two chefs, Chef 1 and Chef 2, who can either Collaborate or Work Independently.
+
+# Step 2: Determine the nature of the game.
+# The game involves simultaneous moves, which means there is imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Chef 1 moves first and Chef 2 moves second.
+
+# Create a new game with two players: Chef 1 and Chef 2.
+g = gbt.Game.new_tree(players=["Chef 1", "Chef 2"], title="Cooking Show Competition")
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Chef 1's decision node.
+# Chef 1 has two actions: Collaborate and Work Independently.
+g.append_move(g.root, "Chef 1", ["Collaborate", "Work Independently"])
+
+# Chef 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Chef 1's actions.
+g.append_move(g.root.children[0], "Chef 2", ["Collaborate", "Work Independently"])
+g.append_move(g.root.children[1], "Chef 2", ["Collaborate", "Work Independently"])
+
+# Step 5: Group Chef 2's decision nodes in the same information set.
+# Since Chef 2 does not know Chef 1's action, Chef 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes and payoffs.
+# If both collaborate, they both achieve a high reward.
+high_reward = g.add_outcome([3, 3], label="Both Collaborate")
+
+# If one collaborates while the other works independently, the collaborator gains nothing and the independent worker earns a moderate reward.
+moderate_reward_chef1 = g.add_outcome([0, 2], label="Chef 1 Collaborates, Chef 2 Independent")
+moderate_reward_chef2 = g.add_outcome([2, 0], label="Chef 2 Collaborates, Chef 1 Independent")
+
+# If both work independently, they each receive a low reward.
+low_reward = g.add_outcome([1, 1], label="Both Work Independently")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], high_reward)  # Both Collaborate
+g.set_outcome(g.root.children[0].children[1], moderate_reward_chef1)  # Chef 1 Collaborates, Chef 2 Independent
+g.set_outcome(g.root.children[1].children[0], moderate_reward_chef2)  # Chef 2 Collaborates, Chef 1 Independent
+g.set_outcome(g.root.children[1].children[1], low_reward)  # Both Work Independently
+
+# Save the EFG
+efg = g.write(format='native')
+```

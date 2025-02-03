@@ -1,0 +1,44 @@
+```python
+# Since Alexis and Beverley make their decisions simultaneously, we model this as if one player moves first and the other second for representation.
+# However, the second player (in our sequential representation) does not know what the first player chose because the decisions are made simultaneously in reality.
+# Therefore, all decision nodes of the second player belong to the same information set as they cannot distinguish between the actions taken by the first player.
+
+# Assuming Alexis moves first in our representation and chooses between Bach and Stravinsky, we create two decision nodes for Beverley under each of Alexis's choices.
+# These nodes for Beverley are indistinguishable from her perspective, representing the simultaneous move aspect of the game.
+# We group Beverley's decision nodes into the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Alexis moves first in our representation and chooses between Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# For each of Alexis's choices, we create decision nodes for Beverley.
+# Beverley can choose between Bach and Stravinsky under each of Alexis's choices.
+# These nodes are added to the game tree.
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Since Alexis and Beverley make their decisions simultaneously, Beverley's decision nodes under each of Alexis's choices are indistinguishable.
+# We group Beverley's decision nodes into the same information set to represent this.
+# This is done to model the simultaneous move aspect of the game.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Define outcomes based on the game description
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+# If both choose Stravinsky, Beverley (Stravinsky lover) gets a higher payoff, and Alexis (Bach lover) gets a lower payoff.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+# If they choose different events, they both get no payoffs.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Disagreement"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Disagreement"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

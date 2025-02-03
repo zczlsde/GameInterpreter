@@ -1,0 +1,65 @@
+```python
+# Since Country B moves after Country A without knowing whether Country A chose to retreat or detonate,
+# Country B's decision nodes after Country A chooses to escalate and then Country B also chooses to escalate,
+# are in the same information set. This is because Country B cannot distinguish between Country A's actions
+# of retreat (R) or detonate (D) when making its own decision.
+
+# Assuming g.root is the starting node where Country A decides to escalate or ignore.
+# g.root.children[0] is the node where Country A chooses to escalate.
+# g.root.children[0].children[1] is the node where Country B chooses to escalate as well.
+# g.root.children[0].children[1].children[0] is the node where Country A chooses retreat (R) after both have escalated.
+# g.root.children[0].children[1].children[1] is the node where Country A chooses detonate (D) after both have escalated.
+
+# Therefore, the decision nodes for Country B, which are after Country A's decision to either retreat or detonate,
+# should be grouped in the same information set as Country B moves without knowing Country A's prior action.
+
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Nuclear Crisis Game")
+
+# Country A's first move: to escalate (E) or ignore (I) the provocation
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with a small positive payoff for both
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore Provocation"))
+
+# If Country A chooses to Escalate, Country B has a choice to Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, it ends with Country B losing face (small negative payoff) and Country A wins this small payoff
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Back Down"))
+
+# If both choose to Escalate, we move to the nuclear crisis phase
+# Country A decides to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# For each of Country A's choices, Country B has to decide without knowing Country A's move
+# Country B decides to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1].children[0], "Country B", ["Retreat", "Detonate"])
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["Retreat", "Detonate"])
+
+# Set the outcomes for all possible scenarios in the nuclear crisis phase
+# If one retreats and the other detonates
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([-10, 10], label="A Retreats, B Detonates"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([10, -10], label="A Detonates, B Retreats"))
+
+# If both retreat
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-2, -2], label="Both Retreat"))
+
+# If both detonate, leading to nuclear disaster
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+
+# Since Country B moves after Country A without knowing whether Country A chose to retreat or detonate,
+# Country B's decision nodes after Country A chooses to escalate and then Country B also chooses to escalate,
+# are in the same information set. This is because Country B cannot distinguish between Country A's actions
+# of retreat (R) or detonate (D) when making its own decision.
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

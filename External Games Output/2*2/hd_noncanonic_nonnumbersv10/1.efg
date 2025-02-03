@@ -1,0 +1,10 @@
+EFG 2 R "Vendor-Retailer Negotiation Game" { "Vendor" "Retailer" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold firm" } 0
+p "" 2 1 "" { "Compromise" "Hold firm" } 0
+t "" 1 "Fair Price" { 1, 1 }
+t "" 3 "Retailer Favorable" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold firm" } 0
+t "" 2 "Vendor Favorable" { 2, 0 }
+t "" 4 "No Deal" { -1, -1 }

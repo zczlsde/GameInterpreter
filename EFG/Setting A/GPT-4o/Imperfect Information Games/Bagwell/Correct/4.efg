@@ -1,0 +1,18 @@
+EFG 2 R "Misinterpretation Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Perceive S" 99/100 "Perceive C" 1/100 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 1 "SS" { 4, 1 }
+t "" 2 "SC" { 2, 0 }
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "SS" { 4, 1 }
+t "" 4 "SC" { 2, 0 }
+c "" 2 "" { "Perceive C" 99/100 "Perceive S" 1/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 5 "CS" { 5, 2 }
+t "" 6 "CC" { 3, 3 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 7 "CS" { 5, 2 }
+t "" 8 "CC" { 3, 3 }

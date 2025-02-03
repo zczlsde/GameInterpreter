@@ -1,0 +1,66 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Suspect 1 and Suspect 2, who can either "Confess" or "Remain Silent".
+
+# Step 2: Determine the structure of the game.
+# The game is simultaneous, meaning both players make their decisions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Suspect 1 moves first and Suspect 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Suspect 1's decision node.
+# Suspect 1 has two actions, "Confess" and "Remain Silent".
+# Suspect 2's decision nodes are g.root.children[0] (if Suspect 1 confesses) and g.root.children[1] (if Suspect 1 remains silent).
+
+# Step 5: Group Suspect 2's decision nodes in the same information set.
+# Since Suspect 2 does not know Suspect 1's action, Suspect 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Suspect 1 and Suspect 2.
+g = gbt.Game.new_tree(players=["Suspect 1", "Suspect 2"], title="Prisoner's Dilemma")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Suspect 1 moves first and Suspect 2 moves second.
+
+# Step 3: Suspect 1's decision node is the root of the game tree.
+# Suspect 1 has two actions: "Confess" and "Remain Silent".
+g.append_move(g.root, "Suspect 1", ["Confess", "Remain Silent"])
+
+# Step 4: Suspect 2's decision nodes are based on Suspect 1's actions.
+# If Suspect 1 confesses, Suspect 2's decision node is g.root.children[0].
+# If Suspect 1 remains silent, Suspect 2's decision node is g.root.children[1].
+g.append_move(g.root.children[0], "Suspect 2", ["Confess", "Remain Silent"])
+g.append_move(g.root.children[1], "Suspect 2", ["Confess", "Remain Silent"])
+
+# Step 5: Group Suspect 2's decision nodes in the same information set.
+# Since Suspect 2 does not know Suspect 1's action, Suspect 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# If both suspects confess, they each receive a moderate sentence of 5 years.
+both_confess = g.add_outcome([-5, -5], label="Both Confess")
+
+# If Suspect 1 confesses and Suspect 2 remains silent, Suspect 1 goes free and Suspect 2 receives a heavy sentence of 10 years.
+confess_silent = g.add_outcome([0, -10], label="Confess/Silent")
+
+# If Suspect 1 remains silent and Suspect 2 confesses, Suspect 1 receives a heavy sentence of 10 years and Suspect 2 goes free.
+silent_confess = g.add_outcome([-10, 0], label="Silent/Confess")
+
+# If both suspects remain silent, they each receive a minor sentence of 1 year.
+both_silent = g.add_outcome([-1, -1], label="Both Silent")
+
+# Step 7: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], both_confess)
+g.set_outcome(g.root.children[0].children[1], confess_silent)
+g.set_outcome(g.root.children[1].children[0], silent_confess)
+g.set_outcome(g.root.children[1].children[1], both_silent)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,11 @@
+EFG 2 R "Rock-Paper-Scissors Game" { "Player 1" "Player 2" }
+c "" 1 "" { "R-R" 1/9 "R-P" 1/9 "R-S" 1/9 "P-R" 1/9 "P-P" 1/9 "P-S" 1/9 "S-R" 1/9 "S-P" 1/9 "S-S" 1/9 } 0
+t "" 1 "R-R Draw" { 0, 0 }
+t "" 2 "R-P P2 Wins" { -1, 1 }
+t "" 3 "R-S P1 Wins" { 1, -1 }
+t "" 4 "P-R P1 Wins" { 1, -1 }
+t "" 5 "P-P Draw" { 0, 0 }
+t "" 6 "P-S P2 Wins" { -1, 1 }
+t "" 7 "S-R P2 Wins" { -1, 1 }
+t "" 8 "S-P P1 Wins" { 1, -1 }
+t "" 9 "S-S Draw" { 0, 0 }

@@ -1,0 +1,71 @@
+```python
+# Since Alice and Bob take turns and their actions depend on the previous actions, 
+# we need to identify the information sets where a player cannot distinguish between the states due to the other player's hidden action.
+
+# However, in this game, all moves are sequential and visible to both players. 
+# There is no simultaneous move or hidden information after the game starts. 
+# Each player knows exactly how many stones are left and can see the other player's move. 
+# Therefore, there are no information sets grouping different nodes for the same player 
+# because at each decision point, the player knows the exact state of the game.
+
+# In conclusion, this game does not require the use of set_infoset() to group nodes into information sets 
+# because there is no imperfect information within the game's structure as described.
+```
+
+Given the game description, we can construct the extensive-form game using the PyGambit library. The game is sequential, with Alice and Bob taking turns removing stones from a pile initially containing five stones. The player who is forced to take the last stone loses. Here's how we can model this game:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Five Stones Game")
+
+# Initial move by Alice, can take 1 or 2 stones
+g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Take 1", "Take 2"])
+
+# Outcomes if Bob takes 1 or 2 stones after Alice has taken 1 stone twice
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Bob wins"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Alice takes 2 stones, Bob can only take 1 stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Take 1"])
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Bob takes 2 stones initially, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[1], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes 1 or 2 stones after Bob has taken 2 stones
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Alice takes 2 stones initially, Bob can take 1 or 2 stones
+g.append_move(g.root.children[1], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 or 2 stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Take 1", "Take 2"])
+
+# Outcomes if Alice takes 1 or 2 stones after Bob has taken 1 stone
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Bob takes 2 stones, Alice can only take 1 stone
+g.append_move(g.root.children[1].children[1], "Alice", ["Take 1"])
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Bob wins"))
+
+# Since all moves are sequential and visible, there's no need for information sets for imperfect information.
+# The game is fully observable, and each player knows the state of the game at their turn.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree for the described game, including all possible moves and outcomes based on the number of stones taken by Alice and Bob in each turn. The game is sequential without any hidden information or simultaneous moves, so there's no need to group nodes into information sets for handling imperfect information.

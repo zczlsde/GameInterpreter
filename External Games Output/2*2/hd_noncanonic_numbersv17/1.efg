@@ -1,0 +1,10 @@
+EFG 2 R "CO2 Emission Reduction Negotiation" { "Country A" "Country B" }
+""
+
+p "" 1 1 "" { "High Emissions" "Cuts" } 0
+p "" 2 1 "" { "High Emissions" "Cuts" } 0
+t "" 4 "Both High Emissions" { -10, -10 }
+t "" 2 "A High, B Cuts" { 4, -4 }
+p "" 2 1 "" { "High Emissions" "Cuts" } 0
+t "" 3 "A Cuts, B High" { -4, 4 }
+t "" 1 "Both Cuts" { 0, 0 }

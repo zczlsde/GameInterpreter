@@ -1,0 +1,47 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Entry Deterrence Game")
+
+# Firm 2, the potential competitor, moves first and decides whether to Enter or Stay Out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 chooses to Enter, Firm 1 must decide whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs for each outcome
+# If Firm 2 stays out, Firm 1 earns more, and Firm 2 earns nothing
+stay_out_outcome = g.add_outcome([2, 0], label="Stay Out")
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+accommodate_outcome = g.add_outcome([1, 1], label="Accommodate")
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+fight_outcome = g.add_outcome([0, 2], label="Fight")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], stay_out_outcome)  # Firm 2 stays out
+g.set_outcome(g.root.children[0].children[0], fight_outcome)  # Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], accommodate_outcome)  # Firm 1 accommodates
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+
+1. **Game Setup**: We start by creating a new game tree with two players, "Firm 1" and "Firm 2". The game is titled "Entry Deterrence Game".
+
+2. **Firm 2's Decision**: Firm 2, the potential competitor, makes the first move. It decides whether to "Enter" the market or "Stay Out". This is represented by appending a move to the root node for Firm 2.
+
+3. **Firm 1's Decision**: If Firm 2 chooses to "Enter", Firm 1 must decide whether to "Fight" or "Accommodate". This decision is appended to the node where Firm 2 has chosen to enter.
+
+4. **Payoffs**: We define the payoffs for each possible outcome:
+   - If Firm 2 stays out, Firm 1 earns more (payoff of 2), and Firm 2 earns nothing (payoff of 0).
+   - If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount (payoff of 1 each).
+   - If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1 (payoff of 2 for Firm 2 and 0 for Firm 1).
+
+5. **Setting Outcomes**: We set the outcomes for each terminal node based on the decisions made by the firms.
+
+6. **Save the EFG**: Finally, we save the extensive form game (EFG) in the native format.

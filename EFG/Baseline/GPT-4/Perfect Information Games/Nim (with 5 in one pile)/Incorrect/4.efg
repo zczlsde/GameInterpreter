@@ -1,0 +1,27 @@
+EFG 2 R "Avoid the last stone game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take 1" "Take 2" } 0
+    p "" 2 2 "" { "Take 1" "Take 2" } 0
+        p "" 1 3 "" { "Take 1" "Take 2" } 0
+            p "" 2 4 "" { "Take 1" "Take 2" } 0
+                p "" 1 5 "" { "Take 1" } 0
+                    t "" 1 "Alice loss" { -1, 1 }
+                p "" 2 6 "" { "Take 2" } 0
+                    t "" 2 "Bob loss" { 1, -1 }
+            p "" 1 7 "" { "Take 2" } 0
+                p "" 2 8 "" { "Take 1" } 0
+                    t "" 3 "Bob loss" { 1, -1 }
+        p "" 2 9 "" { "Take 2" } 0
+            p "" 1 10 "" { "Take 1" "Take 2" } 0
+                p "" 2 11 "" { "Take 1" } 0
+                    t "" 4 "Bob loss" { 1, -1 }
+                p "" 1 12 "" { "Take 2" } 0
+                    t "" 5 "Alice loss" { -1, 1 }
+    p "" 2 13 "" { "Take 2" } 0
+        p "" 1 14 "" { "Take 1" "Take 2" } 0
+            p "" 2 15 "" { "Take 1" } 0
+                t "" 6 "Bob loss" { 1, -1 }
+            p "" 1 16 "" { "Take 2" } 0
+                t "" 7 "Alice loss" { -1, 1 }
+        p "" 2 17 "" { "Take 2" } 0
+            p "" 1 18 "" { "Take 1" } 0
+                t "" 8 "Alice loss" { -1, 1 }

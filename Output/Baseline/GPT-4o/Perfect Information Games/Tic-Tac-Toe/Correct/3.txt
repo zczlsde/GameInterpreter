@@ -1,0 +1,31 @@
+Certainly! Below is the EFG representation of the described Tic-Tac-Toe game scenario:
+
+```
+EFG 2 R "Tic-Tac-Toe Game" { "Player X" "Player O" }
+p "" 1 1 "" { "(0,0)" "(0,2)" "(1,0)" } 0
+p "" 2 1 "" { "(0,2)" "(1,0)" } 0
+t "" 1 "O wins" { -1, 1 }
+p "" 1 2 "" { "(0,2)" } 0
+t "" 2 "X wins" { 1, -1 }
+t "" 3 "X wins" { 1, -1 }
+p "" 2 2 "" { "(0,0)" "(0,2)" } 0
+p "" 1 3 "" { "(0,2)" } 0
+t "" 4 "X wins" { 1, -1 }
+t "" 5 "O wins" { -1, 1 }
+```
+
+### Explanation:
+
+1. **Prologue:**
+   - The game is titled "Tic-Tac-Toe Game".
+   - There are two players: "Player X" and "Player O".
+
+2. **Body:**
+   - The first node is a player node for "Player X" with three possible actions: placing the mark on (0,0), (0,2), or (1,0).
+   - If "Player X" places the mark on (0,0), "Player O" has two possible actions: placing the mark on (0,2) or (1,0).
+     - If "Player O" places the mark on (0,2), "Player O" wins.
+     - If "Player O" places the mark on (1,0), "Player X" can place the mark on (0,2) and wins.
+   - If "Player X" places the mark on (0,2), "Player X" wins immediately.
+   - If "Player X" places the mark on (1,0), "Player O" has two possible actions: placing the mark on (0,0) or (0,2).
+     - If "Player O" places the mark on (0,0), "Player X" can place the mark on (0,2) and wins.
+     - If "Player O" places the mark on (0,2), "Player O" wins.

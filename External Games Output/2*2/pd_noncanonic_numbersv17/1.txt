@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both making decisions simultaneously.
+# Each player has two actions: Collaborate or Hoard.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: The starting node, g.root, is the first player's decision node.
+# The first player has two actions, Collaborate and Hoard.
+
+# Step 4: The second player's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to the first player's actions Collaborate and Hoard.
+
+# Step 5: The second player, moving simultaneously, does not know which action the first player has taken.
+# Therefore, the second player's decision nodes should be grouped in the same information set.
+
+# Set the information set for the second player's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Farmer 1 and Farmer 2.
+g = gbt.Game.new_tree(players=["Farmer 1", "Farmer 2"],
+                      title="Resource-sharing game during drought")
+
+# Step 2: Assume Farmer 1 moves first. Farmer 1 has two actions: Collaborate or Hoard.
+g.append_move(g.root, "Farmer 1", ["Collaborate", "Hoard"])
+
+# Step 3: Farmer 2 moves second. Farmer 2 also has two actions: Collaborate or Hoard.
+# Append moves for Farmer 2 at both decision nodes resulting from Farmer 1's actions.
+g.append_move(g.root.children[0], "Farmer 2", ["Collaborate", "Hoard"])
+g.append_move(g.root.children[1], "Farmer 2", ["Collaborate", "Hoard"])
+
+# Step 4: Since the players move simultaneously, Farmer 2 does not know Farmer 1's action.
+# Group Farmer 2's decision nodes in the same information set to reflect imperfect information.
+# Use the IDENTICAL CODE provided to set the information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# Both collaborate: Each receives a payoff of 5.
+outcome_both_collaborate = g.add_outcome([5, 5], label="Both Collaborate")
+
+# Farmer 1 collaborates, Farmer 2 hoards: Farmer 1 gets 2, Farmer 2 gets 8.
+outcome_f1_collaborate_f2_hoard = g.add_outcome([2, 8], label="F1 Collaborates, F2 Hoards")
+
+# Farmer 1 hoards, Farmer 2 collaborates: Farmer 1 gets 8, Farmer 2 gets 2.
+outcome_f1_hoard_f2_collaborate = g.add_outcome([8, 2], label="F1 Hoards, F2 Collaborates")
+
+# Both hoard: Each receives a payoff of 3.
+outcome_both_hoard = g.add_outcome([3, 3], label="Both Hoard")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_both_collaborate)
+g.set_outcome(g.root.children[0].children[1], outcome_f1_collaborate_f2_hoard)
+g.set_outcome(g.root.children[1].children[0], outcome_f1_hoard_f2_collaborate)
+g.set_outcome(g.root.children[1].children[1], outcome_both_hoard)
+
+# Save the EFG
+efg = g.write(format='native')
+```

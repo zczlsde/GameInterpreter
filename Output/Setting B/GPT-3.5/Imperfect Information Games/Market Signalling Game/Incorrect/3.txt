@@ -1,0 +1,51 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer competition game with imperfect information")
+
+# Add a chance node to represent the strength of the New Manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add a chance node to represent the signal sent by the New Manufacturer
+g.append_move(g.root.children[0], g.players.chance, ["Strong", "Weak"])
+g.append_move(g.root.children[1], g.players.chance, ["Strong", "Weak"])
+
+# Add decision nodes for the Current Manufacturer based on the signal received
+# If the signal indicates Strong
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Add decision nodes for the Current Manufacturer based on the signal received
+# If the signal indicates Weak
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for nodes with identical signals
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Define outcomes for each scenario based on the strength, signal, and decision made
+strong_strong_fight = g.add_outcome([1, 0], label="Strong-Strong-Fight")
+strong_strong_adapt = g.add_outcome([3, 1], label="Strong-Strong-Adapt")
+strong_weak_fight = g.add_outcome([0, 0], label="Strong-Weak-Fight")
+strong_weak_adapt = g.add_outcome([2, 1], label="Strong-Weak-Adapt")
+weak_strong_fight = g.add_outcome([0, 2], label="Weak-Strong-Fight")
+weak_strong_adapt = g.add_outcome([2, 1], label="Weak-Strong-Adapt")
+weak_weak_fight = g.add_outcome([1, 2], label="Weak-Weak-Fight")
+weak_weak_adapt = g.add_outcome([3, 1], label="Weak-Weak-Adapt")
+
+# Set outcomes for each decision node based on the strength and signal
+g.set_outcome(g.root.children[0].children[0].children[0], strong_strong_fight)
+g.set_outcome(g.root.children[0].children[0].children[1], strong_strong_adapt)
+g.set_outcome(g.root.children[1].children[0].children[0], strong_weak_fight)
+g.set_outcome(g.root.children[1].children[0].children[1], strong_weak_adapt)
+g.set_outcome(g.root.children[0].children[1].children[0], weak_strong_fight)
+g.set_outcome(g.root.children[0].children[1].children[1], weak_strong_adapt)
+g.set_outcome(g.root.children[1].children[1].children[0], weak_weak_fight)
+g.set_outcome(g.root.children[1].children[1].children[1], weak_weak_adapt)
+
+# Save the EFG
+efg = g.write(format='native')
+```

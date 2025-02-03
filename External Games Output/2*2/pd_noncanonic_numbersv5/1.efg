@@ -1,0 +1,10 @@
+EFG 2 R "Political Campaign Mudslinging Game" { "Candidate 1" "Candidate 2" }
+""
+
+p "" 1 1 "" { "Mudsling" "Clean" } 0
+p "" 2 1 "" { "Mudsling" "Clean" } 0
+t "" 1 "Both Mudsling" { 3, 3 }
+t "" 2 "C1 Mudsling, C2 Clean" { 8, 2 }
+p "" 2 1 "" { "Mudsling" "Clean" } 0
+t "" 3 "C1 Clean, C2 Mudsling" { 2, 8 }
+t "" 4 "Both Clean" { 5, 5 }

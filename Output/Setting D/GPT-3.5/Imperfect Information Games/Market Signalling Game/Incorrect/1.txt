@@ -1,0 +1,208 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node for the new manufacturer's strength and signal
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Add decision nodes for the current manufacturer based on the signal
+for node in g.root.children:
+    g.append_move(node, "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for decision nodes of the current manufacturer
+# Group decision nodes based on the new manufacturer's strength and signal
+# Strong signal nodes are grouped together, as well as weak signal nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+```
+
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node for the new manufacturer's strength and signal
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add decision nodes for the current manufacturer based on the signal
+g.append_move(g.root.children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for decision nodes of the current manufacturer
+# Group decision nodes based on the new manufacturer's strength and signal
+# Strong signal nodes are grouped together, as well as weak signal nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Set the outcomes for each scenario
+# Define outcomes for each combination of actions
+strong_strong_fight = g.add_outcome([1, 0], label="Strong-Strong-Fight")
+strong_strong_adapt = g.add_outcome([3, 1], label="Strong-Strong-Adapt")
+strong_weak_fight = g.add_outcome([0, 0], label="Strong-Weak-Fight")
+strong_weak_adapt = g.add_outcome([2, 1], label="Strong-Weak-Adapt")
+weak_strong_fight = g.add_outcome([0, 2], label="Weak-Strong-Fight")
+weak_strong_adapt = g.add_outcome([2, 1], label="Weak-Strong-Adapt")
+weak_weak_fight = g.add_outcome([1, 2], label="Weak-Weak-Fight")
+weak_weak_adapt = g.add_outcome([3, 1], label="Weak-Weak-Adapt")
+
+# Set outcomes for each decision node
+g.set_outcome(g.root.children[0].children[0], strong_strong_fight)
+g.set_outcome(g.root.children[0].children[1], strong_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], strong_weak_fight)
+g.set_outcome(g.root.children[1].children[1], strong_weak_adapt)
+g.set_outcome(g.root.children[0].children[0], weak_strong_fight)
+g.set_outcome(g.root.children[0].children[1], weak_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], weak_weak_fight)
+g.set_outcome(g.root.children[1].children[1], weak_weak_adapt)
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node for the new manufacturer's strength and signal
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add decision nodes for the current manufacturer based on the signal
+g.append_move(g.root.children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for decision nodes of the current manufacturer
+# Group decision nodes based on the new manufacturer's strength and signal
+# Strong signal nodes are grouped together, as well as weak signal nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Set the outcomes for each scenario
+# Define outcomes for each combination of actions
+strong_strong_fight = g.add_outcome([1, 0], label="Strong-Strong-Fight")
+strong_strong_adapt = g.add_outcome([3, 1], label="Strong-Strong-Adapt")
+strong_weak_fight = g.add_outcome([0, 0], label="Strong-Weak-Fight")
+strong_weak_adapt = g.add_outcome([2, 1], label="Strong-Weak-Adapt")
+weak_strong_fight = g.add_outcome([0, 2], label="Weak-Strong-Fight")
+weak_strong_adapt = g.add_outcome([2, 1], label="Weak-Strong-Adapt")
+weak_weak_fight = g.add_outcome([1, 2], label="Weak-Weak-Fight")
+weak_weak_adapt = g.add_outcome([3, 1], label="Weak-Weak-Adapt")
+
+# Set outcomes for each decision node
+g.set_outcome(g.root.children[0].children[0], strong_strong_fight)
+g.set_outcome(g.root.children[0].children[1], strong_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], strong_weak_fight)
+g.set_outcome(g.root.children[1].children[1], strong_weak_adapt)
+g.set_outcome(g.root.children[0].children[0], weak_strong_fight)
+g.set_outcome(g.root.children[0].children[1], weak_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], weak_weak_fight)
+g.set_outcome(g.root.children[1].children[1], weak_weak_adapt)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node for the new manufacturer's strength and signal
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add decision nodes for the current manufacturer based on the signal
+g.append_move(g.root.children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for decision nodes of the current manufacturer
+# Group decision nodes based on the new manufacturer's strength and signal
+# Strong signal nodes are grouped together, as well as weak signal nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Set the outcomes for each scenario
+# Define outcomes for each combination of actions
+strong_strong_fight = g.add_outcome([1, 0], label="Strong-Strong-Fight")
+strong_strong_adapt = g.add_outcome([3, 1], label="Strong-Strong-Adapt")
+strong_weak_fight = g.add_outcome([0, 0], label="Strong-Weak-Fight")
+strong_weak_adapt = g.add_outcome([2, 1], label="Strong-Weak-Adapt")
+weak_strong_fight = g.add_outcome([0, 2], label="Weak-Strong-Fight")
+weak_strong_adapt = g.add_outcome([2, 1], label="Weak-Strong-Adapt")
+weak_weak_fight = g.add_outcome([1, 2], label="Weak-Weak-Fight")
+weak_weak_adapt = g.add_outcome([3, 1], label="Weak-Weak-Adapt")
+
+# Set outcomes for each decision node
+g.set_outcome(g.root.children[0].children[0], strong_strong_fight)
+g.set_outcome(g.root.children[0].children[1], strong_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], strong_weak_fight)
+g.set_outcome(g.root.children[1].children[1], strong_weak_adapt)
+g.set_outcome(g.root.children[0].children[0], weak_strong_fight)
+g.set_outcome(g.root.children[0].children[1], weak_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], weak_weak_fight)
+g.set_outcome(g.root.children[1].children[1], weak_weak_adapt)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node for the new manufacturer's strength and signal
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add decision nodes for the current manufacturer based on the signal
+g.append_move(g.root.children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for decision nodes of the current manufacturer
+# Group decision nodes based on the new manufacturer's strength and signal
+# Strong signal nodes are grouped together, as well as weak signal nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Set the outcomes for each scenario
+# Define outcomes for each combination of actions
+strong_strong_fight = g.add_outcome([1, 0], label="Strong-Strong-Fight")
+strong_strong_adapt = g.add_outcome([3, 1], label="Strong-Strong-Adapt")
+strong_weak_fight = g.add_outcome([0, 0], label="Strong-Weak-Fight")
+strong_weak_adapt = g.add_outcome([2, 1], label="Strong-Weak-Adapt")
+weak_strong_fight = g.add_outcome([0, 2], label="Weak-Strong-Fight")
+weak_strong_adapt = g.add_outcome([2, 1], label="Weak-Strong-Adapt")
+weak_weak_fight = g.add_outcome([1, 2], label="Weak-Weak-Fight")
+weak_weak_adapt = g.add_outcome([3, 1], label="Weak-Weak-Adapt")
+
+# Set outcomes for each decision node
+g.set_outcome(g.root.children[0].children[0], strong_strong_fight)
+g.set_outcome(g.root.children[0].children[1], strong_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], strong_weak_fight)
+g.set_outcome(g.root.children[1].children[1], strong_weak_adapt)
+g.set_outcome(g.root.children[0].children[0], weak_strong_fight)
+g.set_outcome(g.root.children[0].children[1], weak_strong_adapt)
+g.set_outcome(g.root.children[1].children[0], weak_weak_fight)
+g.set_outcome(g.root.children[1].children[1], weak_weak_adapt)

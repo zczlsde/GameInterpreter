@@ -1,0 +1,75 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the first move in the game and it's made by player A.
+# Since there's only one action (propose the plan), we don't need to create multiple branches.
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+# This decision creates two branches in the game tree: Accept or Reject
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial Proposal"))
+
+# If B rejects, B proposes an equal split (5000 each)
+# Since B's proposal is the only action, we don't need to create multiple branches here.
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept or reject B's counterproposal
+# This decision creates two branches in the game tree: Accept or Reject
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's counterproposal, the game ends with the equal split adjusted for negotiation cost.
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Counterproposal"))
+
+# If A rejects, A proposes a new plan (5200 for A, 4800 for B) which B has to accept
+# Since B has no choice but to accept, we directly set the outcome without creating a new decision node.
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([4693, 4332], label="Final Proposal Accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B. The game starts with player A proposing a distribution plan. Player B then decides whether to accept or reject this plan. If B rejects, B proposes an equal split, and then A has the option to accept or reject. If A rejects B's counterproposal, A proposes a new plan which B must accept. The final payoffs are set according to the outcomes of these decisions.```python
+import pygambit as gbt
+
+# Create a new game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the only action at this stage, so we move directly to B's decision
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial"))
+
+# If B rejects, B proposes an equal split (5000 each)
+# Since the description implies a sequential move without B's rejection being a simultaneous decision,
+# we proceed to A's decision on B's proposal
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts, the negotiation ends with a slightly different distribution due to negotiation costs
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Equal Split"))
+
+# If A rejects, A proposes a new plan (5200 for A, 4800 for B), which B must accept
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# B has no choice but to accept A's final proposal, ending the game with specific payoffs
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="Final Agreement"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B. The game is sequential, with decisions made one after another, reflecting the negotiation steps and outcomes based on the players' choices. Each decision point (node) leads to different outcomes, simulating the negotiation dynamics and the final payoffs for both players.

@@ -1,0 +1,60 @@
+```python
+# Since Player 2 cannot distinguish between actions B and C taken by Player 1, 
+# we need to group the decision nodes following B and C in the same information set for Player 2.
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Note: There's no need to set information sets for Player 1's decisions in the third stage 
+# because the game's structure ensures Player 1 is always aware of the game state at their decision points.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Three-stage game with imperfect information")
+
+# First stage: Player 1's decision among actions A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2's decision after each of Player 1's actions
+# After action A
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# After action B
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+# After action C
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Since Player 2 cannot distinguish between actions B and C taken by Player 1, 
+# we need to group the decision nodes following B and C in the same information set for Player 2.
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Third stage: Player 1's decision after Player 2 chooses D or E
+# After Player 2 chooses D or E following Player 1's action A, B, or C
+for i in range(3):  # Loop through the children of A, B, and C
+    for j in range(2):  # Loop through the children corresponding to D and E
+        g.append_move(g.root.children[i].children[j], "Player 1", ["G", "H"])
+
+# Setting outcomes
+# For F ending the game after A, B, or C
+for i in range(3):
+    g.set_outcome(g.root.children[i].children[2], g.add_outcome([0, 0], label="End after F"))
+
+# For H ending the game with payoffs after D or E
+for i in range(3):
+    for j in range(2):
+        g.set_outcome(g.root.children[i].children[j].children[1], g.add_outcome([2, -1], label="End after H"))
+
+# For G leading to Player 2's decision between Q and W
+for i in range(3):
+    for j in range(2):
+        g.append_move(g.root.children[i].children[j].children[0], "Player 2", ["Q", "W"])
+
+# Setting outcomes for Q and W
+for i in range(3):
+    for j in range(2):
+        g.set_outcome(g.root.children[i].children[j].children[0].children[0], g.add_outcome([3, 3], label="Both get 3 after Q"))
+        g.set_outcome(g.root.children[i].children[j].children[0].children[1], g.add_outcome([0, 0], label="Both get 0 after W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

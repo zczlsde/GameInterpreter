@@ -1,0 +1,74 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the first move in the game and it's made by player A.
+# Since there's only one action (propose the plan), we don't need to create multiple branches.
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+# This decision creates two branches in the game tree: Accept or Reject.
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial"))
+
+# If B rejects, B proposes an equal split (5000 each).
+# Since the proposal is automatic and there's no decision for B, we move directly to A's decision.
+g.append_move(g.root.children[0].children[1], "A", ["Accept Equal Split"])
+
+# Step 3: A decides whether to accept B's equal split proposal
+# This decision creates two branches: Accept or Reject.
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts the equal split, the game ends with 4750 for each.
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Equal Split"))
+
+# If A rejects, A proposes a new plan (5200 for A, 4800 for B), which B must accept.
+# Since B has no choice but to accept, we directly set the outcome without creating a new decision node.
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([4693, 4332], label="A Proposes Final Plan"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B. The game starts with A proposing a distribution plan. Depending on B's response, the game can follow different paths, each leading to a different outcome. The final payoffs are set according to the negotiation results at each decision node.```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the only action at this stage, so we move directly to B's decision
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial"))
+
+# If B rejects, we move to B's proposal of an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept or reject B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the negotiation ends with a slightly adjusted distribution
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Equal Split"))
+
+# If A rejects, A proposes a new plan where A gets 5200 and B gets 4800
+# B has no right to reject this final proposal
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# The game ends with the final adjusted distribution after A's last proposal
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="Final Proposal Accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B over the division of 10,000 pounds. The game proceeds through a series of proposals and decisions, with the final amounts received by each player depending on the sequence of accept/reject decisions. The game is structured to reflect the sequential nature of the negotiation, with each player's decision leading to different outcomes.

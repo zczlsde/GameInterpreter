@@ -1,0 +1,67 @@
+```python
+# Since the existing manufacturer observes the signal (strong or weak) but not the actual strength of the new manufacturer,
+# we need to group the decision nodes based on the signals received, regardless of the actual strength of the new manufacturer.
+
+# For a strong signal, the existing manufacturer cannot distinguish if it comes from a truly strong new manufacturer or a weak one pretending to be strong.
+# Therefore, the decision nodes following a strong signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Similarly, for a weak signal, the existing manufacturer cannot distinguish if it comes from a truly weak new manufacturer or a strong one pretending to be weak.
+# Therefore, the decision nodes following a weak signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# First, a chance node determines the strength of the new manufacturer: Strong (S) with probability 2/3, Weak (W) with probability 1/3.
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each outcome of the chance node (S or W), the new manufacturer sends a signal: Strong (S) or Weak (W).
+# This results in four paths: S-S, S-W, W-S, W-W.
+for node in g.root.children:
+    g.append_move(node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# The existing manufacturer observes the signal but not the actual strength.
+# Based on the signal, the existing manufacturer must choose to Fight (F) or Adapt (A).
+# This decision is made for each of the four paths.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Define the payoffs for each of the eight possible outcomes.
+# Strong manufacturer, strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="SS-Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="SS-Adapt"))
+
+# Strong manufacturer, weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="SW-Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="SW-Adapt"))
+
+# Weak manufacturer, strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="WS-Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="WS-Adapt"))
+
+# Weak manufacturer, weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="WW-Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="WW-Adapt"))
+
+# Since the existing manufacturer observes the signal (strong or weak) but not the actual strength of the new manufacturer,
+# we need to group the decision nodes based on the signals received, regardless of the actual strength of the new manufacturer.
+
+# For a strong signal, the existing manufacturer cannot distinguish if it comes from a truly strong new manufacturer or a weak one pretending to be strong.
+# Therefore, the decision nodes following a strong signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Similarly, for a weak signal, the existing manufacturer cannot distinguish if it comes from a truly weak new manufacturer or a strong one pretending to be weak.
+# Therefore, the decision nodes following a weak signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

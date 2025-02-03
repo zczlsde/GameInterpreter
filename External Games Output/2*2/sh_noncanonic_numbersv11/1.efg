@@ -1,0 +1,10 @@
+EFG 2 R "Collaboration Dilemma" { "Researcher 1" "Researcher 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Work Independently" } 0
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 1 "Both Collaborate" { 8, 8 }
+t "" 2 "R1 Collaborates, R2 Independent" { 0, 5 }
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 3 "R1 Independent, R2 Collaborates" { 5, 0 }
+t "" 4 "Both Independent" { 3, 3 }

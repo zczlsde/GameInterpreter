@@ -1,0 +1,51 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game is sequential, with A proposing first, then B, and finally A again.
+# 2. There is no simultaneous move or hidden information in this game.
+# 3. Each player knows the previous actions taken by the other player.
+# 4. Therefore, there are no information sets needed to represent imperfect information in this game.
+# 5. Since there is no imperfect information, no set_infoset() function is required.
+
+# No set_infoset() function is needed as there is no imperfect information in this game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes the initial distribution plan
+# A's only action is to propose a distribution where A gets 5500 and B gets 4500
+g.append_move(g.root, "A", ["Propose 5500/4500"])
+
+# Step 2: B decides to accept or reject A's proposal
+# B has two actions: Accept or Reject
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# Step 3: If B accepts, the game ends with payoffs 5500 for A and 4500 for B
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts A's Proposal"))
+
+# Step 4: If B rejects, B proposes an equal split of 5000 each
+# B's only action is to propose an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000/5000"])
+
+# Step 5: A decides to accept or reject B's proposal
+# A has two actions: Accept or Reject
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# Step 6: If A accepts, the game ends with payoffs 4750 for both A and B
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts B's Proposal"))
+
+# Step 7: If A rejects, A proposes a new plan where A gets 5200 and B gets 4800
+# A's only action is to propose 5200/4800
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200/4800"])
+
+# Step 8: B must accept A's new proposal
+# The game ends with payoffs 4693 for A and 4332 for B
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B Must Accept A's New Proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

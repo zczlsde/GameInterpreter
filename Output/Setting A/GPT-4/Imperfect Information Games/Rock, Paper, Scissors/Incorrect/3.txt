@@ -1,0 +1,39 @@
+To model the Rock-Paper-Scissors game as an extensive-form game using the pygambit library, we need to consider that both players choose their actions simultaneously. In game theory, simultaneous moves can be represented by creating a chance move that leads to different information sets for each possible combination of actions. However, since both players reveal their symbols simultaneously and without knowledge of the opponent's choice, we model this by creating a chance node that precedes the players' decisions, effectively making it seem like they choose simultaneously from the perspective of the game tree.
+
+Here's how we can code this in pygambit:
+
+```python
+import pygambit as gbt
+
+# Create a new game instance
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous decision
+# Since we're not using loops or recursion, we manually specify each possible outcome
+g.append_move(g.root, g.players.chance, ["P1_Rock_P2_Rock", "P1_Rock_P2_Paper", "P1_Rock_P2_Scissors",
+                                         "P1_Paper_P2_Rock", "P1_Paper_P2_Paper", "P1_Paper_P2_Scissors",
+                                         "P1_Scissors_P2_Rock", "P1_Scissors_P2_Paper", "P1_Scissors_P2_Scissors"])
+
+# Set the probabilities for each outcome at the chance node
+# Since each outcome is equally likely, we set each probability to 1/9
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes for each combination
+# Rock vs Scissors
+g.set_outcome(g.root.children[0], g.add_outcome([1, -1], label="P1 Rock vs P2 Rock"))
+g.set_outcome(g.root.children[1], g.add_outcome([-1, 1], label="P1 Rock vs P2 Paper"))
+g.set_outcome(g.root.children[2], g.add_outcome([1, -1], label="P1 Rock vs P2 Scissors"))
+# Paper vs Rock
+g.set_outcome(g.root.children[3], g.add_outcome([1, -1], label="P1 Paper vs P2 Rock"))
+g.set_outcome(g.root.children[4], g.add_outcome([0, 0], label="P1 Paper vs P2 Paper"))
+g.set_outcome(g.root.children[5], g.add_outcome([-1, 1], label="P1 Paper vs P2 Scissors"))
+# Scissors vs Paper
+g.set_outcome(g.root.children[6], g.add_outcome([-1, 1], label="P1 Scissors vs P2 Rock"))
+g.set_outcome(g.root.children[7], g.add_outcome([1, -1], label="P1 Scissors vs P2 Paper"))
+g.set_outcome(g.root.children[8], g.add_outcome([0, 0], label="P1 Scissors vs P2 Scissors"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a Rock-Paper-Scissors game where both players' moves are represented as outcomes of a chance move. This approach models the simultaneous move aspect of the game. Each possible combination of moves by the two players (e.g., Player 1 chooses Rock and Player 2 chooses Scissors) is explicitly listed as an outcome of the chance move, with the payoffs set according to the rules of Rock-Paper-Scissors.

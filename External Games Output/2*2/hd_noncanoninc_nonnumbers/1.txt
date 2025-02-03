@@ -1,0 +1,60 @@
+```python
+# Step 1: Identify the players and their actions.
+# In this game, both the husband and the wife have two actions: Compromise or Hold firm.
+
+# Step 2: Determine the structure of the game.
+# Since both players are making decisions simultaneously, we need to model this as a sequential game with imperfect information.
+
+# Step 3: Assume one player moves first for modeling purposes.
+# Let's assume the husband moves first and the wife moves second.
+
+# Step 4: Identify the decision nodes for the wife.
+# The wife's decision nodes are g.root.children[0] (Husband Compromises) and g.root.children[1] (Husband Holds firm).
+
+# Step 5: Group the wife's decision nodes into the same information set.
+# Since the wife does not know the husband's action when making her decision, her decision nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Husband and Wife.
+g = gbt.Game.new_tree(players=["Husband", "Wife"], title="Family Budget Negotiation")
+
+# Step 2: Assume the Husband moves first for modeling purposes.
+# The Husband has two actions: Compromise or Hold firm.
+g.append_move(g.root, "Husband", ["Compromise", "Hold firm"])
+
+# Step 3: The Wife moves second, but she does not know the Husband's action.
+# The Wife also has two actions: Compromise or Hold firm.
+# We append moves for the Wife at both decision nodes resulting from the Husband's actions.
+g.append_move(g.root.children[0], "Wife", ["Compromise", "Hold firm"])
+g.append_move(g.root.children[1], "Wife", ["Compromise", "Hold firm"])
+
+# Step 4: Group the Wife's decision nodes into the same information set.
+# Since the Wife does not know the Husband's action when making her decision,
+# her decision nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both compromise, a moderate family budget is accepted.
+moderate_budget = g.add_outcome([1, 1], label="Moderate Budget")
+
+# If one holds firm and the other compromises, the firm holder gets more of their priorities covered.
+husband_priorities = g.add_outcome([2, 0], label="Husband's Priorities")
+wife_priorities = g.add_outcome([0, 2], label="Wife's Priorities")
+
+# If both hold firm, the family budget fails.
+budget_fails = g.add_outcome([-1, -1], label="Budget Fails")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], moderate_budget)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], wife_priorities)  # Husband Compromises, Wife Holds firm
+g.set_outcome(g.root.children[1].children[0], husband_priorities)  # Husband Holds firm, Wife Compromises
+g.set_outcome(g.root.children[1].children[1], budget_fails)  # Both Hold firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

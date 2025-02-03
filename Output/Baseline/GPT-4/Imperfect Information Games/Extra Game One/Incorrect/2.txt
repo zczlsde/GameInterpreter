@@ -1,0 +1,29 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Three-stage game with conditional moves" { "Player 1" "Player 2" }
+p "" 1 1 "" { "A" "B" "C" } 0
+    p "" 2 1 "" { "D" "E" "F" } 0
+        p "" 1 2 "" { "G" "H" } 0
+            p "" 2 2 "" { "Q" "W" } 0
+                t "" 1 "P1 and P2 choose Q" { 3, 3 }
+                t "" 2 "P1 and P2 choose W" { 0, 0 }
+            t "" 3 "P1 chooses H" { 2, -1 }
+        t "" 4 "P2 chooses F" { 0, 0 }
+    p "" 2 3 "" { "D" "E" "F" } 0
+        p "" 1 3 "" { "G" "H" } 0
+            p "" 2 4 "" { "Q" "W" } 0
+                t "" 5 "P1 and P2 choose Q" { 3, 3 }
+                t "" 6 "P1 and P2 choose W" { 0, 0 }
+            t "" 7 "P1 chooses H" { 2, -1 }
+        t "" 8 "P2 chooses F" { 0, 0 }
+```
+
+This representation outlines the structure of the game as described:
+
+- **Player 1** starts the game by choosing between actions **A**, **B**, or **C**.
+- **Player 2** then makes a decision based on the action taken by Player 1. Player 2 knows if **A** was chosen but cannot distinguish between **B** and **C**. Player 2 can choose **D**, **E**, or **F**. Choosing **F** ends the game.
+- If **Player 2** chooses **D** or **E**, the game moves to the third stage where **Player 1** decides between **G** and **H**. Choosing **H** ends the game with specific payoffs.
+- If **G** is chosen by **Player 1**, **Player 2** then decides between **Q** and **W**, leading to the final payoffs.
+
+Note: This representation assumes that Player 2's information set for actions **B** and **C** is the same, reflecting that Player 2 cannot distinguish between these actions. The specific payoffs are included as described for each terminal node.

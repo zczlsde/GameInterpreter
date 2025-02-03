@@ -1,0 +1,85 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Three-stage imperfect information game")
+
+# Add a chance node at the root with two outcomes "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Add decision nodes for Player 1 after the chance node outcomes
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Add decision nodes for Player 2 after Player 1's decisions
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["A", "B"])
+for node in g.root.children[1].children:
+    g.append_move(node, "Player 2", ["A", "B"])
+
+# Group the decision nodes of Player 2 in the same information set
+# Player 2 cannot distinguish between the outcomes of Player 1's decisions
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Three-stage imperfect information game")
+
+# Add a chance node at the root with two outcomes "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Add decision nodes for Player 1 after the chance node outcomes
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Add decision nodes for Player 2 after Player 1's decisions
+g.append_move(g.root.children[0].children[0], "Player 2", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["A", "B"])
+
+# Group the decision nodes of Player 2 in the same information set
+# Player 2 cannot distinguish between the outcomes of Player 1's decisions
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].infoset)
+```
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Three-stage imperfect information game")
+
+# Add a chance node at the root with two outcomes "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Add decision nodes for Player 1 after the chance node outcomes
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Add decision nodes for Player 2 after Player 1's decisions
+g.append_move(g.root.children[0].children[0], "Player 2", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["A", "B"])
+
+# Group the decision nodes of Player 2 in the same information set
+# Player 2 cannot distinguish between the outcomes of Player 1's decisions
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)

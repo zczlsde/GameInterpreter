@@ -1,0 +1,61 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the local newspaper and the national newspaper.
+# Both players choose simultaneously between two actions: feature a scandalous local event or a major international story.
+
+# Step 2: Determine the imperfect information structure.
+# Since the players move simultaneously, neither player knows the other's choice at the time of making their decision.
+# To model this in a sequential structure, assume one player moves first and the other moves second.
+# The second player, in this case, does not know the first player's choice, so their decision nodes should be grouped in the same information set.
+
+# Step 3: Set the information set for the second player.
+# Assume the local newspaper moves first and the national newspaper moves second.
+# The national newspaper's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the local newspaper's actions.
+# Since the national newspaper cannot distinguish between the local newspaper's choices, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Local Newspaper and National Newspaper.
+g = gbt.Game.new_tree(players=["Local Newspaper", "National Newspaper"],
+                      title="Newspaper Front Page Decision Game")
+
+# Step 2: Model the decision-making process.
+# Assume the Local Newspaper moves first, choosing between "Local Event" and "International Story".
+g.append_move(g.root, "Local Newspaper", ["Local Event", "International Story"])
+
+# Step 3: The National Newspaper moves second, choosing between "Local Event" and "International Story".
+# Since the National Newspaper does not know the Local Newspaper's choice, we will set the information set later.
+g.append_move(g.root.children[0], "National Newspaper", ["Local Event", "International Story"])
+g.append_move(g.root.children[1], "National Newspaper", ["Local Event", "International Story"])
+
+# Step 4: Set the information set for the National Newspaper.
+# The National Newspaper's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the Local Newspaper's actions.
+# Since the National Newspaper cannot distinguish between the Local Newspaper's choices, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and payoffs.
+# If both choose the same, the Local Newspaper gains readership, and the National Newspaper loses interest.
+# If their choices differ, the National Newspaper maintains its broad audience appeal, increasing its profits.
+
+# Both choose "Local Event"
+local_gains = g.add_outcome([1, -1], label="Local Gains")
+# Both choose "International Story"
+local_gains_again = g.add_outcome([1, -1], label="Local Gains Again")
+# Local chooses "Local Event", National chooses "International Story"
+national_gains = g.add_outcome([-1, 1], label="National Gains")
+# Local chooses "International Story", National chooses "Local Event"
+national_gains_again = g.add_outcome([-1, 1], label="National Gains Again")
+
+# Assign outcomes to the terminal nodes
+g.set_outcome(g.root.children[0].children[0], local_gains)
+g.set_outcome(g.root.children[0].children[1], national_gains)
+g.set_outcome(g.root.children[1].children[0], national_gains_again)
+g.set_outcome(g.root.children[1].children[1], local_gains_again)
+
+# Save the EFG
+efg = g.write(format='native')
+```

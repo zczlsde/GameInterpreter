@@ -1,0 +1,9 @@
+EFG 2 R "Negotiation Game" { "A" "B" }
+""
+
+p "" 1 1 "" { "Propose 5500-4500" } 0
+p "" 2 1 "" { "Accept" "Reject" } 0
+t "" 1 "B Accepts Initial" { 5500, 4500 }
+p "" 1 2 "" { "Accept Equal Split" "Reject Equal Split" } 0
+t "" 2 "A Accepts Equal Split" { 4750, 4750 }
+t "" 3 "A Proposes Final Split" { 4693, 4332 }

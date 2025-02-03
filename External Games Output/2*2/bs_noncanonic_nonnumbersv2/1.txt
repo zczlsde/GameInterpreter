@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, the Tech Enthusiast and the Market Trends Enthusiast.
+# Both players have two actions: attend the Technology Conference or attend the Market Trends Seminar.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both players decide independently and without knowledge of the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one player moves first and the other moves second to represent the simultaneous nature.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is the decision node for the first player (e.g., Tech Enthusiast).
+# The second player's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first player's actions.
+
+# Step 5: Group the decision nodes in the same information set.
+# Since the second player (Market Trends Enthusiast) does not know the first player's action, their decision nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Tech Enthusiast and Market Trends Enthusiast.
+g = gbt.Game.new_tree(players=["Tech Enthusiast", "Market Trends Enthusiast"],
+                      title="Conference vs Seminar Decision Game")
+
+# Step 2: Model the game as a sequential game to represent simultaneous decisions.
+# Assume the Tech Enthusiast moves first.
+g.append_move(g.root, "Tech Enthusiast", ["Technology Conference", "Market Trends Seminar"])
+
+# Step 3: The Market Trends Enthusiast moves second, but their decision is simultaneous with the Tech Enthusiast.
+# Therefore, we add moves for the Market Trends Enthusiast at both nodes resulting from the Tech Enthusiast's actions.
+g.append_move(g.root.children[0], "Market Trends Enthusiast", ["Technology Conference", "Market Trends Seminar"])
+g.append_move(g.root.children[1], "Market Trends Enthusiast", ["Technology Conference", "Market Trends Seminar"])
+
+# Step 4: Set the information set for the Market Trends Enthusiast to reflect the simultaneous nature of the game.
+# The Market Trends Enthusiast does not know the Tech Enthusiast's action when making their decision.
+# Use the provided code block to set the information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# Both choose Technology Conference: Tech Enthusiast gets higher payoff, Market Trends Enthusiast gets lower payoff.
+tech_enthusiast_high = g.add_outcome([2, 1], label="Both choose Technology Conference")
+# Both choose Market Trends Seminar: Market Trends Enthusiast gets higher payoff, Tech Enthusiast gets lower payoff.
+market_trends_enthusiast_high = g.add_outcome([1, 2], label="Both choose Market Trends Seminar")
+# Different choices: Both get no payoff.
+no_payoff = g.add_outcome([0, 0], label="Different choices")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], tech_enthusiast_high)  # Both choose Technology Conference
+g.set_outcome(g.root.children[0].children[1], no_payoff)  # Different choices
+g.set_outcome(g.root.children[1].children[0], no_payoff)  # Different choices
+g.set_outcome(g.root.children[1].children[1], market_trends_enthusiast_high)  # Both choose Market Trends Seminar
+
+# Save the EFG
+efg = g.write(format='native')
+```

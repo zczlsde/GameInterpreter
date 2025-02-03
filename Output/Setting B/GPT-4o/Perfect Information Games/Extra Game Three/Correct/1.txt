@@ -1,0 +1,66 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Chance and Sequential Moves Game")
+
+# Step 1: Add a chance node at the root with four possible outcomes: A, B, C, D
+# The chance node is represented by g.players.chance
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Step 2: For each outcome of the chance node, Player 1 chooses between actions E, F, G
+# We need to append moves for Player 1 for each child of the root (i.e., each outcome of the chance node)
+g.append_move(g.root.children[0], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[1], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[2], "Player 1", ["E", "F", "G"])
+g.append_move(g.root.children[3], "Player 1", ["E", "F", "G"])
+
+# Step 3: For each action of Player 1, Player 2 chooses between actions Q and W
+# We need to append moves for Player 2 for each child of Player 1's nodes
+for i in range(4):  # For each outcome of the chance node
+    for j in range(3):  # For each action of Player 1
+        g.append_move(g.root.children[i].children[j], "Player 2", ["Q", "W"])
+
+# Step 4: Set the payoffs for each terminal node based on the given payoff structure
+# Payoffs are defined for each combination of chance outcome and actions by Player 1 and Player 2
+
+# Outcome A
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, -1], label="A, E, Q"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -2], label="A, E, W"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="A, F, Q"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, -2], label="A, F, W"))
+g.set_outcome(g.root.children[0].children[2].children[0], g.add_outcome([1, -1], label="A, G, Q"))
+g.set_outcome(g.root.children[0].children[2].children[1], g.add_outcome([2, -2], label="A, G, W"))
+
+# Outcome B
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([3, -3], label="B, E, Q"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-3, 3], label="B, E, W"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([3, -3], label="B, F, Q"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-3, 3], label="B, F, W"))
+g.set_outcome(g.root.children[1].children[2].children[0], g.add_outcome([3, -3], label="B, G, Q"))
+g.set_outcome(g.root.children[1].children[2].children[1], g.add_outcome([-3, 3], label="B, G, W"))
+
+# Outcome C
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([0, 0], label="C, E, Q"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([-1, 1], label="C, E, W"))
+g.set_outcome(g.root.children[2].children[1].children[0], g.add_outcome([0, 0], label="C, F, Q"))
+g.set_outcome(g.root.children[2].children[1].children[1], g.add_outcome([-1, 1], label="C, F, W"))
+g.set_outcome(g.root.children[2].children[2].children[0], g.add_outcome([0, 0], label="C, G, Q"))
+g.set_outcome(g.root.children[2].children[2].children[1], g.add_outcome([-1, 1], label="C, G, W"))
+
+# Outcome D
+g.set_outcome(g.root.children[3].children[0].children[0], g.add_outcome([4, -4], label="D, E, Q"))
+g.set_outcome(g.root.children[3].children[0].children[1], g.add_outcome([-4, 4], label="D, E, W"))
+g.set_outcome(g.root.children[3].children[1].children[0], g.add_outcome([4, -4], label="D, F, Q"))
+g.set_outcome(g.root.children[3].children[1].children[1], g.add_outcome([-4, 4], label="D, F, W"))
+g.set_outcome(g.root.children[3].children[2].children[0], g.add_outcome([4, -4], label="D, G, Q"))
+g.set_outcome(g.root.children[3].children[2].children[1], g.add_outcome([-4, 4], label="D, G, W"))
+
+# Step 5: Set the probabilities for the chance node
+# Assuming equal probabilities for each outcome: A, B, C, D
+probabilities = [gbt.Rational(1, 4) for _ in range(4)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Save the EFG
+efg = g.write(format='native')
+```

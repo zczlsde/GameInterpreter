@@ -1,0 +1,10 @@
+EFG 2 R "Sequential Game" { "Player A" "Player B" }
+""
+
+p "" 1 1 "" { "Cooperate" "Defect" } 0
+p "" 2 1 "" { "Cooperate" "Defect" } 0
+t "" 1 "Both Cooperate" { 3, 3 }
+t "" 2 "A Cooperates, B Defects" { 0, 5 }
+p "" 2 2 "" { "Cooperate" "Defect" } 0
+t "" 3 "A Defects, B Cooperates" { 5, 0 }
+t "" 4 "Both Defect" { 1, 1 }

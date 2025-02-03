@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, and they are deciding simultaneously between two options: Elegance Boutique and Chic Couture.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: The starting node, g.root, is the first player's decision node.
+# The first player has two actions, Elegance Boutique and Chic Couture.
+
+# Step 4: The second player's decision nodes are g.root.children[0] and g.root.children[1], which correspond to the first player's actions.
+
+# Step 5: The second player, moving simultaneously, does not know which action the first player has taken.
+# Therefore, the second player's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players.
+# Let's name the players "Elegance Lover" and "Chic Lover".
+g = gbt.Game.new_tree(players=["Elegance Lover", "Chic Lover"],
+                      title="Shopping Decision Game")
+
+# Step 2: Model the game as a sequential game to handle simultaneous moves.
+# Assume "Elegance Lover" moves first, choosing between "Elegance Boutique" and "Chic Couture".
+g.append_move(g.root, "Elegance Lover", ["Elegance Boutique", "Chic Couture"])
+
+# Step 3: The second player, "Chic Lover", also chooses between "Elegance Boutique" and "Chic Couture".
+# The decision nodes for "Chic Lover" are g.root.children[0] and g.root.children[1].
+g.append_move(g.root.children[0], "Chic Lover", ["Elegance Boutique", "Chic Couture"])
+g.append_move(g.root.children[1], "Chic Lover", ["Elegance Boutique", "Chic Couture"])
+
+# Step 4: Since the players move simultaneously, "Chic Lover" does not know the action taken by "Elegance Lover".
+# Therefore, the decision nodes for "Chic Lover" should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes based on the players' choices.
+# If both choose "Elegance Boutique", "Elegance Lover" gets 2 points, "Chic Lover" gets 1 point.
+outcome_elegance = g.add_outcome([2, 1], label="Both at Elegance Boutique")
+
+# If both choose "Chic Couture", "Chic Lover" gets 2 points, "Elegance Lover" gets 1 point.
+outcome_chic = g.add_outcome([1, 2], label="Both at Chic Couture")
+
+# If they choose different shops, both get 0 points.
+outcome_different = g.add_outcome([0, 0], label="Different Shops")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_elegance)  # Both at Elegance Boutique
+g.set_outcome(g.root.children[0].children[1], outcome_different)  # Different Shops
+g.set_outcome(g.root.children[1].children[0], outcome_different)  # Different Shops
+g.set_outcome(g.root.children[1].children[1], outcome_chic)       # Both at Chic Couture
+
+# Save the EFG
+efg = g.write(format='native')
+```

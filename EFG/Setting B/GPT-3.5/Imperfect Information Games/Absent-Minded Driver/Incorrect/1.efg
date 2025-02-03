@@ -1,0 +1,16 @@
+EFG 2 R "Three-player imperfect information game" { "Player 1" "Player 2" "Player 3" }
+""
+
+c "" 1 "" { "A" 1/2 "B" 1/2 } 0
+p "" 1 1 "" { "L" "R" } 0
+p "" 2 1 "" { "l" "r" } 0
+p "" 3 1 "" { "a" "b" } 0
+t "" 0
+t "" 3 "Player 3 chooses b" { 3, 3, 3 }
+p "" 3 1 "" { "a" "b" } 2 "Player 2 chooses r" { 2, 2, 2 }
+t "" 0
+t "" 0
+p "" 2 1 "" { "l" "r" } 1 "All players choose R" { 1, 1, 1 }
+t "" 0
+t "" 0
+t "" 0

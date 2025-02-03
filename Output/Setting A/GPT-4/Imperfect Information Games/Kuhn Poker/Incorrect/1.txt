@@ -1,0 +1,62 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each allocation, append moves for Alice to check or bet
+for allocation_node in g.root.children:
+    g.append_move(allocation_node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's actions (Check or Bet), append moves for Bob
+# When Alice checks
+for allocation_node in g.root.children:
+    alice_check_node = allocation_node.children[0]
+    g.append_move(alice_check_node, "Bob", ["Check", "Bet"])
+    # When Bob checks, the game ends, and the higher card wins 1 from the other player
+    # When Bob bets, Alice can fold or call
+    alice_fold_call_node = alice_check_node.children[1]
+    g.append_move(alice_fold_call_node, "Alice", ["Fold", "Call"])
+
+# When Alice bets
+for allocation_node in g.root.children:
+    alice_bet_node = allocation_node.children[1]
+    g.append_move(alice_bet_node, "Bob", ["Fold", "Call"])
+
+# Now, we need to set outcomes for each terminal node based on the actions taken by Alice and Bob
+# Since the outcomes depend on the specific card allocation and the actions taken,
+# we will label them generically here. In practice, you would calculate the specific payoffs
+# based on the card allocation (e.g., JQ, JK, etc.) and the actions (Check, Bet, Fold, Call).
+
+# For simplicity, let's assume the following payoff structure for terminal nodes:
+# - If Bob checks or Alice calls after Bob bets, the higher card wins 2 from the other player
+# - If Alice folds after Bob bets, Bob wins 1 from Alice
+# - If Bob folds after Alice bets, Alice wins 1 from Bob
+
+# Set outcomes for when Bob checks after Alice checks
+for allocation_node in g.root.children:
+    g.set_outcome(allocation_node.children[0].children[0], g.add_outcome([1, -1], label="Higher card wins 1"))
+
+# Set outcomes for when Alice folds or calls after Bob bets
+for allocation_node in g.root.children:
+    g.set_outcome(allocation_node.children[0].children[1].children[0], g.add_outcome([-1, 1], label="Bob wins 1"))
+    g.set_outcome(allocation_node.children[0].children[1].children[1], g.add_outcome([2, -2], label="Higher card wins 2"))
+
+# Set outcomes for when Bob folds or calls after Alice bets
+for allocation_node in g.root.children:
+    g.set_outcome(allocation_node.children[1].children[0], g.add_outcome([1, -1], label="Alice wins 1"))
+    g.set_outcome(allocation_node.children[1].children[1], g.add_outcome([2, -2], label="Higher card wins 2"))
+
+# Note: In a real implementation, you would need to calculate the specific payoffs based on the card allocations
+# and the actions taken by the players. The labels and payoffs used here are placeholders for demonstration purposes.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code sets up the extensive form game structure for the three-card game described, including the chance node for card allocation, Alice's and Bob's decision nodes, and the outcomes based on their actions. The payoffs and outcomes are simplified and would need to be adjusted based on the actual rules for determining the winner based on the cards dealt.

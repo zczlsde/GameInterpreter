@@ -1,0 +1,10 @@
+EFG 2 R "Performance-Enhancing Drugs Dilemma" { "Athlete 1" "Athlete 2" }
+""
+
+p "" 1 1 "" { "Use Drugs" "Compete Clean" } 0
+p "" 2 1 "" { "Use Drugs" "Compete Clean" } 0
+t "" 1 "Both Use Drugs" { 3, 3 }
+t "" 2 "Athlete 1 Uses Drugs" { 9, 1 }
+p "" 2 1 "" { "Use Drugs" "Compete Clean" } 0
+t "" 3 "Athlete 2 Uses Drugs" { 1, 9 }
+t "" 4 "Neither Uses Drugs" { 6, 6 }

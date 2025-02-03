@@ -1,0 +1,10 @@
+EFG 2 R "Price Cutting Game" { "Company A" "Company B" }
+""
+
+p "" 1 1 "" { "Cut Prices" "Not Cut Prices" } 0
+p "" 2 1 "" { "Cut Prices" "Not Cut Prices" } 0
+t "" 1 "Both Cut Prices" { 4, 4 }
+t "" 2 "A Cuts, B Doesn't" { 9, 1 }
+p "" 2 1 "" { "Cut Prices" "Not Cut Prices" } 0
+t "" 3 "A Doesn't, B Cuts" { 1, 9 }
+t "" 4 "Neither Cut Prices" { 6, 6 }

@@ -1,0 +1,10 @@
+EFG 2 R "Project Management Collaboration Game" { "Manager 1" "Manager 2" }
+""
+
+p "" 1 1 "" { "Collaborate" "Work Independently" } 0
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 1 "Revolutionary Product" { 3, 3 }
+t "" 2 "Wasted Effort" { 0, 2 }
+p "" 2 1 "" { "Collaborate" "Work Independently" } 0
+t "" 3 "Modest Bonus" { 2, 0 }
+t "" 4 "Stagnant Portfolio" { 1, 1 }

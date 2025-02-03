@@ -1,0 +1,81 @@
+```python
+# Since Player 2's decision is influenced by a misinterpretation of Player 1's action, we need to model this as a chance node after Player 1's decision.
+# Player 1 has two actions, S and C. For each of these actions, there's a chance node representing the probability that Player 2 correctly interprets Player 1's action or misinterprets it.
+# For simplicity, let's assume the game tree starts with Player 1's decision node (g.root), then for each of Player 1's actions (S and C), there's a chance node.
+# At each chance node, there are two outcomes: correctly interpreting Player 1's action or misinterpreting it. This leads to four possible scenarios for Player 2's decision nodes:
+# 1. Player 1 chooses S, and Player 2 correctly interprets this as S.
+# 2. Player 1 chooses S, but Player 2 misinterprets this as C.
+# 3. Player 1 chooses C, and Player 2 correctly interprets this as C.
+# 4. Player 1 chooses C, but Player 2 misinterprets this as S.
+# Since Player 2's decision is based on their interpretation (correct or incorrect) of Player 1's action, and not directly on Player 1's actual action, each of these scenarios represents a unique information set for Player 2.
+# However, from Player 2's perspective, they do not know whether their interpretation is correct or incorrect. Therefore, for each of Player 1's actions, the two scenarios (correct interpretation and misinterpretation) should be grouped into the same information set for Player 2.
+# This means we have two information sets for Player 2: one for when they believe Player 1 has chosen S (regardless of whether this belief is correct), and one for when they believe Player 1 has chosen C.
+
+# Assuming the chance nodes for misinterpretation are added right after Player 1's decision, and before Player 2's decision nodes:
+# For Player 1 choosing S, and Player 2 interpreting as S or misinterpreting as C:
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+# For Player 1 choosing C, and Player 2 interpreting as C or misinterpreting as S:
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Define the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Assign values to each of the payoffs based on the ranking provided: E (highest), A, F, W, B, D (lowest).
+# Let's assign arbitrary values that respect this ranking.
+E = 5  # Highest payoff
+A = 4
+F = 3
+W = 2
+B = 1
+D = 0  # Lowest payoff
+
+# Player 1 moves first, choosing between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's actions, append a chance node to model the probability of misinterpretation by Player 2
+# Assuming a 1% chance of misinterpretation
+g.append_move(g.root.children[0], g.players.chance, ["S interpreted", "C misinterpreted"])
+g.append_move(g.root.children[1], g.players.chance, ["C interpreted", "S misinterpreted"])
+
+# Set the probabilities for the chance nodes
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Append Player 2's moves based on their interpretation
+# For Player 1 choosing S
+g.append_move(g.root.children[0].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["S", "C"])
+# For Player 1 choosing C
+g.append_move(g.root.children[1].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["S", "C"])
+
+# Set outcomes based on the actual choices of Player 1 and Player 2
+# Player 1 chooses S, Player 2 chooses S (correct interpretation or misinterpretation)
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="SS misinterpreted"))
+
+# Player 1 chooses S, Player 2 chooses C
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="SC misinterpreted"))
+
+# Player 1 chooses C, Player 2 chooses S
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="CS misinterpreted"))
+
+# Player 1 chooses C, Player 2 chooses C
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="CC misinterpreted"))
+
+# Handle the imperfect information using the identical code provided
+# For Player 1 choosing S, and Player 2 interpreting as S or misinterpreting as C:
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+# For Player 1 choosing C, and Player 2 interpreting as C or misinterpreting as S:
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

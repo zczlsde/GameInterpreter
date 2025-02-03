@@ -1,0 +1,20 @@
+Certainly! Below is the EFG representation of the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky?" { "Alexis" "Beverley" }
+p "" 1 1 "" { "Bach" "Stravinsky" } 0
+p "" 2 1 "" { "Bach" "Stravinsky" } 0
+t "" 1 "Bach-Bach" { 2, 1 }
+t "" 2 "Stravinsky-Stravinsky" { 1, 2 }
+t "" 3 "Bach-Stravinsky" { 0, 0 }
+t "" 4 "Stravinsky-Bach" { 0, 0 }
+```
+
+Explanation:
+- The game involves two players, Alexis and Beverley.
+- Both players make their decisions simultaneously and independently, so the game is represented with two player nodes.
+- The outcomes are:
+  - "Bach-Bach": Alexis prefers Bach, so Alexis gets a higher payoff (2) and Beverley gets a lower payoff (1).
+  - "Stravinsky-Stravinsky": Beverley prefers Stravinsky, so Beverley gets a higher payoff (2) and Alexis gets a lower payoff (1).
+  - "Bach-Stravinsky" and "Stravinsky-Bach": If they choose different concerts, both get no payoffs (0, 0).
+Iteration:  2

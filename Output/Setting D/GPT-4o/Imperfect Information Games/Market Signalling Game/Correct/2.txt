@@ -1,0 +1,129 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game starts with a chance node determining the strength of the new manufacturer: strong (S) or weak (W).
+# 2. The new manufacturer sends a signal, which can be either strong (S) or weak (W).
+# 3. The existing manufacturer observes the signal but does not know the actual strength of the new manufacturer.
+# 4. The existing manufacturer must decide to either fight (F) or adapt (A) based on the observed signal.
+# 5. Since the existing manufacturer cannot distinguish between the actual strength of the new manufacturer, 
+#    the decision nodes for the existing manufacturer should be grouped in the same information set.
+
+# The possible outcomes for the chance node are:
+# - Strong manufacturer, strong signal (SS)
+# - Strong manufacturer, weak signal (SW)
+# - Weak manufacturer, strong signal (WS)
+# - Weak manufacturer, weak signal (WW)
+
+# The existing manufacturer sees only the signal, not the actual strength, so:
+# - The decision nodes for the existing manufacturer after observing a strong signal (SS and WS) should be in the same information set.
+# - The decision nodes for the existing manufacturer after observing a weak signal (SW and WW) should be in the same information set.
+
+# Set the information sets for the existing manufacturer's decision nodes:
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)  # SS and WS
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)  # SW and WW
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: New Manufacturer and Existing Manufacturer
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game with Imperfect Information")
+
+# Step 1: The game starts with a chance node determining the strength of the new manufacturer: strong (S) or weak (W).
+# The probabilities for the chance node are 2/3 for strong and 1/3 for weak.
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: The new manufacturer sends a signal, which can be either strong (S) or weak (W).
+# This move is made by the New Manufacturer.
+g.append_move(g.root.children[0], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+g.append_move(g.root.children[1], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# Step 3: The existing manufacturer observes the signal but does not know the actual strength of the new manufacturer.
+# Step 4: The existing manufacturer must decide to either fight (F) or adapt (A) based on the observed signal.
+# This move is made by the Existing Manufacturer.
+g.append_move(g.root.children[0].children[0], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[0].children[1], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[0], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[1], "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Step 5: Since the existing manufacturer cannot distinguish between the actual strength of the new manufacturer,
+# the decision nodes for the existing manufacturer should be grouped in the same information set.
+# Set the information sets for the existing manufacturer's decision nodes:
+g.set_infoset(g.root.children[0].children[0], g.root.children[2].children[0].infoset)  # SS and WS
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)  # SW and WW
+
+# Define the outcomes for each possible scenario:
+# Strong manufacturer, strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong-Strong-Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong-Strong-Adapt"))
+
+# Strong manufacturer, weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong-Weak-Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong-Weak-Adapt"))
+
+# Weak manufacturer, strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak-Strong-Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak-Strong-Adapt"))
+
+# Weak manufacturer, weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak-Weak-Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak-Weak-Adapt"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: New Manufacturer and Existing Manufacturer
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game with Imperfect Information")
+
+# Step 1: The game starts with a chance node determining the strength of the new manufacturer: strong (S) or weak (W).
+# The probabilities for the chance node are 2/3 for strong and 1/3 for weak.
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: The new manufacturer sends a signal, which can be either strong (S) or weak (W).
+# This move is made by the New Manufacturer.
+g.append_move(g.root.children[0], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+g.append_move(g.root.children[1], "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# Step 3: The existing manufacturer observes the signal but does not know the actual strength of the new manufacturer.
+# Step 4: The existing manufacturer must decide to either fight (F) or adapt (A) based on the observed signal.
+# This move is made by the Existing Manufacturer.
+g.append_move(g.root.children[0].children[0], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[0].children[1], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[0], "Existing Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[1], "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Step 5: Since the existing manufacturer cannot distinguish between the actual strength of the new manufacturer,
+# the decision nodes for the existing manufacturer should be grouped in the same information set.
+# Set the information sets for the existing manufacturer's decision nodes:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)  # SS and WS
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)  # SW and WW
+
+# Define the outcomes for each possible scenario:
+# Strong manufacturer, strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong-Strong-Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong-Strong-Adapt"))
+
+# Strong manufacturer, weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong-Weak-Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong-Weak-Adapt"))
+
+# Weak manufacturer, strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak-Strong-Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak-Strong-Adapt"))
+
+# Weak manufacturer, weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak-Weak-Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak-Weak-Adapt"))
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,10 @@
+EFG 2 R "Prisoner's Dilemma with Imperfect Information" { "Suspect 1" "Suspect 2" }
+""
+
+p "" 1 1 "" { "Confess" "Remain Silent" } 0
+p "" 2 1 "" { "Confess" "Remain Silent" } 0
+t "" 4 "Both Confess" { -2, -2 }
+t "" 2 "Confess, Silent" { 0, -3 }
+p "" 2 1 "" { "Confess" "Remain Silent" } 0
+t "" 3 "Silent, Confess" { -3, 0 }
+t "" 1 "Both Silent" { -1, -1 }

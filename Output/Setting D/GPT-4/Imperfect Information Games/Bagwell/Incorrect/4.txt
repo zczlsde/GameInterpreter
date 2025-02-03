@@ -1,0 +1,129 @@
+```python
+# Since Player 2's perception of Player 1's action can be incorrect due to misinterpretation,
+# we need to model this as a game with imperfect information.
+# After Player 1 chooses an action, there are two possible perceptions for Player 2 for each of Player 1's actions.
+# This means that for each action of Player 1, there are two nodes for Player 2 that need to be in the same information set,
+# because Player 2 cannot distinguish between the actual action of Player 1 and the misperceived action due to the small probability of error.
+
+# For Player 1 choosing "S", there are two perceptions for Player 2: correctly perceiving "S" and misperceiving it as "C".
+# These two perceptions lead to two decision nodes for Player 2 which should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Similarly, for Player 1 choosing "C", there are two perceptions for Player 2: correctly perceiving "C" and misperceiving it as "S".
+# These also lead to two decision nodes for Player 2 which should be in the same information set.
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Define the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Player 1 moves first and chooses between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's actions, append a chance node to model the small probability of misinterpretation by Player 2
+# The chance node will have two outcomes: correctly perceiving Player 1's choice and misperceiving it
+# Assuming a 1% chance of misperception
+g.append_move(g.root.children[0], g.players.chance, ["S perceived", "C misperceived"])
+g.append_move(g.root.children[1], g.players.chance, ["C perceived", "S misperceived"])
+
+# Set the probabilities for the chance nodes
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2 makes a decision based on the perception of Player 1's action
+# For each perception, Player 2 can choose "S" or "C"
+for node in g.root.children[0].children + g.root.children[1].children:
+    g.append_move(node, "Player 2", ["S", "C"])
+
+# Assign values to the payoffs as per the given rankings
+# E (highest), A, F, W, B, D (lowest)
+E, A, F, W, B, D = 5, 4, 3, 2, 1, 0
+
+# Set the outcomes based on the combinations of choices
+# Player 1 chooses S
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([F, F], label="CC"))
+
+# Player 1 chooses C
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([W, D], label="SC"))
+
+# Handle the imperfect information
+# Since Player 2's perception of Player 1's action can be incorrect due to misinterpretation,
+# we need to model this as a game with imperfect information.
+# After Player 1 chooses an action, there are two possible perceptions for Player 2 for each of Player 1's actions.
+# This means that for each action of Player 1, there are two nodes for Player 2 that need to be in the same information set,
+# because Player 2 cannot distinguish between the actual action of Player 1 and the misperceived action due to the small probability of error.
+
+# For Player 1 choosing "S", there are two perceptions for Player 2: correctly perceiving "S" and misperceiving it as "C".
+# These two perceptions lead to two decision nodes for Player 2 which should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Similarly, for Player 1 choosing "C", there are two perceptions for Player 2: correctly perceiving "C" and misperceiving it as "S".
+# These also lead to two decision nodes for Player 2 which should be in the same information set.
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+unsupported operand type(s) for +: 'pygambit.gambit.NodeChildren' and 'pygambit.gambit.NodeChildren'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Define the game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Player 1 moves first and chooses between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's actions, append a chance node to model the small probability of misinterpretation by Player 2
+# The chance node will have two outcomes: correctly perceiving Player 1's choice and misperceiving it
+# Assuming a 1% chance of misperception
+g.append_move(g.root.children[0], g.players.chance, ["S perceived", "C misperceived"])
+g.append_move(g.root.children[1], g.players.chance, ["C perceived", "S misperceived"])
+
+# Set the probabilities for the chance nodes
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2 makes a decision based on the perception of Player 1's action
+# For each perception, Player 2 can choose "S" or "C"
+for i in range(2):  # For each of Player 1's choices
+    for j in range(2):  # For each perception of Player 1's choice
+        g.append_move(g.root.children[i].children[j], "Player 2", ["S", "C"])
+
+# Assign values to the payoffs as per the given rankings
+# E (highest), A, F, W, B, D (lowest)
+E, A, F, W, B, D = 5, 4, 3, 2, 1, 0
+
+# Set the outcomes based on the combinations of choices
+# Player 1 chooses S, perceived correctly or misperceived as C
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([F, F], label="CC"))
+
+# Player 1 chooses C, perceived correctly or misperceived as S
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([W, D], label="SC"))
+
+# Handle the imperfect information
+# For Player 1 choosing "S", there are two perceptions for Player 2: correctly perceiving "S" and misperceiving it as "C".
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# For Player 1 choosing "C", there are two perceptions for Player 2: correctly perceiving "C" and misperceiving it as "S".
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

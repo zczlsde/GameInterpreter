@@ -1,0 +1,45 @@
+```python
+# Since all actions are observable and there's no simultaneous move or hidden information after the game starts,
+# there's no need to group any decision nodes into the same information set based on the game description provided.
+# Each move is made with full knowledge of the previous moves, and there's no point where a player has to make a decision
+# without knowing exactly where they are in the game tree. Therefore, no set_infoset() function is necessary for this game.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Alice's first move: choose to "take" or "push" the initial piles of 4 and 1 coins
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice takes, the game ends. Alice gets 4, Bob gets 1.
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes 4"))
+
+# If Alice pushes, the piles double and it's Bob's turn with piles of 2 and 8 coins.
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after Alice pushes, Bob gets 8, Alice gets 2.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes 8"))
+
+# If Bob pushes, the piles double again to 4 and 16, and it's Alice's turn.
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice takes after Bob pushes, Alice gets 16, Bob gets 4.
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes 16"))
+
+# If Alice pushes again, the piles double to 8 and 32, and it's Bob's final turn.
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after the second push by Alice, Bob gets 32, Alice gets 8.
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes 32"))
+
+# If Bob pushes for the final time, the piles double to 16 and 64, and the game ends with Alice taking the larger pile.
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the scenario with Alice and Bob and their decisions to take or push piles of coins. Each decision point correctly reflects the state of the game based on the previous actions, with the outcomes assigned according to the rules described. Since all actions are observable and there are no simultaneous moves or hidden information, there's no need for information set grouping, thus no `set_infoset()` function is used.

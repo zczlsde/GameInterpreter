@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, and they are making decisions simultaneously.
+# Each player can either "Compromise" or "Hold Firm".
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Player 1 moves first and Player 2 moves second.
+
+# Step 3: The starting node, g.root, is Player 1's decision node.
+# Player 1 has two actions, "Compromise" and "Hold Firm".
+
+# Step 4: Player 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 1's actions "Compromise" and "Hold Firm".
+
+# Step 5: Player 2, moving simultaneously, does not know which action Player 1 has taken.
+# Therefore, Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Partner 1 and Partner 2.
+g = gbt.Game.new_tree(players=["Partner 1", "Partner 2"],
+                      title="Business Expansion Strategy Negotiation")
+
+# Step 2: Model the game as a sequential game to handle the simultaneous move with imperfect information.
+# Assume Partner 1 moves first, and Partner 2 moves second.
+
+# Step 3: Partner 1's decision node is the root of the game tree.
+# Partner 1 has two actions: "Compromise" and "Hold Firm".
+g.append_move(g.root, "Partner 1", ["Compromise", "Hold Firm"])
+
+# Step 4: Partner 2's decision nodes are the children of Partner 1's actions.
+# These nodes correspond to Partner 1's actions "Compromise" and "Hold Firm".
+g.append_move(g.root.children[0], "Partner 2", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Partner 2", ["Compromise", "Hold Firm"])
+
+# Step 5: Since Partner 2 moves simultaneously with Partner 1, Partner 2 does not know which action Partner 1 has taken.
+# Therefore, Partner 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# If both compromise, a balanced expansion plan is adopted.
+balanced_expansion = g.add_outcome([1, 1], label="Balanced Expansion")
+
+# If one holds firm and the other compromises, the firm holder's strategy is prioritized.
+partner1_prioritized = g.add_outcome([2, 0], label="Partner 1 Prioritized")
+partner2_prioritized = g.add_outcome([0, 2], label="Partner 2 Prioritized")
+
+# If both hold firm, they fail to agree, leading to lost opportunities.
+lost_opportunities = g.add_outcome([-1, -1], label="Lost Opportunities")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], balanced_expansion)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], partner2_prioritized)  # Partner 1 Compromise, Partner 2 Hold Firm
+g.set_outcome(g.root.children[1].children[0], partner1_prioritized)  # Partner 1 Hold Firm, Partner 2 Compromise
+g.set_outcome(g.root.children[1].children[1], lost_opportunities)  # Both Hold Firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

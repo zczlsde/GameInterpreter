@@ -1,0 +1,47 @@
+```python
+# Step 1: The driver starts at junction X with two choices: EXIT or CONTINUE.
+# Step 2: If the driver CONTINUES, he moves to junction Y, where he faces the same choices: EXIT or CONTINUE.
+# Step 3: The driver cannot distinguish between being at junction X or Y, meaning these decision points are in the same information set.
+
+# Assuming g.root is the starting point at junction X, and g.root.children[0] is the node for CONTINUE leading to junction Y,
+# we need to group the decision at X and the decision at Y into the same information set.
+# Since the driver cannot distinguish between X and Y, both decisions to EXIT or CONTINUE at X and Y must be in the same information set.
+
+g.set_infoset(g.root, g.root.children[0].infoset)  # Grouping decision at X with decision at Y in the same information set
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with a single player representing the absent-minded driver
+g = gbt.Game.new_tree(players=["Driver"],
+                      title="Absent-minded driver at junctions X and Y")
+
+# Step 1: The driver starts at junction X with two choices: EXIT or CONTINUE.
+# This creates the initial decision node at junction X.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Step 2: If the driver CONTINUES, he moves to junction Y, where he faces the same choices: EXIT or CONTINUE.
+# This creates the decision node at junction Y, which is reached by continuing from junction X.
+# Note: We are creating a new decision node for the CONTINUE action at junction X, leading to junction Y.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Step 3: The driver cannot distinguish between being at junction X or Y, meaning these decision points are in the same information set.
+# Since the driver cannot distinguish between X and Y, both decisions to EXIT or CONTINUE at X and Y must be in the same information set.
+# This is handled by grouping the decision at X with the decision at Y into the same information set.
+g.set_infoset(g.root, g.root.children[1].infoset)  # Grouping decision at X with decision at Y in the same information set
+
+# Setting outcomes for the game based on the driver's decisions:
+# If the driver exits at junction X, he gets to A with a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="To A"))
+
+# If the driver continues to junction Y and then exits, he gets to B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="To B"))
+
+# If the driver continues through both junctions X and Y, he gets to C with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="To C"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet creates an extensive-form game representing the scenario of an absent-minded driver at junctions X and Y using the pygambit library. The game is set up to reflect the driver's inability to distinguish between the two junctions, grouping the decision nodes at X and Y into the same information set to model the driver's absent-mindedness accurately.

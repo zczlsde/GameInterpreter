@@ -1,0 +1,58 @@
+```python
+# Step-by-step thought process:
+# 1. This is a simultaneous move game where both countries decide independently whether to implement pollution controls.
+# 2. Since both countries make their decisions simultaneously, neither country knows the decision of the other at the time of making their own decision.
+# 3. To model this in a sequential structure, we can assume one country moves first and the other moves second.
+# 4. The first country's decision node is the root, and the second country's decision nodes are the children of the root.
+# 5. The second country, moving simultaneously, does not know which action the first country has taken.
+# 6. Therefore, the second country's decision nodes should be grouped in the same information set.
+
+# Assuming Country 1 moves first and Country 2 moves second:
+# Country 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Country 1's actions (implement or not implement).
+# Since Country 2 cannot distinguish between these nodes, they should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step-by-step thought process:
+# 1. This is a simultaneous move game where both countries decide independently whether to implement pollution controls.
+# 2. Since both countries make their decisions simultaneously, neither country knows the decision of the other at the time of making their own decision.
+# 3. To model this in a sequential structure, we can assume one country moves first and the other moves second.
+# 4. The first country's decision node is the root, and the second country's decision nodes are the children of the root.
+# 5. The second country, moving simultaneously, does not know which action the first country has taken.
+# 6. Therefore, the second country's decision nodes should be grouped in the same information set.
+
+# Create a new game with two players: Country 1 and Country 2
+g = gbt.Game.new_tree(players=["Country 1", "Country 2"],
+                      title="Pollution Control Game")
+
+# Country 1 moves first, deciding whether to implement controls or not
+g.append_move(g.root, "Country 1", ["Implement", "Not Implement"])
+
+# Country 2 moves second, but does not know Country 1's decision
+# Therefore, Country 2's decision nodes are the children of the root
+g.append_move(g.root.children[0], "Country 2", ["Implement", "Not Implement"])
+g.append_move(g.root.children[1], "Country 2", ["Implement", "Not Implement"])
+
+# Set the information set for Country 2's decision nodes
+# Country 2 cannot distinguish between these nodes, so they should be in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Define the payoffs for each outcome
+both_implement = g.add_outcome([7, 7], label="Both Implement")
+one_implements = g.add_outcome([3, 10], label="Country 1 Implements, Country 2 Does Not")
+other_implements = g.add_outcome([10, 3], label="Country 1 Does Not Implement, Country 2 Implements")
+neither_implements = g.add_outcome([5, 5], label="Neither Implement")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], both_implement)
+g.set_outcome(g.root.children[0].children[1], one_implements)
+g.set_outcome(g.root.children[1].children[0], other_implements)
+g.set_outcome(g.root.children[1].children[1], neither_implements)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,43 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-Player Game with Chance Event")
+
+# First stage: a chance event with equal probability for "A" or "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+# Set the probabilities for the chance event
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Second stage: Player 1 chooses between "L" and "R" without knowing the outcome of the chance event
+# This move is appended to both outcomes of the chance event, creating two branches for each choice of Player 1
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["L", "R"])
+    # If Player 1 selects "R", the game ends with a payoff of (1, 1, 1) to all players
+    g.set_outcome(chance_outcome.children[1], g.add_outcome([1, 1, 1]))
+
+# Third stage: If Player 1 chooses "L", then Player 2 can select either "l" or "r"
+# Player 2's move is appended to the "L" choice of Player 1, without knowing Player 1's choice
+for player1_L_choice in [node.children[0] for node in g.root.children]:
+    g.append_move(player1_L_choice, "Player 2", ["l", "r"])
+    # If Player 2 chooses "r", the game ends with a payoff of (2, 2, 2) to all players
+    g.set_outcome(player1_L_choice.children[1], g.add_outcome([2, 2, 2]))
+
+# Fourth stage: If Player 2 selects "l", then Player 3 can choose between "a" and "b"
+# Player 3's move is appended to the "l" choice of Player 2, without knowing Player 2's choice
+for player2_l_choice in [node.children[0] for node in [node.children[0] for node in g.root.children]]:
+    g.append_move(player2_l_choice, "Player 3", ["a", "b"])
+    # Regardless of Player 3's choice, the game ends with a payoff of (3, 3, 3) to all players
+    g.set_outcome(player2_l_choice.children[0], g.add_outcome([3, 3, 3]))
+    g.set_outcome(player2_l_choice.children[1], g.add_outcome([3, 3, 3]))
+
+# Since none of the players have knowledge of the previous moves of other players or the chance event,
+# we need to set the information sets accordingly to reflect the imperfect information structure.
+# However, the game's structure as described does not explicitly require merging information sets across different branches,
+# as each player's decision is made without knowledge of the specific actions taken before, but they are inherently in separate branches of the game tree.
+# Therefore, we do not use g.set_infoset() in this specific game structure as there's no direct requirement to merge nodes into the same information set based on the game description.
+
+# Save the EFG
+efg = g.write(format='native')
+```

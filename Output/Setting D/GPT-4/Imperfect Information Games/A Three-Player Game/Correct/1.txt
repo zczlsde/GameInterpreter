@@ -1,0 +1,60 @@
+```python
+# Since player 1 does not know the decision of the chance node, the nodes after A and B for player 1's decision must be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Player 2 does not observe the action of player 1. Therefore, the nodes after player 1 chooses L under both A and B for player 2's decision must be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Player 3 does not observe the action of player 2. Therefore, the nodes after player 2 chooses l under all possible previous actions (A or B by chance and L by player 1) for player 3's decision must be in the same information set.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Imperfect Information")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the decision of the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+g.append_move(g.root.children[1], "Player 1", ["L", "R"])
+
+# Since player 1 does not know the decision of the chance node, the nodes after A and B for player 1's decision must be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1], label="R chosen"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1, 1], label="R chosen"))
+
+# Stage 3: Player 2 chooses 'l' or 'r' without observing Player 1's action
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["l", "r"])
+
+# Player 2 does not observe the action of player 1. Therefore, the nodes after player 1 chooses L under both A and B for player 2's decision must be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2], label="r chosen"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 2, 2], label="r chosen"))
+
+# Stage 4: Player 3 chooses 'a' or 'b' without observing Player 2's action
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["a", "b"])
+
+# Player 3 does not observe the action of player 2. Therefore, the nodes after player 2 chooses l under all possible previous actions (A or B by chance and L by player 1) for player 3's decision must be in the same information set.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# The game ends with a payoff (3, 3, 3) after player 3's decision
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="a chosen"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="b chosen"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="a chosen"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([3, 3, 3], label="b chosen"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

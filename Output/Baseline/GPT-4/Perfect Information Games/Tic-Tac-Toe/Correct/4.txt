@@ -1,0 +1,17 @@
+Given the game description and the rules provided, here is the EFG representation of the game:
+
+```
+EFG 2 R "Tic-Tac-Toe Game" { "Player X" "Player O" }
+p "" 1 1 "" { "(0, 0)" "(0, 2)" "(1, 0)" } 0
+    p "" 2 1 "" { "(0, 2)" "(1, 0)" } 0
+        t "" 1 "O wins" { -1, 1 }
+        p "" 1 2 "" { "(0, 2)" } 0
+            t "" 2 "X wins" { 1, -1 }
+    t "" 3 "X wins" { 1, -1 }
+    p "" 2 2 "" { "(0, 0)" "(0, 2)" } 0
+        p "" 1 3 "" { "(0, 2)" } 0
+            t "" 4 "X wins" { 1, -1 }
+        t "" 5 "O wins" { -1, 1 }
+```
+
+This EFG representation outlines the possible moves and outcomes for the given Tic-Tac-Toe game state. Each player node (`p`) represents a decision point for the respective player, with the available actions listed. Terminal nodes (`t`) represent the end of the game, with the outcomes and corresponding payoffs for each player. The game tree is simplified to reflect the specific scenario described, focusing on the moves leading to immediate wins or further play.

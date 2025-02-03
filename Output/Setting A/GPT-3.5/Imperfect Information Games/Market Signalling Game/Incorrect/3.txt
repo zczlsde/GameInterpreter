@@ -1,0 +1,49 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Add a chance node to represent the strength of the New Manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# Add a chance node to represent the signal sent by the New Manufacturer
+g.append_move(g.root.children[0], g.players.chance, ["Strong", "Weak"])
+g.append_move(g.root.children[1], g.players.chance, ["Strong", "Weak"])
+
+# Add moves for the Current Manufacturer based on the signal received
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["Fight", "Adapt"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for nodes with identical signals
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define outcomes for each scenario
+outcomes = {
+    "Strong_Strong_Fight": g.add_outcome([1, 0], label="Strong_Strong_Fight"),
+    "Strong_Strong_Adapt": g.add_outcome([3, 1], label="Strong_Strong_Adapt"),
+    "Strong_Weak_Fight": g.add_outcome([0, 0], label="Strong_Weak_Fight"),
+    "Strong_Weak_Adapt": g.add_outcome([2, 1], label="Strong_Weak_Adapt"),
+    "Weak_Strong_Fight": g.add_outcome([0, 2], label="Weak_Strong_Fight"),
+    "Weak_Strong_Adapt": g.add_outcome([2, 1], label="Weak_Strong_Adapt"),
+    "Weak_Weak_Fight": g.add_outcome([1, 2], label="Weak_Weak_Fight"),
+    "Weak_Weak_Adapt": g.add_outcome([3, 1], label="Weak_Weak_Adapt")
+}
+
+# Set outcomes for each node
+g.set_outcome(g.root.children[0].children[0].children[0], outcomes["Strong_Strong_Fight"])
+g.set_outcome(g.root.children[0].children[0].children[1], outcomes["Strong_Strong_Adapt"])
+g.set_outcome(g.root.children[0].children[1].children[0], outcomes["Strong_Weak_Fight"])
+g.set_outcome(g.root.children[0].children[1].children[1], outcomes["Strong_Weak_Adapt"])
+g.set_outcome(g.root.children[1].children[0].children[0], outcomes["Weak_Strong_Fight"])
+g.set_outcome(g.root.children[1].children[0].children[1], outcomes["Weak_Strong_Adapt"])
+g.set_outcome(g.root.children[1].children[1].children[0], outcomes["Weak_Weak_Fight"])
+g.set_outcome(g.root.children[1].children[1].children[1], outcomes["Weak_Weak_Adapt"])
+
+# Save the EFG
+efg = g.write(format='native')
+```

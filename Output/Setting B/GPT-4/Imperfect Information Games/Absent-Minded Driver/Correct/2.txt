@@ -1,0 +1,34 @@
+Certainly! Given the game description, we'll construct the Extensive Form Game (EFG) using the PyGambit library. The key challenge here is the absent-minded driver's inability to distinguish between junctions X and Y, which implies that these junctions form a single information set. Since the driver moves first and there are no simultaneous moves explicitly mentioned, we'll proceed under the assumption that the driver's decision is sequential at each junction, but with the crucial twist of not remembering the previous choice.
+
+Here's how we can code this scenario:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# At the root, the driver is at junction X but can't distinguish it from Y, so we add moves for both junctions.
+# Since the driver can't distinguish between X and Y, these moves are part of the same information set.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Now, we need to set the outcomes based on the driver's decisions.
+# If the driver exits at the first decision, it's equivalent to exiting at X for a payoff of 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Exit at X"))
+
+# If the driver continues and then exits, it's equivalent to exiting at Y for a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at Y"))
+
+# If the driver continues twice, it's equivalent to reaching C for a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Since the driver cannot distinguish between being at X or Y, we need to set these nodes to be in the same information set.
+# This is crucial to represent the absent-mindedness correctly.
+g.set_infoset(g.root, g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an EFG for the absent-minded driver problem, capturing the essence of the driver's inability to distinguish between junctions X and Y. The use of `g.set_infoset` after defining moves for both junctions ensures that these decisions are part of the same information set, reflecting the driver's absent-mindedness accurately.

@@ -1,0 +1,44 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Monopoly Entry Game")
+
+# Firm 2 moves first and decides whether to Enter or Stay Out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 decides to either Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the payoffs for each outcome
+# If Firm 2 stays out, Firm 1 earns more, and Firm 2 earns nothing
+stay_out_outcome = g.add_outcome([3, 0], label="Stay Out")
+g.set_outcome(g.root.children[1], stay_out_outcome)
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+accommodate_outcome = g.add_outcome([2, 2], label="Accommodate")
+g.set_outcome(g.root.children[0].children[1], accommodate_outcome)
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+fight_outcome = g.add_outcome([1, 3], label="Fight")
+g.set_outcome(g.root.children[0].children[0], fight_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+1. **Game Setup**: We start by creating a new extensive-form game with two players: Firm 1 and Firm 2. The game is titled "Monopoly Entry Game".
+
+2. **Firm 2's Decision**: Firm 2, the potential competitor, moves first. It has two actions: "Enter" or "Stay Out". This is represented by appending a move to the root node for Firm 2.
+
+3. **Firm 1's Decision**: If Firm 2 decides to enter, Firm 1, the monopolist, must decide whether to "Fight" or "Accommodate". This is represented by appending a move to the node where Firm 2 has chosen to enter.
+
+4. **Payoffs**:
+   - If Firm 2 stays out, Firm 1 earns a payoff of 3, and Firm 2 earns 0.
+   - If Firm 2 enters and Firm 1 accommodates, both firms earn a payoff of 2.
+   - If Firm 2 enters and Firm 1 fights, Firm 2 earns a payoff of 3, and Firm 1 earns 1.
+
+5. **Outcome Setting**: We set the outcomes for each terminal node based on the payoffs described.
+
+6. **Save the Game**: Finally, we save the extensive-form game in the native format.

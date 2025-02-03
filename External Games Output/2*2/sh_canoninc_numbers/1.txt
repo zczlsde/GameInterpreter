@@ -1,0 +1,52 @@
+```python
+# Step-by-step thought process:
+# 1. In the Stag Hunt game, both hunters make their decisions simultaneously.
+# 2. To model this in a sequential structure, assume one hunter moves first and the other moves second.
+# 3. The starting node, g.root, is the decision node for the first hunter.
+# 4. The first hunter has two actions: Collaborate (hunt stag) or Act Independently (hunt hare).
+# 5. The second hunter's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first hunter's actions.
+# 6. Since the second hunter does not know the first hunter's action, these decision nodes should be grouped in the same information set.
+
+# Set the information set for the second hunter's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Hunter1 and Hunter2
+g = gbt.Game.new_tree(players=["Hunter1", "Hunter2"], title="Stag Hunt Game")
+
+# Step 1: Model the game as a sequential game where Hunter1 moves first
+# Hunter1 has two actions: Collaborate (hunt stag) or Act Independently (hunt hare)
+g.append_move(g.root, "Hunter1", ["Collaborate", "Act Independently"])
+
+# Step 2: Hunter2 makes a decision after Hunter1
+# Hunter2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Hunter1's actions
+g.append_move(g.root.children[0], "Hunter2", ["Collaborate", "Act Independently"])
+g.append_move(g.root.children[1], "Hunter2", ["Collaborate", "Act Independently"])
+
+# Step 3: Set the information set for Hunter2's decision nodes
+# Since Hunter2 does not know Hunter1's action, these decision nodes should be grouped in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes for each possible combination of actions
+# If both collaborate, they each receive a large reward of 3 units
+outcome_collaborate = g.add_outcome([3, 3], label="Both Collaborate")
+
+# If one collaborates while the other hunts a hare, the collaborator gets nothing and the independent hunter gets 2 units
+outcome_hare_hunter1 = g.add_outcome([0, 2], label="Hunter1 Collaborates, Hunter2 Hunts Hare")
+outcome_hare_hunter2 = g.add_outcome([2, 0], label="Hunter1 Hunts Hare, Hunter2 Collaborates")
+
+# If both hunt hares independently, they each receive a small reward of 1 unit
+outcome_both_hare = g.add_outcome([1, 1], label="Both Hunt Hare")
+
+# Step 5: Assign outcomes to the terminal nodes
+g.set_outcome(g.root.children[0].children[0], outcome_collaborate)
+g.set_outcome(g.root.children[0].children[1], outcome_hare_hunter1)
+g.set_outcome(g.root.children[1].children[0], outcome_hare_hunter2)
+g.set_outcome(g.root.children[1].children[1], outcome_both_hare)
+
+# Save the EFG
+efg = g.write(format='native')
+```

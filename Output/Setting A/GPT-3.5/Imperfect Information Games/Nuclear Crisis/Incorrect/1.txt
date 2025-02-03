@@ -1,0 +1,200 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear crisis game")
+
+# Country A moves first and has two actions: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# If Country A chooses to Ignore, both countries receive a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore"))
+
+# If Country A chooses to Escalate, Country B faces the choice to Back down (B) or Escalate further (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# If Country B chooses to Back down, Country A gains a small payoff and Country B incurs a small loss
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Back down"))
+
+# If both countries choose to Escalate, Country A decides between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B is unaware of Country A's decision and must choose between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# If one country Detonates while the other Retreats, the Detonating country gains a large positive payoff
+# and the Retreating country incurs a large negative payoff
+detonate_retreat = g.add_outcome([3, -2], label="Detonate-Retreat")
+
+# If both countries Detonate, it leads to a catastrophic nuclear disaster with a very large negative payoff for both
+detonate_detonate = g.add_outcome([-5, -5], label="Detonate-Detonate")
+
+# If both countries Retreat, they each suffer a small negative payoff
+retreat_retreat = g.add_outcome([-1, -1], label="Retreat-Retreat")
+
+# Set outcomes for the respective decisions
+g.set_outcome(g.root.children[0].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], detonate_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0].children[1], retreat_retreat)
+
+# Set information sets for simultaneous decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[1].children[0])
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear crisis game")
+
+# Country A moves first and has two actions: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# If Country A chooses to Ignore, both countries receive a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore"))
+
+# If Country A chooses to Escalate, Country B faces the choice to Back down (B) or Escalate further (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# If Country B chooses to Back down, Country A gains a small payoff and Country B incurs a small loss
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Back down"))
+
+# If both countries choose to Escalate, Country A decides between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B is unaware of Country A's decision and must choose between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# If one country Detonates while the other Retreats, the Detonating country gains a large positive payoff
+# and the Retreating country incurs a large negative payoff
+detonate_retreat = g.add_outcome([3, -2], label="Detonate-Retreat")
+
+# If both countries Detonate, it leads to a catastrophic nuclear disaster with a very large negative payoff for both
+detonate_detonate = g.add_outcome([-5, -5], label="Detonate-Detonate")
+
+# If both countries Retreat, they each suffer a small negative payoff
+retreat_retreat = g.add_outcome([-1, -1], label="Retreat-Retreat")
+
+# Set outcomes for the respective decisions
+g.set_outcome(g.root.children[0].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], detonate_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0].children[1], retreat_retreat)
+
+# Set information sets for simultaneous decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[1].children[0])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear crisis game")
+
+# Country A moves first and has two actions: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# If Country A chooses to Ignore, both countries receive a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore"))
+
+# If Country A chooses to Escalate, Country B faces the choice to Back down (B) or Escalate further (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# If Country B chooses to Back down, Country A gains a small payoff and Country B incurs a small loss
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Back down"))
+
+# If both countries choose to Escalate, Country A decides between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B is unaware of Country A's decision and must choose between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# If one country Detonates while the other Retreats, the Detonating country gains a large positive payoff
+# and the Retreating country incurs a large negative payoff
+detonate_retreat = g.add_outcome([3, -2], label="Detonate-Retreat")
+
+# If both countries Detonate, it leads to a catastrophic nuclear disaster with a very large negative payoff for both
+detonate_detonate = g.add_outcome([-5, -5], label="Detonate-Detonate")
+
+# If both countries Retreat, they each suffer a small negative payoff
+retreat_retreat = g.add_outcome([-1, -1], label="Retreat-Retreat")
+
+# Set outcomes for the respective decisions
+g.set_outcome(g.root.children[0].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], detonate_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0].children[1], retreat_retreat)
+
+# Set information sets for simultaneous decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[1].children[0])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear crisis game")
+
+# Country A moves first and has two actions: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# If Country A chooses to Ignore, both countries receive a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore"))
+
+# If Country A chooses to Escalate, Country B faces the choice to Back down (B) or Escalate further (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# If Country B chooses to Back down, Country A gains a small payoff and Country B incurs a small loss
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Back down"))
+
+# If both countries choose to Escalate, Country A decides between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B is unaware of Country A's decision and must choose between Retreating (R) or Detonating (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# If one country Detonates while the other Retreats, the Detonating country gains a large positive payoff
+# and the Retreating country incurs a large negative payoff
+detonate_retreat = g.add_outcome([3, -2], label="Detonate-Retreat")
+
+# If both countries Detonate, it leads to a catastrophic nuclear disaster with a very large negative payoff for both
+detonate_detonate = g.add_outcome([-5, -5], label="Detonate-Detonate")
+
+# If both countries Retreat, they each suffer a small negative payoff
+retreat_retreat = g.add_outcome([-1, -1], label="Retreat-Retreat")
+
+# Set outcomes for the respective decisions
+g.set_outcome(g.root.children[0].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], detonate_retreat)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], detonate_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0].children[1], retreat_retreat)
+
+# Set information sets for simultaneous decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[1].children[0])
+
+# Save the EFG
+efg = g.write(format='native')

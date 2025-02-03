@@ -1,0 +1,32 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+# This is the first move in the game, so we append it to the root of the game tree
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 decides to enter, then Firm 1 must decide how to respond
+# We append this decision to the child node of the root corresponding to Firm 2's decision to "Enter"
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Now we set the outcomes based on the game description
+# If Firm 2 stays out, the game ends, and Firm 1 earns more. We assume specific payoffs for illustration.
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+# We assume specific payoffs for illustration
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+# We assume specific payoffs for illustration
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# The game tree is now fully specified with moves and outcomes
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form game (EFG) for a market entry scenario using the Pygambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and Firm 1 chooses how to respond if Firm 2 enters. The payoffs are set based on the game's description, illustrating the strategic decisions and their consequences.

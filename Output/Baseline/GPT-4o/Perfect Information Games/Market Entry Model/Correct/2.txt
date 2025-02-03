@@ -1,0 +1,6 @@
+EFG 2 R "Entry deterrence game" { "Firm 2" "Firm 1" }
+p "" 1 1 "" { "Enter" "Out" } 0
+p "" 2 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 wins" { 3, 0 }
+t "" 2 "Equal share" { 1, 1 }
+t "" 3 "Firm 2 wins" { 0, 2 }

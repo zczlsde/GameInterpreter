@@ -1,0 +1,73 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the labor union and company management.
+# Both players can either "Compromise" or "Hold Firm".
+
+# Step 2: Determine the structure of the game.
+# Since both players make their decisions simultaneously, this game involves imperfect information.
+# To model this game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: Define the decision nodes.
+# Let's assume the labor union moves first and company management moves second.
+# The starting node, g.root, is the labor union's decision node.
+# The labor union has two actions: "Compromise" and "Hold Firm".
+# Company management's decision nodes are g.root.children[0] and g.root.children[1], which correspond to the labor union's actions "Compromise" and "Hold Firm".
+
+# Step 4: Group the decision nodes into information sets.
+# Since the company management does not know the labor union's action when making its decision,
+# company management's decision nodes should be grouped in the same information set.
+
+# Set the information set for company management's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players: the labor union and company management.
+# Both players can either "Compromise" or "Hold Firm".
+
+# Step 2: Determine the structure of the game.
+# Since both players make their decisions simultaneously, this game involves imperfect information.
+# To model this game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: Define the decision nodes.
+# Let's assume the labor union moves first and company management moves second.
+g = gbt.Game.new_tree(players=["Labor Union", "Company Management"],
+                      title="Labor Negotiation Game")
+
+# The starting node, g.root, is the labor union's decision node.
+# The labor union has two actions: "Compromise" and "Hold Firm".
+g.append_move(g.root, "Labor Union", ["Compromise", "Hold Firm"])
+
+# Company management's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to the labor union's actions "Compromise" and "Hold Firm".
+g.append_move(g.root.children[0], "Company Management", ["Compromise", "Hold Firm"])
+g.append_move(g.root.children[1], "Company Management", ["Compromise", "Hold Firm"])
+
+# Step 4: Group the decision nodes into information sets.
+# Since the company management does not know the labor union's action when making its decision,
+# company management's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and payoffs.
+# If both compromise, a reasonable contract is agreed upon.
+# If one holds firm and the other compromises, the firm holder gets more favorable terms.
+# If both hold firm, negotiations may fail, leading to strikes and loss of productivity.
+
+# Define the outcomes
+compromise_outcome = g.add_outcome([1, 1], label="Reasonable Contract")
+firm_union_outcome = g.add_outcome([2, 0], label="Union Favorable")
+firm_management_outcome = g.add_outcome([0, 2], label="Management Favorable")
+strike_outcome = g.add_outcome([-1, -1], label="Strike")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], compromise_outcome)  # Both Compromise
+g.set_outcome(g.root.children[0].children[1], firm_management_outcome)  # Union Compromise, Management Hold Firm
+g.set_outcome(g.root.children[1].children[0], firm_union_outcome)  # Union Hold Firm, Management Compromise
+g.set_outcome(g.root.children[1].children[1], strike_outcome)  # Both Hold Firm
+
+# Save the EFG
+efg = g.write(format='native')
+```

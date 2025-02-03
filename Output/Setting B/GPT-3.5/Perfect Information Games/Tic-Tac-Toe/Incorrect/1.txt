@@ -1,0 +1,252 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state
+initial_board = [["e", "o", "e"],
+                 ["e", "x", "o"],
+                 ["x", "x", "o"]]
+
+# Define the current player
+current_player = "x"
+
+# Define the available moves for player "x" based on the current board state
+available_moves = [(0, 0), (0, 2), (1, 0)]
+
+# Append moves for player "x" based on the available moves
+for move in available_moves:
+    g.append_move(g.root, "x", [str(move)])
+
+# Set information set for player "x" based on the available moves
+for i in range(len(available_moves)):
+    g.set_infoset(g.root.children[i], g.root.children[0].infoset)
+
+# Define the outcomes for different scenarios
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+
+# Set outcomes for different move sequences
+# If "x" places the mark on (0,0)
+g.set_outcome(g.root.children[0], x_wins)
+
+# If "x" places the mark on (0,2)
+g.set_outcome(g.root.children[1], x_wins)
+
+# If "x" places the mark on (1,0)
+# Append moves for player "o" based on the available moves
+for i in range(2):
+    g.append_move(g.root.children[2], "o", [str(available_moves[i])])
+
+# Set information set for player "o" based on the available moves
+for i in range(2):
+    g.set_infoset(g.root.children[2].children[i], g.root.children[2].children[0].infoset)
+
+# If "o" places the mark on (0,2)
+g.set_outcome(g.root.children[2].children[0], o_wins)
+
+# If "o" places the mark on (1,0)
+# Append moves for player "x" based on the available moves
+for i in range(2):
+    g.append_move(g.root.children[2].children[1], "x", [str(available_moves[i])])
+
+# Set information set for player "x" based on the available moves
+for i in range(2):
+    g.set_infoset(g.root.children[2].children[1].children[i], g.root.children[2].children[1].children[0].infoset)
+
+# If "x" places the mark on (0,2) after (1,0)
+g.set_outcome(g.root.children[2].children[1].children[0], x_wins)
+
+# If "x" places the mark on (0,2) after (0,0)
+g.set_outcome(g.root.children[2].children[1].children[1], x_wins)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state
+initial_board = [["e", "o", "e"],
+                 ["e", "x", "o"],
+                 ["x", "x", "o"]]
+
+# Define the current player
+current_player = "x"
+
+# Define the available moves for player "x" based on the current board state
+available_moves = [(0, 0), (0, 2), (1, 0)]
+
+# Append moves for player "x" based on the available moves
+for move in available_moves:
+    node_x = g.append_move(g.root, "x", [str(move)])
+
+# Set information set for player "x" based on the available moves
+for i in range(len(available_moves)):
+    g.set_infoset(g.root.children[i], g.root.children[0].infoset)
+
+# Define the outcomes for different scenarios
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+
+# Set outcomes for different move sequences
+# If "x" places the mark on (0,0)
+g.set_outcome(node_x, x_wins)
+
+# If "x" places the mark on (0,2)
+node_x2 = g.append_move(g.root, "x", ["(0,2)"])
+g.set_infoset(node_x2, node_x.infoset)
+g.set_outcome(node_x2, x_wins)
+
+# If "x" places the mark on (1,0)
+node_x3 = g.append_move(g.root, "x", ["(1,0)"])
+g.set_infoset(node_x3, node_x.infoset)
+
+# Append moves for player "o" based on the available moves
+node_o1 = g.append_move(node_x3, "o", ["(0,0)"])
+node_o2 = g.append_move(node_x3, "o", ["(0,2)"])
+g.set_infoset(node_o1, node_o2.infoset)
+
+# If "o" places the mark on (0,0)
+node_x4 = g.append_move(node_o1, "x", ["(0,2)"])
+g.set_infoset(node_x4, node_o1.infoset)
+g.set_outcome(node_x4, x_wins)
+
+# If "o" places the mark on (0,2)
+g.set_outcome(node_o2, o_wins)
+
+# If "o" places the mark on (0,2) after (1,0)
+node_x5 = g.append_move(node_o2, "x", ["(0,2)"])
+g.set_infoset(node_x5, node_o2.infoset)
+g.set_outcome(node_x5, x_wins)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state
+initial_board = [["e", "o", "e"],
+                 ["e", "x", "o"],
+                 ["x", "x", "o"]]
+
+# Define the current player
+current_player = "x"
+
+# Define the available moves for player "x" based on the current board state
+available_moves = [(0, 0), (0, 2), (1, 0)]
+
+# Append moves for player "x" based on the available moves
+node_x1 = g.append_move(g.root, "x", ["(0,0)"])
+node_x2 = g.append_move(g.root, "x", ["(0,2)"])
+node_x3 = g.append_move(g.root, "x", ["(1,0)"])
+
+# Set information set for player "x" based on the available moves
+g.set_infoset(node_x1, node_x2.infoset)
+g.set_infoset(node_x3, node_x2.infoset)
+
+# Define the outcomes for different scenarios
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+
+# Set outcomes for different move sequences
+# If "x" places the mark on (0,0)
+g.set_outcome(node_x1, x_wins)
+
+# If "x" places the mark on (0,2)
+g.set_outcome(node_x2, x_wins)
+
+# If "x" places the mark on (1,0)
+node_o1 = g.append_move(node_x3, "o", ["(0,0)"])
+node_o2 = g.append_move(node_x3, "o", ["(0,2)"])
+
+# Set information set for player "o" based on the available moves
+g.set_infoset(node_o1, node_o2.infoset)
+
+# If "o" places the mark on (0,0)
+node_x4 = g.append_move(node_o1, "x", ["(0,2)"])
+g.set_infoset(node_x4, node_o1.infoset)
+g.set_outcome(node_x4, x_wins)
+
+# If "o" places the mark on (0,2)
+g.set_outcome(node_o2, o_wins)
+
+# If "o" places the mark on (0,2) after (1,0)
+node_x5 = g.append_move(node_o2, "x", ["(0,2)"])
+g.set_infoset(node_x5, node_o2.infoset)
+g.set_outcome(node_x5, x_wins)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Define the initial board state
+initial_board = [["e", "o", "e"],
+                 ["e", "x", "o"],
+                 ["x", "x", "o"]]
+
+# Define the current player
+current_player = "x"
+
+# Define the available moves for player "x" based on the current board state
+available_moves = [(0, 0), (0, 2), (1, 0)]
+
+# Append moves for player "x" based on the available moves
+node_x1 = g.append_move(g.root, "x", ["(0,0)"])
+node_x2 = g.append_move(g.root, "x", ["(0,2)"])
+node_x3 = g.append_move(g.root, "x", ["(1,0)"])
+
+# Set information set for player "x" based on the available moves
+g.set_infoset(node_x1, node_x2.infoset)
+g.set_infoset(node_x3, node_x2.infoset)
+
+# Define the outcomes for different scenarios
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+
+# Set outcomes for different move sequences
+# If "x" places the mark on (0,0)
+g.set_outcome(node_x1, x_wins)
+
+# If "x" places the mark on (0,2)
+node_x2_o1 = g.append_move(node_x2, "o", ["(0,0)"])
+node_x2_o2 = g.append_move(node_x2, "o", ["(0,2)"])
+g.set_infoset(node_x2_o1, node_x2_o2.infoset)
+
+# If "o" places the mark on (0,0)
+node_x2_o1_x1 = g.append_move(node_x2_o1, "x", ["(0,2)"])
+g.set_infoset(node_x2_o1_x1, node_x2_o1.infoset)
+g.set_outcome(node_x2_o1_x1, x_wins)
+
+# If "o" places the mark on (0,2)
+g.set_outcome(node_x2_o2, o_wins)
+
+# If "o" places the mark on (0,2) after (1,0)
+node_x2_o2_x1 = g.append_move(node_x2_o2, "x", ["(0,2)"])
+g.set_infoset(node_x2_o2_x1, node_x2_o2.infoset)
+g.set_outcome(node_x2_o2_x1, x_wins)
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,6 @@
+In the first stage, Player 1 has three options: A, B, and C. 
+In the second stage, Player 2, without knowing Player 1's choice, can select either D or E.
+In the third stage, Player 1 has two actions to choose from: F or G. 
+Finally, in the fourth stage, Player 3 can decide between actions Q and W. 
+If Player 3 selects Q in the final stage, all players receive a payoff of 3. 
+However, if Player 3 opts for W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3.

@@ -1,0 +1,37 @@
+```python
+# Step 1: Firm 2 decides whether to enter or stay out. This is Firm 2's decision node.
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate. This is Firm 1's decision node.
+# Step 3: Since Firm 1's decision depends on Firm 2's action, there is no simultaneous move or hidden information.
+# Therefore, there is no need to set any information sets in this game as there is no imperfect information.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Entry Deterrence Game")
+
+# Step 1: Firm 2 decides whether to enter or stay out. This is Firm 2's decision node.
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate. This is Firm 1's decision node.
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs based on the conditions provided:
+# - Firm 1 earns more if Firm 2 does not enter.
+# - If Firm 2 enters, Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+# - If Firm 2 enters, Firm 2 earns more than firm 1 if Firm 1 fights.
+
+# Payoffs for each outcome:
+# Firm 2 chooses "Out": Firm 1 earns 3, Firm 2 earns 0
+# Firm 2 chooses "Enter" and Firm 1 chooses "Fight": Firm 1 earns 1, Firm 2 earns 2
+# Firm 2 chooses "Enter" and Firm 1 chooses "Accommodate": Firm 1 earns 2, Firm 2 earns 2
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Out"))
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Firm 1 Fights"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Firm 1 Accommodates"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

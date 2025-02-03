@@ -1,0 +1,42 @@
+```python
+# Step-by-step thought process:
+
+# 1. Firm 2 decides whether to enter the market or stay out. This is Firm 2's decision node.
+# 2. If Firm 2 stays out, the game ends, and no further decisions are made.
+# 3. If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate.
+# 4. Firm 1's decision is based on Firm 2's entry, but Firm 1 knows Firm 2's decision because it is sequential.
+# 5. Since Firm 1 knows Firm 2's decision, there is no imperfect information for Firm 1.
+# 6. Therefore, there are no information sets to be set for Firm 1, as Firm 1's decision is not based on imperfect information.
+
+# Conclusion: There are no information sets to be set in this game because Firm 1's decision is made with perfect information.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Monopoly Entry Game")
+
+# Step 1: Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Step 2: If Firm 2 stays out, the game ends with payoffs for both firms
+stay_out_outcome = g.add_outcome([3, 0], label="Stay Out")  # Firm 1 earns more if Firm 2 stays out
+g.set_outcome(g.root.children[1], stay_out_outcome)
+
+# Step 3: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Step 4: Set the outcomes based on Firm 1's decision
+fight_outcome = g.add_outcome([1, 2], label="Fight")  # Firm 2 earns more if Firm 1 fights
+accommodate_outcome = g.add_outcome([2, 2], label="Accommodate")  # Both firms earn equally if Firm 1 accommodates
+
+# Assign outcomes to the respective nodes
+g.set_outcome(g.root.children[0].children[0], fight_outcome)
+g.set_outcome(g.root.children[0].children[1], accommodate_outcome)
+
+# Conclusion: There are no information sets to be set in this game because Firm 1's decision is made with perfect information.
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,40 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with one player, the absent-minded driver
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver Game")
+
+# The driver first makes a decision at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to CONTINUE, they reach junction Y
+# At junction Y, the driver again makes a decision
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+
+# Set the outcomes for each terminal node
+# If the driver exits at junction X, they reach destination A with a payoff of 0
+g.set_outcome(g.root.children[1], g.add_outcome([0], label="Destination A"))
+
+# If the driver exits at junction Y, they reach destination B with a payoff of 4
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([4], label="Destination B"))
+
+# If the driver continues at junction Y, they reach destination C with a payoff of 1
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1], label="Destination C"))
+
+# Set the information set to reflect the driver's inability to distinguish between junctions X and Y
+# Both nodes where the driver makes a decision (junction X and Y) are in the same information set
+g.set_infoset(g.root.children[0], g.root.children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+- **Game Setup**: We define a game with one player, the "Driver", who makes decisions at two junctions, X and Y.
+- **Moves**: The driver has two choices at each junction: "EXIT" or "CONTINUE".
+- **Outcomes**: 
+  - Exiting at junction X leads to destination A with a payoff of 0.
+  - Exiting at junction Y leads to destination B with a payoff of 4.
+  - Continuing at junction Y leads to destination C with a payoff of 1.
+- **Imperfect Information**: The driver cannot distinguish between junctions X and Y, so both decision nodes are placed in the same information set.
+- **Code Structure**: The code follows the structure of defining moves, setting outcomes, and handling imperfect information using the `pygambit` library.

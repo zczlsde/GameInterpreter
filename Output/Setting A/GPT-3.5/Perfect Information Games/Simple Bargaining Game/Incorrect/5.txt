@@ -1,0 +1,124 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+a_accepts_b_accepts = g.add_outcome([5500, 4500], label="A accepts, B accepts")
+a_accepts_b_rejects = g.add_outcome([0, 0], label="A accepts, B rejects")
+a_rejects_b_accepts = g.add_outcome([4750, 4750], label="A rejects, B accepts")
+a_rejects_b_rejects = g.add_outcome([4693, 4332], label="A rejects, B rejects")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], a_accepts_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], a_accepts_b_rejects)
+g.set_outcome(g.root.children[0].children[1].children[1], a_rejects_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], a_rejects_b_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+a_accepts_b_accepts = g.add_outcome([5500, 4500], label="A accepts, B accepts")
+a_accepts_b_rejects = g.add_outcome([0, 0], label="A accepts, B rejects")
+a_rejects_b_accepts = g.add_outcome([4750, 4750], label="A rejects, B accepts")
+a_rejects_b_rejects = g.add_outcome([4693, 4332], label="A rejects, B rejects")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], a_accepts_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], a_accepts_b_rejects)
+g.set_outcome(g.root.children[0].children[1].children[1], a_rejects_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], a_rejects_b_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+a_accepts_b_accepts = g.add_outcome([5500, 4500], label="A accepts, B accepts")
+a_accepts_b_rejects = g.add_outcome([0, 0], label="A accepts, B rejects")
+a_rejects_b_accepts = g.add_outcome([4750, 4750], label="A rejects, B accepts")
+a_rejects_b_rejects = g.add_outcome([4693, 4332], label="A rejects, B rejects")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], a_accepts_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], a_accepts_b_rejects)
+g.set_outcome(g.root.children[0].children[1].children[1], a_rejects_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], a_rejects_b_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "A", ["Accept", "Reject"])
+
+# Create outcomes for the different paths in the negotiation
+a_accepts_b_accepts = g.add_outcome([5500, 4500], label="A accepts, B accepts")
+a_accepts_b_rejects = g.add_outcome([0, 0], label="A accepts, B rejects")
+a_rejects_b_accepts = g.add_outcome([4750, 4750], label="A rejects, B accepts")
+a_rejects_b_rejects = g.add_outcome([4693, 4332], label="A rejects, B rejects")
+
+# Set outcomes for the corresponding nodes
+g.set_outcome(g.root.children[0].children[0], a_accepts_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[0], a_accepts_b_rejects)
+g.set_outcome(g.root.children[0].children[1].children[1], a_rejects_b_accepts)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], a_rejects_b_rejects)
+
+# Set information sets for imperfect information
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

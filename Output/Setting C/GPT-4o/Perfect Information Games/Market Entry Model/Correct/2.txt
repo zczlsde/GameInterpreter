@@ -1,0 +1,40 @@
+```python
+# Step 1: Firm 2 decides whether to enter or stay out. This is a decision node for Firm 2.
+# Step 2: If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate.
+# Step 3: Firm 1's decision is based on Firm 2's action, but Firm 1 knows Firm 2's action, so there is no imperfect information for Firm 1.
+# Step 4: Since Firm 1 knows Firm 2's action, there is no need to set any information sets for Firm 1's decision nodes.
+
+# In this game, there is no simultaneous move or hidden information that requires setting an information set.
+# Therefore, no g.set_infoset() function is needed.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Monopoly Entry Game")
+
+# Step 1: Firm 2 decides whether to enter or stay out. This is a decision node for Firm 2.
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Step 2: If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate.
+# Append Firm 1's move after Firm 2 chooses to enter.
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Step 3: Set the payoffs for each outcome.
+# If Firm 2 stays out, Firm 1 earns more, and Firm 2 earns nothing.
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 3], label="Fight"))
+
+# Step 4: Since Firm 1 knows Firm 2's action, there is no need to set any information sets for Firm 1's decision nodes.
+# In this game, there is no simultaneous move or hidden information that requires setting an information set.
+# Therefore, no g.set_infoset() function is needed.
+
+# Save the EFG
+efg = g.write(format='native')
+```

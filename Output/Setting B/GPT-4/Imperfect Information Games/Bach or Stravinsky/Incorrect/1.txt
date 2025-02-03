@@ -1,0 +1,35 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Since decisions are made simultaneously, we simulate this with a chance node leading to all possible decision combinations
+# We append a chance move with four outcomes: both choose Bach, both choose Stravinsky, Alexis chooses Bach and Beverley chooses Stravinsky, and vice versa.
+g.append_move(g.root, g.players.chance, ["Both Bach", "Both Stravinsky", "Bach-Stravinsky", "Stravinsky-Bach"])
+
+# Set the probabilities for each outcome at the chance node to represent equal likelihood of each combination
+# Since there are four outcomes and they are equally likely, each has a probability of 1/4
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# Now, we set the outcomes for each branch
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff
+g.set_outcome(g.root.children[0], g.add_outcome([2, 1], label="Both Bach"))
+
+# If both choose Stravinsky, Beverley gets a higher payoff, and Alexis gets a lower payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 2], label="Both Stravinsky"))
+
+# If they choose different events, they both get no payoffs
+g.set_outcome(g.root.children[2], g.add_outcome([0, 0], label="Bach-Stravinsky"))
+g.set_outcome(g.root.children[3], g.add_outcome([0, 0], label="Stravinsky-Bach"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+In this code:
+- We start by creating a new game tree with two players, Alexis and Beverley.
+- We simulate the simultaneous decision-making process by introducing a chance node right at the beginning. This node has four branches representing all possible outcomes of their decisions.
+- We assign equal probabilities to each of the four outcomes using `g.set_chance_probs`, indicating that each combination of decisions is equally likely.
+- We then set the outcomes for each branch based on the game's description. If both players choose the same concert, the one who prefers that concert gets a higher payoff. If they choose different concerts, both receive no payoff.
+- Finally, we save the game in the native format of Pygambit for further analysis or visualization.

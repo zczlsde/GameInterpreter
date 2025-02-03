@@ -1,0 +1,10 @@
+EFG 2 R "Soccer Team Strategy Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "Work Together" "Focus Individually" } 0
+p "" 2 1 "" { "Work Together" "Focus Individually" } 0
+t "" 1 "Team Wins" { 3, 3 }
+t "" 2 "Player 2 Benefits" { 0, 2 }
+p "" 2 1 "" { "Work Together" "Focus Individually" } 0
+t "" 3 "Player 1 Benefits" { 2, 0 }
+t "" 4 "Team Suffers" { 1, 1 }

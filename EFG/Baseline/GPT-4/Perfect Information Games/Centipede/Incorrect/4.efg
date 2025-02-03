@@ -1,0 +1,9 @@
+EFG 2 R "Doubling coins game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 }
+p "" 2 1 "" { "Take" "Push" } 0
+t "" 2 "Bob takes 8, Alice takes 2" { 2, 8 }
+p "" 1 2 "" { "Take" "Push" } 0
+t "" 3 "Alice takes 16, Bob takes 4" { 16, 4 }
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 4 "Bob takes 32, Alice takes 8" { 8, 32 }

@@ -1,0 +1,65 @@
+```python
+# Step 1: Since player 1 chooses between "L" and "R" without knowing the outcome of the chance event, 
+# the decision nodes after each chance event outcome ("A" or "B") are in the same information set for player 1.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 2: Player 2's decision to choose between "l" and "r" does not depend on knowing player 1's choice between "L" and "R".
+# Therefore, the decision nodes following player 1's choice of "L" after each chance event outcome ("A" or "B") are in the same information set for player 2.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Step 3: Similarly, player 3's choice between "a" and "b" does not depend on the choices made by player 2 or the outcome of the chance event.
+# Thus, the decision nodes following player 2's choice of "l" after player 1 has chosen "L" are in the same information set for player 3, 
+# regardless of the initial chance event outcome ("A" or "B") and player 2's choice.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three-Player Game with Chance Event")
+
+# First stage: a chance event with outcomes "A" or "B", each with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Second stage: Player 1 chooses between "L" and "R" without knowing the outcome of the chance event
+# This is done for both outcomes of the chance event, "A" and "B"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+    # If Player 1 selects "R", the game ends with a payoff of (1, 1, 1) to all players
+    g.set_outcome(node.children[1], g.add_outcome([1, 1, 1], label="R selected"))
+
+# Third stage: If Player 1 chooses "L", then Player 2 can select either "l" or "r"
+# This is done for the "L" choice under both "A" and "B" outcomes of the chance event
+for node in [g.root.children[0].children[0], g.root.children[1].children[0]]:
+    g.append_move(node, "Player 2", ["l", "r"])
+    # If Player 2 chooses "r", the game ends with a payoff of (2, 2, 2) to all players
+    g.set_outcome(node.children[1], g.add_outcome([2, 2, 2], label="r selected"))
+
+# Fourth stage: If Player 2 selects "l", then Player 3 can choose between "a" and "b"
+# This is done for the "l" choice after Player 1 has chosen "L", under both "A" and "B" outcomes
+for node in [g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0]]:
+    g.append_move(node, "Player 3", ["a", "b"])
+    # The game concludes with a payoff of (3, 3, 3) once Player 3 makes a decision
+    g.set_outcome(node.children[0], g.add_outcome([3, 3, 3], label="a selected"))
+    g.set_outcome(node.children[1], g.add_outcome([3, 3, 3], label="b selected"))
+
+# Handling imperfect information
+# Step 1: Since player 1 chooses between "L" and "R" without knowing the outcome of the chance event, 
+# the decision nodes after each chance event outcome ("A" or "B") are in the same information set for player 1.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 2: Player 2's decision to choose between "l" and "r" does not depend on knowing player 1's choice between "L" and "R".
+# Therefore, the decision nodes following player 1's choice of "L" after each chance event outcome ("A" or "B") are in the same information set for player 2.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Step 3: Similarly, player 3's choice between "a" and "b" does not depend on the choices made by player 2 or the outcome of the chance event.
+# Thus, the decision nodes following player 2's choice of "l" after player 1 has chosen "L" are in the same information set for player 3, 
+# regardless of the initial chance event outcome ("A" or "B") and player 2's choice.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

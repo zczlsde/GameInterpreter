@@ -1,0 +1,88 @@
+```python
+# Since both players choose their symbols simultaneously, neither player knows the other's choice at the time of decision.
+# This means each player's decision node is indistinguishable from their perspective, based on the other player's choice.
+# Therefore, all decision nodes for each player after the initial choice must be in the same information set for that player.
+
+# Let's assume Player 1's actions are represented as children of the root node, and each of those actions leads to a new decision node for Player 2.
+# Since Player 2's decision is simultaneous with Player 1's, Player 2 cannot distinguish between the scenarios where Player 1 has chosen rock, paper, or scissors.
+# Therefore, all of Player 2's decision nodes must be grouped into the same information set.
+
+# Similarly, Player 1's decision nodes, which are hypothetical here since we're modeling the game as sequential for the sake of representation, would also be grouped in the same information set if they were to make a decision after Player 2.
+
+# However, in this game, the moves are simultaneous, and the representation of sequential moves is just for the sake of modeling in PyGambit. 
+# In reality, there's only one decision node for each player in terms of game play, but they're conceptually in the same information set due to the simultaneous nature of the game.
+
+# Since the game is symmetric, and both players have the same set of actions and information set structure, we only need to set the information set for one player to represent this symmetry.
+# But, for the sake of completeness in representation, if we were to explicitly model each player's decisions after seeing the other's choice (even though they actually decide simultaneously), we would group all of Player 1's decision nodes into one information set, and all of Player 2's decision nodes into another information set.
+
+# Note: The actual PyGambit code to create the game tree and nodes is not included here as per the instruction to only include the set_infoset() functions. The below code assumes that the game tree and nodes have been created accordingly.
+
+# Example code for setting information sets, assuming nodes have been created for each player's decisions following the other's choice:
+# g.set_infoset(player1_decision_node1, player1_decision_node2.infoset)
+# g.set_infoset(player1_decision_node3, player1_decision_node2.infoset)
+# g.set_infoset(player2_decision_node1, player2_decision_node2.infoset)
+# g.set_infoset(player2_decision_node3, player2_decision_node2.infoset)
+
+# However, since the actual decision-making is simultaneous and not sequential, the above explicit setting of information sets might not directly apply without the context of the game tree structure in PyGambit.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors")
+
+# Since the game involves simultaneous moves, we model it as if Player 1 moves first for the sake of constructing the game tree.
+# Append moves for Player 1 at the root node. Player 1 can choose Rock, Paper, or Scissors.
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's choices, append moves for Player 2. Player 2 also can choose Rock, Paper, or Scissors.
+# This is done sequentially for the sake of constructing the game tree, but represents simultaneous decision-making.
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Define the outcomes for each combination of choices.
+# The outcomes are defined based on the rules: Rock beats Scissors, Scissors beat Paper, and Paper beats Rock.
+# The payoffs are set as follows: a win results in a payoff of 1, a loss results in a payoff of -1, and a tie results in a payoff of 0 for both players.
+# For simplicity, we directly set the outcomes without using a loop or recursion.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Tie - Rock"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, -1], label="Win - Paper beats Rock"))
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([-1, 1], label="Lose - Rock beats Scissors"))
+
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([-1, 1], label="Lose - Paper beaten by Scissors"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 0], label="Tie - Paper"))
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([1, -1], label="Win - Scissors beaten by Rock"))
+
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([1, -1], label="Win - Scissors beats Paper"))
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="Lose - Scissors beaten by Rock"))
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="Tie - Scissors"))
+
+# Since both players choose their symbols simultaneously, neither player knows the other's choice at the time of decision.
+# This means each player's decision node is indistinguishable from their perspective, based on the other player's choice.
+# Therefore, all decision nodes for each player after the initial choice must be in the same information set for that player.
+
+# Let's assume Player 1's actions are represented as children of the root node, and each of those actions leads to a new decision node for Player 2.
+# Since Player 2's decision is simultaneous with Player 1's, Player 2 cannot distinguish between the scenarios where Player 1 has chosen rock, paper, or scissors.
+# Therefore, all of Player 2's decision nodes must be grouped into the same information set.
+
+# Similarly, Player 1's decision nodes, which are hypothetical here since we're modeling the game as sequential for the sake of representation, would also be grouped in the same information set if they were to make a decision after Player 2.
+
+# However, in this game, the moves are simultaneous, and the representation of sequential moves is just for the sake of modeling in PyGambit. 
+# In reality, there's only one decision node for each player in terms of game play, but they're conceptually in the same information set due to the simultaneous nature of the game.
+
+# Since the game is symmetric, and both players have the same set of actions and information set structure, we only need to set the information set for one player to represent this symmetry.
+# But, for the sake of completeness in representation, if we were to explicitly model each player's decisions after seeing the other's choice (even though they actually decide simultaneously), we would group all of Player 1's decision nodes into one information set, and all of Player 2's decision nodes into another information set.
+
+# Note: The actual PyGambit code to create the game tree and nodes is not included here as per the instruction to only include the set_infoset() functions. The below code assumes that the game tree and nodes have been created accordingly.
+
+# Example code for setting information sets, assuming nodes have been created for each player's decisions following the other's choice:
+# g.set_infoset(player1_decision_node1, player1_decision_node2.infoset)
+# g.set_infoset(player1_decision_node3, player1_decision_node2.infoset)
+# g.set_infoset(player2_decision_node1, player2_decision_node2.infoset)
+# g.set_infoset(player2_decision_node3, player2_decision_node2.infoset)
+
+# However, since the actual decision-making is simultaneous and not sequential, the above explicit setting of information sets might not directly apply without the context of the game tree structure in PyGambit.
+
+# Save the EFG
+efg = g.write(format='native')
+```

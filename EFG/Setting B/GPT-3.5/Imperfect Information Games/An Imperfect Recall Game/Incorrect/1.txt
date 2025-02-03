@@ -1,0 +1,124 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Player 1
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage imperfect information game")
+
+# Stage 1: Chance node with two actions "L" and "R" each with probability 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2])
+
+# Stage 2: Player 1 observes the outcome from the chance node and selects either "l" or "r"
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+    
+# Stage 3: Player 1 chooses between "A" and "B" with imperfect information about the chance node outcome
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 1", ["A", "B"])
+    g.set_infoset(node, g.root.children[0].infoset)  # Grouping nodes in the same information set
+    
+for node in g.root.children[1].children:
+    g.append_move(node, "Player 1", ["A", "B"])
+    g.set_infoset(node, g.root.children[1].infoset)  # Grouping nodes in the same information set
+
+# Set all outcomes to 0
+for child in g.root.children:
+    for subchild in child.children:
+        for subsubchild in subchild.children:
+            g.set_outcome(subsubchild, g.add_outcome([0, 0], label=""))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+closing parenthesis ']' does not match opening parenthesis '(' (<string>, line 9)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage imperfect information game")
+
+# Stage 1: Chance node with two actions "L" and "R" each with probability 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome from the chance node and selects either "l" or "r"
+for child in g.root.children:
+    g.append_move(child, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses between "A" and "B" with imperfect information about the chance node outcome
+for subchild in g.root.children[0].children:
+    g.append_move(subchild, "Player 1", ["A", "B"])
+    g.set_infoset(subchild, g.root.children[0].infoset)  # Grouping nodes in the same information set
+
+for subchild in g.root.children[1].children:
+    g.append_move(subchild, "Player 1", ["A", "B"])
+    g.set_infoset(subchild, g.root.children[1].infoset)  # Grouping nodes in the same information set
+
+# Set all outcomes to 0
+for child in g.root.children:
+    for subchild in child.children:
+        for subsubchild in subchild.children:
+            g.set_outcome(subsubchild, g.add_outcome([0, 0], label=""))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+add_outcome(): number of payoffs must equal number of players
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage imperfect information game")
+
+# Stage 1: Chance node with two actions "L" and "R" each with probability 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome from the chance node and selects either "l" or "r"
+for child in g.root.children:
+    g.append_move(child, "Player 1", ["l", "r"])
+    
+    # Stage 3: Player 1 chooses between "A" and "B" with imperfect information about the chance node outcome
+    for subchild in child.children:
+        g.append_move(subchild, "Player 1", ["A", "B"])
+        g.set_infoset(subchild, child.infoset)  # Grouping nodes in the same information set
+        
+        # Set all outcomes to 0
+        for subsubchild in subchild.children:
+            g.set_outcome(subsubchild, g.add_outcome([0, 0], label=""))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+add_outcome(): number of payoffs must equal number of players
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage imperfect information game")
+
+# Stage 1: Chance node with two actions "L" and "R" each with probability 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome from the chance node and selects either "l" or "r"
+for child in g.root.children:
+    g.append_move(child, "Player 1", ["l", "r"])
+    
+    # Stage 3: Player 1 chooses between "A" and "B" with imperfect information about the chance node outcome
+    for subchild in child.children:
+        g.append_move(subchild, "Player 1", ["A", "B"])
+        g.set_infoset(subchild, child.infoset)  # Grouping nodes in the same information set
+        
+        # Set all outcomes to 0
+        for subsubchild in subchild.children:
+            g.set_outcome(subsubchild, g.add_outcome([0, 0, 0], label=""))
+
+# Save the EFG
+efg = g.write(format='native')

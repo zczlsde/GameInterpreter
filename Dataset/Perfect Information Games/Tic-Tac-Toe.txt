@@ -1,0 +1,23 @@
+You’re playing a two-player paper-and-pencil game, where players take turns marking a three-by-three grid with either an "x" or an "o." The objective is to get three of your marks in a row, column, or diagonal to win.
+The winner gains 1 point, while the loser loses 1 point.
+Assuming "e" represents empty, the current board state is: 
+e | o | e
+e | x | o
+x | x | o
+The next move is "x" 
+
+The game tree could be generated as follows:
+"x" can place the mark on (0,0), (0,2) and (1,0).
+If "x" places the mark on (0,0), 
+   "o" can then place the mark on (0,2) and (1,0).
+   If "o" places the mark on (0,2), "o" wins.
+   If "o" places the mark on (1,0), 
+      "x" can then place the mark on (0,2), 
+      If "x" places the mark on (0,2), "x" wins.
+If "x" places the mark on (0,2), "x" wins.
+If "x" places the mark on (1,0), 
+   "o" can then place the mark on (0,0) and (0,2).
+   If "o" places the mark on (0,0), 
+      "x" can then place the mark on (0,2), 
+      If "x" places the mark on (0,2), "x" wins.
+   If "o" places the mark on (0,2), "o" wins.

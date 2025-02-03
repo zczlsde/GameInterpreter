@@ -1,0 +1,41 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the first move in the game, so it's appended to the root.
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+# This decision is appended as a move for B after A's proposal.
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial Proposal"))
+
+# If B rejects, B proposes an equal split (5000 each)
+# This is B's counter-proposal, so it's appended after B's rejection.
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept or reject B's counter-proposal
+# This decision is appended as a move for A after B's counter-proposal.
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's plan, the negotiation ends with a slightly adjusted distribution (4750 each)
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Counter-Proposal"))
+
+# If A rejects, A proposes a new plan where A gets 5200 and B gets 4800
+# This is A's final proposal, so it's appended after A's rejection.
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# B has no right to reject and must accept A's final proposal
+# The game ends with the final adjusted distribution (4693 for A, 4332 for B)
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="Final Distribution"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet generates an Extensive Form Game (EFG) for the negotiation game described. The game starts with player A proposing a distribution plan. Depending on B's response, the game follows different paths, including B's counter-proposal and A's final proposal, leading to different outcomes based on the decisions made by A and B at each step.

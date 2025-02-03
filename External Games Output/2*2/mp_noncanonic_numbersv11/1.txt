@@ -1,0 +1,61 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the independent bookstore and the national bookstore chain.
+# Both players decide simultaneously whether to promote fiction or non-fiction.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume the national bookstore chain moves first and the independent bookstore moves second.
+
+# Step 3: The starting node, g.root, is the national bookstore chain's decision node.
+# The national bookstore chain has two actions: promote fiction or non-fiction.
+
+# Step 4: The independent bookstore's decision nodes are g.root.children[0] and g.root.children[1], which correspond to the national bookstore chain's actions (promote fiction and promote non-fiction).
+
+# Step 5: The independent bookstore, moving simultaneously, does not know which action the national bookstore chain has taken.
+# Therefore, the independent bookstore's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Independent Bookstore and National Bookstore Chain.
+g = gbt.Game.new_tree(players=["Independent Bookstore", "National Bookstore Chain"],
+                      title="Bookstore Promotion Game")
+
+# Step 2: Model the game as a sequential game to handle simultaneous moves.
+# Assume the National Bookstore Chain moves first.
+
+# Step 3: The National Bookstore Chain decides whether to promote fiction or non-fiction.
+g.append_move(g.root, "National Bookstore Chain", ["Promote Fiction", "Promote Non-Fiction"])
+
+# Step 4: The Independent Bookstore makes its decision without knowing the National Bookstore Chain's choice.
+# The Independent Bookstore also decides whether to promote fiction or non-fiction.
+g.append_move(g.root.children[0], "Independent Bookstore", ["Promote Fiction", "Promote Non-Fiction"])
+g.append_move(g.root.children[1], "Independent Bookstore", ["Promote Fiction", "Promote Non-Fiction"])
+
+# Step 5: Since the Independent Bookstore moves simultaneously, its decision nodes are grouped in the same information set.
+# This models the imperfect information in the game.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the players' actions.
+# If both promote the same genre, the Independent Bookstore gains 2 points, and the Chain loses 2 points.
+# If their promotions differ, the Chain gains 3 points, and the Independent Store loses 3 points.
+
+# Both promote fiction
+outcome_same_genre = g.add_outcome([2, -2], label="Same Genre Promotion")
+# Both promote non-fiction
+outcome_same_genre_2 = g.add_outcome([2, -2], label="Same Genre Promotion")
+# Different promotions
+outcome_diff_genre = g.add_outcome([-3, 3], label="Different Genre Promotion")
+
+# Set outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], outcome_same_genre)  # Both promote fiction
+g.set_outcome(g.root.children[0].children[1], outcome_diff_genre)  # Chain promotes fiction, Independent promotes non-fiction
+g.set_outcome(g.root.children[1].children[0], outcome_diff_genre)  # Chain promotes non-fiction, Independent promotes fiction
+g.set_outcome(g.root.children[1].children[1], outcome_same_genre_2)  # Both promote non-fiction
+
+# Save the EFG
+efg = g.write(format='native')
+```

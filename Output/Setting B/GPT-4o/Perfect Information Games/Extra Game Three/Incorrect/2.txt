@@ -1,0 +1,51 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Chance and Sequential Moves Game")
+
+# Step 1: Add a chance node at the root with four possible outcomes: A, B, C, D
+# The chance node is represented by g.players.chance
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Step 2: For each outcome of the chance node, Player 1 chooses between actions E, F, G
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Step 3: For each of Player 1's actions, Player 2 chooses between actions Q, W
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 2", ["Q", "W"])
+
+# Step 4: Set the payoffs for each terminal node based on the given outcomes
+# Outcome A
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, -1], label="A, Q"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -2], label="A, W"))
+
+# Outcome B
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([3, -3], label="B, Q"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-3, 3], label="B, W"))
+
+# Outcome C
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([0, 0], label="C, Q"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([-1, 1], label="C, W"))
+
+# Outcome D
+g.set_outcome(g.root.children[3].children[0].children[0], g.add_outcome([4, -4], label="D, Q"))
+g.set_outcome(g.root.children[3].children[0].children[1], g.add_outcome([-4, 4], label="D, W"))
+
+# Step 5: Set the probabilities for the chance node
+# Assuming equal probabilities for simplicity
+probabilities = [gbt.Rational(1, 4) for _ in range(4)]
+g.set_chance_probs(g.root.infoset, probabilities)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+- **Step 1**: We start by adding a chance node at the root with four possible outcomes: A, B, C, and D. This is done using `g.append_move` with `g.players.chance`.
+- **Step 2**: For each outcome of the chance node, Player 1 has three actions to choose from: E, F, and G. We append these moves for each child of the root.
+- **Step 3**: After Player 1's decision, Player 2 observes Player 1's choice and selects between two actions: Q and W. We append these moves for each child of Player 1's nodes.
+- **Step 4**: We set the payoffs for each terminal node based on the given outcomes using `g.set_outcome`.
+- **Step 5**: We set equal probabilities for the chance node outcomes using `gbt.Rational` to represent the probabilities.

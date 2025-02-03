@@ -1,0 +1,81 @@
+```python
+# Since the game is sequential and each player's move is based on the previous move, there's no simultaneous move.
+# Therefore, there's no need to group decision nodes into the same information set based on the game description provided.
+# Each decision is made with full knowledge of the previous actions, so there's no imperfect information within the decision nodes as described.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the first distribution plan: A gets 5500, B gets 4500
+a_propose_1 = g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# B decides whether to accept or reject A's first proposal
+b_decision_1 = g.append_move(a_propose_1, "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution
+g.set_outcome(b_decision_1.children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects, B proposes an equal split
+b_propose = g.append_move(b_decision_1.children[1], "B", ["Propose 5000-5000"])
+
+# A decides whether to accept or reject B's proposal
+a_decision = g.append_move(b_propose, "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with a slightly adjusted distribution due to negotiation costs
+g.set_outcome(a_decision.children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new plan
+a_propose_2 = g.append_move(a_decision.children[1], "A", ["Propose 5200-4800"])
+
+# B has no right to reject and must accept A's final proposal
+# The game ends with a different adjusted distribution due to further negotiation costs
+g.set_outcome(a_propose_2, g.add_outcome([4693, 4332], label="B accepts A's final proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+append_move(): nodes must be Node or str, not NoneType
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the first distribution plan: A gets 5500, B gets 4500
+# Since A's move is the first and only action, we directly append it to the root
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# B decides whether to accept or reject A's first proposal
+# B's decision is based on A's proposal, so we append B's move to the first child of the root (A's move)
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects, B proposes an equal split
+# Since B's rejection leads to another decision by B, we append this move to B's reject action
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# A decides whether to accept or reject B's proposal
+# A's decision is based on B's proposal, so we append A's move to the child of B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with a slightly adjusted distribution due to negotiation costs
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new plan
+# Since A's rejection leads to another decision by A, we append this move to A's reject action
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# B has no right to reject and must accept A's final proposal
+# The game ends with a different adjusted distribution due to further negotiation costs
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's final proposal"))
+
+# Save the EFG
+efg = g.write(format='native')

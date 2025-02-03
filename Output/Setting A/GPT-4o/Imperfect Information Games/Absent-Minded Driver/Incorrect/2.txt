@@ -1,0 +1,56 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with one player, the driver
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver Game")
+
+# The driver first makes a decision at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction X, the game ends with a payoff of 0
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Destination A"))
+
+# If the driver chooses to CONTINUE, he reaches junction Y
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction Y, the game ends with a payoff of 4
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Destination B"))
+
+# If the driver chooses to CONTINUE at junction Y, the game ends with a payoff of 1
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Destination C"))
+
+# Since the driver cannot distinguish between junctions X and Y, we set them in the same information set
+g.set_infoset(g.root.children[1], g.root.children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with one player, the driver
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver Game")
+
+# The driver first makes a decision at junction X
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction X, the game ends with a payoff of 0
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Destination A"))
+
+# If the driver chooses to CONTINUE, he reaches junction Y
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# If the driver chooses to EXIT at junction Y, the game ends with a payoff of 4
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Destination B"))
+
+# If the driver chooses to CONTINUE at junction Y, the game ends with a payoff of 1
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Destination C"))
+
+# Since the driver cannot distinguish between junctions X and Y, we set them in the same information set
+g.set_infoset(g.root.children[1], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

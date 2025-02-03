@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two directors, Director 1 and Director 2.
+# Each director has two actions: Collaborate on the joint project or Work on their own film.
+
+# Step 2: Determine the structure of the game.
+# Since the directors make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Director 1 moves first and Director 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Director 1's decision node.
+# Director 1 has two actions: Collaborate or Work on their own film.
+# Director 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Director 1's actions.
+
+# Step 4: Group the decision nodes into information sets.
+# Director 2, moving simultaneously, does not know which action Director 1 has taken.
+# Therefore, Director 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two directors, Director 1 and Director 2.
+# Each director has two actions: Collaborate on the joint project or Work on their own film.
+
+# Step 2: Determine the structure of the game.
+# Since the directors make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Director 1 moves first and Director 2 moves second.
+
+# Step 3: Create a new extensive-form game with the two directors as players.
+g = gbt.Game.new_tree(players=["Director 1", "Director 2"],
+                      title="Film Directors' Collaboration Game")
+
+# Step 4: Define the decision nodes and actions.
+# The starting node, g.root, is Director 1's decision node.
+# Director 1 has two actions: Collaborate or Work on their own film.
+g.append_move(g.root, "Director 1", ["Collaborate", "Work on own film"])
+
+# Director 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Director 1's actions.
+# Director 2 also has two actions: Collaborate or Work on their own film.
+g.append_move(g.root.children[0], "Director 2", ["Collaborate", "Work on own film"])
+g.append_move(g.root.children[1], "Director 2", ["Collaborate", "Work on own film"])
+
+# Step 5: Group the decision nodes into information sets.
+# Director 2, moving simultaneously, does not know which action Director 1 has taken.
+# Therefore, Director 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes and payoffs.
+# If both collaborate, they create a masterpiece.
+masterpiece = g.add_outcome([3, 3], label="Masterpiece")
+# If one collaborates and the other works on their own film, the collaborator is left without a finished product.
+collaborator_left = g.add_outcome([0, 2], label="Collaborator left")
+independent_success = g.add_outcome([2, 0], label="Independent success")
+# If both work on their own films, they produce average movies.
+average_movies = g.add_outcome([1, 1], label="Average movies")
+
+# Step 7: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], masterpiece)
+g.set_outcome(g.root.children[0].children[1], collaborator_left)
+g.set_outcome(g.root.children[1].children[0], independent_success)
+g.set_outcome(g.root.children[1].children[1], average_movies)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,60 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, and they move simultaneously.
+# Each player has two actions: Collaborate or Self-promote.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume one player moves first and the other moves second.
+
+# Step 3: Assume Player 1 moves first and Player 2 moves second.
+# The starting node, g.root, is Player 1's decision node.
+# Player 1 has two actions, Collaborate and Self-promote.
+
+# Step 4: Player 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Player 1's actions Collaborate and Self-promote.
+
+# Step 5: Player 2, moving simultaneously, does not know which action Player 1 has taken.
+# Therefore, Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Colleague 1 and Colleague 2.
+g = gbt.Game.new_tree(players=["Colleague 1", "Colleague 2"],
+                      title="Promotion Competition Game")
+
+# Step 2: Assume Colleague 1 moves first. Colleague 1 has two actions: Collaborate or Self-promote.
+g.append_move(g.root, "Colleague 1", ["Collaborate", "Self-promote"])
+
+# Step 3: Colleague 2 moves second. Colleague 2 also has two actions: Collaborate or Self-promote.
+# Colleague 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Colleague 1's actions Collaborate and Self-promote.
+g.append_move(g.root.children[0], "Colleague 2", ["Collaborate", "Self-promote"])
+g.append_move(g.root.children[1], "Colleague 2", ["Collaborate", "Self-promote"])
+
+# Step 4: Since the players move simultaneously, Colleague 2 does not know which action Colleague 1 has taken.
+# Therefore, Colleague 2's decision nodes should be grouped in the same information set.
+# Use the provided code block to handle the imperfect information.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both collaborate, they show teamwork and are equally considered, scoring 0 points each.
+outcome_collaborate_collaborate = g.add_outcome([0, 0], label="Both Collaborate")
+
+# If one self-promotes while the other collaborates, the self-promoter gets the promotion worth 5 points, while the collaborator gets -5 points.
+outcome_selfpromote_collaborate = g.add_outcome([5, -5], label="Colleague 1 Self-promotes")
+outcome_collaborate_selfpromote = g.add_outcome([-5, 5], label="Colleague 2 Self-promotes")
+
+# If both self-promote, they undercut each other's credibility, and neither gets promoted, each suffering -3 points.
+outcome_selfpromote_selfpromote = g.add_outcome([-3, -3], label="Both Self-promote")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_collaborate_collaborate)
+g.set_outcome(g.root.children[0].children[1], outcome_collaborate_selfpromote)
+g.set_outcome(g.root.children[1].children[0], outcome_selfpromote_collaborate)
+g.set_outcome(g.root.children[1].children[1], outcome_selfpromote_selfpromote)
+
+# Save the EFG
+efg = g.write(format='native')
+```

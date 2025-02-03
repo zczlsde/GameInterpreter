@@ -1,0 +1,95 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with one player named "Driver"
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver game")
+
+# Add the decision nodes for the driver at junctions X and Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Group the decision nodes at junctions X and Y in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with one player named "Driver"
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver game")
+
+# Add the decision nodes for the driver at junctions X and Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Group the decision nodes at junctions X and Y in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with one player named "Driver"
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver game")
+
+# Add the decision nodes for the driver at junctions X and Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Group the decision nodes at junctions X and Y in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with one player named "Driver"
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver game")
+
+# Add the decision nodes for the driver at junctions X and Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Group the decision nodes at junctions X and Y in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with one player named "Driver"
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver game")
+
+# Add the decision nodes for the driver at junctions X and Y
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Group the decision nodes at junctions X and Y in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

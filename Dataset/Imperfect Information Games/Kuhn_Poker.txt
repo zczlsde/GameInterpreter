@@ -1,0 +1,19 @@
+This is a two-player card game between Alice and Bob, using a deck of only three cards: a King, Queen, and Jack. 
+Each player contributes 1 to the pot at the start. 
+
+Each player is dealt one of the three cards, and the third is put aside unseen by a chance node.
+There are six possible allocations of the cards, each with probability 1/6: JQ, JK, QJ, QK, KJ, and KQ.
+
+The game proceeds as follows for each of the six possible allocations:
+Alice can check or bet 1, WITHOUT knowing the allocation of the chance node.
+
+    If Alice checks then Bob can check or bet 1, WITHOUT knowing Alice’s card.
+        If Bob checks, the game ends (i.e. the higher card wins 1 from the other player).
+
+        If Bob bets then Alice can fold or call, WITHOUT knowing Bob's card.
+            If Alice folds then Bob takes the pot of 3 (i.e. winning 1 from player 1).
+            If Alice calls, the game ends. (i.e. the higher card wins 2 from the other player).
+            
+    If Alice bets then Bob can fold or call, WITHOUT knowing the Alice's card.
+        If Bob folds then Alice takes the pot of 3 (i.e. winning 1 from player 2).
+        If Bob calls, the game ends. (i.e. the higher card wins 2 from the other player).

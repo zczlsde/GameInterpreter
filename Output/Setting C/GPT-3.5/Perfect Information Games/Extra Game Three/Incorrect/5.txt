@@ -1,0 +1,179 @@
+```python
+# Step-by-step thought process:
+# 1. There is a chance node at the root that selects one of four outcomes: A, B, C, or D.
+# 2. Player 1 moves after the chance node and has three possible actions: E, F, or G.
+# 3. Player 2 moves last and has two possible actions: Q or W.
+# 4. Player 2's actions depend on both the outcome of the chance node and Player 1's action.
+# 5. Player 2's decision nodes should be grouped in the same information set since they cannot distinguish between the different outcomes of the chance node and Player 1's action.
+
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[3], g.root.children[1].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game with chance node")
+
+# Append a chance node at the root with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Append Player 1's actions after the chance node: E, F, G
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Append Player 2's actions after Player 1's actions: Q, W
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+
+# Set information sets for Player 2's decision nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[3], g.root.children[1].children[0].infoset)
+
+# Define the payoffs for each combination of chance node outcome and Player actions
+outcomes = {
+    ("A", "Q"): [1, -1], ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3], ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0], ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4], ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes based on the defined payoffs
+for outcome, payoff in outcomes.items():
+    node = g.get_node_by_history(outcome)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game with chance node")
+
+# Append a chance node at the root with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Append Player 1's actions after the chance node: E, F, G
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Append Player 2's actions after Player 1's actions: Q, W
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+
+# Set information sets for Player 2's decision nodes
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0])
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0])
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[0])
+g.set_infoset(g.root.children[0].children[3], g.root.children[1].children[0])
+
+# Define the payoffs for each combination of chance node outcome and Player actions
+outcomes = {
+    ("A", "Q"): [1, -1], ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3], ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0], ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4], ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes based on the defined payoffs
+for outcome, payoff in outcomes.items():
+    node = g.get_node_by_history(outcome)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game with chance node")
+
+# Append a chance node at the root with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Append Player 1's actions after the chance node: E, F, G
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Append Player 2's actions after Player 1's actions: Q, W
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+
+# Set information sets for Player 2's decision nodes
+for node in g.root.children[0].children:
+    g.set_infoset(node.children[0], node.infoset)
+    g.set_infoset(node.children[1], node.infoset)
+
+# Define the payoffs for each combination of chance node outcome and Player actions
+outcomes = {
+    ("A", "Q"): [1, -1], ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3], ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0], ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4], ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes based on the defined payoffs
+for outcome, payoff in outcomes.items():
+    node = g.get_node_by_history(outcome)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect information game with chance node")
+
+# Append a chance node at the root with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Append Player 1's actions after the chance node: E, F, G
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Append Player 2's actions after Player 1's actions: Q, W
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 2", ["Q", "W"])
+
+# Set information sets for Player 2's decision nodes
+for node in g.root.children[0].children:
+    g.set_infoset(node.children[0], node.children[1].infoset)
+
+# Define the payoffs for each combination of chance node outcome and Player actions
+outcomes = {
+    ("A", "Q"): [1, -1], ("A", "W"): [2, -2],
+    ("B", "Q"): [3, -3], ("B", "W"): [-3, 3],
+    ("C", "Q"): [0, 0], ("C", "W"): [-1, 1],
+    ("D", "Q"): [4, -4], ("D", "W"): [-4, 4]
+}
+
+# Set the outcomes based on the defined payoffs
+for outcome, payoff in outcomes.items():
+    node = g.get_node_by_history(outcome)
+    g.set_outcome(node, g.add_outcome(payoff))
+
+# Save the EFG
+efg = g.write(format='native')

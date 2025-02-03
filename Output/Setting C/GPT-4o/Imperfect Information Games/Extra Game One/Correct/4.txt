@@ -1,0 +1,103 @@
+```python
+# Step-by-step thought process:
+
+# 1. Player 1 has three actions: A, B, and C. 
+#    These actions are represented by the children of the root node.
+
+# 2. Player 2 knows when action A was taken, so there is no imperfect information for action A.
+#    However, Player 2 cannot distinguish between actions B and C.
+
+# 3. Therefore, Player 2's decision nodes after actions B and C should be grouped in the same information set.
+
+# 4. Player 2 has three options: D, E, and F. 
+#    If Player 2 chooses F, the game ends. 
+#    If Player 2 chooses D or E, Player 1 has a choice between actions G and H.
+
+# 5. Since Player 2 cannot distinguish between actions B and C, 
+#    Player 2's decision nodes after actions B and C should be grouped in the same information set.
+
+# Group Player 2's decision nodes after actions B and C in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Step 1: Player 1 has three actions: A, B, and C.
+# These actions are represented by the children of the root node.
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 2: Player 2 knows when action A was taken, so there is no imperfect information for action A.
+# Player 2 has three options: D, E, and F.
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+
+# Step 3: If Player 2 chooses F, the game ends.
+# Set the outcome for choosing F after action A
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([0, 0], label="End after F"))
+
+# Step 4: If Player 2 chooses D or E, Player 1 has a choice between actions G and H.
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["G", "H"])
+
+# Step 5: Selecting H ends the game with payoffs 2 for Player 1 and -1 for Player 2.
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+
+# Step 6: If Player 1 chooses G, Player 2 then decides between actions Q and W.
+g.append_move(g.root.children[0].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Step 7: Set outcomes for Player 2's choices after Player 1 chooses G
+# Both players get 3 after Q, and both players get 0 after W.
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+
+# Step 8: Player 2 cannot distinguish between actions B and C.
+# Therefore, Player 2's decision nodes after actions B and C should be grouped in the same information set.
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Group Player 2's decision nodes after actions B and C in the same information set
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)
+
+# Step 9: Set outcomes for Player 2's choices after actions B and C
+# If Player 2 chooses F, the game ends.
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([0, 0], label="End after F"))
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="End after F"))
+
+# If Player 2 chooses D or E, Player 1 has a choice between actions G and H.
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["G", "H"])
+
+# Set outcomes for Player 1's choices after actions B and C
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([2, -1], label="End after H"))
+g.set_outcome(g.root.children[2].children[1].children[1], g.add_outcome([2, -1], label="End after H"))
+
+# If Player 1 chooses G, Player 2 then decides between actions Q and W.
+g.append_move(g.root.children[1].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 2", ["Q", "W"])
+
+# Set outcomes for Player 2's choices after Player 1 chooses G
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+g.set_outcome(g.root.children[1].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[1].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+g.set_outcome(g.root.children[2].children[0].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[2].children[0].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+g.set_outcome(g.root.children[2].children[1].children[0].children[0], g.add_outcome([3, 3], label="Both get 3"))
+g.set_outcome(g.root.children[2].children[1].children[0].children[1], g.add_outcome([0, 0], label="Both get 0"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

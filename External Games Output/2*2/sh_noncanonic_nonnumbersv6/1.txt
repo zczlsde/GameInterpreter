@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, General 1 and General 2.
+# Both players have two actions: "Joint Attack" and "Independent Mission".
+
+# Step 2: Determine the structure of the game.
+# Since the generals must decide simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume General 1 moves first and General 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is General 1's decision node.
+# General 1 has two actions, "Joint Attack" and "Independent Mission".
+# General 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to General 1's actions "Joint Attack" and "Independent Mission".
+
+# Step 4: Group the decision nodes into information sets.
+# General 2, moving simultaneously, does not know which action General 1 has taken.
+# Therefore, General 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: General 1 and General 2.
+g = gbt.Game.new_tree(players=["General 1", "General 2"],
+                      title="Generals' Coordination Game")
+
+# Step 2: General 1 makes the first move with two possible actions: "Joint Attack" and "Independent Mission".
+g.append_move(g.root, "General 1", ["Joint Attack", "Independent Mission"])
+
+# Step 3: General 2 makes a move after General 1, but does not know General 1's action.
+# General 2 has the same two actions: "Joint Attack" and "Independent Mission".
+# We append moves for General 2 at both of General 1's decision nodes.
+g.append_move(g.root.children[0], "General 2", ["Joint Attack", "Independent Mission"])
+g.append_move(g.root.children[1], "General 2", ["Joint Attack", "Independent Mission"])
+
+# Step 4: Set the information set for General 2's decision nodes to reflect imperfect information.
+# General 2 does not know which action General 1 has taken, so we group the decision nodes in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# Both generals choose "Joint Attack": decisive victory with strategic advantage.
+decisive_victory = g.add_outcome([3, 3], label="Decisive Victory")
+
+# General 1 chooses "Joint Attack", General 2 chooses "Independent Mission": General 1 exposed, General 2 modest victory.
+general1_exposed = g.add_outcome([0, 2], label="General 1 Exposed")
+
+# General 1 chooses "Independent Mission", General 2 chooses "Joint Attack": General 2 exposed, General 1 modest victory.
+general2_exposed = g.add_outcome([2, 0], label="General 2 Exposed")
+
+# Both generals choose "Independent Mission": minor successes, no significant impact.
+minor_successes = g.add_outcome([1, 1], label="Minor Successes")
+
+# Step 6: Assign the outcomes to the terminal nodes of the game tree.
+g.set_outcome(g.root.children[0].children[0], decisive_victory)
+g.set_outcome(g.root.children[0].children[1], general1_exposed)
+g.set_outcome(g.root.children[1].children[0], general2_exposed)
+g.set_outcome(g.root.children[1].children[1], minor_successes)
+
+# Save the EFG
+efg = g.write(format='native')
+```

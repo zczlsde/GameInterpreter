@@ -1,0 +1,55 @@
+```python
+# Since Alice and Bob take turns and each has perfect information on the previous moves, there's no need for information sets based on imperfect information.
+# However, to represent the game as described, we would typically model the sequential nature of the decisions without needing to group nodes into information sets for handling imperfect information.
+# This game does not inherently contain imperfect information scenarios as each player knows exactly how many stones are left at each turn.
+# Therefore, no set_infoset() functions are necessary for this game description.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice moves first with the option to take 1 or 2 stones from the pile of 5 stones
+g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, leaving 4 stones, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, leaving 3 stones, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Take 1", "Take 2"])
+# If Alice takes 1 stone, leaving 2 stones, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Take 1", "Take 2"])
+# Outcomes for Bob taking 1 or 2 stones after Alice has taken 1 stone
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Bob loss"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob wins"))
+
+# If Alice takes 2 stones, leaving 1 stone, Bob can only take 1 stone
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Take 1"])
+# Outcome for Bob taking the last stone
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([1, -1], label="Bob loss"))
+
+# If Bob takes 2 stones initially, leaving 2 stones, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[1], "Alice", ["Take 1", "Take 2"])
+# Outcomes for Alice taking 1 or 2 stones after Bob has taken 2 stones
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Alice loss"))
+
+# If Alice takes 2 stones initially, leaving 3 stones, Bob can take 1 or 2 stones
+g.append_move(g.root.children[1], "Bob", ["Take 1", "Take 2"])
+# If Bob takes 1 stone, leaving 2 stones, Alice can take 1 or 2 stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Take 1", "Take 2"])
+# Outcomes for Alice taking 1 or 2 stones after Bob has taken 1 stone
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([1, -1], label="Alice wins"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loss"))
+
+# If Bob takes 2 stones, leaving 1 stone, Alice can only take 1 stone
+g.append_move(g.root.children[1].children[1], "Alice", ["Take 1"])
+# Outcome for Alice taking the last stone
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loss"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs the game tree for the "Avoid the Last Stone Game" between Alice and Bob, where each player alternates turns taking 1 or 2 stones from a pile initially containing 5 stones. The goal is to avoid taking the last stone, with the winner earning 1 point and the loser losing 1 point. The game tree is built step by step, detailing each player's choices and the resulting outcomes based on the remaining stones.

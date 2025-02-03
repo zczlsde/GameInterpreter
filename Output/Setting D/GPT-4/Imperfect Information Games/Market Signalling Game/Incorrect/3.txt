@@ -1,0 +1,229 @@
+```python
+# Since the existing manufacturer observes the signal (strong or weak) but not the actual strength of the new manufacturer,
+# we need to group the decision nodes based on the signals received, regardless of the actual strength of the new manufacturer.
+
+# For a strong signal, the existing manufacturer cannot distinguish if it comes from a truly strong new manufacturer or a weak one pretending to be strong.
+# Therefore, the decision nodes following a strong signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset("strong_signal_from_strong", "strong_signal_from_weak.infoset")
+
+# Similarly, for a weak signal, the existing manufacturer cannot distinguish if it comes from a truly weak new manufacturer or a strong one pretending to be weak.
+# Therefore, the decision nodes following a weak signal from both a strong and weak new manufacturer should be in the same information set.
+g.set_infoset("weak_signal_from_strong", "weak_signal_from_weak.infoset")
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# The game starts with a chance node determining the strength of the new manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Set the probabilities for the strength of the new manufacturer: 2/3 for Strong, 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each outcome of the new manufacturer's strength, they send a signal: Strong (S) or Weak (W)
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# Now, the existing manufacturer must make a decision based on the signal received, not knowing the actual strength
+# The decision is between competing aggressively (F) or adapting (A)
+# We append moves for each signal sent by the new manufacturer
+for strength_node in g.root.children:
+    for signal_node in strength_node.children:
+        g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Define the payoffs based on the game description
+# If the new manufacturer is strong and sends a strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong_Strong_Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong_Strong_Adapt"))
+
+# If the new manufacturer is strong and sends a weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong_Weak_Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong_Weak_Adapt"))
+
+# If the new manufacturer is weak and sends a strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak_Strong_Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak_Strong_Adapt"))
+
+# If the new manufacturer is weak and sends a weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak_Weak_Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak_Weak_Adapt"))
+
+# Handle imperfect information where the existing manufacturer observes the signal but not the actual strength
+# For a strong signal, the existing manufacturer cannot distinguish if it comes from a truly strong new manufacturer or a weak one pretending to be strong.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# For a weak signal, the existing manufacturer cannot distinguish if it comes from a truly weak new manufacturer or a strong one pretending to be weak.
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet creates an extensive-form game representing the scenario described. It starts with a chance node to determine the strength of the new manufacturer, followed by the new manufacturer's decision to send a strong or weak signal. The existing manufacturer then makes a decision based on the observed signal, without knowing the actual strength of the new manufacturer. The payoffs are set according to the outcomes described, and imperfect information is handled by grouping decision nodes based on the signals received, ensuring the existing manufacturer cannot distinguish the actual strength of the new manufacturer from the signal alone.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# The game starts with a chance node determining the strength of the new manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Set the probabilities for the strength of the new manufacturer: 2/3 for Strong, 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each outcome of the new manufacturer's strength, they send a signal: Strong (S) or Weak (W)
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# Now, the existing manufacturer must make a decision based on the signal received, not knowing the actual strength
+# The decision is between competing aggressively (F) or adapting (A)
+# We append moves for each signal sent by the new manufacturer
+for strength_node in g.root.children:
+    for signal_node in strength_node.children:
+        g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Define the payoffs based on the game description
+# If the new manufacturer is strong and sends a strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong_Strong_Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong_Strong_Adapt"))
+
+# If the new manufacturer is strong and sends a weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong_Weak_Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong_Weak_Adapt"))
+
+# If the new manufacturer is weak and sends a strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak_Strong_Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak_Strong_Adapt"))
+
+# If the new manufacturer is weak and sends a weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak_Weak_Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak_Weak_Adapt"))
+
+# Handle imperfect information where the existing manufacturer observes the signal but not the actual strength
+# Correcting the set_infoset calls by accurately specifying the paths for node1 and node2
+# For a strong signal
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# For a weak signal
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# The game starts with a chance node determining the strength of the new manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Set the probabilities for the strength of the new manufacturer: 2/3 for Strong, 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each outcome of the new manufacturer's strength, they send a signal: Strong (S) or Weak (W)
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# Now, the existing manufacturer must make a decision based on the signal received, not knowing the actual strength
+# The decision is between competing aggressively (F) or adapting (A)
+# We append moves for each signal sent by the new manufacturer
+for strength_node in g.root.children:
+    for signal_node in strength_node.children:
+        g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Define the payoffs based on the game description
+# If the new manufacturer is strong and sends a strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong_Strong_Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong_Strong_Adapt"))
+
+# If the new manufacturer is strong and sends a weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong_Weak_Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong_Weak_Adapt"))
+
+# If the new manufacturer is weak and sends a strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak_Strong_Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak_Strong_Adapt"))
+
+# If the new manufacturer is weak and sends a weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak_Weak_Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak_Weak_Adapt"))
+
+# Correcting the set_infoset calls by accurately specifying the paths for node1 and node2
+# For a strong signal
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# For a weak signal
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: "New Manufacturer" and "Existing Manufacturer"
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# The game starts with a chance node determining the strength of the new manufacturer
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Set the probabilities for the strength of the new manufacturer: 2/3 for Strong, 1/3 for Weak
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each outcome of the new manufacturer's strength, they send a signal: Strong (S) or Weak (W)
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# Now, the existing manufacturer must make a decision based on the signal received, not knowing the actual strength
+# The decision is between competing aggressively (F) or adapting (A)
+# We append moves for each signal sent by the new manufacturer
+for strength_node in g.root.children:
+    for signal_node in strength_node.children:
+        g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Define the payoffs based on the game description
+# If the new manufacturer is strong and sends a strong signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="Strong_Strong_Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="Strong_Strong_Adapt"))
+
+# If the new manufacturer is strong and sends a weak signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Strong_Weak_Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="Strong_Weak_Adapt"))
+
+# If the new manufacturer is weak and sends a strong signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="Weak_Strong_Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="Weak_Strong_Adapt"))
+
+# If the new manufacturer is weak and sends a weak signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="Weak_Weak_Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="Weak_Weak_Adapt"))
+
+# Correctly setting the information sets for imperfect information
+# For a strong signal
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# For a weak signal
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

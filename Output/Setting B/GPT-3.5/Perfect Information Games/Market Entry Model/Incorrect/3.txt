@@ -1,0 +1,127 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2 moves first and has two actions: Enter or Stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Create outcomes based on the payoffs described in the game description
+firm1_noenter = g.add_outcome([1, 0], label="Firm 1 earns more (Firm 2 stays out)")
+equal_share = g.add_outcome([0, 0], label="Equal earnings if Firm 1 accommodates")
+firm2_earnsmore = g.add_outcome([0, 1], label="Firm 2 earns more if Firm 1 fights")
+
+# Set outcomes for each possible combination of actions
+g.set_outcome(g.root.children[0].children[0], firm2_earnsmore)  # Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], equal_share)  # Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[1], firm1_noenter)  # Firm 2 stays out
+
+# Set information set for Firm 1's decision node based on Firm 2's action
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2 moves first and has two actions: Enter or Stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Create outcomes based on the payoffs described in the game description
+firm1_noenter = g.add_outcome([1, 0], label="Firm 1 earns more (Firm 2 stays out)")
+equal_share = g.add_outcome([0, 0], label="Equal earnings if Firm 1 accommodates")
+firm2_earnsmore = g.add_outcome([0, 1], label="Firm 2 earns more if Firm 1 fights")
+
+# Set outcomes for each possible combination of actions
+g.set_outcome(g.root.children[0].children[0], firm2_earnsmore)  # Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], equal_share)  # Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[1], firm1_noenter)  # Firm 2 stays out
+
+# Set information set for Firm 1's decision node based on Firm 2's action
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2 moves first and has two actions: Enter or Stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Create outcomes based on the payoffs described in the game description
+firm1_noenter = g.add_outcome([1, 0], label="Firm 1 earns more (Firm 2 stays out)")
+equal_share = g.add_outcome([0, 0], label="Equal earnings if Firm 1 accommodates")
+firm2_earnsmore = g.add_outcome([0, 1], label="Firm 2 earns more if Firm 1 fights")
+
+# Set outcomes for each possible combination of actions
+g.set_outcome(g.root.children[0].children[0], firm2_earnsmore)  # Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], equal_share)  # Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[1], firm1_noenter)  # Firm 2 stays out
+
+# Set information set for Firm 1's decision node based on Firm 2's action
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2 moves first and has two actions: Enter or Stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay out"])
+
+# If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Create outcomes based on the payoffs described in the game description
+firm1_noenter = g.add_outcome([1, 0], label="Firm 1 earns more (Firm 2 stays out)")
+equal_share = g.add_outcome([0, 0], label="Equal earnings if Firm 1 accommodates")
+firm2_earnsmore = g.add_outcome([0, 1], label="Firm 2 earns more if Firm 1 fights")
+
+# Set outcomes for each possible combination of actions
+g.set_outcome(g.root.children[0].children[0], firm2_earnsmore)  # Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[1], equal_share)  # Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[1], firm1_noenter)  # Firm 2 stays out
+
+# Set information set for Firm 1's decision node based on Firm 2's action
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

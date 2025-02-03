@@ -1,0 +1,22 @@
+Based on the game description provided, here is the corresponding EFG representation:
+
+```
+EFG 2 R "Three-stage game with imperfect information" { "Player 1" "Player 2" }
+p "" 1 1 "" { "A" "B" "C" } 0
+    p "" 2 1 "" { "D" "E" "F" } 0
+        p "" 1 2 "" { "G" "H" } 0
+            p "" 2 3 "" { "Q" "W" } 0
+                t "" 1 "P1 and P2 choose Q" { 3, 3 }
+                t "" 2 "P1 and P2 choose W" { 0, 0 }
+            t "" 3 "P1 chooses H" { 2, -1 }
+        t "" 4 "P2 chooses F after A" { 0, 0 }
+    p "" 2 2 "" { "D" "E" "F" } 0
+        p "" 1 3 "" { "G" "H" } 0
+            p "" 2 3 "" { "Q" "W" } 0
+                t "" 1 "P1 and P2 choose Q" { 3, 3 }
+                t "" 2 "P1 and P2 choose W" { 0, 0 }
+            t "" 3 "P1 chooses H" { 2, -1 }
+        t "" 5 "P2 chooses F after B or C" { 0, 0 }
+```
+
+This representation captures the sequential nature of the game, including the decision points for both players, the information sets that indicate Player 2's imperfect information after Player 1's initial choice, and the outcomes associated with each sequence of actions. Note that the information set for Player 2 after actions B or C is the same, reflecting Player 2's inability to distinguish between these actions.

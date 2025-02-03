@@ -1,0 +1,60 @@
+```python
+# Step 1: The game starts with a chance node that determines L or R.
+# Step 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# Step 3: Player 1 chooses again either A or B, but she has forgotten the outcome of stage 1.
+# Therefore, Player 1's decision nodes in stage 3 should be grouped in the same information set
+# if they correspond to the same choice in stage 2, regardless of the outcome of stage 1.
+
+# Grouping decision nodes for Player 1 in stage 3 based on their choice in stage 2:
+# If Player 1 chose 'l' in stage 2, then the nodes corresponding to (L, l) and (R, l) in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 1 chose 'r' in stage 2, then the nodes corresponding to (L, r) and (R, r) in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect information")
+
+# Step 1: The game starts with a chance node that determines L or R with equal probabilities.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Step 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Step 3: Player 1 chooses again either A or B, but she has forgotten the outcome of stage 1.
+# Therefore, Player 1's decision nodes in stage 3 should be grouped in the same information set
+# if they correspond to the same choice in stage 2, regardless of the outcome of stage 1.
+
+# Append moves for Player 1 in stage 3
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Grouping decision nodes for Player 1 in stage 3 based on their choice in stage 2:
+# If Player 1 chose 'l' in stage 2, then the nodes corresponding to (L, l) and (R, l) in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 1 chose 'r' in stage 2, then the nodes corresponding to (L, r) and (R, r) in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Set the payoffs for all outcomes to 0
+outcome_zero = g.add_outcome([0], label="Zero payoff")
+g.set_outcome(g.root.children[0].children[0].children[0], outcome_zero)
+g.set_outcome(g.root.children[0].children[0].children[1], outcome_zero)
+g.set_outcome(g.root.children[0].children[1].children[0], outcome_zero)
+g.set_outcome(g.root.children[0].children[1].children[1], outcome_zero)
+g.set_outcome(g.root.children[1].children[0].children[0], outcome_zero)
+g.set_outcome(g.root.children[1].children[0].children[1], outcome_zero)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome_zero)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_zero)
+
+# Save the EFG
+efg = g.write(format='native')
+```

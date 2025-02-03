@@ -1,0 +1,10 @@
+EFG 2 R "Leader-Follower Game with Misinterpretation" { "Player 1" "Player 2" }
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "S perceived" 0.99 "C perceived" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both choose S" { 5, 2 }
+t "" 2 "S-C" { 3, 1 }
+c "" 2 "" { "S perceived" 0.01 "C perceived" 0.99 } 0
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "C-S" { 6, 3 }
+t "" 4 "Both choose C" { 4, 4 }

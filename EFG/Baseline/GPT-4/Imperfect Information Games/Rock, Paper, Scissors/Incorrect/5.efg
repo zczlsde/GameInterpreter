@@ -1,0 +1,11 @@
+EFG 2 R "Rock-Paper-Scissors Game" { "Player 1" "Player 2" }
+c "" 1 "" { "P1:Rock P2:Rock" 1/9 "P1:Rock P2:Paper" 1/9 "P1:Rock P2:Scissors" 1/9 "P1:Paper P2:Rock" 1/9 "P1:Paper P2:Paper" 1/9 "P1:Paper P2:Scissors" 1/9 "P1:Scissors P2:Rock" 1/9 "P1:Scissors P2:Paper" 1/9 "P1:Scissors P2:Scissors" 1/9 } 0
+t "" 1 "Both Rock" { 0, 0 }
+t "" 2 "P1 Rock, P2 Paper" { -1, 1 }
+t "" 3 "P1 Rock, P2 Scissors" { 1, -1 }
+t "" 4 "P1 Paper, P2 Rock" { 1, -1 }
+t "" 5 "Both Paper" { 0, 0 }
+t "" 6 "P1 Paper, P2 Scissors" { -1, 1 }
+t "" 7 "P1 Scissors, P2 Rock" { -1, 1 }
+t "" 8 "P1 Scissors, P2 Paper" { 1, -1 }
+t "" 9 "Both Scissors" { 0, 0 }

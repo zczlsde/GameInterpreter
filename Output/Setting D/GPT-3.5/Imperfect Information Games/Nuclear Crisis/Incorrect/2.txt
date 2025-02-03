@@ -1,0 +1,47 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear Crisis Game")
+
+# Add the initial decision node for Country A to escalate (E) or ignore (I) the provocation
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Add the decision node for Country B to back down (B) or escalate further (E) after Country A escalates
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Add the decision nodes for Country A to retreat (R) or detonate (D) after both countries escalate
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Add the decision nodes for Country B to retreat (R) or detonate (D) after Country A's decision
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Group the decision nodes for Country A and Country B in the same information set where they cannot distinguish each other's decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                    title="Nuclear Crisis Game")
+
+# Add the initial decision node for Country A to escalate (E) or ignore (I) the provocation
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Add the decision node for Country B to back down (B) or escalate further (E) after Country A escalates
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Add the decision nodes for Country A to retreat (R) or detonate (D) after both countries escalate
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Add the decision nodes for Country B to retreat (R) or detonate (D) after Country A's decision
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Group the decision nodes for Country A and Country B in the same information set where they cannot distinguish each other's decisions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Product Development Game" { "Startup" "Major Tech Corporation" }
+""
+
+p "" 2 1 "" { "Develop A" "Develop B" } 0
+p "" 1 1 "" { "Develop A" "Develop B" } 0
+t "" 1 "Startup Profits" { 1, -1 }
+t "" 2 "Corporation Profits" { -1, 1 }
+p "" 1 1 "" { "Develop A" "Develop B" } 0
+t "" 2 "Corporation Profits" { -1, 1 }
+t "" 1 "Startup Profits" { 1, -1 }

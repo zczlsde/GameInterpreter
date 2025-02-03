@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, City A and City B, who must decide simultaneously whether to fund the project.
+
+# Step 2: Recognize the imperfect information.
+# Since the players make their decisions simultaneously, neither city knows the decision of the other city at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume City A moves first and City B moves second. However, City B does not know City A's decision when making its own decision.
+
+# Step 4: Identify the decision nodes for City B.
+# City B's decision nodes are g.root.children[0] (City A funds) and g.root.children[1] (City A does not fund).
+
+# Step 5: Group City B's decision nodes in the same information set.
+# Since City B cannot distinguish between City A funding or not funding, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, City A and City B.
+g = gbt.Game.new_tree(players=["City A", "City B"], title="Infrastructure Project Funding Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume City A moves first and City B moves second. However, City B does not know City A's decision when making its own decision.
+
+# Step 3: City A makes the first move with two actions: Fund or Not Fund.
+g.append_move(g.root, "City A", ["Fund", "Not Fund"])
+
+# Step 4: City B makes a decision after City A, but without knowing City A's decision.
+# City B has the same two actions: Fund or Not Fund, at both decision nodes.
+g.append_move(g.root.children[0], "City B", ["Fund", "Not Fund"])
+g.append_move(g.root.children[1], "City B", ["Fund", "Not Fund"])
+
+# Step 5: Group City B's decision nodes in the same information set.
+# Since City B cannot distinguish between City A funding or not funding, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Set the outcomes for each possible combination of actions.
+# If both cities fund the project, they share the costs and benefits, each receiving a payoff of 6.
+outcome_both_fund = g.add_outcome([6, 6], label="Both Fund")
+
+# If City A funds and City B does not, City A receives a payoff of 4, and City B receives a payoff of 8.
+outcome_a_funds = g.add_outcome([4, 8], label="City A Funds")
+
+# If City B funds and City A does not, City A receives a payoff of 8, and City B receives a payoff of 4.
+outcome_b_funds = g.add_outcome([8, 4], label="City B Funds")
+
+# If neither city funds the project, the bridge is not built, and both cities receive a payoff of 0.
+outcome_neither_funds = g.add_outcome([0, 0], label="Neither Funds")
+
+# Assign the outcomes to the corresponding terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_both_fund)
+g.set_outcome(g.root.children[0].children[1], outcome_a_funds)
+g.set_outcome(g.root.children[1].children[0], outcome_b_funds)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_funds)
+
+# Save the EFG
+efg = g.write(format='native')
+```

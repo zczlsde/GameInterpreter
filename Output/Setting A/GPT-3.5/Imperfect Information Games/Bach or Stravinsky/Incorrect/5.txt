@@ -1,0 +1,112 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node to represent the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create outcomes for the game
+alexis_bach = g.add_outcome([2, 0], label="Both choose Bach")
+beverley_stravinsky = g.add_outcome([0, 2], label="Both choose Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes based on the choices made by Alexis and Beverley
+g.set_outcome(g.root.children[0], alexis_bach)
+g.set_outcome(g.root.children[1], beverley_stravinsky)
+g.set_outcome(g.root.children[2], different_choices)
+
+# Set information set for Alexis and Beverley to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node to represent the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create outcomes for the game
+alexis_bach = g.add_outcome([2, 0], label="Both choose Bach")
+beverley_stravinsky = g.add_outcome([0, 2], label="Both choose Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes based on the choices made by Alexis and Beverley
+g.set_outcome(g.root.children[0], alexis_bach)
+g.set_outcome(g.root.children[1], beverley_stravinsky)
+g.set_outcome(g.root.children[2], different_choices)
+
+# Set information set for Alexis and Beverley to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node to represent the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create outcomes for the game
+alexis_bach = g.add_outcome([2, 0], label="Both choose Bach")
+beverley_stravinsky = g.add_outcome([0, 2], label="Both choose Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes based on the choices made by Alexis and Beverley
+g.set_outcome(g.root.children[0], alexis_bach)
+g.set_outcome(g.root.children[1], beverley_stravinsky)
+g.set_outcome(g.root.children[2], different_choices)
+
+# Set information set for Alexis and Beverley to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node to represent the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create outcomes for the game
+alexis_bach = g.add_outcome([2, 0], label="Both choose Bach")
+beverley_stravinsky = g.add_outcome([0, 2], label="Both choose Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes based on the choices made by Alexis and Beverley
+g.set_outcome(g.root.children[0], alexis_bach)
+g.set_outcome(g.root.children[1], beverley_stravinsky)
+g.set_outcome(g.root.children[2], different_choices)
+
+# Set information set for Alexis and Beverley to handle imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0], g.root.children[2].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

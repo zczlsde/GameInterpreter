@@ -1,0 +1,47 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "Player X" and "Player O"
+g = gbt.Game.new_tree(players=["Player X", "Player O"], title="Tic-Tac-Toe")
+
+# The current board state is:
+# e | o | e
+# e | x | o
+# x | x | o
+# "x" moves next.
+
+# First, "x" can place the mark on (0,0), (0,2), and (1,0).
+# We append moves for "x" at the root node.
+g.append_move(g.root, "Player X", ["(0,0)", "(0,2)", "(1,0)"])
+
+# If "x" places the mark on (0,0),
+# "o" can then place the mark on (0,2) and (1,0).
+g.append_move(g.root.children[0], "Player O", ["(0,2)", "(1,0)"])
+
+# If "o" places the mark on (0,2), "o" wins.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "o" places the mark on (1,0),
+# "x" can then place the mark on (0,2), and "x" wins.
+g.append_move(g.root.children[0].children[1], "Player X", ["(0,2)"])
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "x" places the mark on (0,2), "x" wins directly.
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "x" places the mark on (1,0),
+# "o" can then place the mark on (0,0) and (0,2).
+g.append_move(g.root.children[2], "Player O", ["(0,0)", "(0,2)"])
+
+# If "o" places the mark on (0,0),
+# "x" can then place the mark on (0,2), and "x" wins.
+g.append_move(g.root.children[2].children[0], "Player X", ["(0,2)"])
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "o" places the mark on (0,2), "o" wins directly.
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs the extensive-form game (EFG) for the given Tic-Tac-Toe scenario using the PyGambit library. It outlines the possible moves for "Player X" and "Player O" based on the current board state and assigns outcomes based on the winning conditions. The game tree is built step by step, considering each player's possible moves and the resulting game states.

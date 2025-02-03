@@ -1,0 +1,11 @@
+There are two players in this scenario: Country A and Country B. 
+The status quo is that Country A receives revenue from Country B. 
+Initially, Country B has the choice to either "Accept" this arrangement or "Rebel." 
+If Country B accepts the status quo, Country A then decides whether to "Tax" or "Drop Taxes." 
+If Country A continues to tax, it gains 6, while Country B loses 2. If Country A drops the taxes, Country A earns 4, and Country B breaks even with 0. 
+However, if Country B decides to rebel, Country A faces a choice to either "Grant Independence" to Country B or attempt to "Suppress" the rebellion. 
+Granting independence results in Country A earning 0, while Country B gains 3. 
+Attempting to suppress the rebellion leads to war, with the outcome determined by chance. 
+In the event of war, Country B has a 0.3 probability of winning. 
+If Country B wins the war, it loses 3, while Country A loses 1. 
+If Country B loses the war, it loses 5, and Country A still loses 1.

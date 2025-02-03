@@ -1,0 +1,49 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Player 1 (Leader) and Player 2 (Follower)
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Misinterpretation Game")
+
+# Step 1: Player 1 makes the first move, choosing between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Step 2: Introduce a chance node to represent the misinterpretation by Player 2
+# If Player 1 chooses "S", there's a 1% chance Player 2 perceives it as "C"
+# If Player 1 chooses "C", there's a 1% chance Player 2 perceives it as "S"
+g.append_move(g.root.children[0], g.players.chance, ["Perceive S", "Perceive C"])
+g.set_chance_probs(g.root.children[0].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+g.append_move(g.root.children[1], g.players.chance, ["Perceive C", "Perceive S"])
+g.set_chance_probs(g.root.children[1].infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Step 3: Player 2 makes a decision based on their perception
+# For each perception, Player 2 chooses between "S" and "C"
+g.append_move(g.root.children[0].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[0].children[1], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1].children[1], "Player 2", ["S", "C"])
+
+# Step 4: Set the information sets for Player 2's decision nodes
+# Player 2 cannot distinguish between the actual choice of Player 1 due to misinterpretation
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+
+# Step 5: Define the payoffs for each outcome
+# Assign values to the payoffs based on the ranking: E > A > F > W > B > D
+E, A, F, W, B, D = 6, 5, 4, 3, 2, 1
+
+# Set the outcomes for each possible combination of actions
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="Both S"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="P1 S, P2 C"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="Both S"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="P1 S, P2 C"))
+
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="P1 C, P2 S"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="Both C"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="P1 C, P2 S"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="Both C"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

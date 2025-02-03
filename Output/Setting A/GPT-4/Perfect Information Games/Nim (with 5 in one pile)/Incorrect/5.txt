@@ -1,0 +1,50 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone")
+
+# Alice starts the game and can choose to remove one or two stones.
+g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can also remove one or two stones.
+g.append_move(g.root.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone, Alice can again choose to remove one or two stones.
+g.append_move(g.root.children[0].children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob has the choice to remove one or two stones.
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# Outcomes if Bob removes one or two stones after Alice has removed one stone twice.
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice removes two stones after Bob has removed one, Bob can only remove one leading to his loss.
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Bob removes two stones initially, Alice can remove one or two stones.
+g.append_move(g.root.children[0].children[1], "Alice", ["Remove 1", "Remove 2"])
+
+# Outcomes if Alice removes one or two stones after Bob has removed two stones.
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice removes two stones initially, Bob has the option to remove one or two stones.
+g.append_move(g.root.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone, Alice can remove one or two stones.
+g.append_move(g.root.children[1].children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# Outcomes if Alice removes one or two stones after Bob has removed one stone initially.
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Bob removes two stones initially after Alice has removed two, Alice loses.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs an extensive-form game for the scenario described, where Alice and Bob take turns removing stones from a pile, aiming not to remove the last stone. The game tree is built step by step, detailing each player's choices and the resulting outcomes. The outcomes are set based on the game's rules, with the winner earning one point and the loser losing one point.

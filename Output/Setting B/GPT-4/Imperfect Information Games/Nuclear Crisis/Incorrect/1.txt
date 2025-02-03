@@ -1,0 +1,212 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A's initial move: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with both countries receiving a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Mutual Peace"))
+
+# If Country A chooses to Escalate, Country B has to decide whether to Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, Country A wins a small payoff, and Country B loses face with a small payoff
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Country A Escalation, Country B Backs down"))
+
+# If Country B also chooses to Escalate, we move to the nuclear crisis phase
+# Country A decides whether to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# Country B, unaware of Country A's move, also decides whether to Retreat (R) or Detonate (D)
+# Since Country B is unaware of Country A's move, we need to create an information set for Country B's moves
+for node in g.root.children[0].children[1].children:
+    g.append_move(node, "Country B", ["Retreat", "Detonate"])
+
+# Set the information set for Country B's moves to indicate that Country B is unaware of Country A's move
+g.set_infoset(g.root.children[0].children[1].children[0].children[0], g.root.children[0].children[1].children[1].children[0].infoset)
+
+# Define outcomes based on the nuclear crisis phase decisions
+# If both countries retreat, they both suffer a small negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+
+# If one country detonates and the other retreats, the detonating country wins a large positive payoff, while the retreating country loses a large negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([-10, 10], label="Country A Retreats, Country B Detonates"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([10, -10], label="Country A Detonates, Country B Retreats"))
+
+# If both countries detonate, it leads to a nuclear disaster with a very large negative payoff for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form game (EFG) for the described nuclear crisis scenario using the PyGambit library. It carefully constructs the game tree, detailing the decisions at each stage, including the initial escalation or ignore decision by Country A, followed by Country B's response, and finally the nuclear crisis phase with potential for mutual destruction. The use of information sets captures the uncertainty of Country B regarding Country A's actions in the nuclear phase, reflecting the simultaneous decision-making aspect of this critical stage.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A's initial move: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with both countries receiving a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Mutual Peace"))
+
+# If Country A chooses to Escalate, Country B has to decide whether to Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, Country A wins a small payoff, and Country B loses face with a small payoff
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Country A Escalation, Country B Backs down"))
+
+# If Country B also chooses to Escalate, we move to the nuclear crisis phase
+# Country A decides whether to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# Country B, unaware of Country A's move, also decides whether to Retreat (R) or Detonate (D)
+# Since Country B is unaware of Country A's move, we need to create an information set for Country B's moves
+for node in g.root.children[0].children[1].children:
+    g.append_move(node, "Country B", ["Retreat", "Detonate"])
+
+# Correctly set the information set for Country B's moves to indicate that Country B is unaware of Country A's move
+# We need to ensure we're referencing the correct nodes for setting the information set
+g.set_infoset(g.root.children[0].children[1].children[0].children[0], g.root.children[0].children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1].children[0], g.root.children[0].children[1].children[0].children[1].infoset)
+
+# Define outcomes based on the nuclear crisis phase decisions
+# If both countries retreat, they both suffer a small negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+
+# If one country detonates and the other retreats, the detonating country wins a large positive payoff, while the retreating country loses a large negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([10, -10], label="Country A Detonates, Country B Retreats"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([-10, 10], label="Country A Retreats, Country B Detonates"))
+
+# If both countries detonate, it leads to a nuclear disaster with a very large negative payoff for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A's initial move: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with both countries receiving a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Mutual Peace"))
+
+# If Country A chooses to Escalate, Country B has to decide whether to Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, Country A wins a small payoff, and Country B loses face with a small payoff
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Country A Escalation, Country B Backs down"))
+
+# If Country B also chooses to Escalate, we move to the nuclear crisis phase
+# Country A decides whether to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# Country B, unaware of Country A's move, also decides whether to Retreat (R) or Detonate (D)
+# Since Country B is unaware of Country A's move, we need to create an information set for Country B's moves
+# Append moves for both scenarios under Country A's decision to Retreat or Detonate
+g.append_move(g.root.children[0].children[1].children[0], "Country B", ["Retreat", "Detonate"])
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["Retreat", "Detonate"])
+
+# Correctly set the information set for Country B's moves to indicate that Country B is unaware of Country A's move
+# This time, we ensure we're correctly referencing the nodes for setting the information set
+# Since both nodes under Country A's decisions lead to Country B's decisions without knowledge of Country A's action,
+# we link their information sets to indicate this uncertainty
+g.set_infoset(g.root.children[0].children[1].children[1].children[0], g.root.children[0].children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1].children[1], g.root.children[0].children[1].children[0].children[0].infoset)
+
+# Define outcomes based on the nuclear crisis phase decisions
+# If both countries retreat, they both suffer a small negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+
+# If one country detonates and the other retreats, the detonating country wins a large positive payoff, while the retreating country loses a large negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([10, -10], label="Country A Detonates, Country B Retreats"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([-10, 10], label="Country A Retreats, Country B Detonates"))
+
+# If both countries detonate, it leads to a nuclear disaster with a very large negative payoff for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A's initial move: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with both countries receiving a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Mutual Peace"))
+
+# If Country A chooses to Escalate, Country B has to decide whether to Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, Country A wins a small payoff, and Country B loses face with a small payoff
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, -1], label="Country A Escalation, Country B Backs down"))
+
+# If Country B also chooses to Escalate, we move to the nuclear crisis phase
+# Country A decides whether to Retreat (R) or Detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["Retreat", "Detonate"])
+
+# Country B, unaware of Country A's move, also decides whether to Retreat (R) or Detonate (D)
+# Append moves for both scenarios under Country A's decision to Retreat or Detonate
+b_decision_after_a_retreat = g.append_move(g.root.children[0].children[1].children[0], "Country B", ["Retreat", "Detonate"])
+b_decision_after_a_detonate = g.append_move(g.root.children[0].children[1].children[1], "Country B", ["Retreat", "Detonate"])
+
+# Correctly set the information set for Country B's moves to indicate that Country B is unaware of Country A's move
+# This time, we ensure we're correctly referencing the nodes for setting the information set
+# Since both nodes under Country A's decisions lead to Country B's decisions without knowledge of Country A's action,
+# we link their information sets to indicate this uncertainty
+# Note: The previous error was due to incorrect usage of variables and misunderstanding of the library's functions.
+# The correct approach is to directly manipulate the nodes without assigning the result of append_move or set_infoset, as these functions return None.
+
+# Define outcomes based on the nuclear crisis phase decisions
+# If both countries retreat, they both suffer a small negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+
+# If one country detonates and the other retreats, the detonating country wins a large positive payoff, while the retreating country loses a large negative payoff
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([10, -10], label="Country A Detonates, Country B Retreats"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([-10, 10], label="Country A Retreats, Country B Detonates"))
+
+# If both countries detonate, it leads to a nuclear disaster with a very large negative payoff for both
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([-100, -100], label="Nuclear Disaster"))
+
+# Correctly setting the information set for Country B's decisions
+# This is done after both decision nodes for Country B have been created
+g.set_infoset(g.root.children[0].children[1].children[0].children[0], g.root.children[0].children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1].children[0], g.root.children[0].children[1].children[0].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

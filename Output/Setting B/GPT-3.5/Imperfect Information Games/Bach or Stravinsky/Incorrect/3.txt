@@ -1,0 +1,158 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node for the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create nodes for each player's decision
+# Alexis moves first
+alexis_node = g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+beverley_node = g.append_move(g.root, "Beverley", ["Bach", "Stravinsky"])
+
+# Set both Alexis and Beverley in the same information set
+g.set_infoset(alexis_node, beverley_node.infoset)
+
+# Define the outcomes based on the choices made by both players
+alexis_bach_beverley_bach = g.add_outcome([2, 1], label="Alexis(Bach) - Beverley(Bach)")
+alexis_stravinsky_beverley_stravinsky = g.add_outcome([1, 2], label="Alexis(Stravinsky) - Beverley(Stravinsky)")
+no_payoff = g.add_outcome([0, 0], label="No payoff")
+
+# Set outcomes for each combination of choices
+g.set_outcome(alexis_node.children[0], alexis_bach_beverley_bach)
+g.set_outcome(alexis_node.children[1], no_payoff)
+g.set_outcome(beverley_node.children[0], no_payoff)
+g.set_outcome(beverley_node.children[1], alexis_stravinsky_beverley_stravinsky)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node for the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create nodes for each player's decision
+# Alexis moves first
+alexis_bach = g.append_move(g.root, "Alexis", ["Bach"])
+alexis_stravinsky = g.append_move(g.root, "Alexis", ["Stravinsky"])
+beverley_bach = g.append_move(alexis_bach, "Beverley", ["Bach"])
+beverley_stravinsky = g.append_move(alexis_stravinsky, "Beverley", ["Stravinsky"])
+
+# Set information sets for the players
+g.set_infoset(alexis_bach, beverley_bach.infoset)
+g.set_infoset(alexis_stravinsky, beverley_stravinsky.infoset)
+
+# Define the outcomes based on the choices made by both players
+alexis_bach_beverley_bach = g.add_outcome([2, 1], label="Alexis(Bach) - Beverley(Bach)")
+alexis_stravinsky_beverley_stravinsky = g.add_outcome([1, 2], label="Alexis(Stravinsky) - Beverley(Stravinsky)")
+no_payoff = g.add_outcome([0, 0], label="No payoff")
+
+# Set outcomes for each combination of choices
+g.set_outcome(beverley_bach.children[0], alexis_bach_beverley_bach)
+g.set_outcome(beverley_bach.children[1], no_payoff)
+g.set_outcome(beverley_stravinsky.children[0], no_payoff)
+g.set_outcome(beverley_stravinsky.children[1], alexis_stravinsky_beverley_stravinsky)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node for the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create nodes for each player's decision
+# Alexis moves first
+alexis_bach = g.append_move(g.root, "Alexis", ["Bach"])
+alexis_stravinsky = g.append_move(g.root, "Alexis", ["Stravinsky"])
+
+# Set information sets for Alexis
+g.set_infoset(alexis_bach, alexis_stravinsky.infoset)
+
+# Create nodes for Beverley's decision after Alexis chooses Bach
+beverley_bach = g.append_move(alexis_bach, "Beverley", ["Bach", "Stravinsky"])
+g.set_infoset(beverley_bach, alexis_stravinsky.infoset)
+
+# Create nodes for Beverley's decision after Alexis chooses Stravinsky
+beverley_stravinsky = g.append_move(alexis_stravinsky, "Beverley", ["Bach", "Stravinsky"])
+g.set_infoset(beverley_stravinsky, alexis_stravinsky.infoset)
+
+# Define the outcomes based on the choices made by both players
+alexis_bach_beverley_bach = g.add_outcome([2, 1], label="Alexis(Bach) - Beverley(Bach)")
+alexis_stravinsky_beverley_stravinsky = g.add_outcome([1, 2], label="Alexis(Stravinsky) - Beverley(Stravinsky)")
+no_payoff = g.add_outcome([0, 0], label="No payoff")
+
+# Set outcomes for each combination of choices
+g.set_outcome(beverley_bach.children[0], alexis_bach_beverley_bach)
+g.set_outcome(beverley_bach.children[1], no_payoff)
+g.set_outcome(beverley_stravinsky.children[0], no_payoff)
+g.set_outcome(beverley_stravinsky.children[1], alexis_stravinsky_beverley_stravinsky)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Add a chance node for the simultaneous and independent choice between Bach and Stravinsky
+g.append_move(g.root, g.players.chance, ["Bach", "Stravinsky"])
+
+# Create nodes for each player's decision
+# Alexis moves first
+alexis_bach = g.append_move(g.root, "Alexis", ["Bach"])
+alexis_stravinsky = g.append_move(g.root, "Alexis", ["Stravinsky"])
+
+# Set information sets for Alexis
+g.set_infoset(alexis_bach, alexis_stravinsky.infoset)
+
+# Create nodes for Beverley's decision after Alexis chooses Bach
+beverley_bach = g.append_move(alexis_bach, "Beverley", ["Bach"])
+beverley_stravinsky = g.append_move(alexis_bach, "Beverley", ["Stravinsky"])
+
+# Set information sets for Beverley after Alexis chooses Bach
+g.set_infoset(beverley_bach, beverley_stravinsky.infoset)
+
+# Create nodes for Beverley's decision after Alexis chooses Stravinsky
+beverley_bach_stravinsky = g.append_move(alexis_stravinsky, "Beverley", ["Bach", "Stravinsky"])
+
+# Set information sets for Beverley after Alexis chooses Stravinsky
+g.set_infoset(beverley_bach_stravinsky, beverley_stravinsky.infoset)
+
+# Define the outcomes based on the choices made by both players
+alexis_bach_beverley_bach = g.add_outcome([2, 1], label="Alexis(Bach) - Beverley(Bach)")
+alexis_stravinsky_beverley_stravinsky = g.add_outcome([1, 2], label="Alexis(Stravinsky) - Beverley(Stravinsky)")
+no_payoff = g.add_outcome([0, 0], label="No payoff")
+
+# Set outcomes for each combination of choices
+g.set_outcome(beverley_bach.children[0], alexis_bach_beverley_bach)
+g.set_outcome(beverley_bach.children[1], no_payoff)
+g.set_outcome(beverley_stravinsky.children[0], no_payoff)
+g.set_outcome(beverley_stravinsky.children[1], alexis_stravinsky_beverley_stravinsky)
+g.set_outcome(beverley_bach_stravinsky.children[0], no_payoff)
+g.set_outcome(beverley_bach_stravinsky.children[1], no_payoff)
+
+# Save the EFG
+efg = g.write(format='native')

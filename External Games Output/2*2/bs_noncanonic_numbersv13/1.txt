@@ -1,0 +1,55 @@
+```python
+# Step-by-step thought process:
+# 1. This is a simultaneous move game where both friends decide independently and without knowing the other's choice.
+# 2. To model this game with a sequential structure, assume one friend moves first and the other moves second.
+# 3. The starting node, g.root, is the first friend's decision node.
+# 4. The first friend has two actions: choose basketball or soccer.
+# 5. The second friend's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first friend's actions.
+# 6. Since the second friend does not know the first friend's choice, the second friend's decision nodes should be grouped in the same information set.
+
+# Set the information set for the second friend's decision nodes
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Friend1 and Friend2
+g = gbt.Game.new_tree(players=["Friend1", "Friend2"],
+                      title="Friends deciding on a live event to watch")
+
+# Step 1: Model the game as a sequential game to handle simultaneous moves
+# Assume Friend1 moves first and chooses between Basketball and Soccer
+g.append_move(g.root, "Friend1", ["Basketball", "Soccer"])
+
+# Step 2: Friend2 makes a decision without knowing Friend1's choice
+# Friend2's decision nodes are g.root.children[0] and g.root.children[1]
+# These correspond to Friend1's actions: Basketball and Soccer
+
+# Friend2 has the same actions available at both decision nodes: Basketball or Soccer
+g.append_move(g.root.children[0], "Friend2", ["Basketball", "Soccer"])
+g.append_move(g.root.children[1], "Friend2", ["Basketball", "Soccer"])
+
+# Step 3: Set the information set for Friend2's decision nodes
+# Since Friend2 does not know Friend1's choice, group the decision nodes in the same information set
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes based on the choices made by both friends
+# If both choose Basketball, Friend1 gets 2 points, Friend2 gets 1 point
+basketball_outcome = g.add_outcome([2, 1], label="Both choose Basketball")
+
+# If both choose Soccer, Friend1 gets 1 point, Friend2 gets 2 points
+soccer_outcome = g.add_outcome([1, 2], label="Both choose Soccer")
+
+# If they choose different events, both get 0 points
+different_outcome = g.add_outcome([0, 0], label="Different choices")
+
+# Set the outcomes for each possible combination of choices
+g.set_outcome(g.root.children[0].children[0], basketball_outcome)  # Both choose Basketball
+g.set_outcome(g.root.children[0].children[1], different_outcome)   # Friend1: Basketball, Friend2: Soccer
+g.set_outcome(g.root.children[1].children[0], different_outcome)   # Friend1: Soccer, Friend2: Basketball
+g.set_outcome(g.root.children[1].children[1], soccer_outcome)      # Both choose Soccer
+
+# Save the EFG
+efg = g.write(format='native')
+```

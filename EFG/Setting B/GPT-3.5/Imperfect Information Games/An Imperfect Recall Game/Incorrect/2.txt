@@ -1,0 +1,107 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Player 1 and Chance
+g = gbt.Game.new_tree(players=["Player 1", "Chance"],
+                    title="Three-stage imperfect information game")
+
+# Append the chance node at the root with actions "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Append the Player 1 node at the second stage with actions "l" and "r"
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Set the information set for Player 1 at the second stage
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Append the Player 1 node at the third stage with actions "A" and "B"
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Set the information set for Player 1 at the third stage
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Set outcomes for all terminal nodes to 0
+for node in g.terminals:
+    g.set_outcome(node, g.add_outcome([0, 0]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+'pygambit.gambit.Game' object has no attribute 'terminals'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1 and Chance
+g = gbt.Game.new_tree(players=["Player 1", "Chance"],
+                    title="Three-stage imperfect information game")
+
+# Append the chance node at the root with actions "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Append the Player 1 node at the second stage with actions "l" and "r"
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Set the information set for Player 1 at the second stage
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Append the Player 1 node at the third stage with actions "A" and "B"
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Set outcomes for all terminal nodes to 0
+for node in g.root.children[0].children[0].children + g.root.children[0].children[1].children + g.root.children[1].children[0].children + g.root.children[1].children[1].children:
+    g.set_outcome(node, g.add_outcome([0, 0]))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1 and Chance
+g = gbt.Game.new_tree(players=["Player 1", "Chance"],
+                    title="Three-stage imperfect information game")
+
+# Append the chance node at the root with actions "L" and "R"
+g.append_move(g.root, g.players.chance, ["L", "R"])
+
+# Append the Player 1 node at the second stage with actions "l" and "r"
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Set the information set for Player 1 at the second stage
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Append the Player 1 node at the third stage with actions "A" and "B"
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Set the information set for Player 1 at the third stage
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Set outcomes for all terminal nodes to 0
+for child in g.root.children:
+    for node in child.children:
+        for terminal_node in node.children:
+            g.set_outcome(terminal_node, g.add_outcome([0, 0]))
+
+# Save the EFG
+efg = g.write(format='native')

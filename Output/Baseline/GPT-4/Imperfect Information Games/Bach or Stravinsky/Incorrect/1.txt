@@ -1,0 +1,23 @@
+Based on the game description provided, here is the EFG representation for the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Bach" 1/2 "Stravinsky" 1/2 } 0
+    p "" 1 1 "" { "Bach" "Stravinsky" } 0
+        p "" 2 1 "" { "Bach" "Stravinsky" } 0
+            t "" 1 "Both choose Bach" { 2, 1 }
+            t "" 2 "Disagreement" { 0, 0 }
+        p "" 2 2 "" { "Bach" "Stravinsky" } 0
+            t "" 3 "Disagreement" { 0, 0 }
+            t "" 4 "Both choose Stravinsky" { 1, 2 }
+```
+
+Explanation:
+- The game starts with a chance node (represented by `c`) to simulate the simultaneous decision-making process, even though there's no actual chance move in the game. This is a common approach to represent simultaneous moves in an extensive form game representation.
+- Alexis (player 1) and Beverley (player 2) then make their decisions in what appears to be a sequential manner in this representation, but it's understood that these decisions are actually simultaneous.
+- The outcomes are as follows:
+    - If both choose Bach, Alexis gets a payoff of 2, and Beverley gets a payoff of 1.
+    - If both choose Stravinsky, Alexis gets a payoff of 1, and Beverley gets a payoff of 2.
+    - If they choose different concerts, both get a payoff of 0.
+
+Note: The representation uses a chance node to initiate the game, which is a common technique to represent simultaneous moves in an extensive form game. However, in a strict sense, there's no chance move in this game. The representation assumes that the players' decisions are made under uncertainty, hence the initial chance node with equal probabilities for "Bach" and "Stravinsky" to reflect the simultaneous decision-making process.

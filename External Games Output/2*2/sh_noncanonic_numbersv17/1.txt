@@ -1,0 +1,76 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two political parties, each deciding whether to commit to a coalition or pursue their agenda independently.
+
+# Step 2: Determine the structure of the game.
+# The game is simultaneous because both parties decide at the same time whether to commit or not.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Party 1 moves first and Party 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Party 1's decision node.
+# Party 1 has two actions: Commit or Not Commit.
+# Party 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Party 1's actions Commit and Not Commit.
+
+# Step 5: Determine the information set for Party 2.
+# Since Party 2 moves simultaneously with Party 1, Party 2 does not know which action Party 1 has taken.
+# Therefore, Party 2's decision nodes should be grouped in the same information set.
+
+# Set the information set for Party 2's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two political parties, Party 1 and Party 2, each deciding whether to commit to a coalition or pursue their agenda independently.
+
+# Step 2: Determine the structure of the game.
+# The game is simultaneous because both parties decide at the same time whether to commit or not.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Party 1 moves first and Party 2 moves second.
+
+# Create a new extensive-form game with two players: Party 1 and Party 2.
+g = gbt.Game.new_tree(players=["Party 1", "Party 2"], title="Political Coalition Game")
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Party 1's decision node.
+# Party 1 has two actions: Commit or Not Commit.
+g.append_move(g.root, "Party 1", ["Commit", "Not Commit"])
+
+# Party 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Party 1's actions Commit and Not Commit.
+g.append_move(g.root.children[0], "Party 2", ["Commit", "Not Commit"])
+g.append_move(g.root.children[1], "Party 2", ["Commit", "Not Commit"])
+
+# Step 5: Determine the information set for Party 2.
+# Since Party 2 moves simultaneously with Party 1, Party 2 does not know which action Party 1 has taken.
+# Therefore, Party 2's decision nodes should be grouped in the same information set.
+
+# Set the information set for Party 2's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes and payoffs.
+# If both parties commit, they each receive 6 points.
+outcome_both_commit = g.add_outcome([6, 6], label="Both Commit")
+
+# If Party 1 commits and Party 2 does not, Party 1 gets 0 points and Party 2 gets 3 points.
+outcome_party1_commit = g.add_outcome([0, 3], label="Party 1 Commits")
+
+# If Party 1 does not commit and Party 2 commits, Party 1 gets 3 points and Party 2 gets 0 points.
+outcome_party2_commit = g.add_outcome([3, 0], label="Party 2 Commits")
+
+# If neither party commits, they each receive 2 points.
+outcome_neither_commit = g.add_outcome([2, 2], label="Neither Commit")
+
+# Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_both_commit)
+g.set_outcome(g.root.children[0].children[1], outcome_party1_commit)
+g.set_outcome(g.root.children[1].children[0], outcome_party2_commit)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_commit)
+
+# Save the EFG
+efg = g.write(format='native')
+```

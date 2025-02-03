@@ -1,0 +1,22 @@
+Given the game description for the "Bach or Stravinsky?" game, here is the corresponding EFG representation:
+
+```
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Bach" 1/2 "Stravinsky" 1/2 } 0
+p "" 1 1 "" { "Bach" "Stravinsky" } 0
+p "" 2 1 "" { "Bach" "Stravinsky" } 0
+t "" 1 "Both choose Bach" { 2, 1 }
+t "" 2 "Mismatch" { 0, 0 }
+t "" 3 "Mismatch" { 0, 0 }
+t "" 4 "Both choose Stravinsky" { 1, 2 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with a chance node (represented by `c`), which is a conceptual representation to split the decision-making process, even though there's no actual chance move in the game. This node represents the simultaneous decision-making by Alexis and Beverley. The actions "Bach" and "Stravinsky" are given equal probabilities (1/2 each) to reflect that each player can independently choose either option, but this is a simplification for the sake of representation. In reality, this game does not involve chance but simultaneous decisions.
+  
+- Following the chance node, there are personal player nodes (`p`) for Alexis and Beverley. However, given the simultaneous nature of the decisions, the representation directly jumps to the outcomes without detailing individual decision nodes for each player. This simplification is made because the extensive form representation provided does not fully capture the simultaneous move aspect in its standard form. In a more accurate representation, the decision nodes for Alexis and Beverley would be shown as happening simultaneously rather than sequentially.
+
+- The terminal nodes (`t`) represent the outcomes of the game based on the decisions made by Alexis and Beverley. The payoffs are assigned based on the preferences described: if both choose Bach, Alexis (the Bach lover) gets a higher payoff (2) than Beverley (1). If both choose Stravinsky, Beverley (the Stravinsky lover) gets a higher payoff (2) than Alexis (1). If their choices mismatch, both get no payoff (0).
+
+This representation simplifies the simultaneous decision aspect by using a chance node to represent the decision-making process, which is a limitation of this representation. In a true simultaneous-move game, there wouldn't be a chance node dictating the flow of decisions.

@@ -1,0 +1,54 @@
+```python
+# Since both players display their symbols simultaneously, neither player knows the other's choice at the time of decision.
+# This creates a situation of imperfect information for both players.
+# However, the game description and task focus on setting the information set for Player 2's decisions.
+# Assume Player 1 moves first for the sake of sequential representation, choosing Rock, Paper, or Scissors.
+# This results in three decision nodes for Player 2, one for each of Player 1's choices.
+# Player 2, however, does not know Player 1's choice when making their own decision.
+# Therefore, all of Player 2's decision nodes must be in the same information set to represent this uncertainty.
+
+# Grouping Player 2's decision nodes under the same information set.
+# Let's assume the nodes for Player 2's decisions after Player 1 chooses Rock, Paper, and Scissors are g.root.children[0], g.root.children[1], and g.root.children[2], respectively.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors Game")
+
+# Since the game involves simultaneous moves, we model it as if Player 1 moves first for the sake of representation.
+# Player 1 has three actions: Rock, Paper, Scissors.
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# For each of Player 1's actions, Player 2 has a decision to make without knowing Player 1's choice.
+# This is represented by creating three separate decision nodes for Player 2, one following each of Player 1's possible actions.
+# These nodes will later be grouped into the same information set to represent the simultaneous nature of the game.
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Now, we set the outcomes based on the rules of Rock, Paper, Scissors.
+# For simplicity, we assign a payoff of 1 to the winner, -1 to the loser, and 0 for a tie.
+# This loop iterates over Player 1's choices.
+for i, p1_choice in enumerate(g.root.children):
+    # This nested loop iterates over Player 2's choices within each of Player 1's choices.
+    for j, p2_choice in enumerate(p1_choice.children):
+        # Determine the outcome based on the game rules
+        if i == j:  # Tie condition
+            g.set_outcome(p2_choice, g.add_outcome([0, 0]))
+        elif (i == 0 and j == 2) or (i == 1 and j == 0) or (i == 2 and j == 1):  # Player 1 wins
+            g.set_outcome(p2_choice, g.add_outcome([1, -1]))
+        else:  # Player 2 wins
+            g.set_outcome(p2_choice, g.add_outcome([-1, 1]))
+
+# Since both players make their choices simultaneously, Player 2's decision nodes must be in the same information set.
+# This represents Player 2's lack of knowledge about Player 1's choice.
+# We use the identical code provided to set the information set for Player 2's nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

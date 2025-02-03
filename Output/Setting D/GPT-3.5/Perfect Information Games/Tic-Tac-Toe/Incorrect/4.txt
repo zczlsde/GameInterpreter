@@ -1,0 +1,174 @@
+```python
+# Set the information set for the decision nodes of player "x"
+g.set_infoset(g.root.children[0], g.root.children[1])
+g.set_infoset(g.root.children[0], g.root.children[2])
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append move for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append move for player "o" at the first child node of the root (if "x" places the mark on (0,0))
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+
+# Append move for player "o" at the second child node of the root (if "x" places the mark on (0,2))
+g.append_move(g.root.children[1], "o", [(0, 0)])
+
+# Append move for player "o" at the third child node of the root (if "x" places the mark on (1,0))
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Append move for player "x" at the first child node of the root (if "x" places the mark on (0,0) and "o" places the mark on (0,2))
+g.append_move(g.root.children[0].children[0], "x", [(0, 2)])
+
+# Append move for player "x" at the third child node of the root (if "x" places the mark on (1,0) and "o" places the mark on (0,0))
+g.append_move(g.root.children[2].children[0], "x", [(0, 2)])
+
+# Set the outcome for the terminal nodes
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+g.set_outcome(g.root.children[1].children[0], o_wins)
+g.set_outcome(g.root.children[0].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[2].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[0].children[1], x_wins)
+g.set_outcome(g.root.children[2].children[1], o_wins)
+
+# Set the information set for the decision nodes of player "x"
+g.set_infoset(g.root.children[0], g.root.children[1])
+g.set_infoset(g.root.children[0], g.root.children[2])
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append move for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the first child node of the root (if "x" places the mark on (0,0))
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the second child node of the root (if "x" places the mark on (0,2))
+g.append_move(g.root.children[1], "o", ["(0, 0)"])
+
+# Append move for player "o" at the third child node of the root (if "x" places the mark on (1,0))
+g.append_move(g.root.children[2], "o", ["(0, 0)", "(0, 2)"])
+
+# Append move for player "x" at the first child node of the root (if "x" places the mark on (0,0) and "o" places the mark on (0,2))
+g.append_move(g.root.children[0].children[0], "x", ["(0, 2)"])
+
+# Append move for player "x" at the third child node of the root (if "x" places the mark on (1,0) and "o" places the mark on (0,0))
+g.append_move(g.root.children[2].children[0], "x", ["(0, 2)"])
+
+# Set the outcome for the terminal nodes
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+g.set_outcome(g.root.children[1].children[0], o_wins)
+g.set_outcome(g.root.children[0].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[2].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[0].children[1], x_wins)
+g.set_outcome(g.root.children[2].children[1], o_wins)
+
+# Set the information set for the decision nodes of player "x"
+g.set_infoset(g.root.children[0], g.root.children[1])
+g.set_infoset(g.root.children[0], g.root.children[2])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append move for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the first child node of the root (if "x" places the mark on (0,0))
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the second child node of the root (if "x" places the mark on (0,2))
+g.append_move(g.root.children[1], "o", ["(0, 0)"])
+
+# Append move for player "o" at the third child node of the root (if "x" places the mark on (1,0))
+g.append_move(g.root.children[2], "o", ["(0, 0)", "(0, 2)"])
+
+# Append move for player "x" at the first child node of the root (if "x" places the mark on (0,0) and "o" places the mark on (0,2))
+g.append_move(g.root.children[0].children[0], "x", ["(0, 2)"])
+
+# Append move for player "x" at the third child node of the root (if "x" places the mark on (1,0) and "o" places the mark on (0,0))
+g.append_move(g.root.children[2].children[0], "x", ["(0, 2)"])
+
+# Set the outcome for the terminal nodes
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+g.set_outcome(g.root.children[1].children[0], o_wins)
+g.set_outcome(g.root.children[0].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[2].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[0].children[1], x_wins)
+g.set_outcome(g.root.children[2].children[1], o_wins)
+
+# Set the information set for the decision nodes of player "x"
+g.set_infoset(g.root.children[0], g.root.children[1])
+g.set_infoset(g.root.children[0], g.root.children[2])
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append move for player "x" at the root node
+g.append_move(g.root, "x", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the first child node of the root (if "x" places the mark on (0,0))
+g.append_move(g.root.children[0], "o", ["(0, 2)", "(1, 0)"])
+
+# Append move for player "o" at the second child node of the root (if "x" places the mark on (0,2))
+g.append_move(g.root.children[1], "o", ["(0, 0)"])
+
+# Append move for player "o" at the third child node of the root (if "x" places the mark on (1,0))
+g.append_move(g.root.children[2], "o", ["(0, 0)", "(0, 2)"])
+
+# Append move for player "x" at the first child node of the root (if "x" places the mark on (0,0) and "o" places the mark on (0,2))
+g.append_move(g.root.children[0].children[0], "x", ["(0, 2)"])
+
+# Append move for player "x" at the third child node of the root (if "x" places the mark on (1,0) and "o" places the mark on (0,0))
+g.append_move(g.root.children[2].children[0], "x", ["(0, 2)"])
+
+# Set the outcome for the terminal nodes
+x_wins = g.add_outcome([1, -1], label="x wins")
+o_wins = g.add_outcome([-1, 1], label="o wins")
+g.set_outcome(g.root.children[1].children[0], o_wins)
+g.set_outcome(g.root.children[0].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[2].children[0].children[0], x_wins)
+g.set_outcome(g.root.children[0].children[1], x_wins)
+g.set_outcome(g.root.children[2].children[1], o_wins)
+
+# Set the information set for the decision nodes of player "x"
+g.set_infoset(g.root.children[0], g.root.children[1])
+g.set_infoset(g.root.children[0].children[0], g.root.children[2])
+
+# Save the EFG
+efg = g.write(format='native')

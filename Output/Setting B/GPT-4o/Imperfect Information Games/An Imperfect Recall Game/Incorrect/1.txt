@@ -1,0 +1,78 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Player 1 and Chance
+g = gbt.Game.new_tree(players=["Player 1", "Chance"],
+                      title="Three-stage game with imperfect recall")
+
+# Stage 1: Chance node determines L or R with probabilities 1/2 and 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node at stage 1
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+# Set information set for stage 2
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Stage 3: Player 1 chooses again either A or B
+for node in g.root.children[0].children:
+    g.append_move(node, "Player 1", ["A", "B"])
+# Set information set for stage 3
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+
+# Set payoffs to 0 for all outcomes
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([0, 0], label="Outcome B")
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([0, 0], label="Outcome B")
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+closing parenthesis ']' does not match opening parenthesis '(' (<string>, line 11)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Player 1 and Chance
+g = gbt.Game.new_tree(players=["Player 1", "Chance"],
+                      title="Three-stage game with imperfect recall")
+
+# Stage 1: Chance node determines L or R with probabilities 1/2 and 1/2
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for the chance node at stage 1
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+# Set information set for stage 2
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[0].infoset)
+
+# Stage 3: Player 1 chooses again either A or B
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+# Set information set for stage 3
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[0].infoset)
+
+# Set payoffs to 0 for all outcomes
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([0, 0], label="Outcome B"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([0, 0], label="Outcome B"))
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([0, 0], label="Outcome B"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([0, 0], label="Outcome A"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([0, 0], label="Outcome B"))
+
+# Save the EFG
+efg = g.write(format='native')

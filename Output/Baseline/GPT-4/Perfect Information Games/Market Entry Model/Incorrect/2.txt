@@ -1,0 +1,22 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Entry Deterrence Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Fights" { x, y }  ; x < y
+t "" 2 "Firm 1 Accommodates" { z, z }  ; z > x
+t "" 3 "Firm 2 Stays Out" { w, 0 }  ; w > z
+```
+
+In this representation:
+- `x`, `y`, `z`, and `w` are placeholders for the actual payoffs, which should satisfy the conditions described in the game description. Specifically:
+  - `w` represents the payoff to Firm 1 if Firm 2 does not enter, which is the highest payoff Firm 1 can receive in this game.
+  - `z` represents the payoff to both firms if Firm 1 accommodates Firm 2's entry, implying both firms earn the same amount in this scenario.
+  - `x` and `y` represent the payoffs to Firm 1 and Firm 2, respectively, if Firm 1 fights Firm 2's entry. `y` is greater than `x`, indicating Firm 2 earns more than Firm 1 in this scenario.
+- The game starts with Firm 2 deciding whether to Enter or Out. If Firm 2 chooses Out, the game ends with Firm 1 receiving its highest payoff (`w`) and Firm 2 receiving nothing.
+- If Firm 2 enters, then Firm 1 must choose how to compete: either Fight or Accommodate.
+  - If Firm 1 fights, the payoffs are `x` for Firm 1 and `y` for Firm 2.
+  - If Firm 1 accommodates, both firms receive a payoff of `z`.
+
+Please note, the actual values of `x`, `y`, `z`, and `w` are not specified in the description and should be determined based on the specific conditions and preferences of the firms involved in the game.

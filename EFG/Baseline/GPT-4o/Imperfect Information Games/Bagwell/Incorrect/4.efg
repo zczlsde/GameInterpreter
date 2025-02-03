@@ -1,0 +1,16 @@
+EFG 2 R "Misinterpretation Game" { "Leader" "Follower" }
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Correct" 0.99 "Misinterpret" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both S" { A, B }
+t "" 2 "Leader S, Follower C" { C, D }
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "Leader C, Follower S" { E, C }
+t "" 4 "Both C" { F, F }
+c "" 2 "" { "Correct" 0.99 "Misinterpret" 0.01 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 3 "Leader C, Follower S" { E, C }
+t "" 4 "Both C" { F, F }
+p "" 2 2 "" { "S" "C" } 0
+t "" 1 "Both S" { A, B }
+t "" 2 "Leader S, Follower C" { C, D }

@@ -1,0 +1,140 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for B's decision after A's proposal
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# B proposes an equal split of 5,000 pounds each if A rejects the initial proposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1].children[1].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for A's decision after B's proposal
+g.set_infoset(g.root.children[0].children[1].children[1].children[1], g.root.children[0].children[1].children[1].children[0].infoset)
+
+# A proposes a split of 5,200 pounds for A and 4,800 pounds for B if A rejects B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[1].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set outcome for the negotiation based on the decisions made
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A proposes, B accepts"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes, A accepts"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes equal split"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([4693, 4332], label="A proposes, B accepts"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for B's decision after A's proposal
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# B proposes an equal split of 5,000 pounds each if A rejects the initial proposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1].children[1].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for A's decision after B's proposal
+g.set_infoset(g.root.children[0].children[1].children[1].children[1], g.root.children[0].children[1].children[1].children[0].infoset)
+
+# A proposes a split of 5,200 pounds for A and 4,800 pounds for B if A rejects B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[1].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set outcome for the negotiation based on the decisions made
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A proposes, B accepts"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes, A accepts"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes equal split"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([4693, 4332], label="A proposes, B accepts"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for B's decision after A's proposal
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# B proposes an equal split of 5,000 pounds each if A rejects the initial proposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1].children[1].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for A's decision after B's proposal
+g.set_infoset(g.root.children[0].children[1].children[1].children[1], g.root.children[0].children[1].children[1].children[0].infoset)
+
+# A proposes a split of 5,200 pounds for A and 4,800 pounds for B if A rejects B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[1].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set outcome for the negotiation based on the decisions made
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A proposes, B accepts"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes, A accepts"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes equal split"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([4693, 4332], label="A proposes, B accepts"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A makes the first move by proposing a split of 5,500 pounds for A and 4,500 pounds for B
+g.append_move(g.root, "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for B's decision after A's proposal
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# B proposes an equal split of 5,000 pounds each if A rejects the initial proposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+g.append_move(g.root.children[0].children[1].children[1].children[1], "B", ["Accept", "Reject"])
+
+# Set information set for A's decision after B's proposal
+g.set_infoset(g.root.children[0].children[1].children[1].children[1], g.root.children[0].children[1].children[1].children[0].infoset)
+
+# A proposes a split of 5,200 pounds for A and 4,800 pounds for B if A rejects B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[1].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set outcome for the negotiation based on the decisions made
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A proposes, B accepts"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes, A accepts"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4750, 4750], label="B proposes equal split"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], g.add_outcome([4693, 4332], label="A proposes, B accepts"))
+
+# Save the EFG
+efg = g.write(format='native')

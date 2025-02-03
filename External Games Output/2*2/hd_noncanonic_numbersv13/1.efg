@@ -1,0 +1,10 @@
+EFG 2 R "Inheritance Division Game" { "Sibling 1" "Sibling 2" }
+""
+
+p "" 1 1 "" { "Agree" "Demand" } 0
+p "" 2 1 "" { "Agree" "Demand" } 0
+t "" 1 "Fair Split" { 0, 0 }
+t "" 3 "Sibling 2 Demands" { -3, 3 }
+p "" 2 1 "" { "Agree" "Demand" } 0
+t "" 2 "Sibling 1 Demands" { 3, -3 }
+t "" 4 "Legal Battle" { -5, -5 }

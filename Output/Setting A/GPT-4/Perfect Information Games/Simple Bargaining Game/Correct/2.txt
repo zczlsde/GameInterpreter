@@ -1,0 +1,38 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the only action at this stage, so we move directly to B's decision
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial"))
+
+# If B rejects, B proposes an equal split (5000 each)
+# Since this is B's only action after rejecting, we move to A's decision
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept or reject B's counterproposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's counterproposal, the game ends with the equal split adjusted to 4750 each
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Counter"))
+
+# If A rejects B's counterproposal, A proposes a new plan (5200 for A, 4800 for B)
+# Since B has no right to reject, this is the final outcome
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# The game ends with A receiving 4693 and B receiving 4332
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="Final Proposal Accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the negotiation process between players A and B over the division of 10,000 pounds. The game progresses through a series of proposals and counterproposals, with the final amounts received by each player depending on their decisions to accept or reject the proposals. The game is structured to reflect the sequential nature of the negotiation, with each player's decision leading to different outcomes.

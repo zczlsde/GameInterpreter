@@ -1,0 +1,44 @@
+```python
+# Thought process:
+# 1. The game starts with Player A proposing a distribution plan.
+# 2. Player B has the choice to accept or reject A's proposal.
+# 3. If B rejects, B proposes an equal split.
+# 4. Player A then has the choice to accept or reject B's proposal.
+# 5. If A rejects, A proposes a new plan which B must accept.
+# 6. There is no simultaneous move or hidden information in this game.
+# 7. Therefore, there are no information sets to be set in this game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan
+g.append_move(g.root, "A", ["Propose 5500/4500"])
+
+# Step 2: B decides to accept or reject A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# Step 3: If B accepts, the game ends with payoffs 5500 for A and 4500 for B
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts A's Proposal"))
+
+# Step 4: If B rejects, B proposes an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000/5000"])
+
+# Step 5: A decides to accept or reject B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# Step 6: If A accepts, the game ends with payoffs 4750 for both A and B
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts B's Proposal"))
+
+# Step 7: If A rejects, A proposes a new plan which B must accept
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200/4800"])
+
+# Step 8: B must accept, and the game ends with payoffs 4693 for A and 4332 for B
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B Must Accept A's New Proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

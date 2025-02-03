@@ -1,0 +1,28 @@
+Certainly! The game described is a simultaneous move game known as "Rock, Paper, Scissors." In this game, both players choose their actions simultaneously, and the payoffs depend on the combination of actions chosen by the players. Here's the EFG representation for this game:
+
+```
+EFG 2 R "Rock, Paper, Scissors" { "Player 1" "Player 2" }
+p "" 1 1 "" { "Rock" "Paper" "Scissors" } 0
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 1 "Draw" { 0, 0 }
+t "" 2 "Player 1 wins" { 1, -1 }
+t "" 3 "Player 2 wins" { -1, 1 }
+t "" 4 "Player 2 wins" { -1, 1 }
+t "" 5 "Draw" { 0, 0 }
+t "" 6 "Player 1 wins" { 1, -1 }
+t "" 7 "Player 1 wins" { 1, -1 }
+t "" 8 "Player 2 wins" { -1, 1 }
+t "" 9 "Draw" { 0, 0 }
+```
+
+Explanation:
+- The game is represented as a simultaneous move game where both players choose their actions at the same time.
+- Each player has three actions: Rock, Paper, and Scissors.
+- The outcomes are determined by the combination of actions chosen by the players:
+  - If both players choose the same action, the result is a draw with payoffs {0, 0}.
+  - If Player 1 chooses Rock and Player 2 chooses Scissors, Player 1 wins with payoffs {1, -1}.
+  - If Player 1 chooses Scissors and Player 2 chooses Paper, Player 1 wins with payoffs {1, -1}.
+  - If Player 1 chooses Paper and Player 2 chooses Rock, Player 1 wins with payoffs {1, -1}.
+  - If Player 2 chooses Rock and Player 1 chooses Scissors, Player 2 wins with payoffs {-1, 1}.
+  - If Player 2 chooses Scissors and Player 1 chooses Paper, Player 2 wins with payoffs {-1, 1}.
+  - If Player 2 chooses Paper and Player 1 chooses Rock, Player 2 wins with payoffs {-1, 1}.

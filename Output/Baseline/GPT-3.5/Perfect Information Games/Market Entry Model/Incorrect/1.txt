@@ -1,0 +1,9 @@
+EFG 2 R "Monopoly Entry Game" { "Firm 1" "Firm 2" }
+c "" 1 "" { "Enter" 1/2 "Out" 1/2 } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 earns more" { 2, 0 }
+t "" 2 "Firm 2 earns the same" { 1, 1 }
+p "" 1 2 "" { "Fight" "Accommodate" } 0
+t "" 3 "Firm 2 earns the same" { 1, 1 }
+t "" 4 "Firm 1 earns less" { -1, 2 }
+t "" 5 "Game terminates" { 0, 0 }

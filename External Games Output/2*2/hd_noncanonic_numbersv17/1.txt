@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, each with two actions: "High Emissions" and "Cuts".
+
+# Step 2: Determine the structure of the game.
+# The game is simultaneous, meaning both players choose their actions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second.
+
+# Step 4: Identify the decision nodes for Player 2.
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Player 1's actions "High Emissions" and "Cuts".
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 does not know Player 1's action, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Country A and Country B.
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="CO2 Emission Reduction Negotiation")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Country A moves first and Country B moves second.
+
+# Step 3: Country A's move: "High Emissions" or "Cuts".
+g.append_move(g.root, "Country A", ["High Emissions", "Cuts"])
+
+# Step 4: Country B's move: "High Emissions" or "Cuts".
+# Country B's decision nodes are g.root.children[0] and g.root.children[1],
+# corresponding to Country A's actions "High Emissions" and "Cuts".
+g.append_move(g.root.children[0], "Country B", ["High Emissions", "Cuts"])
+g.append_move(g.root.children[1], "Country B", ["High Emissions", "Cuts"])
+
+# Step 5: Group Country B's decision nodes in the same information set.
+# Since Country B does not know Country A's action, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the actions chosen by both countries.
+# If both choose "Cuts", the outcome is neutral with payoffs [0, 0].
+neutral_outcome = g.add_outcome([0, 0], label="Both Cuts")
+
+# If one chooses "High Emissions" and the other "Cuts", the high-emission country gains 4 points,
+# and the cutting country loses 4 points.
+advantage_outcome_A = g.add_outcome([4, -4], label="A High, B Cuts")
+advantage_outcome_B = g.add_outcome([-4, 4], label="A Cuts, B High")
+
+# If both choose "High Emissions", both suffer -10 points.
+worsen_outcome = g.add_outcome([-10, -10], label="Both High Emissions")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], worsen_outcome)  # Both High Emissions
+g.set_outcome(g.root.children[0].children[1], advantage_outcome_A)  # A High, B Cuts
+g.set_outcome(g.root.children[1].children[0], advantage_outcome_B)  # A Cuts, B High
+g.set_outcome(g.root.children[1].children[1], neutral_outcome)  # Both Cuts
+
+# Save the EFG
+efg = g.write(format='native')
+```

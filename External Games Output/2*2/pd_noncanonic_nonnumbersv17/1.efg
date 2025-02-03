@@ -1,0 +1,10 @@
+EFG 2 R "Emission Control Game" { "Country 1" "Country 2" }
+""
+
+p "" 1 1 "" { "Impose Controls" "Not Impose Controls" } 0
+p "" 2 1 "" { "Impose Controls" "Not Impose Controls" } 0
+t "" 1 "Collaborate" { 1, 1 }
+t "" 2 "Control Costs" { -1, 2 }
+p "" 2 1 "" { "Impose Controls" "Not Impose Controls" } 0
+t "" 3 "Polluter Benefits" { 2, -1 }
+t "" 4 "Worsen Climate" { 0, 0 }

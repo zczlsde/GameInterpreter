@@ -1,0 +1,41 @@
+Certainly! Given the game description, we can outline the steps and then translate them into Python code using the Pygambit library. The game involves sequential moves, not simultaneous ones, with Firm 2 deciding whether to enter the market first, followed by Firm 1's decision on how to react if Firm 2 enters.
+
+Here's how we can structure the code:
+
+1. **Initialize the game** with two players: Firm 1 and Firm 2.
+2. **First move**: Firm 2 decides whether to enter the market or stay out.
+   - If Firm 2 stays out, the game ends, and we assign the payoffs.
+   - If Firm 2 enters, we proceed to Firm 1's decision.
+3. **Second move**: Firm 1 decides whether to fight or accommodate Firm 2's entry.
+   - We assign the payoffs based on Firm 1's decision.
+4. **Assign payoffs** according to the game description for each outcome.
+
+Here's the Python code:
+
+```python
+import pygambit as gbt
+
+# Step 1: Initialize the game
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Step 2: Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, proceed to Firm 1's decision
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Assigning payoffs
+# If Firm 2 stays out, Firm 1 earns more (let's assume payoff is 2 for Firm 1 and 0 for Firm 2)
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1 (let's assume payoff is 1 for Firm 1 and 3 for Firm 2)
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 3], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount (let's assume payoff is 2 for both)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet follows the game's structure as described, with Firm 2 making the initial decision to enter the market or not, followed by Firm 1's decision on how to react if Firm 2 enters. The payoffs are assigned based on the outcomes of these decisions. Note that the specific payoff values are placeholders and should be adjusted according to the actual game's payoffs.

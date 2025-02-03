@@ -1,0 +1,18 @@
+EFG 2 R "Manufacturer Competition Game" { "Current Manufacturer" "New Manufacturer" }
+""
+
+c "" 1 "" { "Strong" 1/2 "Weak" 1/2 } 0
+c "" 2 "" { "Strong" 1/2 "Weak" 1/2 } 0
+p "" 1 1 "" { "Fight" "Adapt" } 0
+t "" 1 "Strong_Strong_Fight" { 1, 0 }
+t "" 2 "Strong_Strong_Adapt" { 3, 1 }
+p "" 1 1 "" { "Fight" "Adapt" } 0
+t "" 3 "Strong_Weak_Fight" { 0, 0 }
+t "" 4 "Strong_Weak_Adapt" { 2, 1 }
+c "" 3 "" { "Strong" 1/2 "Weak" 1/2 } 0
+p "" 1 2 "" { "Fight" "Adapt" } 0
+t "" 5 "Weak_Strong_Fight" { 0, 2 }
+t "" 6 "Weak_Strong_Adapt" { 2, 1 }
+p "" 1 2 "" { "Fight" "Adapt" } 0
+t "" 7 "Weak_Weak_Fight" { 1, 2 }
+t "" 8 "Weak_Weak_Adapt" { 3, 1 }

@@ -1,0 +1,124 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept (5,500/4,500)", "Reject"])
+
+# B's decision node after A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject (5,000/5,000)"])
+
+# A's decision node after B's rejection
+g.append_move(g.root.children[0].children[1], "A", ["Accept (4,750/4,750)", "Reject"])
+
+# Set information sets for the decision nodes
+# Grouping nodes where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Grouping nodes where A proposes a new split and B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept (5,500/4,500)", "Reject"])
+
+# B's decision node after A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject (5,000/5,000)"])
+
+# A's decision node after B's rejection
+g.append_move(g.root.children[0].children[1], "A", ["Accept (4,750/4,750)", "Reject"])
+
+# Set information sets for the decision nodes
+# Grouping nodes where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Grouping nodes where A proposes a new split and B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept (5,500/4,500)", "Reject"])
+
+# B's decision node after A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject (5,000/5,000)"])
+
+# A's decision node after B's rejection
+g.append_move(g.root.children[0].children[1], "A", ["Accept (4,750/4,750)", "Reject"])
+
+# Set information sets for the decision nodes
+# Grouping nodes where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[0].infoset)
+
+# Grouping nodes where A proposes a new split and B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept (5,500/4,500)", "Reject"])
+
+# B's decision node after A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject (5,000/5,000)"])
+
+# A's decision node after B's rejection
+g.append_move(g.root.children[0].children[1], "A", ["Accept (4,750/4,750)", "Reject"])
+
+# Set information sets for the decision nodes
+# Grouping nodes where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[0].infoset)
+
+# Grouping nodes where A proposes a new split and B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept (5,500/4,500)", "Reject"])
+
+# B's decision node after A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject (5,000/5,000)"])
+
+# A's decision node after B's rejection
+g.append_move(g.root.children[0].children[1], "A", ["Accept (4,750/4,750)", "Reject"])
+
+# Set information sets for the decision nodes
+# Grouping nodes where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[0].infoset)
+
+# Grouping nodes where A proposes a new split and B has no choice but to accept
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)

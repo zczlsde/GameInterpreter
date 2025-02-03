@@ -1,0 +1,200 @@
+```python
+# Step 1: Create a new game tree with two players
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect Information Game")
+
+# Step 2: Add moves for Player 1 at the first decision node
+g.append_move(g.root, "Player 1", ["A", "B"])
+
+# Step 3: Add moves for Player 2 at the second decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Step 4: Add moves for Player 1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Step 5: Add moves for Player 2 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 2", ["Q", "W"])
+
+# Step 6: Group decision nodes of Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0])
+
+# Step 7: Group decision nodes of Player 2 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1])
+```
+
+```python
+# Step 1: Create a new game tree with two players
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect Information Game")
+
+# Step 2: Add moves for Player 1 at the first decision node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player 2 at the second decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Step 4: Add moves for Player 1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Step 5: Add moves for Player 2 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 2", ["Q", "W"])
+
+# Step 6: Group decision nodes of Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0])
+
+# Step 7: Group decision nodes of Player 2 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1])
+
+# Step 8: Set outcomes for the terminal nodes
+outcome1 = g.add_outcome([2, -1], label="Player 1 chooses H")
+outcome2 = g.add_outcome([3, 0], label="Player 1 chooses G and Player 2 chooses Q")
+outcome3 = g.add_outcome([0, 0], label="Player 1 chooses G and Player 2 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome1)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect Information Game")
+
+# Step 2: Add moves for Player 1 at the first decision node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player 2 at the second decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Step 4: Add moves for Player 1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Step 5: Add moves for Player 2 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 2", ["Q", "W"])
+
+# Step 6: Group decision nodes of Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0])
+
+# Step 7: Group decision nodes of Player 2 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1])
+
+# Step 8: Set outcomes for the terminal nodes
+outcome1 = g.add_outcome([2, -1], label="Player 1 chooses H")
+outcome2 = g.add_outcome([3, 0], label="Player 1 chooses G and Player 2 chooses Q")
+outcome3 = g.add_outcome([0, 0], label="Player 1 chooses G and Player 2 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome1)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect Information Game")
+
+# Step 2: Add moves for Player 1 at the first decision node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player 2 at the second decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Step 4: Add moves for Player 1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Step 5: Add moves for Player 2 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 2", ["Q", "W"])
+
+# Step 6: Group decision nodes of Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0])
+
+# Step 7: Group decision nodes of Player 2 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1])
+
+# Step 8: Set outcomes for the terminal nodes
+outcome1 = g.add_outcome([2, -1], label="Player 1 chooses H")
+outcome2 = g.add_outcome([3, 0], label="Player 1 chooses G and Player 2 chooses Q")
+outcome3 = g.add_outcome([0, 0], label="Player 1 chooses G and Player 2 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome1)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Step 1: Create a new game tree with two players
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                    title="Imperfect Information Game")
+
+# Step 2: Add moves for Player 1 at the first decision node
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Step 3: Add moves for Player 2 at the second decision node
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+
+# Step 4: Add moves for Player 1 at the third decision node
+g.append_move(g.root.children[0].children[0], "Player 1", ["G", "H"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["G", "H"])
+
+# Step 5: Add moves for Player 2 at the fourth decision node
+g.append_move(g.root.children[0].children[0].children[1], "Player 2", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 2", ["Q", "W"])
+
+# Step 6: Group decision nodes of Player 1 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0])
+
+# Step 7: Group decision nodes of Player 2 in the same information set
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1])
+
+# Step 8: Set outcomes for the terminal nodes
+outcome1 = g.add_outcome([2, -1], label="Player 1 chooses H")
+outcome2 = g.add_outcome([3, 0], label="Player 1 chooses G and Player 2 chooses Q")
+outcome3 = g.add_outcome([0, 0], label="Player 1 chooses G and Player 2 chooses W")
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], outcome1)
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], outcome2)
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], outcome3)
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], outcome1)
+
+# Save the EFG
+efg = g.write(format='native')

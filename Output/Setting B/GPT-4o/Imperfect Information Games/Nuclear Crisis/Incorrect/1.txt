@@ -1,0 +1,182 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Nuclear Crisis Game")
+
+# Country A's initial move to either escalate (E) or ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Country B's move after Country A escalates, to either back down (B) or escalate (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Country A's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Set information sets for simultaneous moves
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Define outcomes for different scenarios
+both_detonate = g.add_outcome([-100, -100], label="Both countries detonate")
+both_retreat = g.add_outcome([-1, -1], label="Both countries retreat")
+countryA_detonates = g.add_outcome([10, -10], label="Country A detonates")
+countryB_detonates = g.add_outcome([-10, 10], label="Country B detonates")
+countryA_retreats = g.add_outcome([-10, 10], label="Country A retreats")
+countryB_retreats = g.add_outcome([10, -10], label="Country B retreats")
+countryA_ignores = g.add_outcome([1, 1], label="Country A ignores")
+countryA_escalates_B_backsdown = g.add_outcome([1, -1], label="Country A escalates, Country B backs down")
+
+# Set outcomes for different nodes
+g.set_outcome(g.root.children[1], countryA_ignores)
+g.set_outcome(g.root.children[0].children[1].children[0], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], countryA_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[0], countryB_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], both_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1], countryA_escalates_B_backsdown)
+g.set_outcome(g.root.children[0].children[1], countryB_backsdown)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Nuclear Crisis Game")
+
+# Country A's initial move to either escalate (E) or ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Country B's move after Country A escalates, to either back down (B) or escalate (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Country A's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Set information sets for simultaneous moves
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Define outcomes for different scenarios
+both_detonate = g.add_outcome([-100, -100], label="Both countries detonate")
+both_retreat = g.add_outcome([-1, -1], label="Both countries retreat")
+countryA_detonates = g.add_outcome([10, -10], label="Country A detonates")
+countryB_detonates = g.add_outcome([-10, 10], label="Country B detonates")
+countryA_retreats = g.add_outcome([-10, 10], label="Country A retreats")
+countryB_retreats = g.add_outcome([10, -10], label="Country B retreats")
+countryA_ignores = g.add_outcome([1, 1], label="Country A ignores")
+countryA_escalates_B_backsdown = g.add_outcome([1, -1], label="Country A escalates, Country B backs down")
+
+# Set outcomes for different nodes
+g.set_outcome(g.root.children[1], countryA_ignores)
+g.set_outcome(g.root.children[0].children[1].children[0], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], countryA_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[0], countryB_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], both_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1], countryA_escalates_B_backsdown)
+g.set_outcome(g.root.children[0].children[1], countryB_retreats)
+
+# Save the EFG
+efg = g.write(format='native')
+
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Nuclear Crisis Game")
+
+# Country A's initial move to either escalate (E) or ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Country B's move after Country A escalates, to either back down (B) or escalate (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Country A's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Set information sets for simultaneous moves
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Define outcomes for different scenarios
+both_detonate = g.add_outcome([-100, -100], label="Both countries detonate")
+both_retreat = g.add_outcome([-1, -1], label="Both countries retreat")
+countryA_detonates = g.add_outcome([10, -10], label="Country A detonates")
+countryB_detonates = g.add_outcome([-10, 10], label="Country B detonates")
+countryA_retreats = g.add_outcome([-10, 10], label="Country A retreats")
+countryB_retreats = g.add_outcome([10, -10], label="Country B retreats")
+countryA_ignores = g.add_outcome([1, 1], label="Country A ignores")
+countryA_escalates_B_backsdown = g.add_outcome([1, -1], label="Country A escalates, Country B backs down")
+
+# Set outcomes for different nodes
+g.set_outcome(g.root.children[1], countryA_ignores)
+g.set_outcome(g.root.children[0].children[1].children[0], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], countryA_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[0], countryB_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], both_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1], countryA_escalates_B_backsdown)
+g.set_outcome(g.root.children[0].children[1], countryB_retreats)
+
+# Save the EFG
+efg = g.write(format='native')
+
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Nuclear Crisis Game")
+
+# Country A's initial move to either escalate (E) or ignore (I)
+g.append_move(g.root, "Country A", ["E", "I"])
+
+# Country B's move after Country A escalates, to either back down (B) or escalate (E)
+g.append_move(g.root.children[0], "Country B", ["B", "E"])
+
+# Country A's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1], "Country A", ["R", "D"])
+
+# Country B's move after both countries escalate, to either retreat (R) or detonate (D)
+g.append_move(g.root.children[0].children[1].children[1], "Country B", ["R", "D"])
+
+# Set information sets for simultaneous moves
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+
+# Define outcomes for different scenarios
+both_detonate = g.add_outcome([-100, -100], label="Both countries detonate")
+both_retreat = g.add_outcome([-1, -1], label="Both countries retreat")
+countryA_detonates = g.add_outcome([10, -10], label="Country A detonates")
+countryB_detonates = g.add_outcome([-10, 10], label="Country B detonates")
+countryA_retreats = g.add_outcome([-10, 10], label="Country A retreats")
+countryB_retreats = g.add_outcome([10, -10], label="Country B retreats")
+countryA_ignores = g.add_outcome([1, 1], label="Country A ignores")
+countryA_escalates_B_backsdown = g.add_outcome([1, -1], label="Country A escalates, Country B backs down")
+
+# Set outcomes for different nodes
+g.set_outcome(g.root.children[1], countryA_ignores)
+g.set_outcome(g.root.children[0].children[1].children[0], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], countryA_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[0], countryB_detonates)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1].children[1], countryA_retreats)
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], both_detonate)
+g.set_outcome(g.root.children[0].children[1].children[1], countryA_escalates_B_backsdown)
+g.set_outcome(g.root.children[0].children[1], countryB_retreats)
+
+# Save the EFG
+efg = g.write(format='native')

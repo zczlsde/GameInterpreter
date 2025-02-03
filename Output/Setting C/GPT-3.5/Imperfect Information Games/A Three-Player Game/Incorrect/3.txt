@@ -1,0 +1,135 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add chance node at the root with two outcomes "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+
+# Player 1's decision nodes after the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Player 2's decision nodes after Player 1's decision node "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+
+# Player 3's decision nodes after Player 2's decision node "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+
+# Group decision nodes in the same information set where players have imperfect information
+# Player 1's decision nodes "L" and "R" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+# Player 2's decision nodes "l" and "r" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add chance node at the root with two outcomes "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+
+# Player 1's decision nodes after the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Player 2's decision nodes after Player 1's decision node "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+
+# Player 3's decision nodes after Player 2's decision node "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+
+# Group decision nodes in the same information set where players have imperfect information
+# Player 1's decision nodes "L" and "R" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+# Player 2's decision nodes "l" and "r" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[1].infoset)
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add chance node at the root with two outcomes "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+
+# Player 1's decision nodes after the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Player 2's decision nodes after Player 1's decision node "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+
+# Player 3's decision nodes after Player 2's decision node "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+
+# Group decision nodes in the same information set where players have imperfect information
+# Player 1's decision nodes "L" and "R" are in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+# Player 2's decision nodes "l" and "r" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add chance node at the root with two outcomes "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+
+# Player 1's decision nodes after the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Player 2's decision nodes after Player 1's decision node "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+
+# Player 3's decision nodes after Player 2's decision node "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+
+# Group decision nodes in the same information set where players have imperfect information
+# Player 1's decision nodes "L" and "R" are in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+# Player 2's decision nodes "l" and "r" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Multi-stage game with imperfect information")
+
+# Add chance node at the root with two outcomes "A" and "B"
+g.append_move(g.root, g.players.chance, ["A", "B"])
+
+# Player 1's decision nodes after the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+
+# Player 2's decision nodes after Player 1's decision node "L"
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+
+# Player 3's decision nodes after Player 2's decision node "l"
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+
+# Group decision nodes in the same information set where players have imperfect information
+# Player 1's decision nodes "L" and "R" are in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+# Player 2's decision nodes "l" and "r" are in the same information set
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)

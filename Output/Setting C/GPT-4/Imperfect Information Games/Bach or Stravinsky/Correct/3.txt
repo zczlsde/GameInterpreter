@@ -1,0 +1,52 @@
+```python
+# Since Alexis and Beverley make their decisions simultaneously and independently,
+# we model this by assuming one player moves first and the other second for representation,
+# but in reality, they don't know each other's choices when making their own decision.
+
+# Let's assume Alexis moves first and chooses between Bach and Stravinsky,
+# then Beverley moves, also choosing between Bach and Stravinsky.
+
+# However, since Beverley makes her decision without knowing Alexis's choice,
+# both of Beverley's decision nodes (after Alexis chooses Bach and after Alexis chooses Stravinsky)
+# should be in the same information set to represent that Beverley cannot distinguish between these scenarios.
+
+# Similarly, if we were to model it with Beverley moving first, then Alexis's decision nodes
+# would need to be grouped in the same information set for the same reason.
+
+# Therefore, the necessary set_infoset() function to represent this game correctly is:
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+# This line groups Beverley's decision nodes (assuming Alexis moves first) into the same information set,
+# indicating Beverley does not know Alexis's prior action when making her decision.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Since Alexis and Beverley make their decisions simultaneously and independently,
+# we model this by assuming Alexis moves first for representation purposes.
+# Alexis chooses between Bach and Stravinsky.
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# For each of Alexis's choices, Beverley then makes her choice also between Bach and Stravinsky.
+# However, since the decisions are made simultaneously, Beverley's choices are in the same information set.
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Group Beverley's decision nodes into the same information set to represent simultaneous decisions.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set outcomes based on the game description:
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+# If both choose Stravinsky, Beverley gets a higher payoff, and Alexis gets a lower payoff.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+# If they choose different events, they both get no payoffs.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Alexis Bach, Beverley Stravinsky"))
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Alexis Stravinsky, Beverley Bach"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

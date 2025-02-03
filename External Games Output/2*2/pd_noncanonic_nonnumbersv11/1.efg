@@ -1,0 +1,10 @@
+EFG 2 R "Roommates Cleaning Game" { "Roommate 1" "Roommate 2" }
+""
+
+p "" 1 1 "" { "Clean" "Not Clean" } 0
+p "" 2 1 "" { "Clean" "Not Clean" } 0
+t "" 1 "Harmonious" { 1, 1 }
+t "" 2 "Resentful Cleaner" { -1, 2 }
+p "" 2 1 "" { "Clean" "Not Clean" } 0
+t "" 3 "Resentful Non-Cleaner" { 2, -1 }
+t "" 4 "Messy" { 0, 0 }

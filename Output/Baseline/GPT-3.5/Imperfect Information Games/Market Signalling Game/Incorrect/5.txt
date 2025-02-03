@@ -1,0 +1,13 @@
+EFG 2 R "Manufacturer Competition Game"
+{ "New Manufacturer" "Existing Manufacturer" }
+c "Strength" 1 "" { "Strong" 2/3 "Weak" 1/3 } 0
+c "Signal" 1 "" { "Strong" 1/2 "Weak" 1/2 } 0
+p "Existing Manufacturer Decision" 2 1 "" { "Fight" "Adapt" } 0
+t "New Manufacturer Strong, Signal Strong, Existing Manufacturer Fights" { 1, 0 }
+t "New Manufacturer Strong, Signal Strong, Existing Manufacturer Adapts" { 3, 1 }
+t "New Manufacturer Strong, Signal Weak, Existing Manufacturer Fights" { 0, 0 }
+t "New Manufacturer Strong, Signal Weak, Existing Manufacturer Adapts" { 2, 1 }
+t "New Manufacturer Weak, Signal Strong, Existing Manufacturer Fights" { 0, 2 }
+t "New Manufacturer Weak, Signal Strong, Existing Manufacturer Adapts" { 2, 1 }
+t "New Manufacturer Weak, Signal Weak, Existing Manufacturer Fights" { 1, 2 }
+t "New Manufacturer Weak, Signal Weak, Existing Manufacturer Adapts" { 3, 1 }

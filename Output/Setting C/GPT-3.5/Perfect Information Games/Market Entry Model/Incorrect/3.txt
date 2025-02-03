@@ -1,0 +1,109 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2's decision node to enter or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Firm 1's decision node to Fight or Accommodate if Firm 2 enters
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the information set for Firm 1's decision nodes
+# Group Firm 1's decision nodes in the same information set as Firm 2's decision to Enter
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```  
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2's decision node to enter or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Firm 1's decision node to Fight or Accommodate if Firm 2 enters
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the information set for Firm 1's decision nodes
+# Group Firm 1's decision nodes in the same information set as Firm 2's decision to Enter
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2's decision node to enter or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Firm 1's decision node to Fight or Accommodate if Firm 2 enters
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the information set for Firm 1's decision nodes
+# Group Firm 1's decision nodes in the same information set as Firm 2's decision to Enter
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2's decision node to enter or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Firm 1's decision node to Fight or Accommodate if Firm 2 enters
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the information set for Firm 1's decision nodes
+# Group Firm 1's decision nodes in the same information set as Firm 2's decision to Enter
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"],
+                    title="Monopolist vs Potential Competitor Game")
+
+# Firm 2's decision node to enter or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Firm 1's decision node to Fight or Accommodate if Firm 2 enters
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Set the information set for Firm 1's decision nodes
+# Group Firm 1's decision nodes in the same information set as Firm 2's decision to Enter
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

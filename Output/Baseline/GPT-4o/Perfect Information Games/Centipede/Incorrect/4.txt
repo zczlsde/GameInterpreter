@@ -1,0 +1,32 @@
+Certainly! Below is the EFG representation of the described game:
+
+```
+EFG 2 R "Coin Doubling Game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+p "" 2 1 "" { "Take" "Push" } 0
+p "" 1 2 "" { "Take" "Push" } 0
+p "" 2 2 "" { "Take" "Push" } 0
+t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 }
+t "" 2 "Alice takes 2, Bob takes 8" { 2, 8 }
+t "" 3 "Alice takes 8, Bob takes 2" { 8, 2 }
+t "" 4 "Alice takes 4, Bob takes 16" { 4, 16 }
+t "" 5 "Alice takes 16, Bob takes 4" { 16, 4 }
+t "" 6 "Alice takes 8, Bob takes 32" { 8, 32 }
+t "" 7 "Alice takes 32, Bob takes 8" { 32, 8 }
+t "" 8 "Alice takes 16, Bob takes 64" { 16, 64 }
+t "" 9 "Alice takes 64, Bob takes 16" { 64, 16 }
+```
+
+### Explanation:
+- **Nodes**:
+  - The game starts with Alice's decision (node 1) to either "Take" or "Push".
+  - If Alice "Pushes", Bob then decides (node 2) to either "Take" or "Push".
+  - If Bob "Pushes", Alice decides again (node 3) to either "Take" or "Push".
+  - If Alice "Pushes" again, Bob makes the final decision (node 4) to either "Take" or "Push".
+
+- **Terminal Nodes**:
+  - Each terminal node represents a possible outcome of the game, with the payoffs to Alice and Bob based on the actions taken and the resulting coin piles.
+  - The payoffs are calculated based on the doubling of the coin piles each time they are pushed across the table.
+
+- **Payoffs**:
+  - The payoffs are structured to reflect the rules: if a player "Takes", they receive the larger pile, and the other player receives the smaller pile. If the game ends without a "Take", Alice receives the larger pile, and Bob receives the smaller pile.

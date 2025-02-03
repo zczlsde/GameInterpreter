@@ -1,0 +1,25 @@
+Given the game description, here's the EFG representation:
+
+```
+EFG 2 R "Coin Doubling Game" { "Alice" "Bob" }
+p "" 1 1 "" { "Take" "Push" } 0
+    t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 }
+    p "" 2 1 "" { "Take" "Push" } 0
+        t "" 2 "Bob takes 8, Alice takes 2" { 2, 8 }
+        p "" 1 2 "" { "Take" "Push" } 0
+            t "" 3 "Alice takes 16, Bob takes 4" { 16, 4 }
+            p "" 2 2 "" { "Take" "Push" } 0
+                t "" 4 "Bob takes 32, Alice takes 8" { 8, 32 }
+                t "" 5 "Alice takes 32, Bob takes 8" { 32, 8 }
+p "" 1 1 "" { "Take" "Push" } 0 (optional)
+    t "" 1 "Alice takes 4, Bob takes 1" { 4, 1 } (optional)
+    p "" 2 1 "" { "Take" "Push" } 0 (optional)
+        t "" 2 "Bob takes 8, Alice takes 2" { 2, 8 } (optional)
+        p "" 1 2 "" { "Take" "Push" } 0 (optional)
+            t "" 3 "Alice takes 16, Bob takes 4" { 16, 4 } (optional)
+            p "" 2 2 "" { "Take" "Push" } 0 (optional)
+                t "" 4 "Bob takes 32, Alice takes 8" { 8, 32 } (optional)
+                t "" 5 "Alice takes 32, Bob takes 8" { 32, 8 } (optional)
+```
+
+This EFG representation outlines the structure of the game, including the decision points for both Alice and Bob, the outcomes of their decisions, and the payoffs associated with each outcome. The game starts with Alice deciding whether to "Take" or "Push" the piles of coins. Depending on her decision, the game progresses through a series of decision points for both players, with the size of the piles doubling each time they are "Pushed" across the table. The representation captures the sequential nature of the decisions and the doubling mechanism of the piles, leading to the final payoffs for both players.

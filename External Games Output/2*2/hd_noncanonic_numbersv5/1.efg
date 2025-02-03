@@ -1,0 +1,10 @@
+EFG 2 R "Bipartisan Bill Negotiation" { "Politician 1" "Politician 2" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Bipartisan Bill Passed" { 0, 0 }
+t "" 2 "Politician 2 Gains Support" { -3, 3 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 3 "Politician 1 Gains Support" { 3, -3 }
+t "" 4 "Bill Stalled" { -5, -5 }

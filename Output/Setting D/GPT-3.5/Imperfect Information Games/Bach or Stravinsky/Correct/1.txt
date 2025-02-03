@@ -1,0 +1,109 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Append the move for Alexis at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Beverley", ["Bach", "Stravinsky"])
+
+# Group Alexis and Beverley's decision nodes in the same information set since they move simultaneously and independently
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Output the necessary set_infoset() functions
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Append the move for Alexis at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Beverley", ["Bach", "Stravinsky"])
+
+# Group Alexis and Beverley's decision nodes in the same information set since they move simultaneously and independently
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set the outcomes for the game
+both_bach = g.add_outcome([2, 1], label="Both Bach")
+both_stravinsky = g.add_outcome([1, 2], label="Both Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes for each combination of choices
+g.set_outcome(g.root.children[0].children[0], both_bach)
+g.set_outcome(g.root.children[0].children[1], different_choices)
+g.set_outcome(g.root.children[1].children[0], different_choices)
+g.set_outcome(g.root.children[1].children[1], both_stravinsky)
+```
+
+=======================================
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Append the move for Alexis at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the Bach node with actions Bach and Stravinsky
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the Stravinsky node with actions Bach and Stravinsky
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Group Alexis and Beverley's decision nodes in the same information set since they move simultaneously and independently
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Set the outcomes for the game
+both_bach = g.add_outcome([2, 1], label="Both Bach")
+both_stravinsky = g.add_outcome([1, 2], label="Both Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes for each combination of choices
+g.set_outcome(g.root.children[0].children[0].children[0], both_bach)
+g.set_outcome(g.root.children[0].children[0].children[1], different_choices)
+g.set_outcome(g.root.children[0].children[1].children[0], different_choices)
+g.set_outcome(g.root.children[0].children[1].children[1], both_stravinsky)
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Append the move for Alexis at the root node with actions Bach and Stravinsky
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the Bach node with actions Bach and Stravinsky
+g.append_move(g.root.children[0], "Beverley", ["Bach", "Stravinsky"])
+
+# Append the move for Beverley at the Stravinsky node with actions Bach and Stravinsky
+g.append_move(g.root.children[1], "Beverley", ["Bach", "Stravinsky"])
+
+# Group Alexis and Beverley's decision nodes in the same information set since they move simultaneously and independently
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Set the outcomes for the game
+both_bach = g.add_outcome([2, 1], label="Both Bach")
+both_stravinsky = g.add_outcome([1, 2], label="Both Stravinsky")
+different_choices = g.add_outcome([0, 0], label="Different choices")
+
+# Set outcomes for each combination of choices
+g.set_outcome(g.root.children[0].children[0], both_bach)
+g.set_outcome(g.root.children[0].children[1], different_choices)
+g.set_outcome(g.root.children[1].children[0], different_choices)
+g.set_outcome(g.root.children[1].children[1], both_stravinsky)

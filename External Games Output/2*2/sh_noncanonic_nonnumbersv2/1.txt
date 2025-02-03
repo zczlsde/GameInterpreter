@@ -1,0 +1,71 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two project managers, let's call them Manager 1 and Manager 2.
+# Both managers can either "Collaborate" or "Work Independently".
+
+# Step 2: Determine the structure of the game.
+# Since the managers make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Manager 1 moves first and Manager 2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Manager 1's decision node.
+# Manager 1 has two actions: "Collaborate" and "Work Independently".
+# Manager 2's decision nodes are g.root.children[0] (Manager 1 collaborates) and g.root.children[1] (Manager 1 works independently).
+
+# Step 4: Group the decision nodes into information sets.
+# Manager 2, moving simultaneously, does not know which action Manager 1 has taken.
+# Therefore, Manager 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two project managers, let's call them Manager 1 and Manager 2.
+# Both managers can either "Collaborate" or "Work Independently".
+
+# Step 2: Determine the structure of the game.
+# Since the managers make their decisions simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Manager 1 moves first and Manager 2 moves second.
+
+# Create a new extensive-form game with two players: Manager 1 and Manager 2.
+g = gbt.Game.new_tree(players=["Manager 1", "Manager 2"],
+                      title="Project Management Collaboration Game")
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Manager 1's decision node.
+# Manager 1 has two actions: "Collaborate" and "Work Independently".
+g.append_move(g.root, "Manager 1", ["Collaborate", "Work Independently"])
+
+# Manager 2's decision nodes are g.root.children[0] (Manager 1 collaborates) and g.root.children[1] (Manager 1 works independently).
+g.append_move(g.root.children[0], "Manager 2", ["Collaborate", "Work Independently"])
+g.append_move(g.root.children[1], "Manager 2", ["Collaborate", "Work Independently"])
+
+# Step 4: Group the decision nodes into information sets.
+# Manager 2, moving simultaneously, does not know which action Manager 1 has taken.
+# Therefore, Manager 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and payoffs.
+# If both collaborate, they achieve a revolutionary product and significant bonuses.
+collaborate_outcome = g.add_outcome([3, 3], label="Revolutionary Product")
+
+# If one collaborates and the other doesn't, the collaborator's effort is wasted.
+# The one working independently earns a modest bonus.
+wasted_effort_outcome = g.add_outcome([0, 2], label="Wasted Effort")
+modest_bonus_outcome = g.add_outcome([2, 0], label="Modest Bonus")
+
+# If both work independently, the software portfolio remains stagnant.
+stagnant_outcome = g.add_outcome([1, 1], label="Stagnant Portfolio")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], collaborate_outcome)  # Both collaborate
+g.set_outcome(g.root.children[0].children[1], wasted_effort_outcome)  # Manager 1 collaborates, Manager 2 works independently
+g.set_outcome(g.root.children[1].children[0], modest_bonus_outcome)  # Manager 1 works independently, Manager 2 collaborates
+g.set_outcome(g.root.children[1].children[1], stagnant_outcome)  # Both work independently
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,46 @@
+```python
+# Step 1: Identify the decision nodes for the absent-minded driver.
+# The driver has two decision points, but cannot distinguish between them (X and Y).
+
+# Step 2: Group these decision nodes into the same information set.
+# Since the driver cannot tell the difference between junctions X and Y, 
+# we group the decision nodes after choosing CONTINUE at X and the initial decision node into the same information set.
+
+# Assuming g.root is the initial decision node at junction X, and g.root.children[1] is the node after choosing CONTINUE,
+# which leads to junction Y (as the driver perceives it the same as X).
+
+g.set_infoset(g.root, g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game tree with a single player representing the absent-minded driver.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# Step 2: Append the initial move at junction X with two actions: EXIT and CONTINUE.
+g.append_move(g.root, "Driver", ["EXIT", "CONTINUE"])
+
+# Step 3: Since the driver cannot distinguish between junction X and Y, 
+# we need to create a continuation for the CONTINUE action that mirrors the initial decision.
+# This is done by appending another move with the same options at the continuation node.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Step 4: Set the outcomes for each terminal node.
+# If the driver exits at the first junction (X), the payoff is 0.
+g.set_outcome(g.root.children[0], g.add_outcome([0], label="Exit at A"))
+# If the driver continues to junction Y and then exits, the payoff is 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at B"))
+# If the driver continues at both junctions, ending up at C, the payoff is 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Step 5: Handle the imperfect information.
+# The driver cannot distinguish between junction X and Y, so we group the decision nodes into the same information set.
+# This is crucial to model the absent-mindedness correctly.
+g.set_infoset(g.root, g.root.children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing the absent-minded driver problem. It models the driver's decision-making process at two junctions, X and Y, with the crucial aspect of imperfect information due to the driver's absent-mindedness. The game tree is constructed with appropriate actions and outcomes at each junction, and the identical decision nodes are grouped into the same information set to reflect the driver's inability to distinguish between the two junctions.

@@ -1,0 +1,198 @@
+```python
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# This means Player 1 has perfect information at this stage and no information set grouping is needed here.
+
+# Stage 3: Player 1 chooses again either A or B but has forgotten the outcome of stage 1.
+# She only remembers her choice in stage 2, not whether the chance node resulted in L or R.
+# Therefore, for each of Player 1's choices in stage 2 (l or r), the decision nodes in stage 3 (A or B) 
+# cannot be distinguished based on the initial chance outcome. 
+# This necessitates grouping the stage 3 decision nodes based on the stage 2 action.
+
+# For action l in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset("stage3_lA", "stage3_lB.infoset")
+
+# Similarly, for action r in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset("stage3_rA", "stage3_rB.infoset")
+
+# Note: The actual node names (e.g., "stage3_lA", "stage3_lB") are placeholders for illustration.
+# In practice, these would be replaced with the actual node references from the game tree.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three Stage Game with Imperfect Recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Append a chance move at the root with actions L and R.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# For each outcome of the chance node (L and R), append moves for Player 1 choosing l or r.
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, but has forgotten the outcome of stage 1.
+# She only remembers her choice in stage 2, not whether the chance node resulted in L or R.
+# Therefore, for each of Player 1's choices in stage 2 (l or r), append moves for choosing A or B.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["A", "B"])
+
+# Set all payoffs to 0 as specified.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0]))
+
+# Stage 3: Handling imperfect information.
+# For action l in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset("stage3_lA", "stage3_lB.infoset")
+
+# Similarly, for action r in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset("stage3_rA", "stage3_rB.infoset")
+
+# Note: The actual node names (e.g., "stage3_lA", "stage3_lB") are placeholders for illustration.
+# In practice, these would be replaced with the actual node references from the game tree.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a game tree for a three-stage game with imperfect recall using the pygambit library. The game starts with a chance node that decides between two outcomes, L and R, with equal probabilities. In the second stage, Player 1 makes a decision based on the outcome of the chance node. In the third stage, Player 1 makes another decision but without recalling the outcome of the first stage, only remembering her choice from the second stage. This setup requires grouping the third-stage decisions into information sets based on the second-stage choice, reflecting the imperfect recall. The payoffs for all outcomes are set to 0 as specified.
+=======================================
+"set_infoset(): no node with label 'stage3_lA'"
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three Stage Game with Imperfect Recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Append a chance move at the root with actions L and R.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# For each outcome of the chance node (L and R), append moves for Player 1 choosing l or r.
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, but has forgotten the outcome of stage 1.
+# She only remembers her choice in stage 2, not whether the chance node resulted in L or R.
+# Therefore, for each of Player 1's choices in stage 2 (l or r), append moves for choosing A or B.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["A", "B"])
+
+# Set all payoffs to 0 as specified.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0]))
+
+# Handling imperfect information correctly.
+# We need to group the nodes based on the player's choice in stage 2 (l or r) for stage 3 decisions (A or B).
+# This requires identifying the correct nodes after all moves have been appended.
+
+# For action l in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+# Identifying nodes after appending moves for A and B for both outcomes of L and R.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+
+# Similarly, for action r in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three Stage Game with Imperfect Recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+for outcome in g.root.children:
+    g.append_move(outcome, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, but has forgotten the outcome of stage 1.
+for outcome in g.root.children:
+    for choice in outcome.children:
+        g.append_move(choice, "Player 1", ["A", "B"])
+
+# Set all payoffs to 0 as specified.
+for outcome in g.root.children:
+    for choice in outcome.children:
+        for final_choice in choice.children:
+            g.set_outcome(final_choice, g.add_outcome([0]))
+
+# Handling imperfect information correctly.
+# Grouping nodes based on the player's choice in stage 2 (l or r) for stage 3 decisions (A or B).
+
+# For action l in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+# Correctly identifying nodes after appending moves for A and B for both outcomes of L and R.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+
+# Similarly, for action r in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three Stage Game with Imperfect Recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+for outcome in g.root.children:
+    g.append_move(outcome, "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B, but has forgotten the outcome of stage 1.
+for outcome in g.root.children:
+    for choice in outcome.children:
+        g.append_move(choice, "Player 1", ["A", "B"])
+
+# Set all payoffs to 0 as specified.
+for outcome in g.root.children:
+    for choice in outcome.children:
+        for final_choice in choice.children:
+            g.set_outcome(final_choice, g.add_outcome([0]))
+
+# Handling imperfect information correctly.
+# For action l in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+# Identifying nodes correctly after appending moves for A and B for both outcomes of L and R.
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# Similarly, for action r in stage 2, the decision nodes for choosing A or B in stage 3 should be in the same information set.
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[1].children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

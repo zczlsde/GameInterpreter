@@ -1,0 +1,244 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Initial board state
+initial_board = ["e", "o", "e", "e", "x", "o", "x", "x", "o"]
+
+# Define the initial chance node representing the next move
+g.append_move(g.root, g.players.chance, [(0, 0), (0, 2), (1, 0)])
+
+# Player "x" places the mark on (0,0)
+node_x_00 = g.root.children[0]
+g.append_move(node_x_00, "o", [(0, 2), (1, 0)])
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_x_00.children[0]
+g.set_infoset(node_x_00, node_o_02.infoset)
+g.set_outcome(node_o_02, g.add_outcome([-1, 1], label="Player o wins"))
+
+# Player "o" places the mark on (1,0)
+node_o_10 = node_x_00.children[1]
+g.append_move(node_o_10, "x", [(0, 2)])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_10.children[0]
+g.set_infoset(node_o_10, node_x_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (0,2)
+node_x_02 = g.root.children[1]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (1,0)
+node_x_10 = g.root.children[2]
+g.append_move(node_x_10, "o", [(0, 0), (0, 2)])
+
+# Player "o" places the mark on (0,0)
+node_o_00 = node_x_10.children[0]
+g.append_move(node_o_00, "x", [(0, 2)])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_00.children[0]
+g.set_infoset(node_o_00, node_x_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_o_00.children[1]
+g.set_infoset(node_o_00, node_o_02.infoset)
+g.set_outcome(node_o_02, g.add_outcome([-1, 1], label="Player o wins")
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+'(' was never closed (<string>, line 52)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Initial board state
+initial_board = ["e", "o", "e", "e", "x", "o", "x", "x", "o"]
+
+# Define the initial chance node representing the next move
+g.append_move(g.root, g.players.chance, [(0, 0), (0, 2), (1, 0)])
+
+# Player "x" places the mark on (0,0)
+node_x_00 = g.root.children[0]
+g.append_move(node_x_00, "o", [(0, 2), (1, 0)])
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_x_00.children[0]
+g.append_move(node_o_02, "x", [(0, 2)])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_02.children[0]
+g.set_infoset(node_o_02, node_x_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (1,0)
+node_o_10 = node_x_00.children[1]
+g.append_move(node_o_10, "x", [(0, 2)])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_10.children[0]
+g.set_infoset(node_o_10, node_x_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (0,2)
+node_x_02 = g.root.children[1]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (1,0)
+node_x_10 = g.root.children[2]
+g.append_move(node_x_10, "o", [(0, 0), (0, 2)])
+
+# Player "o" places the mark on (0,0)
+node_o_00 = node_x_10.children[0]
+g.append_move(node_o_00, "x", [(0, 2)])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_00.children[0]
+g.set_infoset(node_o_00, node_x_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_o_00.children[1]
+g.set_infoset(node_o_00, node_o_02.infoset)
+g.set_outcome(node_o_02, g.add_outcome([-1, 1], label="Player o wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Initial board state
+initial_board = ["e", "o", "e", "e", "x", "o", "x", "x", "o"]
+
+# Define the initial chance node representing the next move
+g.append_move(g.root, g.players.chance, ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0,0)
+node_x_00 = g.root.children[0]
+g.append_move(node_x_00, "o", ["(0, 2)", "(1, 0)"])
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_x_00.children[0]
+g.append_move(node_o_02, "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_02.children[0]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (1,0)
+node_o_10 = node_x_00.children[1]
+g.append_move(node_o_10, "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_10.children[0]
+g.set_infoset(node_x_02, node_o_10.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (0,2)
+node_x_02 = g.root.children[1]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (1,0)
+node_x_10 = g.root.children[2]
+g.append_move(node_x_10, "o", ["(0, 0)", "(0, 2)"])
+
+# Player "o" places the mark on (0,0)
+node_o_00 = node_x_10.children[0]
+g.append_move(node_o_00, "x", ["(0, 2)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_00.children[0]
+g.set_infoset(node_x_02, node_o_00.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_o_00.children[1]
+g.set_infoset(node_o_02, node_o_00.infoset)
+g.set_outcome(node_o_02, g.add_outcome([-1, 1], label="Player o wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+set_infoset(): `infoset` must have same number of actions as `node` has children.
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Initial board state
+initial_board = ["e", "o", "e", "e", "x", "o", "x", "x", "o"]
+
+# Define the initial chance node representing the next move
+g.append_move(g.root, g.players.chance, ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0,0)
+node_x_00 = g.root.children[0]
+g.append_move(node_x_00, "o", ["(0, 2)", "(1, 0)"])
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_x_00.children[0]
+g.append_move(node_o_02, "x", ["(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_02.children[0]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (1,0)
+node_o_10 = node_x_00.children[1]
+g.append_move(node_o_10, "x", ["(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_10.children[0]
+g.set_infoset(node_x_02, node_o_10.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (0,2)
+node_x_02 = g.root.children[1]
+g.set_infoset(node_x_02, node_o_02.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "x" places the mark on (1,0)
+node_x_10 = g.root.children[2]
+g.append_move(node_x_10, "o", ["(0, 0)", "(0, 2)"])
+
+# Player "o" places the mark on (0,0)
+node_o_00 = node_x_10.children[0]
+g.append_move(node_o_00, "x", ["(0, 2)", "(1, 0)"])
+
+# Player "x" places the mark on (0,2)
+node_x_02 = node_o_00.children[0]
+g.set_infoset(node_x_02, node_o_00.infoset)
+g.set_outcome(node_x_02, g.add_outcome([1, -1], label="Player x wins"))
+
+# Player "o" places the mark on (0,2)
+node_o_02 = node_o_00.children[1]
+g.set_infoset(node_o_02, node_o_00.infoset)
+g.set_outcome(node_o_02, g.add_outcome([-1, 1], label="Player o wins"))
+
+# Save the EFG
+efg = g.write(format='native')

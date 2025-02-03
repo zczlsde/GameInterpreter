@@ -1,0 +1,63 @@
+```python
+# Since the game description does not explicitly mention simultaneous moves or hidden information after the initial setup, 
+# we infer the imperfect information based on the sequential structure of the game.
+
+# In this game, all moves are sequential and there is no simultaneous move or hidden information after the initial setup. 
+# Each player's move is fully informed by the previous actions, making it a game of perfect information at each decision point.
+
+# Therefore, there is no need to group any nodes into the same information set based on the given game description. 
+# Each decision is made with full knowledge of the previous actions, and there are no simultaneous moves that would require 
+# the use of information sets to represent imperfect information.
+
+# No code for set_infoset is necessary based on the provided game description.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# A proposes the first distribution plan: A gets 5500, B gets 4500
+# This is the first move in the game, made by player A
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# B's decision node after A proposes the first distribution plan
+# B can either accept or reject A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts A's first proposal, the game ends with the specified payoffs
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B accepts A's first proposal"))
+
+# If B rejects A's first proposal, B suggests an equal split
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# A's decision node after B proposes the equal split
+# A can either accept or reject B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the specified payoffs
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# If A rejects B's proposal, A proposes a new plan
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# B has no right to reject and must accept A's new plan
+# The game ends with the specified payoffs
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's final proposal"))
+
+# Since the game description does not explicitly mention simultaneous moves or hidden information after the initial setup, 
+# we infer the imperfect information based on the sequential structure of the game.
+
+# In this game, all moves are sequential and there is no simultaneous move or hidden information after the initial setup. 
+# Each player's move is fully informed by the previous actions, making it a game of perfect information at each decision point.
+
+# Therefore, there is no need to group any nodes into the same information set based on the given game description. 
+# Each decision is made with full knowledge of the previous actions, and there are no simultaneous moves that would require 
+# the use of information sets to represent imperfect information.
+
+# No code for set_infoset is necessary based on the provided game description.
+
+# Save the EFG
+efg = g.write(format='native')
+```

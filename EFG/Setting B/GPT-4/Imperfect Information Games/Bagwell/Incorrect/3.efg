@@ -1,0 +1,19 @@
+EFG 2 R "Strategic Misinterpretation Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Perceived S" 99/100 "Perceived C" 1/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "SS" { 5, 2 }
+t "" 2 "SC" { 3, 1 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "SS" { 5, 2 }
+t "" 4 "SC" { 3, 1 }
+c "" 2 "" { "Perceived S" 1/100 "Perceived C" 99/100 } 0
+p "" 2 3 "" { "S" "C" } 0
+t "" 5 "CS" { 6, 3 }
+t "" 6 "CC" { 4, 4 }
+p "" 2 4 "" { "S" "C" } 0
+t "" 7 "CS" { 6, 3 }
+t "" 8 "CC" { 4, 4 }
+

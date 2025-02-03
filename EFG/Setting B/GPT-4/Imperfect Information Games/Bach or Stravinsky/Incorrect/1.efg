@@ -1,0 +1,9 @@
+EFG 2 R "Bach or Stravinsky?" { "Alexis" "Beverley" }
+""
+
+c "" 1 "" { "Both Bach" 1/4 "Both Stravinsky" 1/4 "Bach-Stravinsky" 1/4 "Stravinsky-Bach" 1/4 } 0
+t "" 1 "Both Bach" { 2, 1 }
+t "" 2 "Both Stravinsky" { 1, 2 }
+t "" 3 "Bach-Stravinsky" { 0, 0 }
+t "" 4 "Stravinsky-Bach" { 0, 0 }
+

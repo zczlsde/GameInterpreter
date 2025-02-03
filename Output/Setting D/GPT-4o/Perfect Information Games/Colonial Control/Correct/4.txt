@@ -1,0 +1,55 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game starts with Country B's decision to either "Accept" or "Rebel".
+# 2. If Country B "Accepts", Country A then decides to "Tax" or "Drop Taxes".
+# 3. If Country B "Rebels", Country A decides to "Grant Independence" or "Suppress".
+# 4. If Country A chooses to "Suppress", a chance node determines the outcome of the war.
+# 5. The chance node has two outcomes: Country B wins or loses the war.
+
+# In this game, there is no simultaneous move or hidden information for the players.
+# Country A and Country B make sequential decisions, and the outcome of the war is determined by a chance node.
+# Therefore, there are no information sets to be set for imperfect information in this game.
+
+# Since there are no nodes where a player is uncertain about the state of the game, no set_infoset() function is needed.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Country A and Country B Game")
+
+# Step 1: Country B decides to either "Accept" or "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Step 2: If Country B "Accepts", Country A decides to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# Step 3: If Country B "Rebels", Country A decides to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Step 4: If Country A chooses to "Suppress", a chance node determines the outcome of the war
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Country B wins", "Country B loses"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Define the outcomes for each terminal node
+outcome_tax = g.add_outcome([6, -2], label="Country A taxes")
+outcome_drop_taxes = g.add_outcome([4, 0], label="Country A drops taxes")
+outcome_grant_independence = g.add_outcome([0, 3], label="Country A grants independence")
+outcome_b_wins_war = g.add_outcome([-1, -3], label="Country B wins war")
+outcome_b_loses_war = g.add_outcome([-1, -5], label="Country B loses war")
+
+# Assign outcomes to the terminal nodes
+g.set_outcome(g.root.children[0].children[0], outcome_tax)
+g.set_outcome(g.root.children[0].children[1], outcome_drop_taxes)
+g.set_outcome(g.root.children[1].children[0], outcome_grant_independence)
+g.set_outcome(g.root.children[1].children[1].children[0], outcome_b_wins_war)
+g.set_outcome(g.root.children[1].children[1].children[1], outcome_b_loses_war)
+
+# Save the EFG
+efg = g.write(format='native')
+```

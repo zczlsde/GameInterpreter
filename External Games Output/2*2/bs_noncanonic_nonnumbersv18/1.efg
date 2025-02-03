@@ -1,0 +1,10 @@
+EFG 2 R "Tech Startup Partnership Game" { "AI Proponent" "Blockchain Proponent" }
+""
+
+p "" 1 1 "" { "AI" "Blockchain" } 0
+p "" 2 1 "" { "AI" "Blockchain" } 0
+t "" 1 "AI Project" { 2, 1 }
+t "" 3 "No Collaboration" { 0, 0 }
+p "" 2 1 "" { "AI" "Blockchain" } 0
+t "" 3 "No Collaboration" { 0, 0 }
+t "" 2 "Blockchain Project" { 1, 2 }

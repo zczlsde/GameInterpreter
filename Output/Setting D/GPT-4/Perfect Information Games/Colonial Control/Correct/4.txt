@@ -1,0 +1,54 @@
+```python
+# Since Country B moves first by choosing to "Accept" or "Rebel", and then Country A responds to Country B's action, 
+# there's no need for information sets based on Country B's initial decision as these decisions are perfectly observable to Country A.
+
+# However, when Country B rebels, leading to a war, the outcome of the war is determined by a move of nature (chance node) 
+# with probabilities assigned to winning or losing the war. This introduces imperfect information for the subsequent decisions 
+# because neither Country A nor Country B knows the outcome of the war when making their initial decisions.
+
+# In this game, the imperfect information arises not from the decisions of the players but from the outcome of the war, 
+# which is a chance event. Therefore, there's no need to group decision nodes into information sets based on the players' decisions.
+
+# The game's structure does not require the use of set_infoset() to group decision nodes under the same information set 
+# for representing imperfect information. The imperfect information (the outcome of the war) is inherently handled by the 
+# nature's move and its probabilities, not by the decision nodes of the players.
+
+# Hence, in this specific game description, there's no explicit need to use set_infoset() for grouping decision nodes 
+# based on the players' inability to distinguish among them, as the game's structure and sequence of moves do not create 
+# situations where a player has to make a decision without knowing which node they are at due to the actions of the other player.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Diplomacy Game")
+
+# Country B decides to "Accept" the status quo or "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts, Country A can choose to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+# Set outcomes for Country A's decisions after Country B accepts
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([6, -2], label="Tax"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4, 0], label="Drop Taxes"))
+
+# If Country B rebels, Country A can choose to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+# Set outcome for granting independence
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 3], label="Grant Independence"))
+
+# If Country A tries to suppress the rebellion, a chance node determines the outcome of the war
+g.append_move(g.root.children[1].children[1], g.players.chance, ["B Wins", "B Loses"])
+# Set probabilities for the outcomes of the war
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, -3], label="B Wins War"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-1, -5], label="B Loses War"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the scenario between Country A and Country B using the pygambit library. The game starts with Country B's decision to either accept the status quo or rebel. Depending on Country B's choice, Country A makes subsequent decisions that lead to different outcomes, including a chance node representing the uncertain outcome of a war if Country B rebels and Country A decides to suppress the rebellion. The probabilities of winning or losing the war are set for the chance node, reflecting the imperfect information aspect of the game's outcome.

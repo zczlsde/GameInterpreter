@@ -1,0 +1,38 @@
+Certainly! Below is the EFG representation of the described card game between Alice and Bob:
+
+```
+EFG 2 R "Two-player card game with King, Queen, and Jack" { "Alice" "Bob" }
+c "" 1 "" { "JQ" 1/6 "JK" 1/6 "QJ" 1/6 "QK" 1/6 "KJ" 1/6 "KQ" 1/6 } 0
+p "" 1 1 "" { "Check" "Bet" } 0
+p "" 2 1 "" { "Check" "Bet" } 0
+t "" 1 "Alice wins 1" { 1, -1 }
+t "" 2 "Bob wins 1" { -1, 1 }
+p "" 1 2 "" { "Fold" "Call" } 0
+t "" 3 "Bob wins 3" { -1, 1 }
+t "" 4 "Alice wins 2" { 2, -2 }
+t "" 5 "Bob wins 2" { -2, 2 }
+p "" 2 1 "" { "Fold" "Call" } 0
+t "" 6 "Alice wins 3" { 1, -1 }
+t "" 4 "Alice wins 2" { 2, -2 }
+t "" 5 "Bob wins 2" { -2, 2 }
+```
+
+### Explanation:
+
+1. **Chance Node**: The game starts with a chance node where the cards are dealt. There are six possible allocations of the cards, each with a probability of 1/6.
+
+2. **Alice's Decision**: Alice can either "Check" or "Bet". This decision is made without knowing the allocation of the cards.
+
+3. **Bob's Decision after Alice Checks**: If Alice checks, Bob can either "Check" or "Bet". Bob does not know Alice's card.
+
+4. **Terminal Nodes after Bob Checks**: If Bob checks, the game ends, and the player with the higher card wins 1 from the other player.
+
+5. **Alice's Decision after Bob Bets**: If Bob bets, Alice can either "Fold" or "Call". Alice does not know Bob's card.
+
+6. **Terminal Nodes after Alice Folds or Calls**: If Alice folds, Bob wins the pot of 3. If Alice calls, the game ends, and the player with the higher card wins 2 from the other player.
+
+7. **Bob's Decision after Alice Bets**: If Alice bets, Bob can either "Fold" or "Call". Bob does not know Alice's card.
+
+8. **Terminal Nodes after Bob Folds or Calls**: If Bob folds, Alice wins the pot of 3. If Bob calls, the game ends, and the player with the higher card wins 2 from the other player.
+
+This representation captures the structure and payoffs of the game as described.

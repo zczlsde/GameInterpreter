@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Neighbor 1 and Neighbor 2, who decide simultaneously whether to contribute or not.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume Neighbor 1 moves first and Neighbor 2 moves second.
+
+# Step 3: The starting node, g.root, is Neighbor 1's decision node.
+# Neighbor 1 has two actions: Contribute or Not contribute.
+
+# Step 4: Neighbor 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Neighbor 1's actions Contribute and Not contribute.
+
+# Step 5: Neighbor 2, moving simultaneously, does not know which action Neighbor 1 has taken.
+# Therefore, Neighbor 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Neighbor 1 and Neighbor 2.
+g = gbt.Game.new_tree(players=["Neighbor 1", "Neighbor 2"],
+                      title="Community Garden Game")
+
+# Step 2: Model the game with a sequential structure to handle simultaneous moves.
+# Assume Neighbor 1 moves first and Neighbor 2 moves second.
+
+# Step 3: The starting node, g.root, is Neighbor 1's decision node.
+# Neighbor 1 has two actions: Contribute or Not contribute.
+g.append_move(g.root, "Neighbor 1", ["Contribute", "Not contribute"])
+
+# Step 4: Neighbor 2's decision nodes are g.root.children[0] and g.root.children[1],
+# which correspond to Neighbor 1's actions Contribute and Not contribute.
+g.append_move(g.root.children[0], "Neighbor 2", ["Contribute", "Not contribute"])
+g.append_move(g.root.children[1], "Neighbor 2", ["Contribute", "Not contribute"])
+
+# Step 5: Since Neighbor 2 moves simultaneously, they do not know which action Neighbor 1 has taken.
+# Therefore, Neighbor 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the players' actions.
+# If both contribute, they each get a payoff of 6.
+outcome_both_contribute = g.add_outcome([6, 6], label="Both contribute")
+
+# If Neighbor 1 contributes and Neighbor 2 does not, Neighbor 1 gets 0 and Neighbor 2 gets 3.
+outcome_n1_contribute_n2_not = g.add_outcome([0, 3], label="N1 contributes, N2 does not")
+
+# If Neighbor 1 does not contribute and Neighbor 2 does, Neighbor 1 gets 3 and Neighbor 2 gets 0.
+outcome_n1_not_contribute_n2 = g.add_outcome([3, 0], label="N1 does not contribute, N2 contributes")
+
+# If neither contributes, they each get a payoff of -1.
+outcome_neither_contribute = g.add_outcome([-1, -1], label="Neither contributes")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_both_contribute)
+g.set_outcome(g.root.children[0].children[1], outcome_n1_contribute_n2_not)
+g.set_outcome(g.root.children[1].children[0], outcome_n1_not_contribute_n2)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_contribute)
+
+# Save the EFG
+efg = g.write(format='native')
+```

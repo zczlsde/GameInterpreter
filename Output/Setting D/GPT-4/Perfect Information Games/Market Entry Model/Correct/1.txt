@@ -1,0 +1,47 @@
+```python
+# Since Firm 2's decision to enter or out is the first move and directly affects the game's continuation, 
+# there's no need for an information set for Firm 2's initial decision as it's a perfect information move.
+
+# After Firm 2 decides to enter, Firm 1 must decide how to compete: either Fight or Accommodate.
+# This decision is made with perfect information regarding Firm 2's entry, so there's no need for an information set here either.
+
+# The game described does not involve simultaneous moves or hidden information after the initial move,
+# hence there are no information sets required to group decision nodes based on the game's description.
+
+# No set_infoset() function is necessary for this game structure as described.
+```
+
+Given the game description, we can construct the extensive form game using the PyGambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and if it enters, Firm 1 decides how to respond (Fight or Accommodate). The payoffs are structured based on the conditions provided. Here's how you can code this scenario:
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# If Firm 2 enters, Firm 1 decides how to compete: Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the conditions provided:
+# 1. Firm 1 earns more if Firm 2 does not enter.
+# 2. If Firm 2 enters, Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+# 3. If Firm 2 enters, Firm 2 earns more than Firm 1 if Firm 1 fights.
+
+# Assuming specific payoff values that satisfy the above conditions:
+# If Firm 2 stays out, Firm 1 gets a higher payoff, and Firm 2 gets 0 (since it doesn't enter)
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Firm 1 Fights"))
+
+# If Firm 2 enters and Firm 1 accommodates, both earn the same but less than if Firm 2 stays out
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Firm 1 Accommodates"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game where Firm 2's decision to enter or not is the first move, followed by Firm 1's decision on how to compete if Firm 2 enters. The payoffs are set according to the conditions provided, ensuring that the strategic interactions and outcomes reflect the game's description accurately.

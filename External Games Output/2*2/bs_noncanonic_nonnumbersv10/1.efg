@@ -1,0 +1,10 @@
+EFG 2 R "Roommates' Restaurant Choice Game" { "Roommate 1" "Roommate 2" }
+""
+
+p "" 1 1 "" { "Italian" "Japanese" } 0
+p "" 2 1 "" { "Italian" "Japanese" } 0
+t "" 1 "Both choose Italian" { 2, 1 }
+t "" 3 "Different choices" { 0, 0 }
+p "" 2 1 "" { "Italian" "Japanese" } 0
+t "" 3 "Different choices" { 0, 0 }
+t "" 2 "Both choose Japanese" { 1, 2 }

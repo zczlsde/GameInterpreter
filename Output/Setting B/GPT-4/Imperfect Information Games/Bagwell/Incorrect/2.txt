@@ -1,0 +1,204 @@
+To generate the Extensive Form Game (EFG) for the described scenario using the PyGambit library, we'll follow these steps:
+
+1. **Define the game structure**: Player 1 (the leader) chooses between "S" and "C" first. Then, there's a chance move representing the probability of misinterpretation by Player 2 (the follower). Finally, Player 2 chooses between "S" and "C" based on their interpretation.
+
+2. **Assign payoff values**: We need to assign concrete values to the payoffs (E, A, F, W, B, D) based on the given ranking (E > A > F > W > B > D).
+
+3. **Implement chance moves**: We'll represent the small probability of misinterpretation (1% chance) using a chance node with appropriate probabilities.
+
+4. **Set outcomes**: Based on the actual choices of Player 1 and Player 2, we'll set the outcomes with the assigned payoff values.
+
+Here's how the code could look:
+
+```python
+import pygambit as gbt
+
+# Step 1: Initialize the game
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Leader-Follower Game with Misinterpretation")
+
+# Step 2: Assign payoff values based on the ranking E > A > F > W > B > D
+# Let's assign E=6, A=5, F=4, W=3, B=2, D=1
+payoffs = {
+    "SS": (5, 2),  # Both choose S
+    "SC": (3, 1),  # Player 1 chooses S, Player 2 chooses C
+    "CS": (6, 3),  # Player 1 chooses C, Player 2 chooses S
+    "CC": (4, 4)   # Both choose C
+}
+
+# Step 3: Player 1's move
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Step 4: Chance node for misinterpretation
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["Interpreted as S", "Interpreted as C"])
+    # Setting the chance probabilities
+    if node.move.label == "S":
+        g.set_chance_probs(node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+    else:  # Player 1 chose C
+        g.set_chance_probs(node.infoset, [gbt.Rational(1, 100), gbt.Rational(99, 100)])
+
+# Step 5: Player 2's moves based on interpretation
+for chance_node in g.root.children[0].children + g.root.children[1].children:
+    g.append_move(chance_node, "Player 2", ["S", "C"])
+
+# Step 6: Set outcomes based on the actual choice of Player 1 and Player 2's response
+for i, p1_choice in enumerate(["S", "C"]):
+    for j, interpretation in enumerate(["S", "C"]):
+        for k, p2_choice in enumerate(["S", "C"]):
+            outcome_label = p1_choice + p2_choice
+            g.set_outcome(g.root.children[i].children[j].children[k], g.add_outcome(payoffs[outcome_label], label=outcome_label))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a game tree where Player 1 chooses between "S" and "C", followed by a chance node representing the potential misinterpretation by Player 2, and finally, Player 2 makes a choice based on their interpretation. The payoffs are set according to the actual choices of Player 1 and Player 2, taking into account the ranking provided.
+=======================================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Leader-Follower Game with Misinterpretation")
+
+# Assign payoff values based on the ranking E > A > F > W > B > D
+# Let's assign E=6, A=5, F=4, W=3, B=2, D=1
+payoffs = {
+    "SS": (5, 2),  # Both choose S
+    "SC": (3, 1),  # Player 1 chooses S, Player 2 chooses C
+    "CS": (6, 3),  # Player 1 chooses C, Player 2 chooses S
+    "CC": (4, 4)   # Both choose C
+}
+
+# Player 1's move
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Chance node for misinterpretation for each of Player 1's choices
+for node in g.root.children:
+    # Append chance moves for misinterpretation
+    g.append_move(node, g.players.chance, ["Correct Interpretation", "Misinterpretation"])
+    if node.move.actions[0] == "S":
+        # If Player 1 chooses S, 99% chance Player 2 correctly interprets as S, 1% as C
+        g.set_chance_probs(node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+    else:
+        # If Player 1 chooses C, 99% chance Player 2 correctly interprets as C, 1% as S
+        g.set_chance_probs(node.infoset, [gbt.Rational(1, 100), gbt.Rational(99, 100)])
+
+# Player 2's moves based on interpretation
+for node in g.root.children:
+    for chance_node in node.children:
+        g.append_move(chance_node, "Player 2", ["S", "C"])
+
+# Set outcomes based on the actual choice of Player 1 and Player 2's response
+for i, p1_choice in enumerate(["S", "C"]):
+    for j, _ in enumerate(["Correct Interpretation", "Misinterpretation"]):
+        for k, p2_choice in enumerate(["S", "C"]):
+            # Determine the outcome label based on Player 1's actual choice and Player 2's choice
+            outcome_label = p1_choice + p2_choice
+            # Set the outcome for the corresponding game path
+            g.set_outcome(g.root.children[i].children[j].children[k], g.add_outcome(payoffs[outcome_label], label=outcome_label))
+
+# Save the EFG
+efg = g.write(format='native')
+
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Leader-Follower Game with Misinterpretation")
+
+# Assign concrete values to the payoffs based on the given ranking: E > A > F > W > B > D
+# For simplicity, let's assign: E=6, A=5, F=4, W=3, B=2, D=1
+payoffs = {
+    "SS": (5, 2),  # Both choose S
+    "SC": (3, 1),  # Player 1 chooses S, Player 2 chooses C
+    "CS": (6, 3),  # Player 1 chooses C, Player 2 chooses S
+    "CC": (4, 4)   # Both choose C
+}
+
+# Player 1's move
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's choices, create a chance node to model the misinterpretation
+for node in g.root.children:
+    # Append chance moves for misinterpretation
+    chance_node = g.append_move(node, g.players.chance, ["Correct", "Misinterpret"])
+    # Set the chance probabilities
+    if node.move.actions[0] == "S":
+        # Correct interpretation as S, Misinterpretation as C
+        g.set_chance_probs(chance_node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+    else:
+        # Correct interpretation as C, Misinterpretation as S
+        g.set_chance_probs(chance_node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2's moves based on the chance node's outcome
+for node in g.root.children:
+    for chance_node in node.children:
+        # Player 2's decision node after interpreting Player 1's move
+        decision_node = g.append_move(chance_node, "Player 2", ["S", "C"])
+        # Set outcomes for each of Player 2's decisions
+        for decision in decision_node.children:
+            if node.move.actions[0] == "S" and decision.move.actions[0] == "S":
+                outcome = payoffs["SS"]
+            elif node.move.actions[0] == "S" and decision.move.actions[0] == "C":
+                outcome = payoffs["SC"]
+            elif node.move.actions[0] == "C" and decision.move.actions[0] == "S":
+                outcome = payoffs["CS"]
+            else:  # Player 1: C, Player 2: C
+                outcome = payoffs["CC"]
+            g.set_outcome(decision, g.add_outcome(outcome))
+
+# Save the EFG
+efg = g.write(format='native')
+
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Leader-Follower Game with Misinterpretation")
+
+# Assign concrete values to the payoffs based on the given ranking: E > A > F > W > B > D
+# For simplicity, let's assign: E=6, A=5, F=4, W=3, B=2, D=1
+payoffs = {
+    "SS": (5, 2),  # Both choose S
+    "SC": (3, 1),  # Player 1 chooses S, Player 2 chooses C
+    "CS": (6, 3),  # Player 1 chooses C, Player 2 chooses S
+    "CC": (4, 4)   # Both choose C
+}
+
+# Player 1's move
+player1_move = g.append_move(g.root, "Player 1", ["S", "C"])
+
+# For each of Player 1's choices, create a chance node to model the misinterpretation
+for choice in player1_move.children:
+    # Append chance moves for misinterpretation directly after Player 1's choice
+    if choice.move.actions[0] == "S":
+        chance_node = g.append_move(choice, g.players.chance, ["S", "C"])
+        g.set_chance_probs(chance_node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+    else:  # Player 1 chooses C
+        chance_node = g.append_move(choice, g.players.chance, ["C", "S"])
+        g.set_chance_probs(chance_node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2's moves based on the chance node's outcome
+for choice in player1_move.children:
+    for chance_outcome in choice.children:
+        player2_move = g.append_move(chance_outcome, "Player 2", ["S", "C"])
+        # Determine and set outcomes based on Player 1's actual choice and Player 2's decision
+        for decision in player2_move.children:
+            if choice.move.actions[0] == "S" and decision.move.actions[0] == "S":
+                outcome = payoffs["SS"]
+            elif choice.move.actions[0] == "S" and decision.move.actions[0] == "C":
+                outcome = payoffs["SC"]
+            elif choice.move.actions[0] == "C" and decision.move.actions[0] == "S":
+                outcome = payoffs["CS"]
+            else:  # Player 1: C, Player 2: C
+                outcome = payoffs["CC"]
+            g.set_outcome(decision, g.add_outcome(outcome))
+
+# Save the EFG
+efg = g.write(format='native')

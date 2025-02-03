@@ -1,0 +1,20 @@
+Based on the game description provided, here is the EFG representation of the game involving Firm 1 and Firm 2, where Firm 2 decides whether to enter the market or not, and Firm 1 chooses how to respond if Firm 2 enters.
+
+```
+EFG 2 R "Market Entry Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Fights" { 1, 3 }
+t "" 2 "Firm 1 Accommodates" { 2, 2 }
+t "" 3 "Firm 2 Outs" { 3, 0 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with Firm 2 deciding whether to enter the market or not (`p "" 2 1 "" { "Enter" "Out" } 0`). This is a decision node for Firm 2 with two actions: "Enter" and "Out".
+- If Firm 2 decides to enter, Firm 1 will choose how to compete, either by fighting or accommodating (`p "" 1 1 "" { "Fight" "Accommodate" } 0`). This is a decision node for Firm 1 with two actions: "Fight" and "Accommodate".
+- If Firm 1 chooses to fight, Firm 2 earns more than Firm 1 (`t "" 2 "Firm 1 Fights" { 1, 3 }`). This is a terminal node with payoffs of 1 for Firm 1 and 3 for Firm 2, satisfying the condition that Firm 2 earns more than Firm 1 if Firm 1 fights.
+- If Firm 1 chooses to accommodate, both firms earn the same amount (`t "" 1 "Firm 1 Accommodates" { 2, 2 }`). This is a terminal node with payoffs of 2 for both firms, satisfying the condition that Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+- If Firm 2 decides not to enter the market, Firm 1 earns more (`t "" 3 "Firm 2 Outs" { 3, 0 }`). This is a terminal node with payoffs of 3 for Firm 1 and 0 for Firm 2, satisfying the condition that Firm 1 earns more if Firm 2 does not enter.
+
+This EFG representation captures the strategic decisions and payoffs as described in the game description, adhering to the conditions specified for the payoffs.

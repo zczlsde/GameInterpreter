@@ -1,0 +1,46 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Nuclear Crisis Game")
+
+# Country A's first move: Escalate (E) or Ignore (I)
+g.append_move(g.root, "Country A", ["Escalate", "Ignore"])
+
+# If Country A chooses to Ignore, the game ends with both countries receiving a small positive payoff
+g.set_outcome(g.root.children[1], g.add_outcome([1, 1], label="Ignore Provocation"))
+
+# If Country A chooses to Escalate, Country B now has a choice: Back down (B) or Escalate (E)
+g.append_move(g.root.children[0], "Country B", ["Back down", "Escalate"])
+
+# If Country B chooses to Back down, it ends the game with Country B losing face (small negative payoff) and Country A winning (small positive payoff)
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, -1], label="Back Down"))
+
+# If Country B also chooses to Escalate, we enter a nuclear crisis
+# Since Country B is unaware of Country A's move in the nuclear crisis, we model this as a chance move by nature to simulate simultaneous decisions
+g.append_move(g.root.children[0].children[1], g.players.chance, ["Country A Retreat", "Country A Detonate"])
+
+# Set the probabilities for the chance node, assuming equal likelihood for Country A's actions
+g.set_chance_probs(g.root.children[0].children[1].infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# For each possible action by Country A (retreat or detonate), Country B has the choice to retreat or detonate
+for node in g.root.children[0].children[1].children:
+    g.append_move(node, "Country B", ["Retreat", "Detonate"])
+
+# Outcomes:
+# If one country detonates and the other retreats, the detonating country wins a large positive payoff, while the retreating country loses a large negative payoff.
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([5, -5], label="A Detonates, B Retreats"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([-5, 5], label="B Detonates, A Retreats"))
+
+# If both countries retreat, then both suffer a small negative payoff.
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([-1, -1], label="Both Retreat"))
+
+# If both countries detonate, it leads to a nuclear disaster with a very large negative payoff for both.
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([-10, -10], label="Nuclear Disaster"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form game representing a nuclear crisis scenario between two countries, Country A and Country B. The game starts with Country A deciding whether to escalate a provocation or ignore it. If Country A ignores, both countries receive a small positive payoff, ending the game. If Country A escalates, Country B can either back down, leading to a small payoff for both, or escalate further, leading to a nuclear crisis. In the nuclear crisis, both countries decide simultaneously (modeled as a chance move for equal probabilities) whether to retreat or detonate. The outcomes vary from mutual retreat with small losses, one side winning with the other retreating, to mutual detonation leading to a nuclear disaster with significant losses for both.

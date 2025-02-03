@@ -1,0 +1,158 @@
+```python
+import pygambit as gbt
+
+# Create a new game with a single player, the driver, and a title describing the scenario.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver problem")
+
+# Since the driver cannot distinguish between junction X and Y, we model this as a chance move.
+# The chance move will lead to either junction X or Y with equal probability.
+g.append_move(g.root, g.players.chance, ["Junction X", "Junction Y"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# At junction X (the first chance outcome), the driver has two options: EXIT or CONTINUE.
+# We append these moves under the first chance outcome.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+
+# At junction Y (the second chance outcome), the driver again has two options: EXIT or CONTINUE.
+# We append these moves under the second chance outcome.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Since the driver cannot tell the difference between junction X and Y, these moves are in the same information set.
+# We use g.set_infoset() to group these moves into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Now, we set the outcomes for each of the driver's decisions.
+# If the driver exits at junction X, they reach destination A with a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Destination A"))
+
+# If the driver continues from junction X, they eventually reach destination C with a payoff of 1.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1], label="Destination C"))
+
+# If the driver exits at junction Y, they reach destination B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Destination B"))
+
+# If the driver continues from junction Y, they also eventually reach destination C with a payoff of 1.
+# Note: This outcome is the same as continuing from junction X, so we use the same label and payoff.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Destination C"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing the absent-minded driver problem. The key feature of this problem is the imperfect information represented by the driver's inability to distinguish between junctions X and Y. This is modeled by creating a chance node with equal probabilities leading to two decision nodes that are part of the same information set, indicating the driver's uncertainty. The outcomes are then set based on the driver's decisions at these indistinguishable junctions.
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with a single player (the driver) and a descriptive title
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver dilemma")
+
+# The game starts with a chance move to simulate the driver's confusion between junctions X and Y
+# We append a chance move with two outcomes: reaching junction X or Y, with equal probabilities
+g.append_move(g.root, g.players.chance, ["Junction X", "Junction Y"])
+# Assign equal probabilities to the chance move outcomes
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# For both junctions X and Y, the driver has two choices: EXIT or CONTINUE
+# Append these choices as moves for the driver at both junctions
+# First, for junction X
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+# Then, for junction Y
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# The driver cannot distinguish between junction X and Y, indicating imperfect information
+# Therefore, we group the decision nodes at both junctions into the same information set
+# Use the provided method to set the information set for junction Y's decision node to be the same as junction X's
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Define the outcomes based on the driver's decisions at the indistinguishable junctions
+# If the driver exits at the first decision point, they reach destination A with a payoff of 0
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Reach A"))
+# Continuing from the first decision point leads to destination C with a payoff of 1
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1], label="Reach C"))
+# Exiting at the second decision point (which is indistinguishable from the first) leads to destination B with a payoff of 4
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Reach B"))
+# Continuing from the second decision point also leads to destination C, with the same payoff as continuing from the first
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Reach C"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with a single player, the driver, and a descriptive title.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver dilemma")
+
+# The game starts with a chance node to simulate the driver's confusion between junctions X and Y.
+# We append a chance move with two outcomes: reaching junction X or Y, both with equal probability.
+g.append_move(g.root, g.players.chance, ["Junction X", "Junction Y"])
+# Assign equal probabilities to the chance outcomes.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# For both junctions X and Y, the driver has the same set of choices: EXIT or CONTINUE.
+# First, we handle the decision at junction X.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+# Then, we handle the decision at junction Y.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# The driver cannot distinguish between junction X and Y, indicating imperfect information.
+# Therefore, we group the decisions at junction X and Y into the same information set.
+# This is crucial to accurately represent the driver's absent-mindedness.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Define the outcomes based on the driver's actions at the indistinguishable junctions.
+# Exiting at junction X leads to destination A with a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Destination A"))
+# Continuing from junction X or Y leads to destination C with a payoff of 1.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1], label="Destination C"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Destination C"))
+# Exiting at junction Y leads to destination B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Destination B"))
+
+# Save the EFG to a variable for further analysis or export.
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Initialize the game with a single player (the driver) and a descriptive title.
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded driver dilemma")
+
+# The game starts with a chance node to represent the driver's confusion between junctions X and Y.
+# We append a chance move with two outcomes: reaching junction X or Y, both with equal probability.
+g.append_move(g.root, g.players.chance, ["Junction X", "Junction Y"])
+# Assign equal probabilities to the chance move outcomes.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# For both junctions X and Y, the driver has the same set of choices: EXIT or CONTINUE.
+# First, we handle the decision at junction X.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+# Then, we handle the decision at junction Y.
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# The driver cannot distinguish between junction X and Y, so these decisions are in the same information set.
+# We group the decisions at junction X and Y into the same information set to model this.
+# Use the identical code for handling imperfect information as instructed.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Define the outcomes based on the driver's decisions.
+# Exiting at junction X leads to destination A with a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Reach A"))
+# Continuing from junction X eventually leads to destination C with a payoff of 1.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1], label="Reach C"))
+# Exiting at junction Y leads to destination B with a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Reach B"))
+# Continuing from junction Y also leads to destination C with a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Reach C"))
+
+# Save the EFG
+efg = g.write(format='native')

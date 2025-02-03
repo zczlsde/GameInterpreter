@@ -1,0 +1,80 @@
+```python
+# Since Player 2's decision is influenced by a misinterpretation of Player 1's action, 
+# we need to represent this uncertainty in the game tree. 
+# Player 1 has two actions, "S" and "C". 
+# Player 2's perception is affected by a chance move after Player 1's decision. 
+# This creates two separate information sets for Player 2, one for each perceived action of Player 1.
+
+# However, due to the small probability of misinterpretation, 
+# Player 2's decision nodes after perceiving "S" as "C" and vice versa should be in the same information set 
+# because Player 2 cannot distinguish between the actual action of Player 1 due to the misinterpretation.
+
+# Let's assume the game tree structure is as follows:
+# Player 1 chooses "S" or "C".
+# A chance node then determines whether Player 2 correctly interprets Player 1's action or not.
+# Based on the outcome of the chance node, Player 2 believes Player 1 chose "S" or "C" and then makes their decision.
+
+# For simplicity, let's denote the nodes as follows:
+# g.root.children[0] is the node where Player 1 chooses "S".
+# g.root.children[1] is the node where Player 1 chooses "C".
+# g.root.children[0].children[0] and g.root.children[1].children[1] are the nodes where Player 2 correctly interprets Player 1's action.
+# g.root.children[0].children[1] and g.root.children[1].children[0] are the nodes where Player 2 misinterprets Player 1's action.
+
+# Since Player 2 cannot distinguish between a correct interpretation and a misinterpretation, 
+# the nodes where Player 2 perceives Player 1 chose "S" (both correct interpretation and misinterpretation) should be in the same information set.
+# Similarly, the nodes where Player 2 perceives Player 1 chose "C" should also be in the same information set.
+
+# Therefore, we group the nodes as follows:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset) # Grouping nodes where Player 2 perceives "S"
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset) # Grouping nodes where Player 2 perceives "C"
+```
+
+To construct the extensive-form game for the given scenario using the pygambit library, we'll follow the steps outlined in the game description and incorporate the logic for handling imperfect information as specified. We'll assign numerical values to the payoffs (E, A, F, W, B, D) based on their ranking from highest to lowest.
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Assign numerical values to the payoffs based on their ranking
+# E (highest), A, F, W, B, D (lowest)
+E, A, F, W, B, D = 6, 5, 4, 3, 2, 1
+
+# Player 1 chooses "S" or "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# After Player 1's choice, a chance node determines the interpretation by Player 2
+# There's a 99% chance of correct interpretation and a 1% chance of misinterpretation
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["Correct Interpretation", "Misinterpretation"])
+    g.set_chance_probs(node.infoset, [gbt.Rational(99, 100), gbt.Rational(1, 100)])
+
+# Player 2 makes a decision based on the perceived action of Player 1
+# We create moves for both correct interpretation and misinterpretation scenarios
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 2", ["S", "C"])
+
+# Set the outcomes based on the actual choices of Player 1 and Player 2
+# The outcomes are determined by Player 1's actual selection, not Player 2's interpretation
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([A, B], label="SS"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([W, D], label="SC"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([A, B], label="SS misinterpreted"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([W, D], label="SC misinterpreted"))
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([E, W], label="CS"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([F, F], label="CC"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([E, W], label="CS misinterpreted"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([F, F], label="CC misinterpreted"))
+
+# Handle imperfect information
+# Grouping nodes where Player 2 perceives "S"
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+# Grouping nodes where Player 2 perceives "C"
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs an extensive-form game where Player 1's choice is followed by a chance move that represents the potential misinterpretation by Player 2. Player 2's decisions are then made based on the perceived action of Player 1, with the outcomes determined by the actual choices. The use of `g.set_infoset` ensures that Player 2's decisions are grouped correctly to reflect the imperfect information scenario, where Player 2 cannot distinguish between a correct interpretation and a misinterpretation of Player 1's action.

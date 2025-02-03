@@ -1,0 +1,53 @@
+```python
+# Since Firm 2 moves first by deciding whether to enter or out, and Firm 1 moves second by choosing to Fight or Accommodate,
+# there is no simultaneous move in this game, hence no need for information sets based on simultaneous moves.
+
+# However, if we were to model any uncertainty or simultaneous decisions, we would group nodes in information sets where a player cannot distinguish between the situations.
+# In this game, Firm 1's decision to Fight or Accommodate only occurs after Firm 2 decides to enter. If Firm 2 decides to out, the game ends, and there's no decision for Firm 1.
+
+# Therefore, there's no need for setting information sets using g.set_infoset() for this game structure as described.
+# All decisions are made with perfect information about previous actions.
+
+# Note: If there were any stage in the game where Firm 1 had to make a decision without knowing Firm 2's action (enter or out), we would group those decision nodes into the same information set.
+# For example, if Firm 1 had to decide to Fight or Accommodate without knowing if Firm 2 entered or stayed out, we would use g.set_infoset() to group those decisions. But, this is not the case in the given game structure.
+```
+
+Given the game description, we can construct the extensive-form game using the PyGambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and if it enters, Firm 1 decides how to compete. The payoffs are structured based on the conditions provided. Here's how you can code this scenario:
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# If Firm 2 enters, Firm 1 decides how to compete: Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the conditions given:
+# 1. Firm 1 earns more if Firm 2 does not enter.
+# 2. If Firm 2 enters, Firm 1 and Firm 2 earn the same amount if Firm 1 accommodates.
+# 3. If Firm 2 enters, Firm 2 earns more than Firm 1 if Firm 1 fights.
+
+# Assuming specific payoff values that satisfy the above conditions:
+# Payoffs when Firm 2 stays out
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Out"))
+
+# Payoffs when Firm 2 enters and Firm 1 fights
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# Payoffs when Firm 2 enters and Firm 1 accommodates
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Note: The specific numbers [3, 0], [1, 2], and [2, 2] are chosen to satisfy the conditions.
+# Firm 1 earns more if Firm 2 does not enter: 3 > 1 or 2
+# Firm 1 and Firm 2 earn the same if Firm 1 accommodates: 2 = 2
+# Firm 2 earns more than Firm 1 if Firm 1 fights: 2 > 1
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree based on the description and assigns payoffs that satisfy the given conditions. Note that the specific payoff values are illustrative and can be adjusted as long as they meet the conditions described.

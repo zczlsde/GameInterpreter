@@ -1,0 +1,57 @@
+```python
+# Step 1: Identify the players and their actions.
+# In the Battle of the Sexes game, both players (the couple) choose simultaneously between two actions: Opera and Football.
+
+# Step 2: Determine the imperfect information structure.
+# Since the players move simultaneously, neither player knows the other's choice when making their decision.
+# To model this in a sequential structure, assume one player moves first and the other moves second.
+# The second player, when making their decision, does not know the first player's choice.
+
+# Step 3: Set the information set for the second player.
+# Assume Player 1 moves first and Player 2 moves second.
+# Player 2's decision nodes are g.root.children[0] (Player 1 chooses Opera) and g.root.children[1] (Player 1 chooses Football).
+# Since Player 2 cannot distinguish between these nodes when making their decision, they should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Opera Lover and Football Lover.
+g = gbt.Game.new_tree(players=["Opera Lover", "Football Lover"],
+                      title="Battle of the Sexes")
+
+# Step 2: Model the game as a sequential game to handle simultaneous moves.
+# Assume Opera Lover moves first and Football Lover moves second.
+
+# Step 3: Opera Lover chooses between Opera and Football.
+g.append_move(g.root, "Opera Lover", ["Opera", "Football"])
+
+# Step 4: Football Lover makes a decision without knowing Opera Lover's choice.
+# Football Lover also chooses between Opera and Football.
+g.append_move(g.root.children[0], "Football Lover", ["Opera", "Football"])
+g.append_move(g.root.children[1], "Football Lover", ["Opera", "Football"])
+
+# Step 5: Set the information set for Football Lover to reflect imperfect information.
+# Football Lover cannot distinguish between the nodes where Opera Lover chose Opera or Football.
+# Use the provided code block to set the information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the payoffs for each outcome.
+# If both choose Opera, Opera Lover gets a higher payoff.
+opera_opera_outcome = g.add_outcome([2, 1], label="Both choose Opera")
+# If both choose Football, Football Lover gets a higher payoff.
+football_football_outcome = g.add_outcome([1, 2], label="Both choose Football")
+# If they choose different events, both get no payoff.
+different_outcome = g.add_outcome([0, 0], label="Different choices")
+
+# Step 7: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], opera_opera_outcome)  # Both choose Opera
+g.set_outcome(g.root.children[0].children[1], different_outcome)    # Opera Lover chooses Opera, Football Lover chooses Football
+g.set_outcome(g.root.children[1].children[0], different_outcome)    # Opera Lover chooses Football, Football Lover chooses Opera
+g.set_outcome(g.root.children[1].children[1], football_football_outcome)  # Both choose Football
+
+# Save the EFG
+efg = g.write(format='native')
+```

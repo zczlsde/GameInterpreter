@@ -1,0 +1,10 @@
+EFG 2 R "Strategic Outpost Conflict" { "Warlord 1" "Warlord 2" }
+""
+
+p "" 1 1 "" { "Attack" "Defend" } 0
+p "" 2 1 "" { "Attack" "Defend" } 0
+t "" 1 "Warlord 2 gains advantage" { -1, 1 }
+t "" 2 "Warlord 1 consolidates power" { 1, -1 }
+p "" 2 1 "" { "Attack" "Defend" } 0
+t "" 2 "Warlord 1 consolidates power" { 1, -1 }
+t "" 1 "Warlord 2 gains advantage" { -1, 1 }

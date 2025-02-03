@@ -1,0 +1,147 @@
+```python
+# Step-by-step thought process:
+
+# There are 6 possible outcomes for the chance node:
+# JQ (g.root.children[0]), JK (g.root.children[1]), QJ (g.root.children[2]), QK (g.root.children[3]), KJ (g.root.children[4]), KQ (g.root.children[5]).
+
+# Alice's decision nodes are based on her card, so we need to group nodes where Alice has the same card:
+# JQ (g.root.children[0]) and JK (g.root.children[1]) - Alice has Jack
+# QJ (g.root.children[2]) and QK (g.root.children[3]) - Alice has Queen
+# KJ (g.root.children[4]) and KQ (g.root.children[5]) - Alice has King
+
+# Bob's decision nodes are based on his card, so we need to group nodes where Bob has the same card:
+# QJ (g.root.children[2]) and KJ (g.root.children[4]) - Bob has Jack
+# JQ (g.root.children[0]) and KQ (g.root.children[5]) - Bob has Queen
+# JK (g.root.children[1]) and QK (g.root.children[3]) - Bob has King
+
+# Alice's information sets (she doesn't know Bob's card):
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Alice has Jack
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Alice has Queen
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Alice has King
+
+# Bob's information sets (he doesn't know Alice's card):
+g.set_infoset(g.root.children[2].children[0], g.root.children[4].children[0].infoset)  # Bob has Jack
+g.set_infoset(g.root.children[0].children[0], g.root.children[5].children[0].infoset)  # Bob has Queen
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)  # Bob has King
+
+# Alice's information sets when Bob bets (she doesn't know Bob's card):
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)  # Alice has Jack
+g.set_infoset(g.root.children[2].children[0].children[1], g.root.children[3].children[0].children[1].infoset)  # Alice has Queen
+g.set_infoset(g.root.children[4].children[0].children[1], g.root.children[5].children[0].children[1].infoset)  # Alice has King
+
+# Bob's information sets when Alice bets (he doesn't know Alice's card):
+g.set_infoset(g.root.children[0].children[1], g.root.children[5].children[1].infoset)  # Bob has Queen
+g.set_infoset(g.root.children[1].children[1], g.root.children[3].children[1].infoset)  # Bob has King
+g.set_infoset(g.root.children[2].children[1], g.root.children[4].children[1].infoset)  # Bob has Jack
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three-card poker game")
+
+# Step 1: Define the chance node for card allocation
+# There are 6 possible allocations: JQ, JK, QJ, QK, KJ, KQ
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# Set the probabilities for each allocation (1/6 each)
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6)] * 6)
+
+# Step 2: Define Alice's moves for each card allocation
+# Alice can either Check or Bet
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# Step 3: Define Bob's moves after Alice checks
+# Bob can either Check or Bet
+for node in g.root.children:
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+
+# Step 4: Define Alice's response if Bob bets after she checks
+# Alice can either Fold or Call
+for node in g.root.children:
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# Step 5: Define Bob's response if Alice bets
+# Bob can either Fold or Call
+for node in g.root.children:
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+
+# Step 6: Set the outcomes for each terminal node
+# Outcomes are based on the card rankings: K > Q > J
+# Payoffs are determined by the pot size and the winner
+
+# Define outcomes for each possible scenario
+alice_wins_1 = g.add_outcome([1, -1], label="Alice wins 1")
+bob_wins_1 = g.add_outcome([-1, 1], label="Bob wins 1")
+alice_wins_2 = g.add_outcome([2, -2], label="Alice wins 2")
+bob_wins_2 = g.add_outcome([-2, 2], label="Bob wins 2")
+
+# Set outcomes for each terminal node
+# Alice checks, Bob checks
+g.set_outcome(g.root.children[0].children[0].children[0], bob_wins_1)  # JQ
+g.set_outcome(g.root.children[1].children[0].children[0], bob_wins_1)  # JK
+g.set_outcome(g.root.children[2].children[0].children[0], alice_wins_1)  # QJ
+g.set_outcome(g.root.children[3].children[0].children[0], bob_wins_1)  # QK
+g.set_outcome(g.root.children[4].children[0].children[0], alice_wins_1)  # KJ
+g.set_outcome(g.root.children[5].children[0].children[0], alice_wins_1)  # KQ
+
+# Alice checks, Bob bets, Alice folds
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], bob_wins_1)  # JQ
+g.set_outcome(g.root.children[1].children[0].children[1].children[0], bob_wins_1)  # JK
+g.set_outcome(g.root.children[2].children[0].children[1].children[0], bob_wins_1)  # QJ
+g.set_outcome(g.root.children[3].children[0].children[1].children[0], bob_wins_1)  # QK
+g.set_outcome(g.root.children[4].children[0].children[1].children[0], bob_wins_1)  # KJ
+g.set_outcome(g.root.children[5].children[0].children[1].children[0], bob_wins_1)  # KQ
+
+# Alice checks, Bob bets, Alice calls
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], bob_wins_2)  # JQ
+g.set_outcome(g.root.children[1].children[0].children[1].children[1], bob_wins_2)  # JK
+g.set_outcome(g.root.children[2].children[0].children[1].children[1], alice_wins_2)  # QJ
+g.set_outcome(g.root.children[3].children[0].children[1].children[1], bob_wins_2)  # QK
+g.set_outcome(g.root.children[4].children[0].children[1].children[1], alice_wins_2)  # KJ
+g.set_outcome(g.root.children[5].children[0].children[1].children[1], alice_wins_2)  # KQ
+
+# Alice bets, Bob folds
+g.set_outcome(g.root.children[0].children[1].children[0], alice_wins_1)  # JQ
+g.set_outcome(g.root.children[1].children[1].children[0], alice_wins_1)  # JK
+g.set_outcome(g.root.children[2].children[1].children[0], alice_wins_1)  # QJ
+g.set_outcome(g.root.children[3].children[1].children[0], alice_wins_1)  # QK
+g.set_outcome(g.root.children[4].children[1].children[0], alice_wins_1)  # KJ
+g.set_outcome(g.root.children[5].children[1].children[0], alice_wins_1)  # KQ
+
+# Alice bets, Bob calls
+g.set_outcome(g.root.children[0].children[1].children[1], bob_wins_2)  # JQ
+g.set_outcome(g.root.children[1].children[1].children[1], bob_wins_2)  # JK
+g.set_outcome(g.root.children[2].children[1].children[1], alice_wins_2)  # QJ
+g.set_outcome(g.root.children[3].children[1].children[1], bob_wins_2)  # QK
+g.set_outcome(g.root.children[4].children[1].children[1], alice_wins_2)  # KJ
+g.set_outcome(g.root.children[5].children[1].children[1], alice_wins_2)  # KQ
+
+# Step 7: Set the information sets for imperfect information
+# Use the provided code block to handle the imperfect information
+
+# Alice's information sets (she doesn't know Bob's card):
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)  # Alice has Jack
+g.set_infoset(g.root.children[2], g.root.children[3].infoset)  # Alice has Queen
+g.set_infoset(g.root.children[4], g.root.children[5].infoset)  # Alice has King
+
+# Bob's information sets (he doesn't know Alice's card):
+g.set_infoset(g.root.children[2].children[0], g.root.children[4].children[0].infoset)  # Bob has Jack
+g.set_infoset(g.root.children[0].children[0], g.root.children[5].children[0].infoset)  # Bob has Queen
+g.set_infoset(g.root.children[1].children[0], g.root.children[3].children[0].infoset)  # Bob has King
+
+# Alice's information sets when Bob bets (she doesn't know Bob's card):
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)  # Alice has Jack
+g.set_infoset(g.root.children[2].children[0].children[1], g.root.children[3].children[0].children[1].infoset)  # Alice has Queen
+g.set_infoset(g.root.children[4].children[0].children[1], g.root.children[5].children[0].children[1].infoset)  # Alice has King
+
+# Bob's information sets when Alice bets (he doesn't know Alice's card):
+g.set_infoset(g.root.children[0].children[1], g.root.children[5].children[1].infoset)  # Bob has Queen
+g.set_infoset(g.root.children[1].children[1], g.root.children[3].children[1].infoset)  # Bob has King
+g.set_infoset(g.root.children[2].children[1], g.root.children[4].children[1].infoset)  # Bob has Jack
+
+# Save the EFG
+efg = g.write(format='native')
+```

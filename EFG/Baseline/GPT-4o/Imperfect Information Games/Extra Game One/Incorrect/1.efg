@@ -1,0 +1,16 @@
+EFG 2 R "Three-stage game" { "Player 1" "Player 2" }
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" "F" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 1 "End after F" { 0, 0 }
+t "" 2 "End after H" { 2, -1 }
+t "" 3 "End after Q" { 3, 3 }
+t "" 4 "End after W" { 0, 0 }
+p "" 2 2 "" { "D" "E" "F" } 0
+p "" 1 2 "" { "G" "H" } 0
+p "" 2 2 "" { "Q" "W" } 0
+t "" 1 "End after F" { 0, 0 }
+t "" 2 "End after H" { 2, -1 }
+t "" 3 "End after Q" { 3, 3 }
+t "" 4 "End after W" { 0, 0 }

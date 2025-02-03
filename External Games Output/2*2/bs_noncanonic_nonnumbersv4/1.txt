@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, the Beach Lover and the Mountain Lover.
+# Both players have two actions: choose Beach or Mountain.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both players make their decisions without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume one player moves first, and the other moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is the first player's decision node.
+# The second player's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first player's actions.
+
+# Step 5: Group the second player's decision nodes in the same information set.
+# Since the game is simultaneous, the second player does not know the first player's action.
+# Therefore, the second player's decision nodes should be grouped in the same information set.
+
+# Set the information set for the second player's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Beach Lover and Mountain Lover.
+g = gbt.Game.new_tree(players=["Beach Lover", "Mountain Lover"],
+                      title="Vacation Decision Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume the Beach Lover moves first, choosing between Beach and Mountain.
+g.append_move(g.root, "Beach Lover", ["Beach", "Mountain"])
+
+# Step 3: The Mountain Lover moves second, choosing between Beach and Mountain.
+# The Mountain Lover's decision nodes are g.root.children[0] and g.root.children[1],
+# corresponding to the Beach Lover's actions.
+g.append_move(g.root.children[0], "Mountain Lover", ["Beach", "Mountain"])
+g.append_move(g.root.children[1], "Mountain Lover", ["Beach", "Mountain"])
+
+# Step 4: Set the information set for the Mountain Lover's decision nodes.
+# Since the game is simultaneous, the Mountain Lover does not know the Beach Lover's action.
+# Therefore, the Mountain Lover's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# If both choose Beach, the Beach Lover gets a higher payoff, and the Mountain Lover gets a lower payoff.
+beach_outcome = g.add_outcome([2, 1], label="Both choose Beach")
+# If both choose Mountain, the Mountain Lover gets a higher payoff, and the Beach Lover gets a lower payoff.
+mountain_outcome = g.add_outcome([1, 2], label="Both choose Mountain")
+# If they choose different destinations, they both get no payoff.
+no_payoff_outcome = g.add_outcome([0, 0], label="Different destinations")
+
+# Step 6: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], beach_outcome)  # Both choose Beach
+g.set_outcome(g.root.children[0].children[1], no_payoff_outcome)  # Beach Lover chooses Beach, Mountain Lover chooses Mountain
+g.set_outcome(g.root.children[1].children[0], no_payoff_outcome)  # Beach Lover chooses Mountain, Mountain Lover chooses Beach
+g.set_outcome(g.root.children[1].children[1], mountain_outcome)  # Both choose Mountain
+
+# Save the EFG
+efg = g.write(format='native')
+```

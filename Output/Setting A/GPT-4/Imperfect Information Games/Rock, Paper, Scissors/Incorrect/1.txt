@@ -1,0 +1,46 @@
+```python
+import pygambit as gbt
+
+# Create a new game instance with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock, Paper, Scissors")
+
+# Since both players reveal their choices simultaneously, we model this by having a chance node at the beginning.
+# The chance node will lead to all possible outcomes of the game.
+g.append_move(g.root, g.players.chance, ["Rock-Rock", "Rock-Paper", "Rock-Scissors", 
+                                         "Paper-Rock", "Paper-Paper", "Paper-Scissors", 
+                                         "Scissors-Rock", "Scissors-Paper", "Scissors-Scissors"])
+
+# Set the probabilities for each outcome at the chance node equally, as each outcome is equally likely.
+# There are 9 outcomes, so each has a probability of 1/9.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes with their respective payoffs.
+# In Rock, Paper, Scissors: 
+# - Rock blunts Scissors (Rock wins)
+# - Scissors cut Paper (Scissors wins)
+# - Paper covers Rock (Paper wins)
+# If both players choose the same symbol, it's a draw.
+# Payoffs are represented as [Player 1 payoff, Player 2 payoff]
+
+# Rock-Rock, Paper-Paper, Scissors-Scissors are draws
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Draw - Rock"))
+g.set_outcome(g.root.children[4], g.add_outcome([0, 0], label="Draw - Paper"))
+g.set_outcome(g.root.children[8], g.add_outcome([0, 0], label="Draw - Scissors"))
+
+# Rock-Paper (Paper wins), Paper-Scissors (Scissors wins), Scissors-Rock (Rock wins)
+# Player 2 wins in these scenarios
+g.set_outcome(g.root.children[1], g.add_outcome([-1, 1], label="Paper covers Rock"))
+g.set_outcome(g.root.children[5], g.add_outcome([-1, 1], label="Scissors cut Paper"))
+g.set_outcome(g.root.children[6], g.add_outcome([-1, 1], label="Rock blunts Scissors"))
+
+# Rock-Scissors (Rock wins), Scissors-Paper (Scissors wins), Paper-Rock (Paper wins)
+# Player 1 wins in these scenarios
+g.set_outcome(g.root.children[2], g.add_outcome([1, -1], label="Rock blunts Scissors"))
+g.set_outcome(g.root.children[3], g.add_outcome([1, -1], label="Paper covers Rock"))
+g.set_outcome(g.root.children[7], g.add_outcome([1, -1], label="Scissors cut Paper"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representation of Rock, Paper, Scissors using the pygambit library. The game is modeled with a chance node at the beginning to represent the simultaneous move nature of the game. Each possible outcome of the game (e.g., Rock-Rock, Rock-Paper, etc.) is directly linked to the root chance node, with outcomes and payoffs assigned accordingly. This approach bypasses the need for explicit information sets for simultaneous moves, as the chance node implicitly handles the simultaneous decision-making process.

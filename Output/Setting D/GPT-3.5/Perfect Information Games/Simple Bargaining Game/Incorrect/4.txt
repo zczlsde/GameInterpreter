@@ -1,0 +1,123 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the decision nodes of B where B has no choice but to accept
+# Group the decision nodes where B accepts A's offer and A receives 5,500 pounds and B receives 4,500 pounds
+# with the decision nodes where B accepts the equal split of 5,000 pounds each and both players receive 4,750 pounds
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].children[0].infoset)
+
+# Set the information set for the decision nodes of A where A rejects B's offer and proposes a new split
+# Group the decision nodes where A accepts B's offer of an equal split and both players receive 4,750 pounds
+# with the decision nodes where A rejects B's offer and proposes a new split where A receives 5,200 pounds and B receives 4,800 pounds
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the decision nodes of B where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].children[0].infoset)
+
+# Set the information set for the decision nodes of A where A rejects B's offer and proposes a new split
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0].infoset)
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the decision nodes of B where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].children[0])
+
+# Set the information set for the decision nodes of A where A rejects B's offer and proposes a new split
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].children[0])
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the decision nodes of B where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1])
+
+# Set the information set for the decision nodes of A where A rejects B's offer and proposes a new split
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1])
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A proposes a plan where A receives 5,500 pounds, and B receives 4,500 pounds
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# If B rejects, B then proposes an equal split of 5,000 pounds each
+g.append_move(g.root.children[0].children[1], "B", ["Accept", "Reject"])
+
+# If A rejects B's offer, A proposes a new split where A receives 5,200 pounds, and B receives 4,800 pounds
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept", "Reject"])
+
+# Set the information set for the decision nodes of B where B has no choice but to accept
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1])
+
+# Set the information set for the decision nodes of A where A rejects B's offer and proposes a new split
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1])

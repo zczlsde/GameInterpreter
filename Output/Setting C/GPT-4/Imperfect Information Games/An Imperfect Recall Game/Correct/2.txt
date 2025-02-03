@@ -1,0 +1,58 @@
+```python
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Stage 2: Player 1 observes the outcome of stage 1 (L or R) and chooses either l or r.
+# Stage 3: Player 1 chooses again either A or B but has forgotten the outcome of stage 1.
+
+# In stage 3, Player 1's decision nodes after choosing 'l' in stage 2 are grouped in the same information set 
+# because she forgets whether it was L or R from stage 1.
+# Similarly, Player 1's decision nodes after choosing 'r' in stage 2 are grouped in another information set.
+
+# Assuming g.root.children[0] is the node after L is chosen and g.root.children[1] after R.
+# g.root.children[0].children[0] and g.root.children[1].children[0] are nodes after Player 1 chooses 'l'.
+# g.root.children[0].children[1] and g.root.children[1].children[1] are nodes after Player 1 chooses 'r'.
+
+# Grouping nodes after 'l' is chosen in stage 2 into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+# Grouping nodes after 'r' is chosen in stage 2 into the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# Append moves for Player 1 after L and R outcomes
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])
+
+# Stage 3: Player 1 chooses again either A or B but has forgotten the outcome of stage 1.
+# Append moves for Player 1 after choosing 'l' or 'r' in stage 2
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])
+
+# Set all payoffs to 0
+zero_outcome = g.add_outcome([0])
+for child in g.root.children:
+    for grandchild in child.children:
+        for leaf in grandchild.children:
+            g.set_outcome(leaf, zero_outcome)
+
+# Handling imperfect information in stage 3
+# Grouping nodes after 'l' is chosen in stage 2 into the same information set.
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+# Grouping nodes after 'r' is chosen in stage 2 into the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```

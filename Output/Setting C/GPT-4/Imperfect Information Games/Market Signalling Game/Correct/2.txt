@@ -1,0 +1,69 @@
+```python
+# Step 1: The game starts with a chance node determining the new manufacturer's strength (S or W).
+# Step 2: The new manufacturer sends a signal (S or W), leading to four possible scenarios: SS, SW, WS, WW.
+# Step 3: The current manufacturer observes the signal but does not know the actual strength, leading to imperfect information.
+# Step 4: For the current manufacturer, the decision to fight (F) or adapt (A) is based on the observed signal, not the actual strength.
+# Step 5: Since the current manufacturer's decision is based on the signal, we group nodes by the signal received, not by the actual strength.
+# Step 6: This means we have two information sets for the current manufacturer: one for when the signal is strong (SS, WS) and one for when the signal is weak (SW, WW).
+
+# Assuming g.root.children[0] and g.root.children[1] correspond to the new manufacturer being strong and weak, respectively.
+# And each of these nodes has two children, corresponding to sending a strong or weak signal.
+
+# Grouping nodes based on the signal received by the current manufacturer:
+# For a strong signal (SS, WS)
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+# For a weak signal (SW, WW)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: New Manufacturer and Current Manufacturer
+g = gbt.Game.new_tree(players=["New Manufacturer", "Current Manufacturer"],
+                      title="Market Entry Game")
+
+# Step 1: The game starts with a chance node determining the new manufacturer's strength (S or W).
+# Adding a chance move with probabilities for Strong (2/3) and Weak (1/3)
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: For each outcome of the chance move (Strong or Weak), the new manufacturer sends a signal (S or W).
+# This results in four branches: SS, SW, WS, WW.
+# Adding moves for the new manufacturer to send a signal after being strong or weak
+for node in g.root.children:
+    g.append_move(node, "New Manufacturer", ["Signal Strong", "Signal Weak"])
+
+# Step 3 & 4: The current manufacturer observes the signal and decides to fight (F) or adapt (A).
+# Adding moves for the current manufacturer based on the signal observed.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Current Manufacturer", ["Fight", "Adapt"])
+
+# Step 5 & 6: Grouping nodes based on the signal received by the current manufacturer.
+# For a strong signal (SS, WS)
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+# For a weak signal (SW, WW)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Setting outcomes based on the game description
+# Strong-Strong-Fight
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0]))
+# Strong-Strong-Adapt
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1]))
+# Strong-Weak-Fight
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0]))
+# Strong-Weak-Adapt
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1]))
+# Weak-Strong-Fight
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2]))
+# Weak-Strong-Adapt
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1]))
+# Weak-Weak-Fight
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2]))
+# Weak-Weak-Adapt
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1]))
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,37 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+# This is the first move in the game, made by Firm 2
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, then Firm 1 must decide how to respond
+# This decision is represented by a move for Firm 1 with two actions: Fight or Accommodate
+# This move occurs only if Firm 2 decides to Enter, hence it's appended to the "Enter" child of the root
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Now, we define the payoffs based on the game description:
+# If Firm 2 stays out, the game ends, and Firm 1 earns more (represented by a higher payoff for Firm 1)
+# We assume specific numeric payoffs for simplicity, though these are not provided in the description
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+# Again, we assume specific payoffs for demonstration
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+# We assume specific payoffs for demonstration
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Since the game description does not specify any simultaneous moves or imperfect information,
+# we do not need to use g.set_infoset() in this particular game setup.
+# The game is a sequential game where each player's move is made with perfect information about the previous moves.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game representing the market entry scenario described. Firm 2 makes the initial decision to enter the market or stay out. If Firm 2 enters, Firm 1 chooses to fight or accommodate. The payoffs are set based on the outcomes of these decisions. Since the game is sequential with perfect information, there's no need to group nodes into information sets using `g.set_infoset()`.

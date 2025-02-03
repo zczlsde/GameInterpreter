@@ -1,0 +1,65 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both making decisions simultaneously: 
+# Player 1 (Contractor A) and Player 2 (Contractor B).
+
+# Step 2: Recognize the imperfect information.
+# Since both players decide simultaneously, neither knows the other's decision at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Player 1 moves first and Player 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Player 1's decision node.
+# Player 1 has two actions: "Bid Competitively" and "Price-Fix".
+# Player 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Player 1's actions.
+
+# Step 5: Group Player 2's decision nodes in the same information set.
+# Since Player 2 does not know Player 1's action, Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Contractor A and Contractor B.
+g = gbt.Game.new_tree(players=["Contractor A", "Contractor B"],
+                      title="Defense Contract Bidding Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Contractor A moves first and Contractor B moves second.
+
+# Step 3: Define the actions for Contractor A.
+# Contractor A has two actions: "Bid Competitively" and "Price-Fix".
+g.append_move(g.root, "Contractor A", ["Bid Competitively", "Price-Fix"])
+
+# Step 4: Define the actions for Contractor B.
+# Contractor B's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Contractor A's actions.
+g.append_move(g.root.children[0], "Contractor B", ["Bid Competitively", "Price-Fix"])
+g.append_move(g.root.children[1], "Contractor B", ["Bid Competitively", "Price-Fix"])
+
+# Step 5: Group Contractor B's decision nodes in the same information set.
+# Since Contractor B does not know Contractor A's action, Contractor B's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# If both bid competitively, both maintain integrity but have lower profits.
+outcome_fair_deal = g.add_outcome([1, 1], label="Fair Deal")
+
+# If one bids competitively and the other price-fixes, the competitive bidder risks lower profits or loss, while the price-fixer maximizes gain.
+outcome_competitive_loss = g.add_outcome([0, 2], label="Competitive Loss")
+outcome_price_fix_gain = g.add_outcome([2, 0], label="Price-Fix Gain")
+
+# If both price-fix, they secure high profits but risk legal consequences.
+outcome_price_fix_risk = g.add_outcome([-1, -1], label="Price-Fix Risk")
+
+# Step 7: Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_fair_deal)  # Both bid competitively
+g.set_outcome(g.root.children[0].children[1], outcome_competitive_loss)  # A bids competitively, B price-fixes
+g.set_outcome(g.root.children[1].children[0], outcome_price_fix_gain)  # A price-fixes, B bids competitively
+g.set_outcome(g.root.children[1].children[1], outcome_price_fix_risk)  # Both price-fix
+
+# Save the EFG
+efg = g.write(format='native')
+```

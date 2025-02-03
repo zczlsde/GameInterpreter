@@ -1,0 +1,57 @@
+```python
+# Thought process:
+# 1. The game involves two players, both making decisions simultaneously.
+# 2. To model this in a sequential structure, assume one player moves first, and the other moves second.
+# 3. Let's assume Farmer 1 moves first and Farmer 2 moves second.
+# 4. Farmer 2 does not know the action taken by Farmer 1 when making their decision.
+# 5. Therefore, Farmer 2's decision nodes should be grouped in the same information set.
+
+# Assuming Farmer 1's actions are "Share" and "Take More", and Farmer 2's actions are "Share" and "Take More".
+# Farmer 2's decision nodes are g.root.children[0] (Farmer 1 chooses "Share") and g.root.children[1] (Farmer 1 chooses "Take More").
+
+# Group Farmer 2's decision nodes in the same information set because they do not know Farmer 1's action.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Farmer 1 and Farmer 2
+g = gbt.Game.new_tree(players=["Farmer 1", "Farmer 2"],
+                      title="Water Sharing Game")
+
+# Farmer 1 moves first with two actions: "Share" and "Take More"
+g.append_move(g.root, "Farmer 1", ["Share", "Take More"])
+
+# Farmer 2 moves second with two actions: "Share" and "Take More"
+# Farmer 2's decision nodes are g.root.children[0] (Farmer 1 chooses "Share") 
+# and g.root.children[1] (Farmer 1 chooses "Take More")
+g.append_move(g.root.children[0], "Farmer 2", ["Share", "Take More"])
+g.append_move(g.root.children[1], "Farmer 2", ["Share", "Take More"])
+
+# Group Farmer 2's decision nodes in the same information set because they do not know Farmer 1's action.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Define the outcomes for each terminal node
+# Both share equitably: each gains 0 points
+outcome_share_share = g.add_outcome([0, 0], label="Equitable Sharing")
+
+# Farmer 1 shares, Farmer 2 takes more: Farmer 1 gets -2, Farmer 2 gets 2
+outcome_share_take_more = g.add_outcome([-2, 2], label="Farmer 2 Takes More")
+
+# Farmer 1 takes more, Farmer 2 shares: Farmer 1 gets 2, Farmer 2 gets -2
+outcome_take_more_share = g.add_outcome([2, -2], label="Farmer 1 Takes More")
+
+# Both take more: each gets -10 points
+outcome_take_more_take_more = g.add_outcome([-10, -10], label="Depleted Water Source")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], outcome_share_share)
+g.set_outcome(g.root.children[0].children[1], outcome_share_take_more)
+g.set_outcome(g.root.children[1].children[0], outcome_take_more_share)
+g.set_outcome(g.root.children[1].children[1], outcome_take_more_take_more)
+
+# Save the EFG
+efg = g.write(format='native')
+```

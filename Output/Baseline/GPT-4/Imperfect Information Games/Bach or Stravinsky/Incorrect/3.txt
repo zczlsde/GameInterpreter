@@ -1,0 +1,24 @@
+Based on the game description provided, here is the EFG representation for the "Bach or Stravinsky?" game:
+
+```
+EFG 2 R "Bach or Stravinsky game" { "Alexis" "Beverley" }
+c "" 1 "" { "Bach" 1/2 "Stravinsky" 1/2 } 0
+    p "" 1 1 "" { "Bach" "Stravinsky" } 0
+        p "" 2 1 "" { "Bach" "Stravinsky" } 0
+            t "" 1 "Both choose Bach" { 2, 1 }
+            t "" 2 "Disagreement" { 0, 0 }
+        p "" 2 2 "" { "Bach" "Stravinsky" } 0
+            t "" 3 "Disagreement" { 0, 0 }
+            t "" 4 "Both choose Stravinsky" { 1, 2 }
+```
+
+Explanation:
+- The game starts with a chance node (represented by `c`) to reflect the simultaneous and independent decision-making process, even though there's no actual chance move in the game. This is a simplification to fit the extensive form game format, where the decision of Alexis and Beverley are made simultaneously. In a strict sense, this game doesn't require a chance node since there's no randomness in the decision process, but it's used here for structural purposes.
+- Following the chance node, we have personal decision nodes for Alexis (`p`), where Alexis decides between "Bach" and "Stravinsky".
+- For each of Alexis's decisions, Beverley also makes a decision between "Bach" and "Stravinsky", leading to terminal nodes (`t`) that describe the outcomes of the game.
+- The payoffs are represented in curly braces `{ }` at the terminal nodes, with Alexis's payoff listed first, followed by Beverley's payoff. The payoffs are as follows:
+  - If both choose "Bach", Alexis (the Bach lover) gets a higher payoff (2) and Beverley (the Stravinsky lover) gets a lower payoff (1).
+  - If both choose "Stravinsky", Beverley gets a higher payoff (2) and Alexis gets a lower payoff (1).
+  - If they choose different events, they both get no payoffs (0).
+
+Note: The representation uses a simplification with a chance node to model the simultaneous decisions, which is a common approach in some EFG representations to handle simultaneous moves. However, in pure strategy games without actual chance moves, this might be conceptualized differently.

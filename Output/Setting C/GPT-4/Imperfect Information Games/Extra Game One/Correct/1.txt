@@ -1,0 +1,71 @@
+```python
+# Step 1: Player 1's decision at the first stage does not involve imperfect information as it is the first move.
+# Step 2: Player 2's decision after Player 1 chooses A is perfectly informed. However, Player 2 cannot distinguish between B and C.
+# Therefore, the nodes following B and C for Player 2 should be in the same information set.
+
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)  # Grouping B and C for Player 2's decision
+
+# Step 3: After Player 2 chooses D or E, Player 1's decision does not involve imperfect information as Player 1 knows the history.
+# No action needed for information sets here.
+
+# Step 4: If Player 2 chooses F, the game ends, so there's no decision to be made afterward.
+# No action needed for information sets here.
+
+# Step 5: After Player 1 chooses G, Player 2's decision between Q and W does not involve imperfect information.
+# No action needed for information sets here.
+
+# Note: The game structure implies that after Player 1's initial choice, only Player 2 faces a situation of imperfect information (between B and C).
+# This is the only point in the game where an information set grouping is necessary based on the given description.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Imperfect Information Game")
+
+# Stage 1: Player 1's decision among A, B, or C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2's decision knowing A was taken, but not distinguishing between B and C
+# For action A
+g.append_move(g.root.children[0], "Player 2", ["D", "E", "F"])
+# For actions B and C
+g.append_move(g.root.children[1], "Player 2", ["D", "E", "F"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E", "F"])
+
+# Handling imperfect information for Player 2 between B and C
+g.set_infoset(g.root.children[1], g.root.children[2].infoset)  # Grouping B and C for Player 2's decision
+
+# Stage 3: Player 1's decision after Player 2 chooses D or E
+# For each D and E after A, B, and C
+for i in range(3):  # Looping through A, B, and C branches
+    g.append_move(g.root.children[i].children[0], "Player 1", ["G", "H"])  # After D
+    g.append_move(g.root.children[i].children[1], "Player 1", ["G", "H"])  # After E
+
+# Stage 4: Player 2's decision after Player 1 chooses G
+# For each G after D and E in A, B, and C branches
+for i in range(3):  # Looping through A, B, and C branches
+    g.append_move(g.root.children[i].children[0].children[0], "Player 2", ["Q", "W"])  # After D->G
+    g.append_move(g.root.children[i].children[1].children[0], "Player 2", ["Q", "W"])  # After E->G
+
+# Setting outcomes
+# For F across all branches
+for i in range(3):  # Looping through A, B, and C branches
+    g.set_outcome(g.root.children[i].children[2], g.add_outcome([0, 0], label="F"))
+
+# For H across all D and E decisions
+for i in range(3):  # Looping through A, B, and C branches
+    g.set_outcome(g.root.children[i].children[0].children[1], g.add_outcome([2, -1], label="H after D"))
+    g.set_outcome(g.root.children[i].children[1].children[1], g.add_outcome([2, -1], label="H after E"))
+
+# For Q and W decisions after G
+for i in range(3):  # Looping through A, B, and C branches
+    g.set_outcome(g.root.children[i].children[0].children[0].children[0], g.add_outcome([3, 3], label="Q"))
+    g.set_outcome(g.root.children[i].children[0].children[0].children[1], g.add_outcome([0, 0], label="W"))
+    g.set_outcome(g.root.children[i].children[1].children[0].children[0], g.add_outcome([3, 3], label="Q"))
+    g.set_outcome(g.root.children[i].children[1].children[0].children[1], g.add_outcome([0, 0], label="W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

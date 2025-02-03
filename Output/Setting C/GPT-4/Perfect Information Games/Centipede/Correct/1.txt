@@ -1,0 +1,44 @@
+```python
+# Since all actions are observable and there's no simultaneous move or hidden information after the game starts,
+# there's no need to group any decision nodes into the same information set based on the game description provided.
+# Each move is based on the full knowledge of the previous state of the game, hence no imperfect information within the players' decisions.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Alice's first move: choose to "take" or "push" the piles
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice takes, the game ends. Alice gets 4, Bob gets 1
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after the first push, he gets 8, Alice gets 2
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes after first push"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice takes after the second push, she gets 16, Bob gets 4
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes after second push"))
+
+# If Alice pushes, the piles double again and it's Bob's turn
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes after the second push, he gets 32, Alice gets 8
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes after second push"))
+
+# If Bob pushes for the final time, the piles double, Alice gets 64, Bob gets 16
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game representing the scenario with Alice and Bob and their decisions regarding the piles of coins. Each decision point (node) in the game tree corresponds to a player's choice to either "take" the current piles of coins or "push" them to the other player, doubling their size. The outcomes are set based on the description, with payoffs reflecting the number of coins each player ends up with depending on the sequence of actions taken.

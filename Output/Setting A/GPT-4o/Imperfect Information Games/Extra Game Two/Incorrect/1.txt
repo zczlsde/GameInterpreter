@@ -1,0 +1,256 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Imperfect Information Game")
+
+# First stage: Player 1 has three options: A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2, without knowing Player 1's choice, can select either D or E
+# We need to create moves for Player 2 for each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to reflect imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Third stage: Player 1 has two actions to choose from: F or G
+# We need to create moves for Player 1 for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 can decide between actions Q and W
+# We need to create moves for Player 3 for each of Player 1's actions
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Set outcomes for Player 3's actions
+# If Player 3 selects Q, all players receive a payoff of 3
+outcome_q = g.add_outcome([3, 3, 3], label="All players receive 3")
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+outcome_w = g.add_outcome([2, 2, 3], label="Player 1 and 2 receive 2, Player 3 receives 3")
+
+# Assign outcomes to the terminal nodes
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], outcome_q)
+            g.set_outcome(grandchild.children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Imperfect Information Game")
+
+# First stage: Player 1 has three options: A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2, without knowing Player 1's choice, can select either D or E
+# We need to create moves for Player 2 for each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to reflect imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Third stage: Player 1 has two actions to choose from: F or G
+# We need to create moves for Player 1 for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 can decide between actions Q and W
+# We need to create moves for Player 3 for each of Player 1's actions
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Set outcomes for Player 3's actions
+# If Player 3 selects Q, all players receive a payoff of 3
+outcome_q = g.add_outcome([3, 3, 3], label="All players receive 3")
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+outcome_w = g.add_outcome([2, 2, 3], label="Player 1 and 2 receive 2, Player 3 receives 3")
+
+# Assign outcomes to the terminal nodes
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], outcome_q)
+            g.set_outcome(grandchild.children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Imperfect Information Game")
+
+# First stage: Player 1 has three options: A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2, without knowing Player 1's choice, can select either D or E
+# We need to create moves for Player 2 for each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to reflect imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Third stage: Player 1 has two actions to choose from: F or G
+# We need to create moves for Player 1 for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 can decide between actions Q and W
+# We need to create moves for Player 3 for each of Player 1's actions
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Set outcomes for Player 3's actions
+# If Player 3 selects Q, all players receive a payoff of 3
+outcome_q = g.add_outcome([3, 3, 3], label="All players receive 3")
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+outcome_w = g.add_outcome([2, 2, 3], label="Player 1 and 2 receive 2, Player 3 receives 3")
+
+# Assign outcomes to the terminal nodes
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], outcome_q)
+            g.set_outcome(grandchild.children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Imperfect Information Game")
+
+# First stage: Player 1 has three options: A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2, without knowing Player 1's choice, can select either D or E
+# We need to create moves for Player 2 for each of Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["D", "E"])
+g.append_move(g.root.children[1], "Player 2", ["D", "E"])
+g.append_move(g.root.children[2], "Player 2", ["D", "E"])
+
+# Set the information set for Player 2's moves to reflect imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+
+# Third stage: Player 1 has two actions to choose from: F or G
+# We need to create moves for Player 1 for each of Player 2's actions
+g.append_move(g.root.children[0].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[0].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[1].children[1], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[0], "Player 1", ["F", "G"])
+g.append_move(g.root.children[2].children[1], "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 can decide between actions Q and W
+# We need to create moves for Player 3 for each of Player 1's actions
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[0].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[1].children[1].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[0].children[1], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[0], "Player 3", ["Q", "W"])
+g.append_move(g.root.children[2].children[1].children[1], "Player 3", ["Q", "W"])
+
+# Set outcomes for Player 3's actions
+# If Player 3 selects Q, all players receive a payoff of 3
+outcome_q = g.add_outcome([3, 3, 3], label="All players receive 3")
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+outcome_w = g.add_outcome([2, 2, 3], label="Player 1 and 2 receive 2, Player 3 receives 3")
+
+# Assign outcomes to the terminal nodes
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild.children[0], outcome_q)
+            g.set_outcome(grandchild.children[1], outcome_w)
+
+# Save the EFG
+efg = g.write(format='native')

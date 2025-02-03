@@ -1,0 +1,8 @@
+EFG 2 R "Three-stage game" { "Player 1" "Player 2" }
+c "Stage 1" 1 "" { "L" 1/2 "R" 1/2 } 0
+p "Stage 2" 1 1 "" { "l" "r" } 0
+p "Stage 3" 1 2 "" { "A" "B" } 0
+t "Outcome 1" 1 "" { 0, 0 }
+t "Outcome 2" 1 "" { 0, 0 }
+t "Outcome 3" 1 "" { 0, 0 }
+t "Outcome 4" 1 "" { 0, 0 }

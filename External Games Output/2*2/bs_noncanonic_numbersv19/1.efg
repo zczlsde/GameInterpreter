@@ -1,0 +1,10 @@
+EFG 2 R "Corporate Training Location Decision" { "Head1" "Head2" }
+""
+
+p "" 1 1 "" { "Mountain Retreat" "City Convention Center" } 0
+p "" 2 1 "" { "Mountain Retreat" "City Convention Center" } 0
+t "" 1 "Both choose Mountain Retreat" { 2, 1 }
+t "" 2 "Head1 Mountain, Head2 City" { 0, 0 }
+p "" 2 1 "" { "Mountain Retreat" "City Convention Center" } 0
+t "" 3 "Head1 City, Head2 Mountain" { 0, 0 }
+t "" 4 "Both choose City Convention Center" { 1, 2 }

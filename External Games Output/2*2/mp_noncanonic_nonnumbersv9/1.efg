@@ -1,0 +1,10 @@
+EFG 2 R "Film Release Timing Game" { "Independent Studio" "Hollywood Studio" }
+""
+
+p "" 1 1 "" { "Holiday" "Regular" } 0
+p "" 2 1 "" { "Holiday" "Regular" } 0
+t "" 1 "Holiday-Holiday" { 1, -1 }
+t "" 2 "Holiday-Regular" { -1, 1 }
+p "" 2 1 "" { "Holiday" "Regular" } 0
+t "" 3 "Regular-Holiday" { -1, 1 }
+t "" 4 "Regular-Regular" { 1, -1 }

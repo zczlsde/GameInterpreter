@@ -1,0 +1,19 @@
+EFG 2 R "Three-stage game with imperfect recall" { "Player 1" "Chance" }
+""
+
+c "" 1 "" { "L" 1/2 "R" 1/2 } 0
+p "" 1 2 "" { "l" "r" } 0
+p "" 1 1 "" { "A" "B" } 0
+t "" 1 "Outcome A" { 0, 0 }
+t "" 2 "Outcome B" { 0, 0 }
+p "" 1 1 "" { "A" "B" } 0
+t "" 3 "Outcome A" { 0, 0 }
+t "" 4 "Outcome B" { 0, 0 }
+p "" 1 2 "" { "l" "r" } 0
+p "" 1 3 "" { "A" "B" } 0
+t "" 5 "Outcome A" { 0, 0 }
+t "" 6 "Outcome B" { 0, 0 }
+p "" 1 3 "" { "A" "B" } 0
+t "" 7 "Outcome A" { 0, 0 }
+t "" 8 "Outcome B" { 0, 0 }
+

@@ -1,0 +1,49 @@
+EFG 2 R "Three-stage game with imperfect information" { "Player 1" "Player 2" "Player 3" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 2 1 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+p "" 2 1 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 1 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 2 "" { "D" "E" } 0
+p "" 2 2 "" { "D" "E" } 0
+p "" 2 2 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 2 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 2 "" { "D" "E" } 0
+p "" 2 2 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 2 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 3 "" { "D" "E" } 0
+p "" 2 3 "" { "D" "E" } 0
+p "" 2 3 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 3 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 3 "" { "D" "E" } 0
+p "" 2 3 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 2 3 "" { "D" "E" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }

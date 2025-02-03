@@ -1,0 +1,10 @@
+EFG 2 R "Music Event Decision Game" { "RockFan" "JazzFan" }
+""
+
+p "" 1 1 "" { "Rock" "Jazz" } 0
+p "" 2 1 "" { "Rock" "Jazz" } 0
+t "" 1 "Both choose Rock" { 2, 1 }
+t "" 3 "Different events" { 0, 0 }
+p "" 2 1 "" { "Rock" "Jazz" } 0
+t "" 3 "Different events" { 0, 0 }
+t "" 2 "Both choose Jazz" { 1, 2 }

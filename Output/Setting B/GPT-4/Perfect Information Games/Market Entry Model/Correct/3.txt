@@ -1,0 +1,29 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or stay out
+# This is the first move in the game, indicating Firm 2 moves first
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, then Firm 1 must decide whether to fight or accommodate
+# This decision is only relevant if Firm 2 has chosen to enter, hence it's attached to the "Enter" branch
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs based on the game description
+# Payoffs when Firm 2 stays out - Firm 1 earns more, game ends
+g.set_outcome(g.root.children[1], g.add_outcome([3, 0], label="Firm 2 Stays Out"))
+
+# Payoffs when Firm 2 enters and Firm 1 fights - Firm 2 earns more than Firm 1
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# Payoffs when Firm 2 enters and Firm 1 accommodates - Both firms earn an equal amount
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet generates an Extensive Form Game (EFG) for a market entry scenario using the Pygambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and Firm 1 chooses how to respond if Firm 2 enters. The payoffs are set according to the game's description, with specific outcomes for each possible decision path.

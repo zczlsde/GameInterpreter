@@ -1,0 +1,196 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1, Player 2, and Player 3
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                    title="Imperfect information game")
+
+# Stage 1: Player 1 has three options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 can select D or E without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Stage 3: Player 1 chooses between F or G
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 decides between Q and W
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set information sets for Player 1 and Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+
+# Set outcomes for Player 3's actions in the final stage
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1, Player 2, and Player 3
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                    title="Imperfect information game")
+
+# Stage 1: Player 1 has three options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 can select D or E without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Stage 3: Player 1 chooses between F or G
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 decides between Q and W
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set information sets for Player 1 and Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+
+# Set outcomes for Player 3's actions in the final stage
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1, Player 2, and Player 3
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                    title="Imperfect information game")
+
+# Stage 1: Player 1 has three options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 can select D or E without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Stage 3: Player 1 chooses between F or G
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 decides between Q and W
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set information sets for Player 1 and Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+
+# Set outcomes for Player 3's actions in the final stage
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with players Player 1, Player 2, and Player 3
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                    title="Imperfect information game")
+
+# Stage 1: Player 1 has three options A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2 can select D or E without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Stage 3: Player 1 chooses between F or G
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3 decides between Q and W
+for node in g.root.children:
+    for child_node in node.children:
+        for grandchild_node in child_node.children:
+            g.append_move(grandchild_node, "Player 3", ["Q", "W"])
+
+# Set information sets for Player 1 and Player 2
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[2], g.root.children[1].children[2].infoset)
+
+# Set outcomes for Player 3's actions in the final stage
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[0].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[0], g.add_outcome([3, 3, 3], label="Q selected"))
+g.set_outcome(g.root.children[0].children[2].children[1].children[1], g.add_outcome([2, 2, 3], label="W selected"))
+
+# Save the EFG
+efg = g.write(format='native')

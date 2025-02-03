@@ -1,0 +1,17 @@
+EFG 2 R "Rock, Paper, Scissors game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "Rock" "Paper" "Scissors" } 0
+p "" 2 2 "" { "Rock" "Paper" "Scissors" } 0
+t "" 1 "Rock vs Rock" { 0, 0 }
+t "" 2 "Rock vs Paper" { -1, 1 }
+t "" 3 "Rock vs Scissors" { 1, -1 }
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 4 "Paper vs Rock" { 1, -1 }
+t "" 5 "Paper vs Paper" { 0, 0 }
+t "" 6 "Paper vs Scissors" { -1, 1 }
+p "" 2 2 "" { "Rock" "Paper" "Scissors" } 0
+t "" 7 "Scissors vs Rock" { -1, 1 }
+t "" 8 "Scissors vs Paper" { 1, -1 }
+t "" 9 "Scissors vs Scissors" { 0, 0 }
+

@@ -1,0 +1,10 @@
+EFG 2 R "Water Sharing Game" { "Farmer 1" "Farmer 2" }
+""
+
+p "" 1 1 "" { "Share" "Take More" } 0
+p "" 2 1 "" { "Share" "Take More" } 0
+t "" 1 "Equitable Sharing" { 0, 0 }
+t "" 2 "Farmer 2 Takes More" { -2, 2 }
+p "" 2 1 "" { "Share" "Take More" } 0
+t "" 3 "Farmer 1 Takes More" { 2, -2 }
+t "" 4 "Depleted Water Source" { -10, -10 }

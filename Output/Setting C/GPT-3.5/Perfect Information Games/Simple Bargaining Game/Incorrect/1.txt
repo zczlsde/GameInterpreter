@@ -1,0 +1,40 @@
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# B's decision node after A proposes the initial split
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+
+# A's decision node after B rejects the initial split and proposes a new split
+g.append_move(g.root.children[1].children[1], "A", ["Accept", "Reject"])
+
+# Group the decision nodes for B in the same information set as B cannot distinguish between A's proposals
+g.set_infoset(g.root.children[1], g.root.children[1].children[1].infoset)
+```
+
+
+```python
+# Import the pygambit library
+import pygambit as gbt
+
+# Create a new game tree with two players, A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation game")
+
+# A's decision node to propose the initial split
+g.append_move(g.root, "A", ["Accept", "Reject"])
+
+# B's decision node after A proposes the initial split
+g.append_move(g.root.children[1], "B", ["Accept", "Reject"])
+
+# A's decision node after B rejects the initial split and proposes a new split
+g.append_move(g.root.children[1].children[1], "A", ["Accept", "Reject"])
+
+# Group the decision nodes for B in the same information set as B cannot distinguish between A's proposals
+g.set_infoset(g.root.children[1], g.root.children[1].children[1].infoset)
+```

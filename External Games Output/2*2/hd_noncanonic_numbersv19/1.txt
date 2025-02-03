@@ -1,0 +1,62 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two teams, each with two possible actions: play aggressively or defensively.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both teams decide their strategies without knowing the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Team 1 moves first and Team 2 moves second.
+
+# Step 4: Identify the decision nodes for Team 2.
+# Team 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Team 1's actions (aggressively or defensively).
+
+# Step 5: Group Team 2's decision nodes in the same information set.
+# Since Team 2 does not know Team 1's action, these nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Team 1 and Team 2.
+g = gbt.Game.new_tree(players=["Team 1", "Team 2"], title="Strategic Match Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Team 1 moves first and Team 2 moves second.
+
+# Step 3: Team 1 has two actions: play aggressively or defensively.
+g.append_move(g.root, "Team 1", ["Aggressive", "Defensive"])
+
+# Step 4: Team 2 also has two actions: play aggressively or defensively.
+# Team 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Team 1's actions.
+g.append_move(g.root.children[0], "Team 2", ["Aggressive", "Defensive"])
+g.append_move(g.root.children[1], "Team 2", ["Aggressive", "Defensive"])
+
+# Step 5: Group Team 2's decision nodes in the same information set.
+# Since Team 2 does not know Team 1's action, these nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes based on the strategies chosen by both teams.
+# If both play aggressively, each earns -3 points.
+aggressive_outcome = g.add_outcome([-3, -3], label="Both Aggressive")
+
+# If Team 1 plays aggressively and Team 2 plays defensively, Team 1 wins with 6 points, Team 2 loses with -6 points.
+team1_wins_outcome = g.add_outcome([6, -6], label="Team 1 Wins")
+
+# If Team 1 plays defensively and Team 2 plays aggressively, Team 2 wins with 6 points, Team 1 loses with -6 points.
+team2_wins_outcome = g.add_outcome([-6, 6], label="Team 2 Wins")
+
+# If both play defensively, the match is a draw, each scoring 0 points.
+defensive_outcome = g.add_outcome([0, 0], label="Both Defensive")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], aggressive_outcome)  # Both Aggressive
+g.set_outcome(g.root.children[0].children[1], team1_wins_outcome)  # Team 1 Aggressive, Team 2 Defensive
+g.set_outcome(g.root.children[1].children[0], team2_wins_outcome)  # Team 1 Defensive, Team 2 Aggressive
+g.set_outcome(g.root.children[1].children[1], defensive_outcome)   # Both Defensive
+
+# Save the EFG
+efg = g.write(format='native')
+```

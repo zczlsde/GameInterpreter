@@ -1,0 +1,48 @@
+```python
+# Since all actions are observable and there's no simultaneous move or hidden information after any move,
+# there's no need to group any nodes into the same information set based on the game's description.
+# Each move is based on the complete knowledge of the previous state of the game.
+# Therefore, no set_infoset() function is necessary for this game representation.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Piles Game")
+
+# Initial move by Alice: she can either "take" or "push" the piles
+g.append_move(g.root, "Alice", ["take", "push"])
+
+# If Alice takes, the game ends. Alice gets 4, Bob gets 1
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+# Bob now faces 2 and 8 coins
+g.append_move(g.root.children[1], "Bob", ["take", "push"])
+
+# If Bob takes after Alice's push, Bob gets 8, Alice gets 2
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes after Alice push"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+# Alice now faces 4 and 16 coins
+g.append_move(g.root.children[1].children[1], "Alice", ["take", "push"])
+
+# If Alice takes after Bob's push, Alice gets 16, Bob gets 4
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes after Bob push"))
+
+# If Alice pushes, the piles double again and it's Bob's turn
+# Bob now faces 8 and 32 coins
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["take", "push"])
+
+# If Bob takes after the second push by Alice, Bob gets 32, Alice gets 8
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes after second Alice push"))
+
+# If Bob pushes, the piles double again and the game ends
+# Alice gets 64, Bob gets 16 as per the game rule
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push by Bob"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs the extensive-form game for the described scenario involving Alice and Bob with the doubling coin piles. Each decision node represents a choice between "take" and "push," with the outcomes reflecting the final distribution of coins based on these choices. The game is constructed step by step, reflecting each player's decision at each stage without the need for information sets, as all actions are observable and there are no simultaneous moves.

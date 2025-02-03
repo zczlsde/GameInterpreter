@@ -1,0 +1,10 @@
+EFG 2 R "Political Coalition Game" { "Party 1" "Party 2" }
+""
+
+p "" 1 1 "" { "Commit" "Not Commit" } 0
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 1 "Both Commit" { 6, 6 }
+t "" 2 "Party 1 Commits" { 0, 3 }
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 3 "Party 2 Commits" { 3, 0 }
+t "" 4 "Neither Commit" { 2, 2 }

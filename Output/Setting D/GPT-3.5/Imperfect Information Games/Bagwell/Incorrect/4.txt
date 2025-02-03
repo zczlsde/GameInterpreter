@@ -1,0 +1,205 @@
+```python
+# Step-by-step thought process:
+# There are two players in this game, Player 1 and Player 2.
+# Player 1, the leader, first selects a strategy: either "S" or "C."
+# Player 2, the follower, then tries to interpret Player 1's choice, but there is a small probability of misinterpretation.
+# Based on what Player 2 believes Player 1 chose, Player 2 then picks either "S" or "C."
+# Payoffs are based on the chosen combination: (A, B), (W, D), (E, W), (F, F).
+# The payoff rankings from highest to lowest are: E (highest), A, F, W, B, D.
+
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Imperfect information game")
+
+# Player 1 selects between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 tries to interpret Player 1's choice with a small probability of misinterpretation
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define the payoffs for each combination
+payoff_E = g.add_outcome([E, W], label="Payoff E (highest)")
+payoff_A = g.add_outcome([A, B], label="Payoff A")
+payoff_F = g.add_outcome([F, F], label="Payoff F")
+payoff_WD = g.add_outcome([W, D], label="Payoff WD")
+
+# Set outcomes based on the chosen combination
+g.set_outcome(g.root.children[0].children[0].children[0], payoff_A)
+g.set_outcome(g.root.children[0].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[0].children[1].children[0], payoff_F)
+g.set_outcome(g.root.children[0].children[1].children[1], payoff_F)
+g.set_outcome(g.root.children[1].children[0].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[1].children[1].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[1].children[1], payoff_WD)
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Imperfect information game")
+
+# Player 1 selects between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 tries to interpret Player 1's choice with a small probability of misinterpretation
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define the payoffs for each combination
+payoff_E = g.add_outcome([E, W], label="Payoff E (highest)")
+payoff_A = g.add_outcome([A, B], label="Payoff A")
+payoff_F = g.add_outcome([F, F], label="Payoff F")
+payoff_WD = g.add_outcome([W, D], label="Payoff WD")
+
+# Set outcomes based on the chosen combination
+g.set_outcome(g.root.children[0].children[0].children[0], payoff_A)
+g.set_outcome(g.root.children[0].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[0].children[1].children[0], payoff_F)
+g.set_outcome(g.root.children[0].children[1].children[1], payoff_F)
+g.set_outcome(g.root.children[1].children[0].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[1].children[1].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[1].children[1], payoff_WD)
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Imperfect information game")
+
+# Player 1 selects between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 tries to interpret Player 1's choice with a small probability of misinterpretation
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define the payoffs for each combination
+payoff_E = g.add_outcome([E, W], label="Payoff E (highest)")
+payoff_A = g.add_outcome([A, B], label="Payoff A")
+payoff_F = g.add_outcome([F, F], label="Payoff F")
+payoff_WD = g.add_outcome([W, D], label="Payoff WD")
+
+# Set outcomes based on the chosen combination
+g.set_outcome(g.root.children[0].children[0].children[0], payoff_A)
+g.set_outcome(g.root.children[0].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[0].children[1].children[0], payoff_F)
+g.set_outcome(g.root.children[0].children[1].children[1], payoff_F)
+g.set_outcome(g.root.children[1].children[0].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[1].children[1].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[1].children[1], payoff_WD)
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Imperfect information game")
+
+# Player 1 selects between "S" and "C"
+g.append_move(g.root, "Player 1", ["S", "C"])
+
+# Player 2 tries to interpret Player 1's choice with a small probability of misinterpretation
+g.append_move(g.root.children[0], "Player 2", ["S", "C"])
+g.append_move(g.root.children[1], "Player 2", ["S", "C"])
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+# Define the payoffs for each combination
+payoff_E = g.add_outcome([E, W], label="Payoff E (highest)")
+payoff_A = g.add_outcome([A, B], label="Payoff A")
+payoff_F = g.add_outcome([F, F], label="Payoff F")
+payoff_WD = g.add_outcome([W, D], label="Payoff WD")
+
+# Set outcomes based on the chosen combination
+g.set_outcome(g.root.children[0].children[0].children[0], payoff_A)
+g.set_outcome(g.root.children[0].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[0].children[1].children[0], payoff_F)
+g.set_outcome(g.root.children[0].children[1].children[1], payoff_F)
+g.set_outcome(g.root.children[1].children[0].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[0].children[1], payoff_WD)
+g.set_outcome(g.root.children[1].children[1].children[0], payoff_E)
+g.set_outcome(g.root.children[1].children[1].children[1], payoff_WD)
+
+# Set information sets for Player 2 based on Player 1's actual selection
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[0], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0].children[0], g.root.children[1].children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1].children[0], g.root.children[1].children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,19 @@
+EFG 2 R "Imperfect Information Game" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "S" "C" } 0
+c "" 1 "" { "Perceive S" 99/100 "Perceive C" 1/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 1 "Both S" { 5, 2 }
+t "" 2 "P1 S, P2 C" { 3, 1 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 3 "Both S" { 5, 2 }
+t "" 4 "P1 S, P2 C" { 3, 1 }
+c "" 2 "" { "Perceive S" 1/100 "Perceive C" 99/100 } 0
+p "" 2 1 "" { "S" "C" } 0
+t "" 5 "P1 C, P2 S" { 6, 3 }
+t "" 6 "Both C" { 4, 4 }
+p "" 2 2 "" { "S" "C" } 0
+t "" 7 "P1 C, P2 S" { 6, 3 }
+t "" 8 "Both C" { 4, 4 }
+

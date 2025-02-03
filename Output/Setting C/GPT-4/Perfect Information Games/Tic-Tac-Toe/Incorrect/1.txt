@@ -1,0 +1,57 @@
+```python
+# Since "x" and "o" take turns and the game tree branches based on their moves, 
+# each decision node where "x" or "o" has to make a decision is distinct and known to the player making the decision.
+# However, the game involves a sequence of moves, not simultaneous moves, 
+# so each player knows exactly where they are in the game tree when making a decision.
+# Therefore, there's no need to group nodes into information sets based on the inability of a player to distinguish between them.
+# In this specific game scenario, each move leads to a unique and identifiable situation for the players,
+# so there's no imperfect information within the context of each player's turn.
+# Hence, no set_infoset() function calls are necessary for this game representation.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "Player X" and "Player O"
+g = gbt.Game.new_tree(players=["Player X", "Player O"], title="Tic-Tac-Toe")
+
+# The current board state is:
+# e | o | e
+# e | x | o
+# x | x | o
+# "x" moves next.
+
+# "x" can place the mark on (0,0), (0,2), and (1,0).
+# We create decision nodes for "x" at the root for these moves.
+x_moves = ["(0,0)", "(0,2)", "(1,0)"]
+g.append_move(g.root, "Player X", x_moves)
+
+# If "x" places the mark on (0,0)
+# "o" can then place the mark on (0,2) and (1,0).
+o_moves_after_x_00 = ["(0,2)", "(1,0)"]
+g.append_move(g.root.children[0], "Player O", o_moves_after_x_00)
+
+# Outcomes after "o" moves
+# If "o" places the mark on (0,2), "o" wins.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "o" places the mark on (1,0), "x" can then place the mark on (0,2), "x" wins.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "x" places the mark on (0,2), "x" wins.
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "x" places the mark on (1,0)
+# "o" can then place the mark on (0,0) and (0,2).
+o_moves_after_x_10 = ["(0,0)", "(0,2)"]
+g.append_move(g.root.children[2], "Player O", o_moves_after_x_10)
+
+# Outcomes after "o" moves
+# If "o" places the mark on (0,0), "x" can then place the mark on (0,2), "x" wins.
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([1, -1], label="X wins"))
+# If "o" places the mark on (0,2), "o" wins.
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs the extensive-form game representation of the given Tic-Tac-Toe scenario using the pygambit library. Each decision node represents a move by "x" or "o" based on the current board state, leading to outcomes that reflect the game's win, lose, or draw conditions.

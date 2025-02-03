@@ -1,0 +1,41 @@
+```python
+# Step-by-step thought process:
+
+# 1. Firm 2 decides whether to enter the market or stay out. This is Firm 2's decision node.
+# 2. If Firm 2 stays out, the game ends, and no further decisions are made.
+# 3. If Firm 2 enters, Firm 1 must decide whether to Fight or Accommodate. This is Firm 1's decision node.
+# 4. Firm 1's decision is made after Firm 2's decision, so there is no simultaneous move here.
+# 5. Since Firm 1 knows Firm 2's decision (whether to enter or not), there is no imperfect information for Firm 1.
+# 6. Therefore, there are no information sets to be set in this game, as all decisions are made with perfect information.
+
+# No set_infoset() function is needed because there is no imperfect information in this game.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Monopoly Entry Game")
+
+# Step 1: Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Step 2: If Firm 2 enters, Firm 1 decides whether to Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define the payoffs for each outcome
+# If Firm 2 stays out, Firm 1 earns more
+stay_out_outcome = g.add_outcome([3, 0], label="Firm 2 Stays Out")
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+accommodate_outcome = g.add_outcome([2, 2], label="Accommodate")
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+fight_outcome = g.add_outcome([1, 3], label="Fight")
+
+# Set the outcomes for each terminal node
+g.set_outcome(g.root.children[1], stay_out_outcome)
+g.set_outcome(g.root.children[0].children[0], fight_outcome)
+g.set_outcome(g.root.children[0].children[1], accommodate_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

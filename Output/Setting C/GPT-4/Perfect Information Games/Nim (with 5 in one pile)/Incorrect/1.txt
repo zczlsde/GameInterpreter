@@ -1,0 +1,194 @@
+```python
+# Since the game described involves a sequential structure with perfect information at each step (each player knows the state of the game when making a decision), 
+# there's no need to group nodes into information sets based on the traditional sense of imperfect information (where a player cannot distinguish between different game states).
+# However, for the sake of the task, let's consider the hypothetical scenario where there might be imperfect information to illustrate how it would be represented.
+
+# In this game, there's no explicit mention of imperfect information as each player's move is fully observable by the other player before making their own move.
+# Therefore, under normal circumstances, we wouldn't group any nodes into the same information set due to the lack of imperfect information.
+
+# However, if we were to artificially introduce a scenario of imperfect information, such as if Alice couldn't see the number of stones removed by Bob in the previous turn (or vice versa),
+# we would then group nodes where Alice (or Bob) has to make a decision without knowing the previous move by Bob (or Alice). 
+# Since the game description does not provide such a scenario, we do not have a basis to group nodes into the same information set based on the provided rules.
+
+# Conclusion: Given the sequential and fully observable nature of the game as described, there's no need to use set_infoset() to group nodes into information sets for representing imperfect information.
+```
+
+To construct the extensive-form game for the scenario described using the PyGambit library, we'll follow the game's sequential structure. Since the game is perfectly observable and each player's move is fully known to the opponent, there's no need for information sets to represent imperfect information. However, we'll structure the game tree to reflect the choices and outcomes as described.
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone")
+
+# Alice starts with the choice to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone, Alice can again choose to remove one or two stones
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob has the choice to remove one or two stones
+bob_after_alice_2 = g.append_move(alice_after_bob_1.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# Outcomes based on the moves
+g.set_outcome(bob_after_alice_2.children[0], g.add_outcome([-1, 1], label="Alice loses"))
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Continuing the tree for other branches
+g.set_outcome(bob_after_alice_1.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice removes two stones initially
+bob_after_alice_2 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# Similar outcomes based on the moves
+g.set_outcome(bob_after_alice_2.children[0], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Since the game described involves a sequential structure with perfect information at each step,
+# there's no need to group nodes into information sets based on the traditional sense of imperfect information.
+# However, for the sake of completeness, let's include the hypothetical scenario where there might be imperfect information.
+# Given the sequential and fully observable nature of the game as described, there's no need to use set_infoset() to group nodes into information sets for representing imperfect information.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree for the described game, detailing each player's choices and the resulting outcomes. The game is structured to reflect the sequential decisions and their consequences, with payoffs assigned based on whether a player wins or loses by avoiding or taking the last stone.
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice starts with the choice to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone, Alice can again choose to remove one or two stones
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob has the choice to remove one or two stones, leading to his loss if he removes two
+bob_after_alice_2 = g.append_move(alice_after_bob_1.children[0], "Bob", ["Remove 1", "Remove 2"])
+g.set_outcome(bob_after_alice_2.children[0], g.add_outcome([-1, 1], label="Bob removes 1, loses"))
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([1, -1], label="Bob removes 2, wins"))
+
+# If Alice removes two stones after Bob removes one, Alice wins
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([1, -1], label="Alice removes 2, wins"))
+
+# If Bob removes two stones initially, outcomes depend on Alice's next move
+alice_after_bob_2 = g.append_move(bob_after_alice_1.children[1], "Alice", ["Remove 1", "Remove 2"])
+g.set_outcome(alice_after_bob_2.children[0], g.add_outcome([-1, 1], label="Alice removes 1, loses"))
+g.set_outcome(alice_after_bob_2.children[1], g.add_outcome([1, -1], label="Alice removes 2, wins"))
+
+# If Alice removes two stones initially
+bob_after_alice_3 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# Outcomes for Bob's decision after Alice removes two stones
+g.set_outcome(bob_after_alice_3.children[0], g.add_outcome([-1, 1], label="Bob removes 1, loses"))
+g.set_outcome(bob_after_alice_3.children[1], g.add_outcome([1, -1], label="Bob removes 2, wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice starts with the choice to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Alice removes two stones, Bob can remove one or two stones
+bob_after_alice_2 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone after Alice removes one, Alice can choose again
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Bob removes two stones after Alice removes one, Alice wins
+g.set_outcome(bob_after_alice_1.children[1], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Bob removes one stone after Alice removes two, Alice can choose again
+alice_after_bob_2 = g.append_move(bob_after_alice_2.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Bob removes two stones after Alice removes two, Alice loses
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Detailing further choices and outcomes
+# After Alice's second choice when Bob removed one stone first
+g.set_outcome(alice_after_bob_1.children[0], g.add_outcome([-1, 1], label="Alice loses"))
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# After Alice's choice when she initially removed two stones and Bob removed one
+g.set_outcome(alice_after_bob_2.children[0], g.add_outcome([-1, 1], label="Alice loses"))
+g.set_outcome(alice_after_bob_2.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Since the game described involves a sequential structure with perfect information at each step,
+# there's no need to group nodes into information sets based on the traditional sense of imperfect information.
+# However, for the sake of completeness, let's include the hypothetical scenario where there might be imperfect information.
+# Given the sequential and fully observable nature of the game as described, there's no need to use set_infoset() to group nodes into information sets for representing imperfect information.
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice starts with the choice to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone, Alice can again choose to remove one or two stones
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+# Continuing the tree for Alice's choice after Bob removes one stone
+bob_after_alice_2 = g.append_move(alice_after_bob_1.children[0], "Bob", ["Remove 1", "Remove 2"])
+# Outcomes for Bob's choice after Alice removes one stone again
+g.set_outcome(bob_after_alice_2.children[0], g.add_outcome([-1, 1], label="Alice loses"))
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([1, -1], label="Bob loses"))
+# Outcome if Alice removes two stones after Bob removes one
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# Outcome if Bob removes two stones after Alice removes one
+alice_after_bob_2 = g.append_move(bob_after_alice_1.children[1], "Alice", ["Remove 1", "Remove 2"])
+g.set_outcome(alice_after_bob_2.children[0], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(alice_after_bob_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice removes two stones initially
+bob_after_alice_3 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+# Alice's choices after Bob's response to her initial removal of two stones
+alice_after_bob_3 = g.append_move(bob_after_alice_3.children[0], "Alice", ["Remove 1", "Remove 2"])
+g.set_outcome(alice_after_bob_3.children[0], g.add_outcome([1, -1], label="Bob loses"))
+g.set_outcome(alice_after_bob_3.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+# Outcome if Bob removes two stones after Alice removes two initially
+g.set_outcome(bob_after_alice_3.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Since the game described involves a sequential structure with perfect information at each step,
+# there's no need to group nodes into information sets based on the traditional sense of imperfect information.
+# However, for the sake of completeness, let's include the hypothetical scenario where there might be imperfect information.
+# Given the sequential and fully observable nature of the game as described, there's no need to use set_infoset() to group nodes into information sets for representing imperfect information.
+
+# Save the EFG
+efg = g.write(format='native')

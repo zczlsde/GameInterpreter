@@ -1,0 +1,117 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Append the initial move for Alice with two actions: Take or Push
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# Append the move for Bob after Alice's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+
+# Append the move for Alice after Bob's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1].children[1], "Alice", ["Take", "Push"])
+
+# Set the information set for the nodes where Alice has to choose between Take or Push
+# Alice's decision nodes are grouped in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Append the initial move for Alice with two actions: Take or Push
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# Append the move for Bob after Alice's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+
+# Append the move for Alice after Bob's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1].children[1], "Alice", ["Take", "Push"])
+
+# Set the information set for the nodes where Alice has to choose between Take or Push
+# Alice's decision nodes are grouped in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+```
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Append the initial move for Alice with two actions: Take or Push
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# Append the move for Bob after Alice's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+
+# Append the move for Alice after Bob's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1].children[1], "Alice", ["Take", "Push"])
+
+# Set the information set for the nodes where Alice has to choose between Take or Push
+# Alice's decision nodes are grouped in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1])
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Append the initial move for Alice with two actions: Take or Push
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# Append the move for Bob after Alice's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+
+# Append the move for Alice after Bob's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1].children[1], "Alice", ["Take", "Push"])
+
+# Set the information set for the nodes where Alice has to choose between Take or Push
+# Alice's decision nodes are grouped in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].infoset)
+
+===================
+Index out of range
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="Coin Pile Game")
+
+# Append the initial move for Alice with two actions: Take or Push
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# Append the move for Bob after Alice's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1], "Bob", ["Take", "Push"])
+
+# Append the move for Alice after Bob's Push action with two actions: Take or Push
+g.append_move(g.root.children[0].children[1].children[1], "Alice", ["Take", "Push"])
+
+# Set the information set for the nodes where Alice has to choose between Take or Push
+# Alice's decision nodes are grouped in the same information set as she knows her own actions
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1].children[1], g.root.children[0].children[1].infoset)

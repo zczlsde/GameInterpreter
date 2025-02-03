@@ -1,0 +1,59 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"],
+                      title="Extensive Form Game with Chance Node")
+
+# Append a chance node with four outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for each outcome of the chance node
+# Assuming equal probabilities for simplicity, but these can be adjusted as needed
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4)] * 4)
+
+# For each outcome of the chance node, Player 1 will choose from three actions: E, F, G
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["E", "F", "G"])
+
+# For each of Player 1's actions, Player 2 will choose between two actions: Q or W
+for chance_outcome in g.root.children:
+    for player1_action in chance_outcome.children:
+        g.append_move(player1_action, "Player 2", ["Q", "W"])
+
+# Define payoffs for each combination under outcome A
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, -1]))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -2]))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1]))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, -2]))
+g.set_outcome(g.root.children[0].children[2].children[0], g.add_outcome([1, -1]))
+g.set_outcome(g.root.children[0].children[2].children[1], g.add_outcome([2, -2]))
+
+# Define payoffs for each combination under outcome B
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([3, -3]))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-3, 3]))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([3, -3]))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-3, 3]))
+g.set_outcome(g.root.children[1].children[2].children[0], g.add_outcome([3, -3]))
+g.set_outcome(g.root.children[1].children[2].children[1], g.add_outcome([-3, 3]))
+
+# Define payoffs for each combination under outcome C
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([0, 0]))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([-1, 1]))
+g.set_outcome(g.root.children[2].children[1].children[0], g.add_outcome([0, 0]))
+g.set_outcome(g.root.children[2].children[1].children[1], g.add_outcome([-1, 1]))
+g.set_outcome(g.root.children[2].children[2].children[0], g.add_outcome([0, 0]))
+g.set_outcome(g.root.children[2].children[2].children[1], g.add_outcome([-1, 1]))
+
+# Define payoffs for each combination under outcome D
+g.set_outcome(g.root.children[3].children[0].children[0], g.add_outcome([4, -4]))
+g.set_outcome(g.root.children[3].children[0].children[1], g.add_outcome([-4, 4]))
+g.set_outcome(g.root.children[3].children[1].children[0], g.add_outcome([4, -4]))
+g.set_outcome(g.root.children[3].children[1].children[1], g.add_outcome([-4, 4]))
+g.set_outcome(g.root.children[3].children[2].children[0], g.add_outcome([4, -4]))
+g.set_outcome(g.root.children[3].children[2].children[1], g.add_outcome([-4, 4]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game with a chance node leading to four possible outcomes (A, B, C, D). Following the outcome of the chance node, Player 1 decides among three actions (E, F, G), and then Player 2 chooses between two actions (Q, W) after observing Player 1's choice. The payoffs for each possible path through the game are specified according to the game description. Note that the probabilities for the chance node outcomes are set to equal chances for simplicity, but these can be adjusted as needed to reflect different probabilities for outcomes A, B, C, and D.

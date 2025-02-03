@@ -1,0 +1,10 @@
+EFG 2 R "Coffee Shop Competition Game" { "Local Coffee Shop" "Large Coffee Chain" }
+""
+
+p "" 1 1 "" { "Launch Latte" "Launch Cold Brew" } 0
+p "" 2 1 "" { "Launch Latte" "Launch Cold Brew" } 0
+t "" 1 "Local Coffee Shop Wins" { 2, -2 }
+t "" 2 "Large Coffee Chain Wins" { -3, 3 }
+p "" 2 1 "" { "Launch Latte" "Launch Cold Brew" } 0
+t "" 2 "Large Coffee Chain Wins" { -3, 3 }
+t "" 1 "Local Coffee Shop Wins" { 2, -2 }

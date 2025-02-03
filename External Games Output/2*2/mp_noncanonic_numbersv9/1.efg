@@ -1,0 +1,10 @@
+EFG 2 R "Electric Vehicle Market Share Game" { "Small Company" "Large Manufacturer" }
+""
+
+p "" 2 1 "" { "Sedan" "SUV" } 0
+p "" 1 1 "" { "Sedan" "SUV" } 0
+t "" 1 "Both choose Sedan" { 10, -10 }
+t "" 2 "Large Sedan, Small SUV" { -15, 15 }
+p "" 1 1 "" { "Sedan" "SUV" } 0
+t "" 3 "Large SUV, Small Sedan" { -15, 15 }
+t "" 4 "Both choose SUV" { 10, -10 }

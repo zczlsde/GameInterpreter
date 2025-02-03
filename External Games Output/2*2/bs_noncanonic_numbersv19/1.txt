@@ -1,0 +1,58 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two department heads, let's call them Head1 and Head2.
+# Both have two actions: "Mountain Retreat" and "City Convention Center".
+
+# Step 2: Determine the sequence of moves.
+# Since both department heads are choosing simultaneously, we can model this as a sequential game with imperfect information.
+# Assume Head1 moves first and Head2 moves second.
+
+# Step 3: Identify the decision nodes.
+# The starting node, g.root, is Head1's decision node.
+# Head1 has two actions, "Mountain Retreat" and "City Convention Center".
+# Head2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Head1's actions.
+
+# Step 4: Determine the information set for Head2.
+# Since Head2 cannot distinguish between Head1's actions, Head2's decision nodes should be grouped in the same information set.
+
+# Set the information set for Head2's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Head1 and Head2.
+g = gbt.Game.new_tree(players=["Head1", "Head2"], title="Corporate Training Location Decision")
+
+# Step 2: Head1 makes the first move with two actions: "Mountain Retreat" and "City Convention Center".
+g.append_move(g.root, "Head1", ["Mountain Retreat", "City Convention Center"])
+
+# Step 3: Head2 makes a move after Head1, but since the moves are simultaneous, we model it as if Head2 moves after Head1.
+# Head2 has the same two actions: "Mountain Retreat" and "City Convention Center".
+g.append_move(g.root.children[0], "Head2", ["Mountain Retreat", "City Convention Center"])
+g.append_move(g.root.children[1], "Head2", ["Mountain Retreat", "City Convention Center"])
+
+# Step 4: Set the information set for Head2's decision nodes to reflect imperfect information.
+# Head2 cannot distinguish between Head1's actions, so we group Head2's decision nodes in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# Both choose "Mountain Retreat"
+outcome_mountain_mountain = g.add_outcome([2, 1], label="Both choose Mountain Retreat")
+# Head1 chooses "Mountain Retreat", Head2 chooses "City Convention Center"
+outcome_mountain_city = g.add_outcome([0, 0], label="Head1 Mountain, Head2 City")
+# Head1 chooses "City Convention Center", Head2 chooses "Mountain Retreat"
+outcome_city_mountain = g.add_outcome([0, 0], label="Head1 City, Head2 Mountain")
+# Both choose "City Convention Center"
+outcome_city_city = g.add_outcome([1, 2], label="Both choose City Convention Center")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_mountain_mountain)
+g.set_outcome(g.root.children[0].children[1], outcome_mountain_city)
+g.set_outcome(g.root.children[1].children[0], outcome_city_mountain)
+g.set_outcome(g.root.children[1].children[1], outcome_city_city)
+
+# Save the EFG
+efg = g.write(format='native')
+```

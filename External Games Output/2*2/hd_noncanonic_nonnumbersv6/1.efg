@@ -1,0 +1,10 @@
+EFG 2 R "International Environmental Policy Negotiation" { "Country 1" "Country 2" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Balanced Policy" { 1, 1 }
+t "" 3 "Country 2 Benefits" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Country 1 Benefits" { 2, 0 }
+t "" 4 "No Agreement" { -1, -1 }

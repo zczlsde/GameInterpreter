@@ -1,0 +1,68 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two corporations, and they must decide simultaneously whether to adopt sustainable practices or not.
+
+# Step 2: Recognize the imperfect information.
+# Since the corporations make their decisions simultaneously, neither knows the other's decision at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Corporation 1 moves first and Corporation 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Corporation 1's decision node.
+# Corporation 1 has two actions: Adopt or Not adopt.
+# Corporation 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Corporation 1's actions Adopt and Not adopt.
+
+# Step 5: Group Corporation 2's decision nodes in the same information set.
+# Corporation 2, moving simultaneously, does not know which action Corporation 1 has taken.
+# Therefore, Corporation 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Corporation 1 and Corporation 2.
+g = gbt.Game.new_tree(players=["Corporation 1", "Corporation 2"],
+                      title="Sustainable Practices Decision Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume Corporation 1 moves first and Corporation 2 moves second.
+
+# Step 3: Corporation 1's decision node is the root of the game tree.
+# Corporation 1 has two actions: Adopt or Not adopt.
+g.append_move(g.root, "Corporation 1", ["Adopt", "Not adopt"])
+
+# Step 4: Corporation 2's decision nodes are g.root.children[0] and g.root.children[1].
+# These correspond to Corporation 1's actions: Adopt and Not adopt.
+g.append_move(g.root.children[0], "Corporation 2", ["Adopt", "Not adopt"])
+g.append_move(g.root.children[1], "Corporation 2", ["Adopt", "Not adopt"])
+
+# Step 5: Group Corporation 2's decision nodes in the same information set.
+# Since Corporation 2 moves simultaneously, it does not know which action Corporation 1 has taken.
+# Therefore, Corporation 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# If both adopt sustainable practices, they build better reputations and contribute to environmental preservation.
+outcome_both_adopt = g.add_outcome([2, 2], label="Both Adopt")
+
+# If one adopts and the other doesn't, the adopter incurs higher costs and may lose competitive pricing,
+# while the non-adopter enjoys lower costs and possible short-term gains.
+outcome_corp1_adopts = g.add_outcome([-1, 3], label="Corp1 Adopts, Corp2 Not")
+outcome_corp2_adopts = g.add_outcome([3, -1], label="Corp2 Adopts, Corp1 Not")
+
+# If neither adopts sustainable practices, they both save money but contribute to environmental degradation
+# and potential future regulatory issues.
+outcome_neither_adopts = g.add_outcome([1, 1], label="Neither Adopts")
+
+# Step 7: Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], outcome_both_adopt)
+g.set_outcome(g.root.children[0].children[1], outcome_corp1_adopts)
+g.set_outcome(g.root.children[1].children[0], outcome_corp2_adopts)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_adopts)
+
+# Save the EFG
+efg = g.write(format='native')
+```

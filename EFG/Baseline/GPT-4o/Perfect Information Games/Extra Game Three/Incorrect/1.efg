@@ -1,0 +1,15 @@
+EFG 2 R "Chance and Sequential Moves Game" { "Player 1" "Player 2" }
+c "" 1 "" { "A" 1/4 "B" 1/4 "C" 1/4 "D" 1/4 } 0
+p "" 1 1 "" { "E" "F" "G" } 0
+p "" 2 1 "" { "Q" "W" } 0
+t "" 1 "Outcome A, Q" { 1, -1 }
+t "" 2 "Outcome A, W" { 2, -2 }
+p "" 2 2 "" { "Q" "W" } 0
+t "" 3 "Outcome B, Q" { 3, -3 }
+t "" 4 "Outcome B, W" { -3, 3 }
+p "" 2 3 "" { "Q" "W" } 0
+t "" 5 "Outcome C, Q" { 0, 0 }
+t "" 6 "Outcome C, W" { -1, 1 }
+p "" 2 4 "" { "Q" "W" } 0
+t "" 7 "Outcome D, Q" { 4, -4 }
+t "" 8 "Outcome D, W" { -4, 4 }

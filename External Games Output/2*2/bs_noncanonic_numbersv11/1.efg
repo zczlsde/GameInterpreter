@@ -1,0 +1,10 @@
+EFG 2 R "Two Generals Coordination Game" { "General North" "General South" }
+""
+
+p "" 1 1 "" { "North Ridge" "South Valley" } 0
+p "" 2 1 "" { "North Ridge" "South Valley" } 0
+t "" 1 "Both North Ridge" { 2, 1 }
+t "" 2 "North Ridge/South Valley" { 0, 0 }
+p "" 2 1 "" { "North Ridge" "South Valley" } 0
+t "" 3 "South Valley/North Ridge" { 0, 0 }
+t "" 4 "Both South Valley" { 1, 2 }

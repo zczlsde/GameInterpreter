@@ -1,0 +1,63 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two startups, which we can consider as two players.
+# Each startup has two actions: Collaborate or Go it alone.
+
+# Step 2: Determine the sequence of moves.
+# Since the startups make their decisions simultaneously, we need to model this with imperfect information.
+# We can assume one startup moves first and the other moves second, but the second startup does not know the first startup's action.
+
+# Step 3: Identify the decision nodes and information sets.
+# The starting node, g.root, is the decision node for the first startup.
+# The first startup has two actions, Collaborate and Go it alone.
+# The second startup's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first startup's actions.
+# Since the second startup does not know the first startup's action, its decision nodes should be grouped in the same information set.
+
+# Step 4: Set the information set for the second startup's decision nodes.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two startups, which we can consider as two players.
+# Each startup has two actions: Collaborate or Go it alone.
+g = gbt.Game.new_tree(players=["Startup 1", "Startup 2"],
+                      title="Tech Startup Merger Game")
+
+# Step 2: Determine the sequence of moves.
+# Since the startups make their decisions simultaneously, we need to model this with imperfect information.
+# We can assume one startup moves first and the other moves second, but the second startup does not know the first startup's action.
+
+# Step 3: Identify the decision nodes and information sets.
+# The starting node, g.root, is the decision node for the first startup.
+# The first startup has two actions, Collaborate and Go it alone.
+g.append_move(g.root, "Startup 1", ["Collaborate", "Go it alone"])
+
+# The second startup's decision nodes are g.root.children[0] and g.root.children[1], corresponding to the first startup's actions.
+# Since the second startup does not know the first startup's action, its decision nodes should be grouped in the same information set.
+g.append_move(g.root.children[0], "Startup 2", ["Collaborate", "Go it alone"])
+g.append_move(g.root.children[1], "Startup 2", ["Collaborate", "Go it alone"])
+
+# Step 4: Set the information set for the second startup's decision nodes.
+# The second startup's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes and set them for each terminal node.
+# If both collaborate, they gain substantial market share and funding.
+collaborate_outcome = g.add_outcome([3, 3], label="Both Collaborate")
+# If one collaborates and the other goes it alone, the collaborator risks having no product launch.
+collaborate_alone_outcome = g.add_outcome([-1, 2], label="Collaborate vs Alone")
+# If both go it alone, they struggle in the market.
+alone_outcome = g.add_outcome([1, 1], label="Both Go it Alone")
+
+# Set the outcomes for each terminal node.
+g.set_outcome(g.root.children[0].children[0], collaborate_outcome)
+g.set_outcome(g.root.children[0].children[1], collaborate_alone_outcome)
+g.set_outcome(g.root.children[1].children[0], collaborate_alone_outcome)
+g.set_outcome(g.root.children[1].children[1], alone_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,130 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="International Relations Game")
+
+# Append the initial move for Country B at the root node
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts the status quo, Country A decides whether to Tax or Drop Taxes
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A faces the decision to Grant Independence or Suppress the rebellion
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for the decision nodes of Country A based on the imperfect information
+# Group the decision nodes where Country A cannot distinguish between the actions of Country B
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+```
+
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="International Relations Game")
+
+# Append the initial move for Country B at the root node
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts the status quo, Country A decides whether to Tax or Drop Taxes
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A faces the decision to Grant Independence or Suppress the rebellion
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for the decision nodes of Country A based on the imperfect information
+# Group the decision nodes where Country A cannot distinguish between the actions of Country B
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="International Relations Game")
+
+# Append the initial move for Country B at the root node
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts the status quo, Country A decides whether to Tax or Drop Taxes
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A faces the decision to Grant Independence or Suppress the rebellion
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for the decision nodes of Country A based on the imperfect information
+# Group the decision nodes where Country A cannot distinguish between the actions of Country B
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="International Relations Game")
+
+# Append the initial move for Country B at the root node
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts the status quo, Country A decides whether to Tax or Drop Taxes
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A faces the decision to Grant Independence or Suppress the rebellion
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for the decision nodes of Country A based on the imperfect information
+# Group the decision nodes where Country A cannot distinguish between the actions of Country B
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="International Relations Game")
+
+# Append the initial move for Country B at the root node
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts the status quo, Country A decides whether to Tax or Drop Taxes
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A faces the decision to Grant Independence or Suppress the rebellion
+# Append the moves for Country A at the respective decision nodes
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set the information set for the decision nodes of Country A based on the imperfect information
+# Group the decision nodes where Country A cannot distinguish between the actions of Country B
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)

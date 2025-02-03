@@ -1,0 +1,50 @@
+```python
+# Since "x" and "o" take turns and the game tree branches based on their moves, 
+# each decision node for "o" after "x" makes a move is a different information set because "o" knows where "x" has placed its mark.
+# However, when "x" makes the next move, "x" has perfect information about the state of the game.
+# Therefore, there's no need to group nodes into the same information set based on the game's description and the current state.
+# This game does not have the typical structure of imperfect information for a single player's decision nodes,
+# as each player has perfect information when making their moves.
+# The imperfect information aspect in typical games (where players might not distinguish between nodes within their decision turn) does not apply here.
+# Hence, no set_infoset() function is necessary for this specific game state and description.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "Player X" and "Player O"
+g = gbt.Game.new_tree(players=["Player X", "Player O"], title="Tic-Tac-Toe")
+
+# The root node is the current board state:
+# e | o | e
+# e | x | o
+# x | x | o
+# "X" has the next move and can place a mark on (0,0), (0,2), or (1,0).
+
+# Append moves for "X" at the root node
+g.append_move(g.root, "Player X", ["Place (0,0)", "Place (0,2)", "Place (1,0)"])
+
+# For "X" placing the mark on (0,0)
+# "O" can then place the mark on (0,2) and (1,0).
+g.append_move(g.root.children[0], "Player O", ["Place (0,2)", "Place (1,0)"])
+# If "O" places the mark on (0,2), "O" wins.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([-1, 1], label="O wins"))
+# If "O" places the mark on (1,0), "X" can then place the mark on (0,2), and "X" wins.
+g.append_move(g.root.children[0].children[1], "Player X", ["Place (0,2)"])
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (0,2), "X" wins.
+g.set_outcome(g.root.children[1], g.add_outcome([1, -1], label="X wins"))
+
+# If "X" places the mark on (1,0)
+# "O" can then place the mark on (0,0) and (0,2).
+g.append_move(g.root.children[2], "Player O", ["Place (0,0)", "Place (0,2)"])
+# If "O" places the mark on (0,0), "X" can then place the mark on (0,2), and "X" wins.
+g.append_move(g.root.children[2].children[0], "Player X", ["Place (0,2)"])
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([1, -1], label="X wins"))
+# If "O" places the mark on (0,2), "O" wins.
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([-1, 1], label="O wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,30 @@
+Based on the game description provided, here is the EFG representation of the game involving Country A and Country B, with their strategic decisions following a provocation:
+
+```
+EFG 2 R "Nuclear Crisis Game" { "Country A" "Country B" }
+p "" 1 1 "" { "Escalate" "Ignore" } 0
+    p "" 2 1 "" { "Back down" "Escalate" } 0
+        p "" 1 2 "" { "Retreat" "Detonate" } 0
+            p "" 2 2 "" { "Retreat" "Detonate" } 0
+                t "" 1 "Mutual Retreat" { -1, -1 }
+                t "" 2 "A Detonates, B Retreats" { 10, -10 }
+                t "" 3 "Mutual Detonation" { -100, -100 }
+            t "" 4 "B Retreats, A Detonates" { -10, 10 }
+        t "" 5 "B Backs Down" { 1, -1 }
+    t "" 6 "A Ignores" { 1, 1 }
+```
+
+Explanation of the EFG representation:
+
+- The game starts with Country A's decision node, where it can choose to "Escalate" or "Ignore" the provocation.
+- If Country A chooses to "Ignore", the game ends with both countries receiving a small positive payoff.
+- If Country A escalates, Country B then decides whether to "Back down" or "Escalate" further.
+- If Country B backs down, it ends with Country A winning a small payoff, and Country B loses a small payoff.
+- If both countries choose to escalate, Country A then decides to "Retreat" or "Detonate".
+- Country B, unaware of Country A's decision, also chooses to "Retreat" or "Detonate".
+- The outcomes are as follows:
+    - If both retreat, they suffer a small negative payoff.
+    - If one detonates and the other retreats, the detonating country receives a large positive payoff, while the retreating country receives a large negative payoff.
+    - If both detonate, it results in a nuclear disaster with a very large negative payoff for both countries.
+
+This representation captures the sequential nature of the decisions and the strategic considerations of both countries following the initial provocation.

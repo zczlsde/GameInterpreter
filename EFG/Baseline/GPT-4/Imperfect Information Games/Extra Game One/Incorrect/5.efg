@@ -1,0 +1,16 @@
+EFG 2 R "Three-stage game with imperfect information" { "Player 1" "Player 2" }
+p "" 1 1 "" { "A" "B" "C" } 0
+    p "" 2 1 "" { "D" "E" "F" } 0
+        p "" 1 2 "" { "G" "H" } 0
+            t "" 1 "H chosen" { 2, -1 }
+            p "" 2 3 "" { "Q" "W" } 0
+                t "" 2 "Q chosen" { 3, 3 }
+                t "" 3 "W chosen" { 0, 0 }
+        t "" 4 "F chosen after A" { 0, 0 }
+    p "" 2 2 "" { "D" "E" "F" } 0
+        p "" 1 3 "" { "G" "H" } 0
+            t "" 5 "H chosen" { 2, -1 }
+            p "" 2 4 "" { "Q" "W" } 0
+                t "" 6 "Q chosen" { 3, 3 }
+                t "" 7 "W chosen" { 0, 0 }
+        t "" 8 "F chosen after B or C" { 0, 0 }

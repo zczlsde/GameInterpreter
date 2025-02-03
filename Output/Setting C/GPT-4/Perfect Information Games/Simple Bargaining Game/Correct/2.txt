@@ -1,0 +1,46 @@
+```python
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B). This is a decision node for B.
+# Step 2: If B rejects, B proposes an equal split (5000 each). This is a decision node for A.
+# Step 3: If A rejects B's equal split, A proposes a new plan (5200 for A, 4800 for B), and B has to accept.
+# There are no simultaneous moves or decisions made under uncertainty by either player about the other player's actions.
+# Therefore, there are no information sets that group multiple nodes for a single player due to imperfect information.
+# All decisions are made with perfect information about previous actions.
+# Hence, no set_infoset() function is necessary for this game structure.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan (5500 for A, 4500 for B)
+# This is the initial move by A, so it's appended to the root of the game tree.
+g.append_move(g.root, "A", ["Propose 5500-4500"])
+
+# Step 2: B decides whether to accept or reject A's initial proposal
+# This decision is appended to the child node of the root, which represents A's proposal.
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with the proposed distribution.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B Accepts Initial Proposal"))
+
+# If B rejects, B proposes an equal split (5000 each)
+# This decision is appended to the reject option of B's previous move.
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000-5000"])
+
+# Step 3: A decides whether to accept or reject B's equal split proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts B's proposal, the game ends with the equal split.
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A Accepts Equal Split"))
+
+# If A rejects B's proposal, A proposes a new plan (5200 for A, 4800 for B), and B has to accept.
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200-4800"])
+
+# Since B has no right to reject, the game ends with A's new proposal.
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="A Proposes Final Plan"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,10 @@
+EFG 2 R "Fashion Week Showcase Game" { "New Designer" "Established Designer" }
+""
+
+p "" 1 1 "" { "Classical" "Avant-garde" } 0
+p "" 2 1 "" { "Classical" "Avant-garde" } 0
+t "" 1 "New Designer Gains" { 1, -1 }
+t "" 2 "Established Designer Reaffirms" { -1, 1 }
+p "" 2 1 "" { "Classical" "Avant-garde" } 0
+t "" 2 "Established Designer Reaffirms" { -1, 1 }
+t "" 1 "New Designer Gains" { 1, -1 }

@@ -1,0 +1,183 @@
+```python
+# Since this game is sequential and each player's move depends on the previous move, there's no simultaneous move.
+# Therefore, there's no need to group nodes into information sets based on the inability to distinguish between moves by the opponent.
+# Each move is perfectly informed by the previous move's outcome, making the game a perfect information game.
+# In perfect information games, each decision node is uniquely identifiable by the player making the decision.
+# Hence, there's no need to use g.set_infoset() for grouping nodes into the same information set for this game description.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone")
+
+# Alice starts the game with the option to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_removes_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Alice removes two stones, Bob can remove one or two stones
+bob_after_alice_removes_2 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone after Alice removes one, Alice can remove one or two stones
+alice_after_bob_removes_1 = g.append_move(bob_after_alice_removes_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Bob removes two stones after Alice removes one, Alice can remove one or two stones
+# This leads to a situation where Alice can only remove one stone, leading to her loss
+g.set_outcome(bob_after_alice_removes_1.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Alice removes one stone after Bob removes one, Bob can remove one or two stones
+# This leads to a situation where Bob can only remove one stone, leading to his loss
+g.set_outcome(alice_after_bob_removes_1.children[0], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Alice removes two stones after Bob removes one, Alice loses
+g.set_outcome(alice_after_bob_removes_1.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Bob removes one stone after Alice removes two, Alice can remove one or two stones
+alice_after_bob_removes_1_again = g.append_move(bob_after_alice_removes_2.children[0], "Alice", ["Remove 1", "Remove 2"])
+
+# If Bob removes two stones after Alice removes two, Alice loses
+g.set_outcome(bob_after_alice_removes_2.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# If Alice removes one stone after Bob removes one (again), Bob can only remove one stone, leading to his loss
+g.set_outcome(alice_after_bob_removes_1_again.children[0], g.add_outcome([1, -1], label="Alice wins"))
+
+# If Alice removes two stones after Bob removes one (again), Alice loses
+g.set_outcome(alice_after_bob_removes_1_again.children[1], g.add_outcome([-1, 1], label="Bob wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs an extensive-form game where Alice and Bob take turns deciding how many stones to remove from a pile, aiming to avoid being the one to take the last stone. The game tree is built step by step, with outcomes assigned based on the sequence of moves leading to a player's win or loss.
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice starts the game with the option to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# Scenario where Alice removes one stone
+# Bob can then remove one or two stones
+bob_after_alice1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+# If Bob removes one stone, Alice can again choose to remove one or two stones
+alice_after_bob1 = g.append_move(bob_after_alice1.children[0], "Alice", ["Remove 1", "Remove 2"])
+# If Alice removes one stone, Bob has the choice to remove one or two stones
+bob_after_alice2 = g.append_move(alice_after_bob1.children[0], "Bob", ["Remove 1", "Remove 2"])
+# Outcomes based on Bob's choice
+g.set_outcome(bob_after_alice2.children[0], g.add_outcome([-1, 1], label="Bob removes 1, loses"))
+g.set_outcome(bob_after_alice2.children[1], g.add_outcome([1, -1], label="Bob removes 2, wins"))
+# If Alice removes two stones after Bob removes one, Bob loses
+g.set_outcome(alice_after_bob1.children[1], g.add_outcome([1, -1], label="Alice removes 2, wins"))
+
+# If Bob removes two stones initially, Alice can remove one or two stones
+alice_after_bob2 = g.append_move(bob_after_alice1.children[1], "Alice", ["Remove 1", "Remove 2"])
+# Outcomes based on Alice's choice
+g.set_outcome(alice_after_bob2.children[0], g.add_outcome([1, -1], label="Alice removes 1, wins"))
+g.set_outcome(alice_after_bob2.children[1], g.add_outcome([-1, 1], label="Alice removes 2, loses"))
+
+# Scenario where Alice removes two stones initially
+# Bob can then remove one or two stones
+bob_after_alice3 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+# Outcomes based on Bob's choice
+g.set_outcome(bob_after_alice3.children[0], g.add_outcome([-1, 1], label="Bob removes 1, loses"))
+g.set_outcome(bob_after_alice3.children[1], g.add_outcome([1, -1], label="Bob removes 2, wins"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone")
+
+# Alice starts the game with the option to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+
+# If Alice removes two stones, Bob can remove one or two stones
+bob_after_alice_2 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# If Bob removes one stone after Alice removes one, Alice can remove one or two stones
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+# If Bob removes two stones after Alice removes one, Alice can remove one stone leading to her loss
+g.set_outcome(bob_after_alice_1.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice removes one stone after Bob removes one, Bob can remove one or two stones
+bob_after_alice_1_again = g.append_move(alice_after_bob_1.children[0], "Bob", ["Remove 1", "Remove 2"])
+# If Alice removes two stones after Bob removes one, Alice loses
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Bob removes one stone, Alice can only remove one stone, leading to Alice's loss
+g.set_outcome(bob_after_alice_1_again.children[0], g.add_outcome([-1, 1], label="Alice loses"))
+# If Bob removes two stones, Bob loses
+g.set_outcome(bob_after_alice_1_again.children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Bob removes one stone after Alice removes two, Alice can remove one or two stones
+alice_after_bob_2 = g.append_move(bob_after_alice_2.children[0], "Alice", ["Remove 1", "Remove 2"])
+# If Bob removes two stones after Alice removes two, Alice has only one stone left and loses
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice removes one stone after Bob removes one, Bob can only remove one stone, leading to his loss
+g.set_outcome(alice_after_bob_2.children[0], g.add_outcome([1, -1], label="Bob loses"))
+# If Alice removes two stones after Bob removes one, Alice loses
+g.set_outcome(alice_after_bob_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'NoneType' object has no attribute 'children'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players, Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Avoid the Last Stone Game")
+
+# Alice starts the game with the option to remove one or two stones
+alice_start = g.append_move(g.root, "Alice", ["Remove 1", "Remove 2"])
+
+# If Alice removes one stone, Bob can remove one or two stones
+bob_after_alice_1 = g.append_move(alice_start.children[0], "Bob", ["Remove 1", "Remove 2"])
+# If Alice removes two stones, Bob can remove one or two stones
+bob_after_alice_2 = g.append_move(alice_start.children[1], "Bob", ["Remove 1", "Remove 2"])
+
+# Scenarios after Bob's move when Alice initially removes 1 stone
+# If Bob removes one stone, Alice can again choose to remove one or two stones
+alice_after_bob_1 = g.append_move(bob_after_alice_1.children[0], "Alice", ["Remove 1", "Remove 2"])
+# If Bob removes two stones, Alice can remove one stone, leading to Alice's loss
+g.set_outcome(bob_after_alice_1.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Scenarios after Alice's second move when she and Bob both initially remove 1 stone
+# If Alice removes one stone, Bob can remove one or two stones, but only one stone is left so Bob loses
+g.set_outcome(alice_after_bob_1.children[0], g.add_outcome([1, -1], label="Bob loses"))
+# If Alice removes two stones, Alice loses
+g.set_outcome(alice_after_bob_1.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Scenarios after Bob's move when Alice initially removes 2 stones
+# If Bob removes one stone, Alice can remove one or two stones
+alice_after_bob_2 = g.append_move(bob_after_alice_2.children[0], "Alice", ["Remove 1", "Remove 2"])
+# If Bob removes two stones, Alice has only one stone left and loses
+g.set_outcome(bob_after_alice_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Scenarios after Alice's move when she initially removes 2 stones and Bob removes 1
+# If Alice removes one stone, Bob can remove one stone, leading to Bob's loss
+g.set_outcome(alice_after_bob_2.children[0], g.add_outcome([1, -1], label="Bob loses"))
+# If Alice removes two stones, Alice loses
+g.set_outcome(alice_after_bob_2.children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')

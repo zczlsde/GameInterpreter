@@ -1,0 +1,190 @@
+To construct the Extensive Form Game (EFG) for the given game description using the PyGambit library, we'll follow the game's structure step by step. The game involves four stages with three players. Player 1 moves first, choosing among actions A, B, and C. Then, Player 2 chooses between D and E without knowing Player 1's choice, indicating a need for information sets. After observing Player 2's choice, Player 1 selects between F and G. Finally, Player 3 decides between Q and W, with the payoffs determined by Player 3's choice.
+
+Here's how you can generate the EFG for this game:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with information set")
+
+# Stage 1: Player 1's move (A, B, C)
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2's move (D, E) without knowing Player 1's choice
+# We create an information set for Player 2's move since Player 2 moves without knowing Player 1's choice
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Since Player 2's decision is made without knowing Player 1's choice, all nodes at this stage belong to the same information set
+# We use the set_infoset method to group these nodes into a single information set
+# Note: We need to append moves to all nodes before grouping them into an information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[0].infoset)
+
+# Stage 3: Player 1's move (F, G) after observing Player 2's choice
+# We append moves for Player 1 at each of the nodes resulting from Player 2's decision
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3's decision (Q, W) with payoffs
+# We append moves for Player 3 and set the outcomes based on the game description
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.append_move(grandchild, "Player 3", ["Q", "W"])
+            # If Player 3 selects Q, all players receive a payoff of 3
+            g.set_outcome(grandchild.children[0], g.add_outcome([3, 3, 3], label="All 3"))
+            # If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+            g.set_outcome(grandchild.children[1], g.add_outcome([2, 2, 3], label="2 for P1 and P2, 3 for P3"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree step by step, respecting the game's sequential nature and the information sets required for Player 2's decision. The payoffs are set according to the final stage's outcomes, as described.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with information set")
+
+# Stage 1: Player 1's move (A, B, C)
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2's move (D, E) without knowing Player 1's choice
+# We create moves for Player 2 at each of Player 1's decision nodes
+for node1 in g.root.children:
+    g.append_move(node1, "Player 2", ["D", "E"])
+
+# Since Player 2's decision is made without knowing Player 1's choice, all nodes at this stage belong to the same information set
+# We need to correctly identify and group these nodes into a single information set
+# First, we ensure all moves for Player 2 have been appended
+# Then, we group these nodes into the same information set
+for i, node1 in enumerate(g.root.children):
+    for j, node2 in enumerate(node1.children):
+        if i == 0 and j == 0:  # Use the first node's infoset as the reference
+            continue
+        g.set_infoset(node2, g.root.children[0].children[0].infoset)
+
+# Stage 3: Player 1's move (F, G) after observing Player 2's choice
+# We append moves for Player 1 at each of the nodes resulting from Player 2's decision
+for node1 in g.root.children:
+    for node2 in node1.children:
+        g.append_move(node2, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3's decision (Q, W) with payoffs
+# We append moves for Player 3 and set the outcomes based on the game description
+for node1 in g.root.children:
+    for node2 in node1.children:
+        for node3 in node2.children:
+            g.append_move(node3, "Player 3", ["Q", "W"])
+            # If Player 3 selects Q, all players receive a payoff of 3
+            g.set_outcome(node3.children[0], g.add_outcome([3, 3, 3], label="All 3"))
+            # If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+            g.set_outcome(node3.children[1], g.add_outcome([2, 2, 3], label="2 for P1 and P2, 3 for P3"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with information set")
+
+# Stage 1: Player 1's move (A, B, C)
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2's move (D, E) without knowing Player 1's choice
+# Since Player 2's move is simultaneous (without knowing Player 1's choice), we create a single information set for Player 2's decision after each of Player 1's actions
+for action in ["A", "B", "C"]:
+    for node1 in g.root.children:
+        g.append_move(node1, "Player 2", ["D", "E"])
+
+# Correctly setting the information set for Player 2's moves
+# Since all of Player 2's moves are made without knowing Player 1's choice, they should be in the same information set
+# We only need to set the information set for the first pair of D, E moves, and then assign the rest to the same infoset
+infoset_reference = g.root.children[0].children[0].infoset
+for node1 in g.root.children:
+    for node2 in node1.children:
+        g.set_infoset(node2, infoset_reference)
+
+# Stage 3: Player 1's move (F, G) after observing Player 2's choice
+# We append moves for Player 1 at each of the nodes resulting from Player 2's decision
+for node1 in g.root.children:
+    for node2 in node1.children:
+        g.append_move(node2, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3's decision (Q, W) with payoffs
+# We append moves for Player 3 and set the outcomes based on the game description
+for node1 in g.root.children:
+    for node2 in node1.children:
+        for node3 in node2.children:
+            g.append_move(node3, "Player 3", ["Q", "W"])
+            # If Player 3 selects Q, all players receive a payoff of 3
+            g.set_outcome(node3.children[0], g.add_outcome([3, 3, 3], label="All 3"))
+            # If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+            g.set_outcome(node3.children[1], g.add_outcome([2, 2, 3], label="2 for P1 and P2, 3 for P3"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+append_move(): `nodes` must be terminal nodes
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with information set")
+
+# Stage 1: Player 1's move (A, B, C)
+# Append moves for Player 1 at the root of the tree
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Stage 2: Player 2's move (D, E) without knowing Player 1's choice
+# Since Player 2's moves are made without knowing Player 1's choice, we create a single information set for Player 2's decision after each of Player 1's actions
+# However, we need to append Player 2's moves to the terminal nodes resulting from Player 1's decisions
+for node1 in g.root.children:
+    g.append_move(node1, "Player 2", ["D", "E"])
+
+# Correctly setting the information set for Player 2's moves
+# Since all of Player 2's moves are made without knowing Player 1's choice, they should be in the same information set
+# We only need to set the information set for the first pair of D, E moves, and then assign the rest to the same infoset
+# This step is corrected to ensure we're not attempting to set an infoset before moves are appended
+for node1 in g.root.children[1:]:
+    for node2 in node1.children:
+        g.set_infoset(node2, g.root.children[0].children[0].infoset)
+
+# Stage 3: Player 1's move (F, G) after observing Player 2's choice
+# We append moves for Player 1 at each of the nodes resulting from Player 2's decision
+for node1 in g.root.children:
+    for node2 in node1.children:
+        g.append_move(node2, "Player 1", ["F", "G"])
+
+# Stage 4: Player 3's decision (Q, W) with payoffs
+# We append moves for Player 3 at the terminal nodes resulting from Player 1's second decision
+for node1 in g.root.children:
+    for node2 in node1.children:
+        for node3 in node2.children:
+            g.append_move(node3, "Player 3", ["Q", "W"])
+            # Set outcomes based on Player 3's decision
+            g.set_outcome(node3.children[0], g.add_outcome([3, 3, 3], label="All 3"))
+            g.set_outcome(node3.children[1], g.add_outcome([2, 2, 3], label="2 for P1 and P2, 3 for P3"))
+
+# Save the EFG
+efg = g.write(format='native')

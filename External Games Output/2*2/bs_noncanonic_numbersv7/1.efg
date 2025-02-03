@@ -1,0 +1,10 @@
+EFG 2 R "Meeting Location Selection Game" { "Fine Dining Lover" "Cafe Enthusiast" }
+""
+
+p "" 1 1 "" { "Gourmet Heaven" "Urban Buzz" } 0
+p "" 2 1 "" { "Gourmet Heaven" "Urban Buzz" } 0
+t "" 1 "Both at Gourmet Heaven" { 2, 1 }
+t "" 2 "Split Locations" { 0, 0 }
+p "" 2 1 "" { "Gourmet Heaven" "Urban Buzz" } 0
+t "" 3 "Split Locations" { 0, 0 }
+t "" 4 "Both at Urban Buzz" { 1, 2 }

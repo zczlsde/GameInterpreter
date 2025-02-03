@@ -1,0 +1,10 @@
+EFG 2 R "Military Strategy Game" { "Commander 1" "Commander 2" }
+""
+
+p "" 1 1 "" { "Offense" "Defense" } 0
+p "" 2 1 "" { "Offense" "Defense" } 0
+t "" 4 "Both Offend" { -15, -15 }
+t "" 2 "Offense vs Defense" { 5, -5 }
+p "" 2 1 "" { "Offense" "Defense" } 0
+t "" 3 "Defense vs Offense" { -5, 5 }
+t "" 1 "Both Defend" { 0, 0 }

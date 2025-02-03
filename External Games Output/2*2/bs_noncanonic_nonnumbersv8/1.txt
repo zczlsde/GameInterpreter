@@ -1,0 +1,57 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two generals, each deciding between the northern front and the eastern front.
+
+# Step 2: Determine the nature of the game.
+# The generals are making their decisions simultaneously, which means there is imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume General 1 moves first and General 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# General 1's decision node is the root node, g.root.
+# General 2's decision nodes are g.root.children[0] (if General 1 chooses the northern front) and g.root.children[1] (if General 1 chooses the eastern front).
+
+# Step 5: Group the decision nodes into information sets.
+# General 2 cannot distinguish between the actions of General 1, so General 2's decision nodes should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, General 1 and General 2.
+g = gbt.Game.new_tree(players=["General 1", "General 2"],
+                      title="Two Generals' Coordination Game")
+
+# Step 2: General 1 makes the first move, choosing between the northern front and the eastern front.
+g.append_move(g.root, "General 1", ["Northern Front", "Eastern Front"])
+
+# Step 3: General 2 makes a move after General 1, but cannot observe General 1's choice.
+# General 2's decision nodes are g.root.children[0] (if General 1 chooses the northern front)
+# and g.root.children[1] (if General 1 chooses the eastern front).
+g.append_move(g.root.children[0], "General 2", ["Northern Front", "Eastern Front"])
+g.append_move(g.root.children[1], "General 2", ["Northern Front", "Eastern Front"])
+
+# Step 4: Set the information set for General 2's decision nodes to reflect imperfect information.
+# General 2 cannot distinguish between the actions of General 1, so General 2's decision nodes should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each possible outcome.
+# If both choose the northern front, General 1 (northern strategy advocate) gets a higher payoff.
+northern_success = g.add_outcome([2, 1], label="Northern Success")
+# If both choose the eastern front, General 2 (eastern strategy advocate) gets a higher payoff.
+eastern_success = g.add_outcome([1, 2], label="Eastern Success")
+# If they choose different fronts, they both get no payoff.
+no_success = g.add_outcome([0, 0], label="No Success")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], northern_success)  # Both choose northern
+g.set_outcome(g.root.children[0].children[1], no_success)        # General 1 chooses northern, General 2 chooses eastern
+g.set_outcome(g.root.children[1].children[0], no_success)        # General 1 chooses eastern, General 2 chooses northern
+g.set_outcome(g.root.children[1].children[1], eastern_success)   # Both choose eastern
+
+# Save the EFG
+efg = g.write(format='native')
+```

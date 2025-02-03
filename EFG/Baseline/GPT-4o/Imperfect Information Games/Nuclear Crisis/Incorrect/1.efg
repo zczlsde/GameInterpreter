@@ -1,0 +1,13 @@
+EFG 2 R "Nuclear Crisis Game" { "Country A" "Country B" }
+p "" 1 1 "" { "Escalate" "Ignore" } 0
+p "" 2 1 "" { "Back down" "Escalate" } 0
+p "" 1 2 "" { "Retreat" "Detonate" } 0
+p "" 2 2 "" { "Retreat" "Detonate" } 0
+t "" 1 "Small Positive Payoff" { 1, 1 }
+t "" 2 "Country B Loses Face" { -1, 1 }
+t "" 3 "Country A Retreats" { -2, 3 }
+t "" 4 "Country A Detonates" { 5, -5 }
+t "" 5 "Country B Retreats" { 3, -2 }
+t "" 6 "Country B Detonates" { -5, 5 }
+t "" 7 "Nuclear Disaster" { -10, -10 }
+t "" 8 "Both Retreat" { -1, -1 }

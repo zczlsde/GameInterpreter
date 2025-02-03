@@ -1,0 +1,33 @@
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Diplomatic Strategy Game")
+
+# Country B decides whether to Accept the status quo or Rebel
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts, Country A can choose to continue to Tax or Drop Taxes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+# Set outcomes for Country A's decisions after Country B accepts
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([6, -2], label="Tax"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4, 0], label="Drop Taxes"))
+
+# If Country B rebels, Country A can choose to Grant Independence or Suppress
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+# Set outcome for granting independence
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 3], label="Grant Independence"))
+
+# If Country A tries to suppress the rebellion, a move of nature determines the outcome of the war
+g.append_move(g.root.children[1].children[1], g.players.chance, ["B Wins", "A Wins"])
+# Set the probabilities for the outcomes of the war
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+# Set outcomes for the war
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, -3], label="B Wins War"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-1, -5], label="A Wins War"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet generates an Extensive Form Game (EFG) for a diplomatic strategy game involving two countries, Country A and Country B, using the PyGambit library. The game starts with Country B deciding whether to accept the status quo or rebel. If Country B accepts, Country A can choose to continue taxing or drop taxes, with different outcomes for each choice. If Country B rebels, Country A can either grant independence or try to suppress the rebellion. The suppression attempt leads to a war, the outcome of which is determined by a move of nature, with specified probabilities for each side winning. The outcomes and their associated payoffs are set accordingly for each possible decision path in the game.

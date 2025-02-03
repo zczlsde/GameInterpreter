@@ -1,0 +1,69 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two employees (players) who can either Share or Withhold their ideas.
+
+# Step 2: Determine the structure of the game.
+# Since both employees make their decisions simultaneously, this involves imperfect information.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Employee 1 moves first and Employee 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Employee 1's decision node.
+# Employee 1 has two actions: Share and Withhold.
+# Employee 2's decision nodes are g.root.children[0] and g.root.children[1], corresponding to Employee 1's actions Share and Withhold.
+
+# Step 5: Group Employee 2's decision nodes in the same information set.
+# Since Employee 2 does not know Employee 1's action, Employee 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two employees (players) who can either Share or Withhold their ideas.
+players = ["Employee 1", "Employee 2"]
+
+# Step 2: Create a new extensive-form game with the identified players.
+g = gbt.Game.new_tree(players=players, title="Idea Sharing Game")
+
+# Step 3: Model the game with a sequential structure.
+# Assume Employee 1 moves first and Employee 2 moves second.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Employee 1's decision node.
+# Employee 1 has two actions: Share and Withhold.
+g.append_move(g.root, "Employee 1", ["Share", "Withhold"])
+
+# Employee 2's decision nodes are g.root.children[0] and g.root.children[1], 
+# corresponding to Employee 1's actions Share and Withhold.
+g.append_move(g.root.children[0], "Employee 2", ["Share", "Withhold"])
+g.append_move(g.root.children[1], "Employee 2", ["Share", "Withhold"])
+
+# Step 5: Group Employee 2's decision nodes in the same information set.
+# Since Employee 2 does not know Employee 1's action, Employee 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes and payoffs for each possible combination of actions.
+# If both share openly, the project flourishes and they achieve great results, earning joint recognition.
+flourish_outcome = g.add_outcome([2, 2], label="Flourish")
+
+# If one shares while the other withholds, the sharer contributes more but feels exploited,
+# while the withholder benefits more and gains more recognition.
+exploited_outcome = g.add_outcome([-1, 3], label="Exploited")
+benefit_outcome = g.add_outcome([3, -1], label="Benefit")
+
+# If neither shares openly, the project suffers, and they both receive mediocre evaluations.
+mediocre_outcome = g.add_outcome([0, 0], label="Mediocre")
+
+# Step 7: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], flourish_outcome)  # Both Share
+g.set_outcome(g.root.children[0].children[1], exploited_outcome)  # Employee 1 Shares, Employee 2 Withholds
+g.set_outcome(g.root.children[1].children[0], benefit_outcome)    # Employee 1 Withholds, Employee 2 Shares
+g.set_outcome(g.root.children[1].children[1], mediocre_outcome)   # Both Withhold
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,55 @@
+```python
+# Thought process:
+# 1. The game involves two scientists who can either collaborate or work independently.
+# 2. Since the decision to collaborate or work independently is made simultaneously, this game involves imperfect information.
+# 3. To model the game with a sequential structure, assume Scientist 1 moves first and Scientist 2 moves second.
+# 4. The starting node, g.root, is Scientist 1's decision node.
+# 5. Scientist 1 has two actions: Collaborate or Work Independently.
+# 6. Scientist 2's decision nodes are g.root.children[0] (Collaborate) and g.root.children[1] (Work Independently).
+# 7. Scientist 2, moving simultaneously, does not know which action Scientist 1 has taken.
+# 8. Therefore, Scientist 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Scientist 1 and Scientist 2
+g = gbt.Game.new_tree(players=["Scientist 1", "Scientist 2"],
+                      title="Collaborative Research Game")
+
+# Step 1: Scientist 1 makes the first move with two possible actions: Collaborate or Work Independently
+g.append_move(g.root, "Scientist 1", ["Collaborate", "Work Independently"])
+
+# Step 2: Scientist 2 makes a move without knowing Scientist 1's action, hence imperfect information
+# Scientist 2 has the same two actions: Collaborate or Work Independently
+g.append_move(g.root.children[0], "Scientist 2", ["Collaborate", "Work Independently"])
+g.append_move(g.root.children[1], "Scientist 2", ["Collaborate", "Work Independently"])
+
+# Step 3: Set the information set for Scientist 2's decision nodes to reflect imperfect information
+# Scientist 2 does not know which action Scientist 1 has taken
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes for each possible combination of actions
+# Both collaborate: groundbreaking discovery, high reward
+collaborate_outcome = g.add_outcome([3, 3], label="Groundbreaking Discovery")
+
+# Scientist 1 collaborates, Scientist 2 works independently: Scientist 2 secures moderate publication
+independent_s2_outcome = g.add_outcome([0, 2], label="Moderate Publication for Scientist 2")
+
+# Scientist 1 works independently, Scientist 2 collaborates: Scientist 1 secures moderate publication
+independent_s1_outcome = g.add_outcome([2, 0], label="Moderate Publication for Scientist 1")
+
+# Both work independently: incremental findings, lesser recognition
+incremental_outcome = g.add_outcome([1, 1], label="Incremental Findings")
+
+# Step 5: Assign outcomes to the terminal nodes
+g.set_outcome(g.root.children[0].children[0], collaborate_outcome)  # Both collaborate
+g.set_outcome(g.root.children[0].children[1], independent_s2_outcome)  # Scientist 1 collaborates, Scientist 2 works independently
+g.set_outcome(g.root.children[1].children[0], independent_s1_outcome)  # Scientist 1 works independently, Scientist 2 collaborates
+g.set_outcome(g.root.children[1].children[1], incremental_outcome)  # Both work independently
+
+# Save the EFG
+efg = g.write(format='native')
+```

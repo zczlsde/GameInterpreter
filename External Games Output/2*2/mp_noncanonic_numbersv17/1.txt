@@ -1,0 +1,73 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the boutique digital marketing agency and the large marketing firm.
+# Both players have two actions: focus on a viral social media campaign or a high-profile influencer partnership.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both players make their decisions independently and without knowledge of the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the large marketing firm moves first and the boutique agency moves second.
+
+# Step 4: Identify the decision nodes for each player.
+# The starting node, g.root, is the large marketing firm's decision node.
+# The large marketing firm has two actions, so the boutique agency's decision nodes are g.root.children[0] and g.root.children[1].
+
+# Step 5: Group the decision nodes into information sets.
+# Since the boutique agency does not know which action the large marketing firm has taken, 
+# the boutique agency's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Identify the players and their actions.
+# There are two players: the boutique digital marketing agency and the large marketing firm.
+# Both players have two actions: focus on a viral social media campaign or a high-profile influencer partnership.
+
+# Step 2: Determine the nature of the game.
+# The game is simultaneous because both players make their decisions independently and without knowledge of the other's choice.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the large marketing firm moves first and the boutique agency moves second.
+
+# Create a new game with the two players
+g = gbt.Game.new_tree(players=["Boutique Agency", "Large Firm"],
+                      title="Marketing Strategy Game")
+
+# Step 4: Identify the decision nodes for each player.
+# The starting node, g.root, is the large marketing firm's decision node.
+# The large marketing firm has two actions: Viral Campaign and Influencer Partnership.
+g.append_move(g.root, "Large Firm", ["Viral Campaign", "Influencer Partnership"])
+
+# The boutique agency's decision nodes are g.root.children[0] and g.root.children[1].
+# The boutique agency also has two actions: Viral Campaign and Influencer Partnership.
+g.append_move(g.root.children[0], "Boutique Agency", ["Viral Campaign", "Influencer Partnership"])
+g.append_move(g.root.children[1], "Boutique Agency", ["Viral Campaign", "Influencer Partnership"])
+
+# Step 5: Group the decision nodes into information sets.
+# Since the boutique agency does not know which action the large marketing firm has taken, 
+# the boutique agency's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Set the outcomes for each possible combination of actions.
+# If both choose the same strategy, the boutique agency wins 4 points, and the large firm loses 4 points.
+# If their choices differ, the large firm wins 6 points, and the boutique agency loses 6 points.
+
+# Outcomes for when both choose the same strategy
+same_strategy_outcome = g.add_outcome([4, -4], label="Same Strategy")
+
+# Outcomes for when they choose different strategies
+different_strategy_outcome = g.add_outcome([-6, 6], label="Different Strategy")
+
+# Set outcomes for each terminal node
+g.set_outcome(g.root.children[0].children[0], same_strategy_outcome)  # Both choose Viral Campaign
+g.set_outcome(g.root.children[0].children[1], different_strategy_outcome)  # Large Firm: Viral, Boutique: Influencer
+g.set_outcome(g.root.children[1].children[0], different_strategy_outcome)  # Large Firm: Influencer, Boutique: Viral
+g.set_outcome(g.root.children[1].children[1], same_strategy_outcome)  # Both choose Influencer Partnership
+
+# Save the EFG
+efg = g.write(format='native')
+```

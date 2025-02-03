@@ -1,0 +1,20 @@
+Given the complexity and the detailed nature of the game described, the EFG representation will be a simplified version that captures the essence of the game's structure. Due to the constraints of this format, some details will be abstracted for brevity.
+
+```
+EFG 2 R "Three-card game between Alice and Bob" { "Alice" "Bob" }
+c "" 1 "" { "JQ" 1/6 "JK" 1/6 "QJ" 1/6 "QK" 1/6 "KJ" 1/6 "KQ" 1/6 } 0
+    p "" 1 1 "" { "Check" "Bet" } 0
+        p "" 2 2 "" { "Check" "Bet" } 0
+            t "" 1 "Higher card wins 1" { 1, -1 }
+            t "" 2 "Higher card wins 1" { -1, 1 }
+            p "" 1 3 "" { "Fold" "Call" } 0
+                t "" 3 "Bob wins 1" { -1, 1 }
+                t "" 4 "Higher card wins 2" { 2, -2 }
+                t "" 5 "Higher card wins 2" { -2, 2 }
+        p "" 2 4 "" { "Fold" "Call" } 0
+            t "" 6 "Alice wins 1" { 1, -1 }
+            t "" 7 "Higher card wins 2" { 2, -2 }
+            t "" 8 "Higher card wins 2" { -2, 2 }
+```
+
+This representation simplifies the game by not detailing each card's specific outcomes but rather focusing on the decision structure. The chance node at the beginning represents the six possible allocations of cards with equal probability. Following this, the decision nodes for Alice and Bob are represented, including their options to check, bet, fold, or call. The terminal nodes summarize the outcomes based on the actions taken, with payoffs reflecting the net gain or loss for each player. The specific outcomes for each card combination (JQ, JK, etc.) and the exact payoffs for each scenario (e.g., which card is higher) are abstracted into general outcomes for brevity and clarity.

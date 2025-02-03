@@ -1,0 +1,68 @@
+```python
+# Step-by-step thought process:
+# This game is a sequential game with perfect information, as each player knows the state of the game at every decision point.
+# Therefore, there are no information sets to be set for imperfect information, as each player knows exactly where they are in the game tree.
+# As a result, no g.set_infoset() function is needed in this game.
+
+# Since there is no imperfect information in this game, no information sets need to be defined.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Stone Game")
+
+# Alice starts the game by taking one or two stones
+g.append_move(g.root, "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 or 2 stones
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 stone (Alice loses)
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Take 1"])
+g.set_outcome(g.root.children[0].children[0].children[0].children[0].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Bob takes 2 stones, Bob loses
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones, Bob can take 1 stone (Bob loses)
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Take 1"])
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Bob takes 2 stones, Alice can take 1 or 2 stones
+g.append_move(g.root.children[0].children[1], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 stone (Bob loses)
+g.append_move(g.root.children[0].children[1].children[0], "Bob", ["Take 1"])
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones, Alice loses
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Alice takes 2 stones initially, Bob can take 1 or 2 stones
+g.append_move(g.root.children[1], "Bob", ["Take 1", "Take 2"])
+
+# If Bob takes 1 stone, Alice can take 1 or 2 stones
+g.append_move(g.root.children[1].children[0], "Alice", ["Take 1", "Take 2"])
+
+# If Alice takes 1 stone, Bob can take 1 stone (Bob loses)
+g.append_move(g.root.children[1].children[0].children[0], "Bob", ["Take 1"])
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([1, -1], label="Bob loses"))
+
+# If Alice takes 2 stones, Alice loses
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-1, 1], label="Alice loses"))
+
+# If Bob takes 2 stones, Alice can take 1 stone (Alice loses)
+g.append_move(g.root.children[1].children[1], "Alice", ["Take 1"])
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, 1], label="Alice loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

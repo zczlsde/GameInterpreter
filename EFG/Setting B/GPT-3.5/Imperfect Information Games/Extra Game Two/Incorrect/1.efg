@@ -1,0 +1,49 @@
+EFG 2 R "Imperfect information game" { "Player 1" "Player 2" "Player 3" }
+""
+
+p "" 1 1 "" { "A" "B" "C" } 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 1 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 1 "" { "Q" "W" } 0
+t "" 0
+t "" 0
+p "" 1 2 "" { "F" "G" } 0
+p "" 3 2 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 2 "" { "Q" "W" } 0
+t "" 0
+t "" 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 3 "" { "F" "G" } 0
+p "" 3 3 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 3 "" { "Q" "W" } 0
+t "" 0
+t "" 0
+p "" 1 3 "" { "F" "G" } 0
+p "" 3 4 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 4 "" { "Q" "W" } 0
+t "" 0
+t "" 0
+p "" 2 1 "" { "D" "E" } 0
+p "" 1 4 "" { "F" "G" } 0
+p "" 3 5 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 5 "" { "Q" "W" } 0
+t "" 0
+t "" 0
+p "" 1 4 "" { "F" "G" } 0
+p "" 3 6 "" { "Q" "W" } 0
+t "" 1 "All receive 3" { 3, 3, 3 }
+t "" 2 "P1 and P2 receive 2, P3 receive 3" { 2, 2, 3 }
+p "" 3 6 "" { "Q" "W" } 0
+t "" 0
+t "" 0

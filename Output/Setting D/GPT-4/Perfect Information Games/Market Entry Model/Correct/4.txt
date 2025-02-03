@@ -1,0 +1,47 @@
+```python
+# Since Firm 2's decision to enter or out is the first move and directly affects the subsequent decisions of Firm 1,
+# there is no need for an information set for Firm 2's decision as it is perfectly informed.
+
+# However, to represent the game accurately, we should consider the sequential nature of the decisions.
+# After Firm 2 decides to enter, Firm 1 must decide whether to Fight or Accommodate.
+# This decision by Firm 1 does not involve imperfect information as it is a direct response to Firm 2's entry.
+# Therefore, there are no information sets to be set for Firm 1 either, as Firm 1's decision is made with full knowledge of Firm 2's action.
+
+# In summary, this game does not require the use of set_infoset() due to its structure and the nature of information available to both firms.
+# Each firm's decision is made with perfect information about the preceding actions.
+```
+
+Given the game description and the requirements, we will construct an extensive-form game using the PyGambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and if it enters, Firm 1 decides how to compete. The payoffs are structured based on the conditions provided. Since the game is sequential and each firm's decision is made with perfect information about the preceding actions, there's no need for information sets to handle imperfect information.
+
+Here's the Python code to generate the EFG for this game:
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides whether to enter the market or not
+g.append_move(g.root, "Firm 2", ["Enter", "Out"])
+
+# If Firm 2 enters, Firm 1 decides how to compete: Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the conditions provided:
+# Firm 1 earns more if Firm 2 does not enter
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="No Entry"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 2], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, they earn the same amount
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1.5, 1.5], label="Accommodate"))
+
+# Since the game is sequential with perfect information, there's no need for information sets for imperfect information.
+# Therefore, we do not use g.set_infoset() in this game.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game where Firm 2 first decides whether to enter the market. If Firm 2 enters, Firm 1 then chooses how to respond. The payoffs are set according to the conditions provided, ensuring that the game's strategic structure is accurately represented.

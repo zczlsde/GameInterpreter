@@ -1,0 +1,62 @@
+```python
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Stage 2: Player 1 observes the outcome of stage 1 (L or R) and chooses either l or r.
+# Since Player 1 observes the outcome, there's no need for an information set here.
+# Stage 3: Player 1 chooses again either A or B but has forgotten the outcome of stage 1.
+# She only remembers her choice in stage 2, not whether it was following L or R.
+# Therefore, her decisions in stage 3 based on choosing l or r in stage 2 need to be grouped into information sets.
+# There will be two information sets in stage 3:
+# 1. One for the choices following her initial choice of l (regardless of L or R in stage 1).
+# 2. One for the choices following her initial choice of r (regardless of L or R in stage 1).
+
+# Assuming the game tree is constructed with nodes for each stage and choice,
+# and assuming the nodes are named sequentially as they are created,
+# the nodes for Player 1's decisions in stage 3 following l would be something like:
+# g.root.children[0].children[0] (L then l), g.root.children[1].children[0] (R then l)
+# And for decisions following r:
+# g.root.children[0].children[1] (L then r), g.root.children[1].children[1] (R then r)
+
+# Grouping stage 3 decisions into information sets based on stage 2 decisions:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset) # Grouping choices following l
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset) # Grouping choices following r
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with one player
+g = gbt.Game.new_tree(players=["Player 1"], title="Three-stage game with imperfect recall")
+
+# Stage 1: Chance node determines L or R with equal probabilities.
+# Append a chance move at the root with actions L and R.
+g.append_move(g.root, g.players.chance, ["L", "R"])
+# Set the probabilities for L and R to 1/2 each.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 observes the outcome of stage 1 and chooses either l or r.
+# Append moves for Player 1 at the outcome of the chance node.
+g.append_move(g.root.children[0], "Player 1", ["l", "r"])  # After L
+g.append_move(g.root.children[1], "Player 1", ["l", "r"])  # After R
+
+# Stage 3: Player 1 chooses again either A or B, forgetting the outcome of stage 1.
+# Append moves for Player 1 at the outcomes of stage 2.
+# For each choice in stage 2 (l or r), append moves A and B.
+g.append_move(g.root.children[0].children[0], "Player 1", ["A", "B"])  # L then l
+g.append_move(g.root.children[0].children[1], "Player 1", ["A", "B"])  # L then r
+g.append_move(g.root.children[1].children[0], "Player 1", ["A", "B"])  # R then l
+g.append_move(g.root.children[1].children[1], "Player 1", ["A", "B"])  # R then r
+
+# Set all payoffs to 0 for simplicity.
+for node in g.root.children:
+    for child in node.children:
+        for grandchild in child.children:
+            g.set_outcome(grandchild, g.add_outcome([0]))
+
+# Since Player 1 forgets the outcome of stage 1 in stage 3, we need to group the decisions in stage 3 into information sets.
+# Grouping stage 3 decisions into information sets based on stage 2 decisions:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset) # Grouping choices following l
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset) # Grouping choices following r
+
+# Save the EFG
+efg = g.write(format='native')
+```

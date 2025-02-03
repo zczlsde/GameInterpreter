@@ -1,0 +1,11 @@
+EFG 2 R "Coin Doubling Game" { "Alice" "Bob" }
+p "" 1 1 "" { "Push" "Take" } 0
+    p "" 2 1 "" { "Push" "Take" } 0
+        p "" 1 2 "" { "Push" "Take" } 0
+            p "" 2 2 "" { "Push" "Take" } 0
+                t "" 1 "Alice 16, Bob 4" { 16, 4 }
+                t "" 2 "Alice 4, Bob 16" { 4, 16 }
+            t "" 3 "Alice 4, Bob 8" { 4, 8 }
+        t "" 4 "Alice 8, Bob 2" { 8, 2 }
+    t "" 5 "Alice 2, Bob 8" { 2, 8 }
+t "" 6 "Alice 1, Bob 4" { 1, 4 }

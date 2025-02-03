@@ -1,0 +1,10 @@
+EFG 2 R "Gallery Promotion Game" { "Small Gallery Owner" "Big Gallery Owner" }
+""
+
+p "" 2 1 "" { "Painter1" "Painter2" } 0
+p "" 1 1 "" { "Painter1" "Painter2" } 0
+t "" 1 "Small Gallery Profits" { 1, -1 }
+t "" 2 "Big Gallery Profits" { -1, 1 }
+p "" 1 1 "" { "Painter1" "Painter2" } 0
+t "" 2 "Big Gallery Profits" { -1, 1 }
+t "" 1 "Small Gallery Profits" { 1, -1 }

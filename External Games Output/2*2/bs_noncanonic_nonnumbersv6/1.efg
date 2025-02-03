@@ -1,0 +1,10 @@
+EFG 2 R "Politicians' Decision on Bills" { "Politician 1" "Politician 2" }
+""
+
+p "" 1 1 "" { "Support Healthcare" "Support Education" } 0
+p "" 2 1 "" { "Support Healthcare" "Support Education" } 0
+t "" 1 "Both Support Healthcare" { 2, 1 }
+t "" 3 "Different Bills" { 0, 0 }
+p "" 2 1 "" { "Support Healthcare" "Support Education" } 0
+t "" 3 "Different Bills" { 0, 0 }
+t "" 2 "Both Support Education" { 1, 2 }

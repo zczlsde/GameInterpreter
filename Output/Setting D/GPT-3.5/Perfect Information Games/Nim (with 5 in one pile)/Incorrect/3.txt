@@ -1,0 +1,53 @@
+```python
+# Set the information sets for the game described below
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Stone removal game")
+
+# Step 2: Add chance nodes for the stone removal game
+g.append_move(g.root, g.players.chance, ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[1], "Bob", ["Bob 1", "Bob 2"])
+
+# Step 3: Set the information sets for the decision nodes
+# Group the decision nodes for Alice and Bob in the same information set where they cannot distinguish between the number of stones removed
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0].children[1], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[0].children[1].infoset)
+```
+
+```python
+# Set the information sets for the game described below
+
+# Step 1: Create a new game tree with two players, Alice and Bob
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Stone removal game")
+
+# Step 2: Add chance nodes for the stone removal game
+g.append_move(g.root, g.players.chance, ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[0], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[0].children[0].children[1], "Alice", ["Alice 1", "Alice 2"])
+g.append_move(g.root.children[0].children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[0].children[1], "Bob", ["Bob 1", "Bob 2"])
+g.append_move(g.root.children[1], "Bob", ["Bob 1", "Bob 2"])
+
+# Step 3: Set the information sets for the decision nodes
+# Group the decision nodes for Alice and Bob in the same information set where they cannot distinguish between the number of stones removed
+g.set_infoset(g.root.children[0].children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0].children[1], g.root.children[0].children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[0].children[1].infoset)
+```

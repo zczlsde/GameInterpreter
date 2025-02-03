@@ -1,0 +1,44 @@
+```python
+import pygambit as gbt
+
+# Create a new game with a title indicating the scenario
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"],
+                      title="Market Entry Game")
+
+# Step 1: Add a chance node to determine the strength of the new manufacturer
+# The chance node has two outcomes: Strong (S) with probability 2/3 and Weak (W) with probability 1/3
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# Step 2: For each outcome of the chance node, the new manufacturer sends a signal
+# This results in four branches: Strong-Strong, Strong-Weak, Weak-Strong, Weak-Weak
+for node in g.root.children:
+    g.append_move(node, "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# Step 3: The existing manufacturer makes a decision based on the observed signal
+# Since the existing manufacturer cannot distinguish the strength directly, they react to the signal
+# This step adds moves for the existing manufacturer to either Fight (F) or Adapt (A) based on the signal
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Step 4: Define the outcomes based on the combinations of actions
+# The outcomes are defined based on the game description provided
+# Strong-Strong Signal
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0], label="SS-Fight"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1], label="SS-Adapt"))
+# Strong-Weak Signal
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0], label="SW-Fight"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1], label="SW-Adapt"))
+# Weak-Strong Signal
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2], label="WS-Fight"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1], label="WS-Adapt"))
+# Weak-Weak Signal
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2], label="WW-Fight"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1], label="WW-Adapt"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive form game (EFG) for the market entry scenario using the PyGambit library. The game starts with a chance node determining the new manufacturer's strength. Following this, the new manufacturer sends a signal (either strong or weak), and based on this signal, the existing manufacturer decides to either fight or adapt. The outcomes and their corresponding payoffs are set according to the game description provided.

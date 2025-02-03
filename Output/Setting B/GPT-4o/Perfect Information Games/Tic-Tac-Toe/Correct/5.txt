@@ -1,0 +1,51 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: "X" and "O"
+g = gbt.Game.new_tree(players=["X", "O"], title="Tic-Tac-Toe Game")
+
+# The current board state is:
+# e | o | e
+# e | x | o
+# x | x | o
+# "X" is the next to move
+
+# "X" can place the mark on (0, 0), (0, 2), and (1, 0)
+g.append_move(g.root, "X", ["(0, 0)", "(0, 2)", "(1, 0)"])
+
+# If "X" places the mark on (0, 0)
+# "O" can then place the mark on (0, 2) and (1, 0)
+g.append_move(g.root.children[0], "O", ["(0, 2)", "(1, 0)"])
+
+# If "O" places the mark on (0, 2), "O" wins
+o_wins = g.add_outcome([-1, 1], label="O wins")
+g.set_outcome(g.root.children[0].children[0], o_wins)
+
+# If "O" places the mark on (1, 0)
+# "X" can then place the mark on (0, 2)
+g.append_move(g.root.children[0].children[1], "X", ["(0, 2)"])
+
+# If "X" places the mark on (0, 2), "X" wins
+x_wins = g.add_outcome([1, -1], label="X wins")
+g.set_outcome(g.root.children[0].children[1].children[0], x_wins)
+
+# If "X" places the mark on (0, 2), "X" wins
+g.set_outcome(g.root.children[1], x_wins)
+
+# If "X" places the mark on (1, 0)
+# "O" can then place the mark on (0, 0) and (0, 2)
+g.append_move(g.root.children[2], "O", ["(0, 0)", "(0, 2)"])
+
+# If "O" places the mark on (0, 0)
+# "X" can then place the mark on (0, 2)
+g.append_move(g.root.children[2].children[0], "X", ["(0, 2)"])
+
+# If "X" places the mark on (0, 2), "X" wins
+g.set_outcome(g.root.children[2].children[0].children[0], x_wins)
+
+# If "O" places the mark on (0, 2), "O" wins
+g.set_outcome(g.root.children[2].children[1], o_wins)
+
+# Save the EFG
+efg = g.write(format='native')
+```

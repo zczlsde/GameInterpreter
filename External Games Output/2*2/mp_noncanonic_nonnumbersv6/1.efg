@@ -1,0 +1,10 @@
+EFG 2 R "Holiday Sale Discount Game" { "Local Store" "National Retail Chain" }
+""
+
+p "" 1 1 "" { "Electronics" "Clothing" } 0
+p "" 2 1 "" { "Electronics" "Clothing" } 0
+t "" 1 "Local benefits" { 1, -1 }
+t "" 3 "National benefits" { -1, 1 }
+p "" 2 1 "" { "Electronics" "Clothing" } 0
+t "" 4 "National benefits" { -1, 1 }
+t "" 2 "Local benefits" { 1, -1 }

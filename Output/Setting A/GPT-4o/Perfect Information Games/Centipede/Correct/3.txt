@@ -1,0 +1,52 @@
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Pile Game")
+
+# Alice makes the first move: she can either take the larger pile or push the piles to Bob
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice takes the larger pile, the game ends with Alice getting 4 coins and Bob getting 1 coin
+g.set_outcome(g.root.children[0], g.add_outcome([4, 1], label="Alice takes 4"))
+
+# If Alice pushes, the piles double and it's Bob's turn
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes the larger pile, the game ends with Bob getting 8 coins and Alice getting 2 coins
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([2, 8], label="Bob takes 8"))
+
+# If Bob pushes, the piles double again and it's Alice's turn
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice takes the larger pile, the game ends with Alice getting 16 coins and Bob getting 4 coins
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([16, 4], label="Alice takes 16"))
+
+# If Alice pushes, the piles double again and it's Bob's turn
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob takes the larger pile, the game ends with Bob getting 32 coins and Alice getting 8 coins
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([8, 32], label="Bob takes 32"))
+
+# If Bob pushes, the game ends with Alice getting the larger pile (64 coins) and Bob getting the smaller pile (16 coins)
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], g.add_outcome([64, 16], label="Final push"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+### Explanation:
+
+1. **Game Setup**: We start by creating a new extensive-form game with two players, Alice and Bob.
+
+2. **Alice's First Move**: Alice has the option to either take the larger pile (4 coins) or push the piles to Bob. If she takes, the game ends with her receiving 4 coins and Bob receiving 1 coin.
+
+3. **Bob's First Move**: If Alice pushes, the piles double to 2 and 8 coins, and Bob can either take the larger pile or push the piles back to Alice. If he takes, the game ends with him receiving 8 coins and Alice receiving 2 coins.
+
+4. **Alice's Second Move**: If Bob pushes, the piles double again to 4 and 16 coins, and Alice can either take the larger pile or push the piles back to Bob. If she takes, the game ends with her receiving 16 coins and Bob receiving 4 coins.
+
+5. **Bob's Second Move**: If Alice pushes, the piles double again to 8 and 32 coins, and Bob can either take the larger pile or push the piles back to Alice. If he takes, the game ends with him receiving 32 coins and Alice receiving 8 coins.
+
+6. **Final Outcome**: If Bob pushes, the game ends with Alice receiving the larger pile (64 coins) and Bob receiving the smaller pile (16 coins).
+
+This code models the game as described, with each player's options and the resulting outcomes based on their choices.

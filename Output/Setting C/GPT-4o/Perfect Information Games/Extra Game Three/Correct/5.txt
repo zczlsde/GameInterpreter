@@ -1,0 +1,70 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game starts with a chance node that selects one of four possible outcomes: A, B, C, or D.
+# 2. Player 1 observes the result of the chance node and chooses from three actions: E, F, or G.
+# 3. Player 2, having observed Player 1's choice, will choose between two actions: Q or W.
+# 4. Since Player 1 observes the outcome of the chance node, there is no imperfect information for Player 1.
+# 5. Player 2 observes Player 1's choice, so there is no imperfect information for Player 2 either.
+# 6. Therefore, there are no information sets to be set in this game as both players have perfect information at their decision nodes.
+
+# Since there are no information sets to be set, the code block is empty.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Chance and Sequential Moves Game")
+
+# Step 1: The game starts with a chance node that selects one of four possible outcomes: A, B, C, or D.
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+
+# Set the probabilities for the chance node outcomes
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4), gbt.Rational(1, 4)])
+
+# Step 2: Player 1 observes the result of the chance node and chooses from three actions: E, F, or G.
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["E", "F", "G"])
+
+# Step 3: Player 2, having observed Player 1's choice, will choose between two actions: Q or W.
+for node in g.root.children:
+    for child in node.children:
+        g.append_move(child, "Player 2", ["Q", "W"])
+
+# Step 4: Set the payoffs for each terminal node based on the outcomes and actions
+# Outcome A
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, -1], label="A, E, Q"))
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, -2], label="A, E, W"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([1, -1], label="A, F, Q"))
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, -2], label="A, F, W"))
+g.set_outcome(g.root.children[0].children[2].children[0], g.add_outcome([1, -1], label="A, G, Q"))
+g.set_outcome(g.root.children[0].children[2].children[1], g.add_outcome([2, -2], label="A, G, W"))
+
+# Outcome B
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([3, -3], label="B, E, Q"))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([-3, 3], label="B, E, W"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([3, -3], label="B, F, Q"))
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-3, 3], label="B, F, W"))
+g.set_outcome(g.root.children[1].children[2].children[0], g.add_outcome([3, -3], label="B, G, Q"))
+g.set_outcome(g.root.children[1].children[2].children[1], g.add_outcome([-3, 3], label="B, G, W"))
+
+# Outcome C
+g.set_outcome(g.root.children[2].children[0].children[0], g.add_outcome([0, 0], label="C, E, Q"))
+g.set_outcome(g.root.children[2].children[0].children[1], g.add_outcome([-1, 1], label="C, E, W"))
+g.set_outcome(g.root.children[2].children[1].children[0], g.add_outcome([0, 0], label="C, F, Q"))
+g.set_outcome(g.root.children[2].children[1].children[1], g.add_outcome([-1, 1], label="C, F, W"))
+g.set_outcome(g.root.children[2].children[2].children[0], g.add_outcome([0, 0], label="C, G, Q"))
+g.set_outcome(g.root.children[2].children[2].children[1], g.add_outcome([-1, 1], label="C, G, W"))
+
+# Outcome D
+g.set_outcome(g.root.children[3].children[0].children[0], g.add_outcome([4, -4], label="D, E, Q"))
+g.set_outcome(g.root.children[3].children[0].children[1], g.add_outcome([-4, 4], label="D, E, W"))
+g.set_outcome(g.root.children[3].children[1].children[0], g.add_outcome([4, -4], label="D, F, Q"))
+g.set_outcome(g.root.children[3].children[1].children[1], g.add_outcome([-4, 4], label="D, F, W"))
+g.set_outcome(g.root.children[3].children[2].children[0], g.add_outcome([4, -4], label="D, G, Q"))
+g.set_outcome(g.root.children[3].children[2].children[1], g.add_outcome([-4, 4], label="D, G, W"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

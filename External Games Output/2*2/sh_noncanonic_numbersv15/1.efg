@@ -1,0 +1,10 @@
+EFG 2 R "Tech Companies Collaboration Game" { "Company 1" "Company 2" }
+""
+
+p "" 1 1 "" { "Commit" "Not Commit" } 0
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 1 "Breakthrough" { 10, 10 }
+t "" 2 "Company 1 Commit, Company 2 Not" { 0, 5 }
+p "" 2 1 "" { "Commit" "Not Commit" } 0
+t "" 3 "Company 1 Not, Company 2 Commit" { 5, 0 }
+t "" 4 "Incremental Improvement" { 4, 4 }

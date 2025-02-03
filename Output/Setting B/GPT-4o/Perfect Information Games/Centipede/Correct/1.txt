@@ -1,0 +1,41 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Coin Doubling Game")
+
+# Alice makes the first move: she can either "take" or "push"
+g.append_move(g.root, "Alice", ["Take", "Push"])
+
+# If Alice chooses "Take", the game ends with Alice taking the larger pile (4 coins) and Bob taking the smaller pile (1 coin)
+alice_takes = g.add_outcome([4, 1], label="Alice takes 4, Bob takes 1")
+g.set_outcome(g.root.children[0], alice_takes)
+
+# If Alice chooses "Push", the piles double and it's Bob's turn
+g.append_move(g.root.children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses "Take", he takes the larger pile (8 coins) and Alice takes the smaller pile (2 coins)
+bob_takes = g.add_outcome([2, 8], label="Bob takes 8, Alice takes 2")
+g.set_outcome(g.root.children[1].children[0], bob_takes)
+
+# If Bob chooses "Push", the piles double again and it's Alice's turn
+g.append_move(g.root.children[1].children[1], "Alice", ["Take", "Push"])
+
+# If Alice chooses "Take", she takes the larger pile (16 coins) and Bob takes the smaller pile (4 coins)
+alice_takes_again = g.add_outcome([16, 4], label="Alice takes 16, Bob takes 4")
+g.set_outcome(g.root.children[1].children[1].children[0], alice_takes_again)
+
+# If Alice chooses "Push", the piles double again and it's Bob's turn
+g.append_move(g.root.children[1].children[1].children[1], "Bob", ["Take", "Push"])
+
+# If Bob chooses "Take", he takes the larger pile (32 coins) and Alice takes the smaller pile (8 coins)
+bob_takes_again = g.add_outcome([8, 32], label="Bob takes 32, Alice takes 8")
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], bob_takes_again)
+
+# If Bob chooses "Push", the piles double again and the game ends with Alice taking the larger pile (64 coins) and Bob taking the smaller pile (16 coins)
+final_push = g.add_outcome([64, 16], label="Final push: Alice takes 64, Bob takes 16")
+g.set_outcome(g.root.children[1].children[1].children[1].children[1], final_push)
+
+# Save the EFG
+efg = g.write(format='native')
+```

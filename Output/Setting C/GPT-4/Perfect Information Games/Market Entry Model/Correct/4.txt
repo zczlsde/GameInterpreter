@@ -1,0 +1,45 @@
+```python
+# Step 1: Firm 2 decides whether to enter the market or stay out. This is a decision node for Firm 2.
+# Step 2: If Firm 2 enters, Firm 1 must decide to fight or accommodate. This is a decision node for Firm 1.
+# Since Firm 1's decision is directly influenced by Firm 2's action (enter), and there's no simultaneous move or hidden information directly between these decisions, 
+# there's no need to group any decision nodes in the same information set based on the given game structure.
+# The game described does not inherently involve imperfect information between the decision nodes of the two firms based on the actions described.
+# Therefore, no set_infoset() function is necessary for this game structure as described.
+```
+
+To create the extensive-form game (EFG) for the scenario described using the pygambit library, we'll follow the steps outlined in the game description. The game involves two firms, where Firm 2 decides whether to enter the market or not, and depending on that decision, Firm 1 decides to fight or accommodate if Firm 2 enters. The payoffs will be set according to the outcomes described. Since there's no imperfect information or simultaneous moves that require the use of `set_infoset()`, we'll directly model the decision nodes and outcomes.
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Step 1: Firm 2 decides whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# Step 2: If Firm 2 enters, then Firm 1 decides whether to fight or accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Setting outcomes based on the game description
+# If Firm 2 stays out, Firm 1 earns more (no specific values given, so we'll use placeholders)
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1 (placeholders used for payoffs)
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 3], label="Fight"))
+
+# If Firm 2 enters and Firm 1 accommodates, both earn an equal amount (placeholders used for payoffs)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([2, 2], label="Accommodate"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+In this code:
+- We start by creating a new game tree with two players, Firm 1 and Firm 2.
+- Firm 2's decision node is created at the root, with the options to "Enter" or "Stay Out" of the market.
+- If Firm 2 decides to enter (the first child of the root), we then create a decision node for Firm 1 to choose between "Fight" and "Accommodate".
+- The outcomes are set based on the game's description, with placeholders for the specific payoffs since the exact values were not provided. These can be adjusted to reflect the actual payoffs of the game.
+- Since there's no need for `set_infoset()` due to the absence of imperfect information or simultaneous moves, we proceed directly to setting the outcomes for each decision path.
+
+This code generates the EFG for the described market entry game, capturing the strategic decisions and outcomes for both firms.

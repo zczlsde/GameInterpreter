@@ -1,0 +1,10 @@
+EFG 2 R "Political Stance Game" { "Unknown Politician" "Influential Politician" }
+""
+
+p "" 1 1 "" { "Support" "Oppose" } 0
+p "" 2 1 "" { "Support" "Oppose" } 0
+t "" 1 "Match Stance" { 1, -1 }
+t "" 2 "Differ Stance" { -1, 1 }
+p "" 2 1 "" { "Support" "Oppose" } 0
+t "" 2 "Differ Stance" { -1, 1 }
+t "" 1 "Match Stance" { 1, -1 }

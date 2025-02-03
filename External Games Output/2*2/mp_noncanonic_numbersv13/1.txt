@@ -1,0 +1,65 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players: the niche fashion brand and the global fashion giant.
+# Both players decide simultaneously between two actions: debut a new line of sustainable clothing or a new line of tech-infused apparel.
+
+# Step 2: Recognize the imperfect information.
+# Since both players make their decisions simultaneously, neither player knows the other's choice at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume the global fashion giant moves first and the niche fashion brand moves second.
+# The starting node, g.root, is the global fashion giant's decision node.
+# The global fashion giant has two actions, sustainable clothing and tech-infused apparel.
+
+# Step 4: Determine the decision nodes for the niche fashion brand.
+# The niche fashion brand's decision nodes are g.root.children[0] and g.root.children[1], which correspond to the global fashion giant's actions.
+
+# Step 5: Group the niche fashion brand's decision nodes in the same information set.
+# Since the niche fashion brand does not know which action the global fashion giant has taken, these nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: the niche fashion brand and the global fashion giant.
+g = gbt.Game.new_tree(players=["Niche Fashion Brand", "Global Fashion Giant"],
+                      title="Fashion Line Debut Game")
+
+# Step 2: Model the game with a sequential structure.
+# Assume the global fashion giant moves first and the niche fashion brand moves second.
+# The starting node, g.root, is the global fashion giant's decision node.
+# The global fashion giant has two actions: debut a new line of sustainable clothing or a new line of tech-infused apparel.
+g.append_move(g.root, "Global Fashion Giant", ["Sustainable Clothing", "Tech-infused Apparel"])
+
+# Step 3: Determine the decision nodes for the niche fashion brand.
+# The niche fashion brand's decision nodes are g.root.children[0] and g.root.children[1], which correspond to the global fashion giant's actions.
+g.append_move(g.root.children[0], "Niche Fashion Brand", ["Sustainable Clothing", "Tech-infused Apparel"])
+g.append_move(g.root.children[1], "Niche Fashion Brand", ["Sustainable Clothing", "Tech-infused Apparel"])
+
+# Step 4: Group the niche fashion brand's decision nodes in the same information set.
+# Since the niche fashion brand does not know which action the global fashion giant has taken, these nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes for each possible combination of actions.
+# If both opt for the same type of clothing line, the niche brand wins 1 point, and the global giant loses 1 point.
+# If their choices differ, the global giant wins 2 points, and the niche brand loses 2 points.
+
+# Both choose Sustainable Clothing
+outcome_same = g.add_outcome([1, -1], label="Same Choice")
+g.set_outcome(g.root.children[0].children[0], outcome_same)
+
+# Global chooses Sustainable, Niche chooses Tech-infused
+outcome_diff = g.add_outcome([-2, 2], label="Different Choice")
+g.set_outcome(g.root.children[0].children[1], outcome_diff)
+
+# Global chooses Tech-infused, Niche chooses Sustainable
+g.set_outcome(g.root.children[1].children[0], outcome_diff)
+
+# Both choose Tech-infused Apparel
+g.set_outcome(g.root.children[1].children[1], outcome_same)
+
+# Save the EFG
+efg = g.write(format='native')
+```

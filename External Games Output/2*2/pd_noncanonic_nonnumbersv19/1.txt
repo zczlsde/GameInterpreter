@@ -1,0 +1,65 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Nation 1 and Nation 2. They must decide simultaneously whether to exchange spies or not.
+
+# Step 2: Recognize the imperfect information.
+# Since the players make their decisions simultaneously, neither player knows the other's decision at the time of making their own decision.
+
+# Step 3: Model the game with a sequential structure.
+# Assume Nation 1 moves first and Nation 2 moves second. This is a common way to model simultaneous moves in a sequential game.
+
+# Step 4: Identify the decision nodes.
+# The starting node, g.root, is Nation 1's decision node.
+# Nation 1 has two actions: Agree or Not agree.
+# Nation 2's decision nodes are g.root.children[0] and g.root.children[1], which correspond to Nation 1's actions Agree and Not agree.
+
+# Step 5: Group Nation 2's decision nodes in the same information set.
+# Since Nation 2 does not know Nation 1's action when making its decision, Nation 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Nation 1 and Nation 2.
+g = gbt.Game.new_tree(players=["Nation 1", "Nation 2"],
+                      title="Spy Exchange Game")
+
+# Step 2: Model the game with a sequential structure to represent simultaneous moves.
+# Assume Nation 1 moves first and Nation 2 moves second.
+
+# Step 3: Nation 1's decision node is the root of the game tree.
+# Nation 1 has two actions: Agree or Not agree.
+g.append_move(g.root, "Nation 1", ["Agree", "Not agree"])
+
+# Step 4: Nation 2's decision nodes are based on Nation 1's actions.
+# Nation 2 has two decision nodes, corresponding to Nation 1's actions.
+# Nation 2 also has two actions: Agree or Not agree.
+g.append_move(g.root.children[0], "Nation 2", ["Agree", "Not agree"])
+g.append_move(g.root.children[1], "Nation 2", ["Agree", "Not agree"])
+
+# Step 5: Group Nation 2's decision nodes in the same information set.
+# Since Nation 2 does not know Nation 1's action when making its decision,
+# Nation 2's decision nodes should be grouped in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 6: Define the outcomes for each possible combination of actions.
+# Both agree: regain spies, mutual respect.
+outcome_mutual_respect = g.add_outcome([1, 1], label="Mutual Respect")
+# Nation 1 agrees, Nation 2 does not: Nation 1 feels duped, Nation 2 gains advantage.
+outcome_nation2_advantage = g.add_outcome([-1, 2], label="Nation 2 Advantage")
+# Nation 1 does not agree, Nation 2 agrees: Nation 2 feels duped, Nation 1 gains advantage.
+outcome_nation1_advantage = g.add_outcome([2, -1], label="Nation 1 Advantage")
+# Neither agrees: spies remain in captivity, escalating hostilities.
+outcome_escalation = g.add_outcome([0, 0], label="Escalation")
+
+# Step 7: Assign outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_mutual_respect)
+g.set_outcome(g.root.children[0].children[1], outcome_nation2_advantage)
+g.set_outcome(g.root.children[1].children[0], outcome_nation1_advantage)
+g.set_outcome(g.root.children[1].children[1], outcome_escalation)
+
+# Save the EFG
+efg = g.write(format='native')
+```

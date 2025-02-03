@@ -1,0 +1,46 @@
+Certainly! Below is the Python code to generate the Extensive Form Game (EFG) for the given game description using the PyGambit library. The code is annotated with comments to explain the reasoning behind each step.
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="A strategic game with chance node")
+
+# Step 1: Append a chance node with four outcomes: A, B, C, D
+# We use gbt.Rational to represent the probabilities for each outcome equally likely
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# Step 2: For each outcome of the chance node, Player 1 will choose from three actions: E, F, G
+# Since there are four outcomes from the chance node, we will have four branches to append moves for Player 1
+for chance_node in g.root.children:
+    g.append_move(chance_node, "Player 1", ["E", "F", "G"])
+
+# Step 3: For each action of Player 1, Player 2 will choose between two actions: Q or W
+# This needs to be done for each outcome of the chance node (A, B, C, D) and for each action of Player 1 (E, F, G)
+for chance_node in g.root.children:
+    for player1_node in chance_node.children:
+        g.append_move(player1_node, "Player 2", ["Q", "W"])
+
+# Step 4: Define the payoffs for each combination of actions under each outcome of the chance node
+# The payoffs are given in the problem statement and are specific to the outcome of the chance node
+payoffs = {
+    "A": [("Q", [1, -1]), ("W", [2, -2])],
+    "B": [("Q", [3, -3]), ("W", [-3, 3])],
+    "C": [("Q", [0, 0]), ("W", [-1, 1])],
+    "D": [("Q", [4, -4]), ("W", [-4, 4])]
+}
+
+# Assign the payoffs to the corresponding outcomes
+for i, chance_node in enumerate(g.root.children):
+    outcome = ["A", "B", "C", "D"][i]
+    for player1_node in chance_node.children:
+        for j, player2_node in enumerate(player1_node.children):
+            action = ["Q", "W"][j]
+            g.set_outcome(player2_node, g.add_outcome(payoffs[outcome][j][1]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code systematically constructs the game tree by starting with a chance node that determines the state of the world (A, B, C, or D). Following the outcome of the chance node, Player 1 makes a decision among three actions (E, F, G), and then Player 2 responds with one of two actions (Q or W) after observing Player 1's choice. The payoffs are assigned based on the outcome of the chance node and the actions chosen by the players, as specified in the game description.

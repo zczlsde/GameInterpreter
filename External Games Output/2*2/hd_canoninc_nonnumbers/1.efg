@@ -1,0 +1,10 @@
+EFG 2 R "Chicken Game" { "Driver 1" "Driver 2" }
+""
+
+p "" 1 1 "" { "Swerve" "Go Straight" } 0
+p "" 2 1 "" { "Swerve" "Go Straight" } 0
+t "" 1 "Both Swerve" { 0, 0 }
+t "" 2 "Driver 1 Swerves" { -1, 1 }
+p "" 2 1 "" { "Swerve" "Go Straight" } 0
+t "" 3 "Driver 2 Swerves" { 1, -1 }
+t "" 4 "Both Go Straight" { -10, -10 }

@@ -1,0 +1,172 @@
+```python
+# Step 1: Alice's decision to check or bet is made without knowing the card allocation, so all six possible allocations lead to the same information set for Alice's decision.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+g.set_infoset(g.root.children[3], g.root.children[1].infoset)
+g.set_infoset(g.root.children[4], g.root.children[1].infoset)
+g.set_infoset(g.root.children[5], g.root.children[1].infoset)
+
+# Step 2: Bob's decision to check or bet (if Alice checks) or to fold or call (if Alice bets) is also made without knowing Alice's card. However, Bob's decisions are contingent on Alice's action, so we have two sets of information sets for Bob: one for each of Alice's actions.
+# For Bob's decision after Alice checks:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[4].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[5].children[0], g.root.children[1].children[0].infoset)
+
+# For Bob's decision after Alice bets:
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[3].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[4].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[5].children[1], g.root.children[1].children[1].infoset)
+
+# Note: The above steps ensure that all decision nodes for Alice and Bob, under each of their possible actions, are grouped into the correct information sets based on the game's structure and the players' knowledge at each point.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each allocation, append Alice's decision to check or bet
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's decisions, append Bob's responses
+# If Alice checks, Bob can check or bet
+# If Alice bets, Bob can fold or call
+for allocation in g.root.children:
+    g.append_move(allocation.children[0], "Bob", ["Check", "Bet"])
+    g.append_move(allocation.children[1], "Bob", ["Fold", "Call"])
+
+# For each of Bob's decisions after Alice checks, append outcomes
+# If Bob checks, the game ends with the higher card winning 1 from the other player
+# If Bob bets, Alice can fold or call
+for allocation in g.root.children:
+    # Alice's check, Bob's check - outcomes are determined by card comparison
+    # Specific outcomes will be set later based on card allocation
+    g.append_move(allocation.children[0].children[0], "End", ["Outcome"])
+    g.append_move(allocation.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# For each of Bob's decisions after Alice bets, append outcomes
+# If Bob folds, Alice wins 1 from Bob
+# If Bob calls, the game ends with the higher card winning 2 from the other player
+for allocation in g.root.children:
+    # Alice's bet, Bob's fold - Alice wins 1 from Bob
+    g.set_outcome(allocation.children[1].children[0], g.add_outcome([1, -1], label="Alice wins 1"))
+    # Alice's bet, Bob's call - outcomes are determined by card comparison
+    # Specific outcomes will be set later based on card allocation
+    g.append_move(allocation.children[1].children[1], "End", ["Outcome"])
+
+# Set outcomes for Alice folding after Bob bets
+for allocation in g.root.children:
+    g.set_outcome(allocation.children[0].children[1].children[0], g.add_outcome([-1, 1], label="Bob wins 1"))
+
+# Set outcomes for the final showdowns (Alice calls after Bob bets, or both check)
+# The outcomes depend on the specific card allocation, which determines the winner
+# These outcomes need to be set based on the card comparison logic, which is not detailed here
+
+# Use the identical code block for setting information sets for imperfect information
+# Step 1: Alice's decision to check or bet is made without knowing the card allocation
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+g.set_infoset(g.root.children[3], g.root.children[1].infoset)
+g.set_infoset(g.root.children[4], g.root.children[1].infoset)
+g.set_infoset(g.root.children[5], g.root.children[1].infoset)
+
+# Step 2: Bob's decisions
+# For Bob's decision after Alice checks:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[4].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[5].children[0], g.root.children[1].children[0].infoset)
+
+# For Bob's decision after Alice bets:
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[3].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[4].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[5].children[1], g.root.children[1].children[1].infoset)
+
+# Note: The outcomes for the final showdowns need to be set based on the specific card allocation logic
+# This involves comparing the cards to determine the winner and setting the appropriate outcomes
+# This part of the code is not included here as it requires additional logic to determine the winner based on the cards
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+"append_move(): no player with label 'End'"
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with two players: Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"], title="Three Card Game")
+
+# Append a chance move at the root for the six possible allocations of cards (JQ, JK, QJ, QK, KJ, KQ)
+# Each allocation has a probability of 1/6
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 6) for _ in range(6)])
+
+# For each allocation, append Alice's decision to check or bet
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Check", "Bet"])
+
+# For each of Alice's decisions, append Bob's responses
+for allocation in g.root.children:
+    # If Alice checks
+    g.append_move(allocation.children[0], "Bob", ["Check", "Bet"])
+    # If Alice bets
+    g.append_move(allocation.children[1], "Bob", ["Fold", "Call"])
+
+# For Bob's decision after Alice checks, append Alice's responses if Bob bets
+for allocation in g.root.children:
+    # If Bob bets after Alice checks
+    g.append_move(allocation.children[0].children[1], "Alice", ["Fold", "Call"])
+
+# Now, we need to set outcomes for all terminal nodes
+# This includes outcomes for:
+# - Alice checks, Bob checks (comparison of cards)
+# - Alice checks, Bob bets, Alice folds (Bob wins 3)
+# - Alice checks, Bob bets, Alice calls (comparison of cards, winner wins 2)
+# - Alice bets, Bob folds (Alice wins 3)
+# - Alice bets, Bob calls (comparison of cards, winner wins 2)
+# Specific outcomes based on card comparison are not detailed here
+
+# Use the identical code block for setting information sets for imperfect information
+# Step 1: Alice's decision to check or bet is made without knowing the card allocation
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+g.set_infoset(g.root.children[3], g.root.children[1].infoset)
+g.set_infoset(g.root.children[4], g.root.children[1].infoset)
+g.set_infoset(g.root.children[5], g.root.children[1].infoset)
+
+# Step 2: Bob's decisions
+# For Bob's decision after Alice checks:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[3].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[4].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[5].children[0], g.root.children[1].children[0].infoset)
+
+# For Bob's decision after Alice bets:
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[2].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[3].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[4].children[1], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[5].children[1], g.root.children[1].children[1].infoset)
+
+# Note: The specific outcomes for each terminal node based on card comparison need to be set according to the game's rules
+# This involves determining the winner based on the cards and setting the appropriate payoffs
+
+# Save the EFG
+efg = g.write(format='native')

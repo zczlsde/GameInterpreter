@@ -1,0 +1,48 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with hidden actions")
+
+# First stage: Player 1 chooses among A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses between D and E without knowing Player 1's choice
+# Since Player 2's move is without knowing Player 1's choice, we create an information set for Player 2's moves
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# Third stage: Player 1 chooses between F and G after observing Player 2's choice
+# Each of Player 2's choices leads to a new decision for Player 1
+for child in g.root.children:
+    for node in child.children:
+        g.append_move(node, "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 decides between Q and W
+# Player 3's decision is made after Player 1's second choice
+for child in g.root.children:
+    for node in child.children:
+        for sub_node in node.children:
+            g.append_move(sub_node, "Player 3", ["Q", "W"])
+
+# Setting outcomes based on Player 3's choices
+# If Player 3 selects Q, all players receive a payoff of 3
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3
+for child in g.root.children:
+    for node in child.children:
+        for sub_node in node.children:
+            g.set_outcome(sub_node.children[0], g.add_outcome([3, 3, 3], label="All choose Q"))
+            g.set_outcome(sub_node.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 choose W, P3 gets 3"))
+
+# Since Player 2's move is made without knowing Player 1's initial choice, we need to set the information set for Player 2's moves
+# We group all D and E decisions of Player 2 into the same information set to reflect that Player 2's decision is made without knowledge of Player 1's action
+for i in range(1, len(g.root.children), 2):  # Start from the second child and skip every other child to group D's and E's
+    g.set_infoset(g.root.children[i].children[0], g.root.children[0].children[0].infoset)
+    g.set_infoset(g.root.children[i].children[1], g.root.children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates a sequential game where Player 1 makes the first move by choosing between actions A, B, and C. Player 2 then makes a move (choosing between D and E) without knowing Player 1's choice, which is represented by grouping Player 2's decisions into the same information set. Player 1 makes another decision (between F and G) after observing Player 2's choice. Finally, Player 3 decides between Q and W, with the payoffs determined by Player 3's choice. The information set for Player 2's moves is set after all moves have been appended to ensure that Player 2's decision is modeled as being made without knowledge of Player 1's initial choice.

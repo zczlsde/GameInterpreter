@@ -1,0 +1,102 @@
+```python
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append moves for player "o" at the child nodes of player "x"
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+g.append_move(g.root.children[1], "o", [(0, 0)])
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Set information sets for player "o" based on the game state
+# Grouping the nodes where "o" has to make a decision in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append moves for player "o" at the child nodes of player "x"
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+g.append_move(g.root.children[1], "o", [(0, 0)])
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Set information sets for player "o" based on the game state
+# Grouping the nodes where "o" has to make a decision in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+```
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append moves for player "o" at the child nodes of player "x"
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+g.append_move(g.root.children[1], "o", [(0, 0)])
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Set information sets for player "o" based on the game state
+# Grouping the nodes where "o" has to make a decision in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append moves for player "o" at the child nodes of player "x"
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+g.append_move(g.root.children[1], "o", [(0, 0)])
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Set information sets for player "o" based on the game state
+# Grouping the nodes where "o" has to make a decision in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)
+
+===================
+Argument 'value' has incorrect type (expected str, got tuple)
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree with two players, "x" and "o"
+g = gbt.Game.new_tree(players=["x", "o"], title="Tic Tac Toe")
+
+# Append moves for player "x" at the root node
+g.append_move(g.root, "x", [(0, 0), (0, 2), (1, 0)])
+
+# Append moves for player "o" at the child nodes of player "x"
+g.append_move(g.root.children[0], "o", [(0, 2), (1, 0)])
+g.append_move(g.root.children[1], "o", [(0, 0)])
+g.append_move(g.root.children[2], "o", [(0, 0), (0, 2)])
+
+# Set information sets for player "o" based on the game state
+# Grouping the nodes where "o" has to make a decision in the same information set
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1], g.root.children[2].children[0].infoset)

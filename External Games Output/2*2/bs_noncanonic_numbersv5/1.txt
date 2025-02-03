@@ -1,0 +1,59 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, and they are deciding simultaneously between two options: Mountains or Beach.
+
+# Step 2: Since the players move simultaneously, this game involves imperfect information.
+# To model the game with a sequential structure, assume one partner moves first and the other moves second.
+
+# Step 3: The starting node, g.root, is the first partner's decision node.
+# The first partner has two actions, Mountains and Beach.
+
+# Step 4: The second partner's decision nodes are g.root.children[0] and g.root.children[1], 
+# which correspond to the first partner's actions Mountains and Beach.
+
+# Step 5: The second partner, moving simultaneously, does not know which action the first partner has taken.
+# Therefore, the second partner's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Partner1 and Partner2.
+g = gbt.Game.new_tree(players=["Partner1", "Partner2"],
+                      title="Weekend Getaway Decision")
+
+# Step 2: Assume Partner1 moves first. Partner1 has two actions: Mountains and Beach.
+g.append_move(g.root, "Partner1", ["Mountains", "Beach"])
+
+# Step 3: Partner2 moves second. Partner2 also has two actions: Mountains and Beach.
+# Partner2's decision nodes are g.root.children[0] and g.root.children[1], 
+# corresponding to Partner1's actions Mountains and Beach.
+g.append_move(g.root.children[0], "Partner2", ["Mountains", "Beach"])
+g.append_move(g.root.children[1], "Partner2", ["Mountains", "Beach"])
+
+# Step 4: Since the players move simultaneously, Partner2 does not know which action Partner1 has taken.
+# Therefore, Partner2's decision nodes should be grouped in the same information set.
+# Use the provided code block to handle the imperfect information.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Set the outcomes for each possible combination of actions.
+# If both choose Mountains, Partner1 gets 2 points, Partner2 gets 1 point.
+mountains_outcome = g.add_outcome([2, 1], label="Both choose Mountains")
+g.set_outcome(g.root.children[0].children[0], mountains_outcome)
+
+# If Partner1 chooses Mountains and Partner2 chooses Beach, they stay home and both get 0 points.
+stay_home_outcome = g.add_outcome([0, 0], label="Stay Home")
+g.set_outcome(g.root.children[0].children[1], stay_home_outcome)
+
+# If Partner1 chooses Beach and Partner2 chooses Mountains, they stay home and both get 0 points.
+g.set_outcome(g.root.children[1].children[0], stay_home_outcome)
+
+# If both choose Beach, Partner1 gets 1 point, Partner2 gets 2 points.
+beach_outcome = g.add_outcome([1, 2], label="Both choose Beach")
+g.set_outcome(g.root.children[1].children[1], beach_outcome)
+
+# Save the EFG
+efg = g.write(format='native')
+```

@@ -1,0 +1,67 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Diplomacy Game")
+
+# Country B decides to either "Accept" or "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts, Country A decides to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# If Country B rebels, Country A decides to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Adding a chance node for the outcome of the war if Country A decides to "Suppress"
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Lose"])
+# Set the probabilities for winning or losing the war
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Since all decisions by Country A are made without uncertainty about Country B's choice (due to sequential structure),
+# there's no need to group nodes in information sets based on Country A's uncertainty.
+
+# However, if there were any simultaneous moves or hidden actions that required grouping nodes into information sets,
+# we would use g.set_infoset(node1, node2.infoset) to group those nodes. In this game, all moves are sequential and
+# there's no hidden information between the moves, so no additional set_infoset() calls are necessary.
+
+# Note: This code block assumes that the game's sequential structure and the chance node for the war outcome are sufficient
+# to represent the game without needing to explicitly group nodes into information sets for handling imperfect information.
+# The game's structure inherently handles the sequential decisions and the chance outcomes without additional information sets.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Diplomacy Game")
+
+# Country B decides to either "Accept" or "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts, Country A decides to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+# Set outcomes for Country A's decision after Country B accepts
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([6, -2], label="Tax"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4, 0], label="Drop Taxes"))
+
+# If Country B rebels, Country A decides to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+# Set outcomes for granting independence
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 3], label="Grant Independence"))
+
+# Adding a chance node for the outcome of the war if Country A decides to "Suppress"
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Win", "Lose"])
+# Set the probabilities for winning or losing the war
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war based on the chance node's outcomes
+# If Country B wins
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, -3], label="Country B Wins"))
+# If Country B loses
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-1, -5], label="Country B Loses"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+This code snippet constructs an extensive-form game representing the diplomatic scenario between Country A and Country B using the pygambit library. The game starts with Country B's decision to either accept the status quo or rebel. Depending on Country B's choice, Country A then decides on its course of action, which includes taxing, dropping taxes, granting independence, or attempting to suppress the rebellion. The potential for war is modeled as a chance node with outcomes determined by predefined probabilities. The game's sequential structure and the explicit modeling of chance outcomes capture the strategic interactions and uncertainties inherent in this diplomatic scenario.

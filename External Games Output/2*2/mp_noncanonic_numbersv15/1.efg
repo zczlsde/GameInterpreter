@@ -1,0 +1,10 @@
+EFG 2 R "Sponsorship Game" { "Small Company" "Large Brand" }
+""
+
+p "" 2 1 "" { "Soccer" "Basketball" } 0
+p "" 1 1 "" { "Soccer" "Basketball" } 0
+t "" 1 "Same Sport" { 3, -3 }
+t "" 2 "Different Sport" { -5, 5 }
+p "" 1 1 "" { "Soccer" "Basketball" } 0
+t "" 2 "Different Sport" { -5, 5 }
+t "" 1 "Same Sport" { 3, -3 }

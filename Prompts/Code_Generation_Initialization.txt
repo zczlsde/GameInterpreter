@@ -1,0 +1,84 @@
+Given a game description in natural language, you will be asked to generate python code for the Gambit API (pygambit) to construct a corresponding extensive-form game in Gambit. 
+Here are two examples of how to use pygambit library:
+
+Example 1:
+Game description:
+There are two players, a Buyer and a Seller. The Buyer moves first and has two actions, Trust or Not trust. If the Buyer chooses Not trust, then the game ends, and both players receive payoffs of 0. If the Buyer chooses Trust, then the Seller has a choice with two actions, Honor or Abuse. If the Seller chooses Honor, both players receive payoffs of 1; if the Seller chooses Abuse, the Buyer receives a payoff of -1 and the Seller receives a payoff of 2.
+Code:
+```python
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Buyer", "Seller"],
+                    title="One-shot trust game, after Kreps (1990)")
+
+g.append_move(g.root, "Buyer", ["Trust", "Not trust"])
+g.append_move(g.root.children[0], "Seller", ["Honor", "Abuse"])
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([1, 1], label="Trustworthy"))
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 2], label="Untrustworthy"))
+g.set_outcome(g.root.children[1], g.add_outcome([0, 0], label="Opt-out"))
+# Save the EFG
+efg = g.write(format='native')
+```
+
+Example 2:
+Game description:
+There are two players, Alice and Bob. There is a deck of cards, with equal numbers of King and Queen cards. The game begins with each player putting $1 in the pot. One card is dealt at random to Alice; Alice observes her card but Bob does not. After Alice observes her card, she can choose either to Raise or to Fold. If she chooses to Fold, Bob wins the pot and the game ends. If she chooses to Raise, she adds another $1 to the pot. Bob then chooses either to Meet or Pass. If he chooses to Pass, Alice wins the pot and the game ends. If he chooses to Meet, he adds another $1 to the pot. There is then a showdown, in which Alice reveals her card. If she has a King, then she wins the pot; if she has a Queen, then Bob wins the pot.
+Code:
+```python
+import pygambit as gbt
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                    title="One card poker game, after Myerson (1991)")
+g.append_move(g.root, g.players.chance, ["King", "Queen"])
+for node in g.root.children:
+    g.append_move(node, "Alice", ["Raise", "Fold"])
+g.append_move(g.root.children[0].children[0], "Bob", ["Meet", "Pass"])
+g.append_move(g.root.children[1].children[0], "Bob", ["Meet", "Pass"])
+# Set inforset
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+alice_wins = g.add_outcome([1, -1], label="Alice wins")
+bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+g.set_outcome(g.root.children[0].children[0].children[0], alice_winsbig)
+g.set_outcome(g.root.children[0].children[0].children[1], alice_wins)
+g.set_outcome(g.root.children[0].children[1], bob_wins)
+g.set_outcome(g.root.children[1].children[0].children[0], bob_winsbig)
+g.set_outcome(g.root.children[1].children[0].children[1], alice_wins)
+g.set_outcome(g.root.children[1].children[1], bob_wins)
+# Save the EFG
+efg = g.write(format='native')
+```
+
+Below is the documentation for several relevant functions in the pygambit library:
+1. pygambit.gambit.Game.append_move
+Game.append_move(nodes: Node | str | Iterable[Node | str], player: Player | str, actions: List[str]) → None
+Add a move for player at terminal nodes. All elements of nodes become part of a new information set, with actions labeled according to actions.
+
+2. pygambit.gambit.Game.add_outcome
+Game.add_outcome(payoffs: List | None = None, label: str = '') → Outcome
+Add a new outcome to the game.
+
+3. pygambit.gambit.Game.set_outcome
+Game.set_outcome(node: Node | str, outcome: Outcome | str | None) → None
+Set outcome to be the outcome at node. If outcome is None, the outcome at node is unset.
+
+4. pygambit.gambit.Game.set_infoset
+Game.set_infoset(node: Node | str, infoset: Infoset | str) → None
+Place node in the information set infoset. node must have the same number of descendants as infoset has actions.
+To set the infoset for a node, you can use the following code:
+g.set_infoset(node1, node2.infoset)
+PLEASE BE AWARE, when more than two nodes need to be grouped in the same information set, you should assign all nodes to the infoset of a single node.
+For instance, if you have three nodes, node1, node2, and node3, in the same information set, you can configure the information set as follows:
+g.set_infoset(node1, node2.infoset)
+g.set_infoset(node3, node2.infoset)
+
+5.pygambit.gambit.Game.set_chance_probs
+Game.set_chance_probs(infoset: Infoset | str, probs: Sequence)
+Set the action probabilities at chance information set infoset.
+For example: 
+g.append_move(g.root, g.players.chance, [f"Chance {i}" for i in range(num_choices)])
+probabilities = np.random.randint(1,20,n)
+total = sum(probabilities)
+# Set all the probabilities for the chance node at the same time.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(p,total) for p in probabilities])
+"""

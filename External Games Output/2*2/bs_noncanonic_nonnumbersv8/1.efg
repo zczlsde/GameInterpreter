@@ -1,0 +1,10 @@
+EFG 2 R "Two Generals' Coordination Game" { "General 1" "General 2" }
+""
+
+p "" 1 1 "" { "Northern Front" "Eastern Front" } 0
+p "" 2 1 "" { "Northern Front" "Eastern Front" } 0
+t "" 1 "Northern Success" { 2, 1 }
+t "" 3 "No Success" { 0, 0 }
+p "" 2 1 "" { "Northern Front" "Eastern Front" } 0
+t "" 3 "No Success" { 0, 0 }
+t "" 2 "Eastern Success" { 1, 2 }

@@ -1,0 +1,10 @@
+EFG 2 R "Two Generals' Coordination Game" { "General 1" "General 2" }
+""
+
+p "" 1 1 "" { "Attack" "Hesitate" } 0
+p "" 2 1 "" { "Attack" "Hesitate" } 0
+t "" 1 "Both Attack" { 9, 9 }
+t "" 2 "G1 Attacks, G2 Hesitates" { 0, 4 }
+p "" 2 1 "" { "Attack" "Hesitate" } 0
+t "" 3 "G1 Hesitates, G2 Attacks" { 4, 0 }
+t "" 4 "Both Hesitate" { 2, 2 }

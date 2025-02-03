@@ -1,0 +1,139 @@
+```python
+# Step-by-step thought process:
+# 1. A makes the initial proposal, so A's decision nodes are g.root.children[0] (A's proposal) and g.root.children[1] (B's response).
+# 2. If B accepts A's proposal, the negotiation ends with payoffs 5,500 for A and 4,500 for B.
+# 3. If B rejects A's proposal, B makes a counterproposal, so B's decision nodes are g.root.children[1].children[1] (B's counterproposal) and g.root.children[1].children[0] (A's response to B's counterproposal).
+# 4. If A accepts B's counterproposal, the negotiation ends with payoffs 4,750 for each player.
+# 5. If A rejects B's counterproposal, A makes a new proposal, so A's decision nodes are g.root.children[1].children[1].children[0] (A's new proposal) and g.root.children[1].children[1].children[1] (B's response to A's new proposal).
+# 6. B has no choice but to accept A's new proposal, resulting in payoffs 4,693 for A and 4,332 for B.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["A", "B"],
+                    title="Negotiation game between A and B")
+
+# A's initial proposal
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# B's response to A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Counterproposal: 5000/5000"])
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].children[0].infoset)
+
+# A's response to B's counterproposal
+g.append_move(g.root.children[1].children[1], "A", ["Accept: 4750/4750", "Reject"])
+
+# A's new proposal after rejecting B's counterproposal
+g.append_move(g.root.children[1].children[1].children[1], "A", ["Accept: 4693/4332"])
+
+# Set outcomes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's initial proposal accepted"))
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([4750, 4750], label="B's counterproposal accepted"))
+g.set_outcome(g.root.children[1].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="A's new proposal accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["A", "B"],
+                    title="Negotiation game between A and B")
+
+# A's initial proposal
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# B's response to A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Counterproposal: 5000/5000"])
+
+# A's response to B's counterproposal
+g.append_move(g.root.children[0].children[1], "A", ["Accept: 4750/4750", "Reject"])
+
+# A's new proposal after rejecting B's counterproposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 4693/4332"])
+
+# Set information sets
+g.set_infoset(g.root.children[0], g.root.children[0].children[1])
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+
+# Set outcomes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's initial proposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's counterproposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="A's new proposal accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["A", "B"],
+                    title="Negotiation game between A and B")
+
+# A's initial proposal
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# B's response to A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Counterproposal: 5000/5000"])
+
+# A's response to B's counterproposal
+g.append_move(g.root.children[0].children[1], "A", ["Accept: 4750/4750", "Reject"])
+
+# A's new proposal after rejecting B's counterproposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 4693/4332"])
+
+# Set information sets
+g.set_infoset(g.root.children[0], g.root.children[0].children[1])
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+
+# Set outcomes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's initial proposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's counterproposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="A's new proposal accepted"))
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+g = gbt.Game.new_tree(players=["A", "B"],
+                    title="Negotiation game between A and B")
+
+# A's initial proposal
+g.append_move(g.root, "A", ["Accept: 5500/4500", "Reject"])
+
+# B's response to A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Counterproposal: 5000/5000"])
+
+# A's response to B's counterproposal
+g.append_move(g.root.children[0].children[1], "A", ["Accept: 4750/4750", "Reject"])
+
+# A's new proposal after rejecting B's counterproposal
+g.append_move(g.root.children[0].children[1].children[1], "A", ["Accept: 4693/4332"])
+
+# Set information sets
+g.set_infoset(g.root.children[0], g.root.children[0].children[1])
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].children[1])
+
+# Set outcomes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="A's initial proposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([4750, 4750], label="B's counterproposal accepted"))
+g.set_outcome(g.root.children[0].children[1].children[1].children[0], g.add_outcome([4693, 4332], label="A's new proposal accepted"))
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,1 @@
+Both players simultaneously reveal one of three symbols: rock, paper, or scissors. Rock defeats scissors by blunting it, scissors defeat paper by cutting it, and paper defeats rock by covering it.

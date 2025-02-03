@@ -1,0 +1,10 @@
+EFG 2 R "Strategic Basketball Game" { "Lesser-known College Coach" "Top University Coach" }
+""
+
+p "" 2 1 "" { "Aggressive Offense" "Strong Defense" } 0
+p "" 1 1 "" { "Aggressive Offense" "Strong Defense" } 0
+t "" 1 "Lesser-known team gains notoriety" { 1, -1 }
+t "" 2 "Top university team dominates" { -1, 1 }
+p "" 1 1 "" { "Aggressive Offense" "Strong Defense" } 0
+t "" 2 "Top university team dominates" { -1, 1 }
+t "" 1 "Lesser-known team gains notoriety" { 1, -1 }

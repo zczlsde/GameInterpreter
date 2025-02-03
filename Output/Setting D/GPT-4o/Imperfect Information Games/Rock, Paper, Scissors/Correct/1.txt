@@ -1,0 +1,60 @@
+```python
+# Step-by-step thought process:
+# 1. In this game, both players choose their actions (rock, paper, or scissors) simultaneously.
+# 2. This means that neither player knows the action chosen by the other player at the time of their decision.
+# 3. To represent this in a sequential game structure, we can assume one player moves first, but the other player does not know this move.
+# 4. Let's assume Player 1 moves first and Player 2 moves second.
+# 5. Player 2's decision nodes will be based on Player 1's actions (rock, paper, or scissors).
+# 6. Since Player 2 does not know Player 1's action, all of Player 2's decision nodes should be grouped in the same information set.
+
+# Assuming g is the game object and g.root is the starting node:
+# Player 1's actions are "rock", "paper", "scissors", leading to Player 2's decision nodes.
+# These nodes are g.root.children[0], g.root.children[1], and g.root.children[2].
+
+# Group all of Player 2's decision nodes in the same information set because Player 2 does not know Player 1's action.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new game with two players, Player 1 and Player 2.
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors with Imperfect Information")
+
+# Step 2: Player 1 makes the first move, choosing between "rock", "paper", or "scissors".
+g.append_move(g.root, "Player 1", ["rock", "paper", "scissors"])
+
+# Step 3: Player 2 makes a move without knowing Player 1's choice. 
+# Player 2's decision nodes are based on Player 1's actions.
+# These nodes are g.root.children[0], g.root.children[1], and g.root.children[2].
+g.append_move(g.root.children[0], "Player 2", ["rock", "paper", "scissors"])
+g.append_move(g.root.children[1], "Player 2", ["rock", "paper", "scissors"])
+g.append_move(g.root.children[2], "Player 2", ["rock", "paper", "scissors"])
+
+# Step 4: Group all of Player 2's decision nodes in the same information set because Player 2 does not know Player 1's action.
+# This is the code block provided for setting the information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each combination of actions.
+# Rock vs Scissors: Player 1 wins
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([1, -1], label="Player 1 wins"))
+# Scissors vs Rock: Player 2 wins
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([-1, 1], label="Player 2 wins"))
+# Paper vs Rock: Player 1 wins
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Player 1 wins"))
+# Rock vs Paper: Player 2 wins
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Player 2 wins"))
+# Scissors vs Paper: Player 1 wins
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([1, -1], label="Player 1 wins"))
+# Paper vs Scissors: Player 2 wins
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([-1, 1], label="Player 2 wins"))
+# Rock vs Rock, Paper vs Paper, Scissors vs Scissors: Draw
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Draw"))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 0], label="Draw"))
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="Draw"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

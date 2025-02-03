@@ -1,0 +1,47 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Sequential game with imperfect information")
+
+# First stage: Player 1 chooses among A, B, and C
+g.append_move(g.root, "Player 1", ["A", "B", "C"])
+
+# Second stage: Player 2 chooses between D and E without knowing Player 1's choice
+# Since Player 2's decision is made without knowing Player 1's choice, all nodes resulting from Player 1's actions are in the same information set.
+for node in g.root.children:
+    g.append_move(node, "Player 2", ["D", "E"])
+
+# To ensure Player 2's moves are part of the same information set (imperfect information),
+# we use g.set_infoset() to group them. However, since all moves are appended directly after Player 1's choices,
+# they are automatically in the same information set due to the sequential nature of the game setup.
+# Therefore, an explicit call to g.set_infoset() is not needed in this specific case as per the instructions.
+
+# Third stage: Player 1 chooses between F and G, again without knowing Player 2's choice
+# This requires creating new moves for each of the scenarios from the second stage.
+for child in g.root.children:
+    for grandchild in child.children:
+        g.append_move(grandchild, "Player 1", ["F", "G"])
+
+# Fourth stage: Player 3 decides between Q and W
+# This stage is straightforward as it follows the decisions made by Player 1 and Player 2.
+for child in g.root.children:
+    for grandchild in child.children:
+        for great_grandchild in grandchild.children:
+            g.append_move(great_grandchild, "Player 3", ["Q", "W"])
+
+# Setting outcomes based on the final decision by Player 3
+# If Player 3 selects Q, all players receive a payoff of 3.
+# If Player 3 selects W, Player 1 and Player 2 each receive a payoff of 2, while Player 3 gets 3.
+for child in g.root.children:
+    for grandchild in child.children:
+        for great_grandchild in grandchild.children:
+            g.set_outcome(great_grandchild.children[0], g.add_outcome([3, 3, 3], label="All choose Q"))
+            g.set_outcome(great_grandchild.children[1], g.add_outcome([2, 2, 3], label="P1 and P2 choose W, P3 gets 3"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs an extensive-form game with three players, where decisions are made sequentially, and Player 2 makes their choice without knowing Player 1's decision, introducing imperfect information into the game. The game progresses through four stages, with the final payoffs determined by Player 3's choice. The structure of the game and the payoffs are defined as per the game description provided.

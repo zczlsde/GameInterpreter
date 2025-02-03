@@ -1,0 +1,33 @@
+Certainly! Below is the EFG representation of the described Tic-Tac-Toe game scenario:
+
+```
+EFG 2 R "Tic-Tac-Toe Game" { "X" "O" }
+p "" 1 1 "" { "(0,0)" "(0,2)" "(1,0)" } 0
+p "" 2 1 "" { "(0,2)" "(1,0)" } 0
+t "" 1 "O wins" { -1, 1 }
+p "" 1 2 "" { "(0,2)" } 0
+t "" 2 "X wins" { 1, -1 }
+t "" 3 "X wins" { 1, -1 }
+p "" 2 2 "" { "(0,0)" "(0,2)" } 0
+p "" 1 3 "" { "(0,2)" } 0
+t "" 4 "X wins" { 1, -1 }
+t "" 5 "O wins" { -1, 1 }
+```
+
+### Explanation:
+
+1. **Prologue:**
+   - The game is titled "Tic-Tac-Toe Game".
+   - There are two players: "X" and "O".
+
+2. **Body:**
+   - The first decision node is for player "X" with three possible actions: placing the mark on (0,0), (0,2), or (1,0).
+   - If "X" places the mark on (0,0), player "O" has two possible actions: placing the mark on (0,2) or (1,0).
+     - If "O" places the mark on (0,2), "O" wins.
+     - If "O" places the mark on (1,0), "X" can place the mark on (0,2) and wins.
+   - If "X" places the mark on (0,2), "X" wins immediately.
+   - If "X" places the mark on (1,0), player "O" has two possible actions: placing the mark on (0,0) or (0,2).
+     - If "O" places the mark on (0,0), "X" can place the mark on (0,2) and wins.
+     - If "O" places the mark on (0,2), "O" wins.
+
+This representation captures the decision-making process and possible outcomes based on the current board state and the next moves.

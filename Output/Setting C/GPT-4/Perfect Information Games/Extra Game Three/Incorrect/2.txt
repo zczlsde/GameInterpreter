@@ -1,0 +1,188 @@
+```python
+# Step 1: Since the game starts with a chance node that determines one of four possible outcomes (A, B, C, or D), 
+# and Player 1's decision follows the outcome of this chance node, Player 1 does not have imperfect information 
+# regarding the outcome of the chance node. Therefore, we do not need to group any of Player 1's decision nodes 
+# into the same information set based on the outcome of the chance node.
+
+# Step 2: Player 2's decision comes after Player 1 has chosen an action (E, F, or G). Since Player 2's decision 
+# is based on observing Player 1's action, there is no imperfect information for Player 2 regarding Player 1's action. 
+# Therefore, we do not need to group any of Player 2's decision nodes into the same information set based on Player 1's actions.
+
+# Conclusion: Given the game's structure as described, there are no instances where a player must make a decision 
+# without being able to distinguish between different game states that have occurred previously. This means there 
+# are no decision nodes for either player that need to be grouped into the same information set due to imperfect information.
+
+# Since the game as described does not involve imperfect information that requires grouping decision nodes into the same information set,
+# no set_infoset() functions are necessary for this game's representation.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Extensive Form Game with Chance Node")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for each outcome of the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# For each outcome of the chance node, append moves for Player 1 with three actions: E, F, G
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["E", "F", "G"])
+    # For each of Player 1's actions, append moves for Player 2 with two actions: Q, W
+    for player1_action in chance_outcome.children:
+        g.append_move(player1_action, "Player 2", ["Q", "W"])
+
+# Define payoffs for each combination of actions under each outcome of the chance node
+payoffs = {
+    "A": [("Q", [1, -1]), ("W", [2, -2])],
+    "B": [("Q", [3, -3]), ("W", [-3, 3])],
+    "C": [("Q", [0, 0]), ("W", [-1, 1])],
+    "D": [("Q", [4, -4]), ("W", [-4, 4])]
+}
+
+# Set the payoffs for each leaf node based on the outcome of the chance node and the actions of the players
+for i, chance_outcome in enumerate(g.root.children):
+    outcome_label = ["A", "B", "C", "D"][i]
+    for player1_action in chance_outcome.children:
+        for player2_action in player1_action.children:
+            action_label = player2_action.move.label
+            g.set_outcome(player2_action, g.add_outcome(payoffs[outcome_label][action_label]))
+
+# Since the game as described does not involve imperfect information that requires grouping decision nodes into the same information set,
+# no set_infoset() functions are necessary for this game's representation.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an extensive-form game with a chance node leading to different outcomes (A, B, C, D), followed by decisions from Player 1 and Player 2. The payoffs are set according to the game description. Note that the code for handling imperfect information (`set_infoset()`) is not used here, as the game structure provided does not involve any imperfect information scenarios that require grouping decision nodes into the same information set.
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Extensive Form Game with Chance Node")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for each outcome of the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# For each outcome of the chance node, append moves for Player 1 with three actions: E, F, G
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["E", "F", "G"])
+    # For each of Player 1's actions, append moves for Player 2 with two actions: Q, W
+    for player1_action in chance_outcome.children:
+        g.append_move(player1_action, "Player 2", ["Q", "W"])
+
+# Define payoffs for each combination of actions under each outcome of the chance node
+payoffs = {
+    "A": {"Q": [1, -1], "W": [2, -2]},
+    "B": {"Q": [3, -3], "W": [-3, 3]},
+    "C": {"Q": [0, 0], "W": [-1, 1]},
+    "D": {"Q": [4, -4], "W": [-4, 4]}
+}
+
+# Set the payoffs for each leaf node based on the outcome of the chance node and the actions of the players
+for i, chance_outcome in enumerate(g.root.children):
+    outcome_label = ["A", "B", "C", "D"][i]
+    for player1_action in chance_outcome.children:
+        for player2_action in player1_action.children:
+            action_label = player2_action.move.label
+            g.set_outcome(player2_action, g.add_outcome(payoffs[outcome_label][action_label]))
+
+# Since the game as described does not involve imperfect information that requires grouping decision nodes into the same information set,
+# no set_infoset() functions are necessary for this game's representation.
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Extensive Form Game with Chance Node")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for each outcome of the chance node
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# For each outcome of the chance node, append moves for Player 1 with three actions: E, F, G
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["E", "F", "G"])
+    # For each of Player 1's actions, append moves for Player 2 with two actions: Q, W
+    for player1_action in chance_outcome.children:
+        g.append_move(player1_action, "Player 2", ["Q", "W"])
+
+# Define payoffs for each combination of actions under each outcome of the chance node
+payoffs = {
+    "A": {"Q": [1, -1], "W": [2, -2]},
+    "B": {"Q": [3, -3], "W": [-3, 3]},
+    "C": {"Q": [0, 0], "W": [-1, 1]},
+    "D": {"Q": [4, -4], "W": [-4, 4]}
+}
+
+# Set the payoffs for each leaf node based on the outcome of the chance node and the actions of the players
+for i, chance_outcome in enumerate(g.root.children):
+    outcome_label = ["A", "B", "C", "D"][i]
+    for player1_action in chance_outcome.children:
+        for player2_action in player1_action.children:
+            action_label = player2_action.move.label
+            g.set_outcome(player2_action, g.add_outcome(payoffs[outcome_label][action_label]))
+
+# Since the game as described does not involve imperfect information that requires grouping decision nodes into the same information set,
+# no set_infoset() functions are necessary for this game's representation.
+
+# Save the EFG
+efg = g.write(format='native')
+
+===================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Extensive Form Game with Chance Node")
+
+# Append a chance node with four possible outcomes: A, B, C, D
+g.append_move(g.root, g.players.chance, ["A", "B", "C", "D"])
+# Set the probabilities for each outcome of the chance node equally
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 4) for _ in range(4)])
+
+# For each outcome of the chance node, append moves for Player 1 with three actions: E, F, G
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["E", "F", "G"])
+    # For each of Player 1's actions, append moves for Player 2 with two actions: Q, W
+    for player1_action in chance_outcome.children:
+        g.append_move(player1_action, "Player 2", ["Q", "W"])
+
+# Define payoffs for each combination of actions under each outcome of the chance node
+payoffs = {
+    "A": {"Q": [1, -1], "W": [2, -2]},
+    "B": {"Q": [3, -3], "W": [-3, 3]},
+    "C": {"Q": [0, 0], "W": [-1, 1]},
+    "D": {"Q": [4, -4], "W": [-4, 4]}
+}
+
+# Set the payoffs for each leaf node based on the outcome of the chance node and the actions of the players
+for i, chance_outcome in enumerate(g.root.children):
+    outcome_label = ["A", "B", "C", "D"][i]
+    for player1_action in chance_outcome.children:
+        for player2_action in player1_action.children:
+            action_label = player2_action.move.label
+            g.set_outcome(player2_action, g.add_outcome(payoffs[outcome_label][action_label]))
+
+# Since the game as described does not involve imperfect information that requires grouping decision nodes into the same information set,
+# no set_infoset() functions are necessary for this game's representation.
+
+# Save the EFG
+efg = g.write(format='native')

@@ -1,0 +1,151 @@
+```python
+# Step-by-step thought process:
+# 1. In this game, both players choose their actions (rock, paper, or scissors) simultaneously.
+# 2. This means that neither player knows the action of the other player when making their decision.
+# 3. To represent this in a sequential game structure, we can assume one player moves first, but the other player does not know this move.
+# 4. Let's assume Player 1 moves first and Player 2 moves second.
+# 5. Player 2's decision nodes will be based on Player 1's actions (rock, paper, scissors).
+# 6. Since Player 2 does not know Player 1's action, all of Player 2's decision nodes should be in the same information set.
+
+# Assuming g is the game object and g.root is the starting node:
+# Player 1's actions are at g.root.children[0] (rock), g.root.children[1] (paper), g.root.children[2] (scissors).
+# Player 2's decision nodes are g.root.children[0].children[0], g.root.children[1].children[0], g.root.children[2].children[0].
+
+# Group all of Player 2's decision nodes in the same information set:
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors with Imperfect Information")
+
+# Step 1: Player 1 makes a move first, choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# Step 2: Player 2 makes a move, but does not know Player 1's choice
+# Player 2's decision nodes are based on Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Rock
+g.append_move(g.root.children[1], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Paper
+g.append_move(g.root.children[2], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Scissors
+
+# Step 3: Set the information set for Player 2's decision nodes
+# Since Player 2 does not know Player 1's action, all of Player 2's decision nodes should be in the same information set
+# Use the provided code block to handle the imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+
+# Step 4: Define the outcomes based on the rules of Rock-Paper-Scissors
+# Rock beats Scissors, Scissors beat Paper, Paper beats Rock
+# If both players choose the same action, it's a draw
+
+# Outcomes for Player 1 choosing Rock
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Draw"))  # Rock vs Rock
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Player 2 wins"))  # Rock vs Paper
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([1, -1], label="Player 1 wins"))  # Rock vs Scissors
+
+# Outcomes for Player 1 choosing Paper
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Player 1 wins"))  # Paper vs Rock
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 0], label="Draw"))  # Paper vs Paper
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([-1, 1], label="Player 2 wins"))  # Paper vs Scissors
+
+# Outcomes for Player 1 choosing Scissors
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([-1, 1], label="Player 2 wins"))  # Scissors vs Rock
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([1, -1], label="Player 1 wins"))  # Scissors vs Paper
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="Draw"))  # Scissors vs Scissors
+
+# Save the EFG
+efg = g.write(format='native')
+```
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors with Imperfect Information")
+
+# Step 1: Player 1 makes a move first, choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# Step 2: Player 2 makes a move, but does not know Player 1's choice
+# Player 2's decision nodes are based on Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Rock
+g.append_move(g.root.children[1], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Paper
+g.append_move(g.root.children[2], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Scissors
+
+# Step 3: Set the information set for Player 2's decision nodes
+# Since Player 2 does not know Player 1's action, all of Player 2's decision nodes should be in the same information set
+# Use the provided code block to handle the imperfect information
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[2].children[0], g.root.children[1].children[0].infoset)
+
+# Step 4: Define the outcomes based on the rules of Rock-Paper-Scissors
+# Rock beats Scissors, Scissors beat Paper, Paper beats Rock
+# If both players choose the same action, it's a draw
+
+# Outcomes for Player 1 choosing Rock
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Draw"))  # Rock vs Rock
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Player 2 wins"))  # Rock vs Paper
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([1, -1], label="Player 1 wins"))  # Rock vs Scissors
+
+# Outcomes for Player 1 choosing Paper
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Player 1 wins"))  # Paper vs Rock
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 0], label="Draw"))  # Paper vs Paper
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([-1, 1], label="Player 2 wins"))  # Paper vs Scissors
+
+# Outcomes for Player 1 choosing Scissors
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([-1, 1], label="Player 2 wins"))  # Scissors vs Rock
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([1, -1], label="Player 1 wins"))  # Scissors vs Paper
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="Draw"))  # Scissors vs Scissors
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors with Imperfect Information")
+
+# Step 1: Player 1 makes a move first, choosing between Rock, Paper, or Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# Step 2: Player 2 makes a move, but does not know Player 1's choice
+# Player 2's decision nodes are based on Player 1's actions
+g.append_move(g.root.children[0], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Rock
+g.append_move(g.root.children[1], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Paper
+g.append_move(g.root.children[2], "Player 2", ["Rock", "Paper", "Scissors"])  # After Player 1 chooses Scissors
+
+# Step 3: Set the information set for Player 2's decision nodes
+# Since Player 2 does not know Player 1's action, all of Player 2's decision nodes should be in the same information set
+# Use the provided code block to handle the imperfect information
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+
+# Step 4: Define the outcomes based on the rules of Rock-Paper-Scissors
+# Rock beats Scissors, Scissors beat Paper, Paper beats Rock
+# If both players choose the same action, it's a draw
+
+# Outcomes for Player 1 choosing Rock
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 0], label="Draw"))  # Rock vs Rock
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([-1, 1], label="Player 2 wins"))  # Rock vs Paper
+g.set_outcome(g.root.children[0].children[2], g.add_outcome([1, -1], label="Player 1 wins"))  # Rock vs Scissors
+
+# Outcomes for Player 1 choosing Paper
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([1, -1], label="Player 1 wins"))  # Paper vs Rock
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([0, 0], label="Draw"))  # Paper vs Paper
+g.set_outcome(g.root.children[1].children[2], g.add_outcome([-1, 1], label="Player 2 wins"))  # Paper vs Scissors
+
+# Outcomes for Player 1 choosing Scissors
+g.set_outcome(g.root.children[2].children[0], g.add_outcome([-1, 1], label="Player 2 wins"))  # Scissors vs Rock
+g.set_outcome(g.root.children[2].children[1], g.add_outcome([1, -1], label="Player 1 wins"))  # Scissors vs Paper
+g.set_outcome(g.root.children[2].children[2], g.add_outcome([0, 0], label="Draw"))  # Scissors vs Scissors
+
+# Save the EFG
+efg = g.write(format='native')

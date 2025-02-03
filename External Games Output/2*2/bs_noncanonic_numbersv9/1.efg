@@ -1,0 +1,10 @@
+EFG 2 R "Strategy Session Location Decision" { "Hall Advocate" "Tech Advocate" }
+""
+
+p "" 1 1 "" { "Grand Conference Hall" "Tech Innovation Center" } 0
+p "" 2 1 "" { "Grand Conference Hall" "Tech Innovation Center" } 0
+t "" 1 "Both choose Grand Conference Hall" { 2, 1 }
+t "" 2 "Separate sessions" { 0, 0 }
+p "" 2 1 "" { "Grand Conference Hall" "Tech Innovation Center" } 0
+t "" 3 "Separate sessions" { 0, 0 }
+t "" 4 "Both choose Tech Innovation Center" { 1, 2 }

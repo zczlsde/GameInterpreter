@@ -1,0 +1,149 @@
+To model the game of the absent-minded driver using the PyGambit library, we need to consider the driver's inability to distinguish between junction X and Y. This means we will model the game as having imperfect information, where the decision nodes at junction X and Y belong to the same information set. Since the driver moves without being able to distinguish between these junctions, we will represent the driver's moves under a single player who faces the same decision (EXIT or CONTINUE) at what appears to them as a single decision point. 
+
+Given the game's setup, we don't have simultaneous moves or multiple players making decisions; it's all about the driver's choices. However, the driver's lack of memory introduces uncertainty, which we can model as a chance move at the game's start to represent the driver's position (at X or Y), even though in practice, the driver always starts at X and then potentially moves to Y based on their decision. This initial chance move is a simplification to fit the game's description into a game tree structure and to illustrate the driver's uncertainty as part of the game's mechanics.
+
+Here's how we can code this scenario:
+
+```python
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver")
+
+# Since the driver cannot distinguish between junction X and Y, we model this as a chance move
+# that leads to two identical decision points (representing X and Y) with the same set of actions.
+g.append_move(g.root, g.players.chance, ["At X", "At Y"])
+# Set the probabilities for reaching each junction as equal, assuming the driver always starts at X
+# but this is to fit the game's uncertainty into the model.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Append moves for the driver at both junctions (X and Y), which are represented by the chance node's children.
+# Since the driver cannot distinguish between these junctions, these moves will later be placed in the same information set.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Now, we set the outcomes based on the driver's actions.
+# If the driver exits at X, they get a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Exit at X"))
+# If the driver continues to Y and then exits, they get a payoff of 4.
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4], label="Exit at Y"))
+# If the driver continues to Y and then continues again (mistakenly thinking they are at X and going to Y), they get a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Since the driver cannot distinguish between X and Y, we place the decision nodes in the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code models the absent-minded driver's dilemma, capturing the essence of not being able to distinguish between junctions X and Y and not remembering past decisions. The use of a chance move at the beginning is a technical necessity to incorporate the driver's uncertainty into the game tree, even though, in the narrative, the driver always starts at X.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver")
+
+# Since the driver cannot distinguish between junction X and Y, we model this as a chance move
+# that leads to two identical decision points (representing X and Y) with the same set of actions.
+g.append_move(g.root, g.players.chance, ["At X", "At Y"])
+# Set the probabilities for reaching each junction as equal, assuming the driver always starts at X
+# but this is to fit the game's uncertainty into the model.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Append moves for the driver at both junctions (X and Y), which are represented by the chance node's children.
+# Since the driver cannot distinguish between these junctions, these moves will later be placed in the same information set.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Now, we set the outcomes based on the driver's actions.
+# If the driver exits at X, they get a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Exit at X"))
+# If the driver continues to Y and then exits, they get a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at Y"))
+# If the driver continues to Y and then continues again (mistakenly thinking they are at X and going to Y), they get a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Since the driver cannot distinguish between X and Y, we place the decision nodes in the same information set.
+# Correcting the previous mistake: we should set the information set after creating both nodes.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[0].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver")
+
+# Since the driver cannot distinguish between junction X and Y, we model this as a chance move
+# that leads to two identical decision points (representing X and Y) with the same set of actions.
+g.append_move(g.root, g.players.chance, ["At X", "At Y"])
+# Set the probabilities for reaching each junction as equal, assuming the driver always starts at X
+# but this is to fit the game's uncertainty into the model.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Append moves for the driver at both junctions (X and Y), which are represented by the chance node's children.
+# Since the driver cannot distinguish between these junctions, these moves will later be placed in the same information set.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Now, we set the outcomes based on the driver's actions.
+# If the driver exits at X, they get a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Exit at X"))
+# If the driver continues to Y and then exits, they get a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at Y"))
+# If the driver continues to Y and then continues again (mistakenly thinking they are at X and going to Y), they get a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Correctly grouping the decision nodes into the same information set, reflecting the driver's inability to distinguish between junctions X and Y.
+# The correct approach is to first ensure both nodes are created and then use one node's infoset to set the other's.
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game tree
+g = gbt.Game.new_tree(players=["Driver"], title="Absent-minded Driver")
+
+# Since the driver cannot distinguish between junction X and Y, we model this as a chance move
+# that leads to two identical decision points (representing X and Y) with the same set of actions.
+g.append_move(g.root, g.players.chance, ["At X", "At Y"])
+# Set the probabilities for reaching each junction as equal, assuming the driver always starts at X
+# but this is to fit the game's uncertainty into the model.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Append moves for the driver at both junctions (X and Y), which are represented by the chance node's children.
+# Since the driver cannot distinguish between these junctions, these moves will later be placed in the same information set.
+g.append_move(g.root.children[0], "Driver", ["EXIT", "CONTINUE"])
+g.append_move(g.root.children[1], "Driver", ["EXIT", "CONTINUE"])
+
+# Now, we set the outcomes based on the driver's actions.
+# If the driver exits at X, they get a payoff of 0.
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0], label="Exit at X"))
+# If the driver continues to Y and then exits, they get a payoff of 4.
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([4], label="Exit at Y"))
+# If the driver continues to Y and then continues again (mistakenly thinking they are at X and going to Y), they get a payoff of 1.
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1], label="Continue to C"))
+
+# Correctly grouping the decision nodes into the same information set, reflecting the driver's inability to distinguish between junctions X and Y.
+# The correct approach is to first ensure both nodes are created and then use one node's infoset to set the other's.
+# However, the previous attempts were incorrect in the application of setting the information set. Let's correct this.
+# First, we need to create an information set for the driver's decision nodes after both moves have been appended.
+# Since the driver cannot distinguish between the two scenarios, we group them into the same information set.
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[0].children[1].infoset)
+
+# Save the EFG
+efg = g.write(format='native')

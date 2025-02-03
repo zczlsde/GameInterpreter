@@ -1,0 +1,75 @@
+```python
+# Since Alexis and Beverley make their decisions simultaneously and independently,
+# we model this as if one player moves first and the other second for representation,
+# but in reality, they don't know each other's choices when deciding.
+
+# Assume Alexis moves first and Beverley moves second.
+# Alexis has two actions: Bach or Stravinsky.
+# Beverley, moving "second" in our sequential representation, has the same two actions: Bach or Stravinsky.
+# However, since Beverley's decision is made simultaneously with Alexis's decision,
+# Beverley cannot know Alexis's choice when making her own decision.
+
+# Therefore, Beverley's decision nodes after choosing Bach or Stravinsky must be grouped in the same information set
+# to represent that Beverley does not know Alexis's choice.
+
+# However, in this specific game setup, since both players make their decisions simultaneously and there's no sequential structure to exploit for information sets,
+# and the game description does not specify any sequential moves or hidden actions,
+# there's technically no need to set information sets using g.set_infoset() as there are no sequential decisions to group under information sets for this simultaneous move game.
+
+# In a typical representation of this game in strategic (normal) form, we wouldn't use information sets,
+# as those are concepts used in extensive form games where decisions are made sequentially.
+# Thus, in this specific case, there's no need for g.set_infoset() calls in the code.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new game with two players: Alexis and Beverley
+g = gbt.Game.new_tree(players=["Alexis", "Beverley"], title="Bach or Stravinsky?")
+
+# Append a move for Alexis at the root of the game tree. Alexis has two actions: Bach or Stravinsky.
+g.append_move(g.root, "Alexis", ["Bach", "Stravinsky"])
+
+# For each of Alexis's choices, append a move for Beverley. Beverley also has two actions: Bach or Stravinsky.
+# These moves are added to create the structure of simultaneous decisions in an extensive form game representation.
+for node in g.root.children:
+    g.append_move(node, "Beverley", ["Bach", "Stravinsky"])
+
+# Define the outcomes based on the game description:
+# If both choose Bach, Alexis (Bach lover) gets a higher payoff, and Beverley (Stravinsky lover) gets a lower payoff.
+# If both choose Stravinsky, Beverley gets a higher payoff, and Alexis gets a lower payoff.
+# If they choose different events, they both get no payoffs.
+
+# Outcome when both choose Bach
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([2, 1], label="Both choose Bach"))
+# Outcome when Alexis chooses Bach and Beverley chooses Stravinsky
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([0, 0], label="Different choices"))
+# Outcome when Alexis chooses Stravinsky and Beverley chooses Bach
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 0], label="Different choices"))
+# Outcome when both choose Stravinsky
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 2], label="Both choose Stravinsky"))
+
+# Since Alexis and Beverley make their decisions simultaneously and independently,
+# we model this as if one player moves first and the other second for representation,
+# but in reality, they don't know each other's choices when deciding.
+
+# Assume Alexis moves first and Beverley moves second.
+# Alexis has two actions: Bach or Stravinsky.
+# Beverley, moving "second" in our sequential representation, has the same two actions: Bach or Stravinsky.
+# However, since Beverley's decision is made simultaneously with Alexis's decision,
+# Beverley cannot know Alexis's choice when making her own decision.
+
+# Therefore, Beverley's decision nodes after choosing Bach or Stravinsky must be grouped in the same information set
+# to represent that Beverley does not know Alexis's choice.
+
+# However, in this specific game setup, since both players make their decisions simultaneously and there's no sequential structure to exploit for information sets,
+# and the game description does not specify any sequential moves or hidden actions,
+# there's technically no need to set information sets using g.set_infoset() as there are no sequential decisions to group under information sets for this simultaneous move game.
+
+# In a typical representation of this game in strategic (normal) form, we wouldn't use information sets,
+# as those are concepts used in extensive form games where decisions are made sequentially.
+# Thus, in this specific case, there's no need for g.set_infoset() calls in the code.
+
+# Save the EFG
+efg = g.write(format='native')
+```

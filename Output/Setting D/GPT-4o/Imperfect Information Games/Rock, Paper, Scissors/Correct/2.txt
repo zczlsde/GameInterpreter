@@ -1,0 +1,79 @@
+```python
+# Step-by-step thought process:
+
+# In this game, both players choose their actions simultaneously, which means they do not know the other player's choice at the time of making their own choice.
+# To represent this in a sequential game structure, we can assume one player moves first, and the other player moves second.
+# However, since they move simultaneously, the second player does not know the first player's action, creating imperfect information.
+
+# Let's assume Player 1 moves first and Player 2 moves second.
+# Player 1 has three possible actions: Rock, Paper, Scissors.
+# Player 2 also has three possible actions: Rock, Paper, Scissors.
+
+# Player 2's decision nodes are g.root.children[0], g.root.children[1], and g.root.children[2], corresponding to Player 1's actions Rock, Paper, and Scissors, respectively.
+# Since Player 2 cannot distinguish between Player 1's actions when making their decision, all of Player 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with two players: Player 1 and Player 2
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors with Imperfect Information")
+
+# Player 1 moves first and has three possible actions: Rock, Paper, Scissors
+g.append_move(g.root, "Player 1", ["Rock", "Paper", "Scissors"])
+
+# Player 2 moves second, but does not know Player 1's action, creating imperfect information
+# Player 2 also has three possible actions: Rock, Paper, Scissors
+g.append_move(g.root.children[0], "Player 2", ["Rock", "Paper", "Scissors"])
+g.append_move(g.root.children[1], "Player 2", ["Rock", "Paper", "Scissors"])
+g.append_move(g.root.children[2], "Player 2", ["Rock", "Paper", "Scissors"])
+
+# Set the information set for Player 2's decision nodes to reflect imperfect information
+# Player 2 cannot distinguish between Player 1's actions when making their decision
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+g.set_infoset(g.root.children[2], g.root.children[1].infoset)
+
+# Define the outcomes for each combination of actions
+# Rock vs Rock, Paper vs Paper, Scissors vs Scissors: Draw
+draw = g.add_outcome([0, 0], label="Draw")
+
+# Rock vs Scissors: Player 1 wins
+p1_wins = g.add_outcome([1, -1], label="Player 1 wins")
+
+# Scissors vs Rock: Player 2 wins
+p2_wins = g.add_outcome([-1, 1], label="Player 2 wins")
+
+# Paper vs Rock: Player 1 wins
+p1_wins_paper = g.add_outcome([1, -1], label="Player 1 wins with Paper")
+
+# Rock vs Paper: Player 2 wins
+p2_wins_paper = g.add_outcome([-1, 1], label="Player 2 wins with Paper")
+
+# Scissors vs Paper: Player 1 wins
+p1_wins_scissors = g.add_outcome([1, -1], label="Player 1 wins with Scissors")
+
+# Paper vs Scissors: Player 2 wins
+p2_wins_scissors = g.add_outcome([-1, 1], label="Player 2 wins with Scissors")
+
+# Set the outcomes for each terminal node
+# Player 1: Rock
+g.set_outcome(g.root.children[0].children[0], draw)  # Rock vs Rock
+g.set_outcome(g.root.children[0].children[1], p2_wins_paper)  # Rock vs Paper
+g.set_outcome(g.root.children[0].children[2], p1_wins)  # Rock vs Scissors
+
+# Player 1: Paper
+g.set_outcome(g.root.children[1].children[0], p1_wins_paper)  # Paper vs Rock
+g.set_outcome(g.root.children[1].children[1], draw)  # Paper vs Paper
+g.set_outcome(g.root.children[1].children[2], p2_wins_scissors)  # Paper vs Scissors
+
+# Player 1: Scissors
+g.set_outcome(g.root.children[2].children[0], p2_wins)  # Scissors vs Rock
+g.set_outcome(g.root.children[2].children[1], p1_wins_scissors)  # Scissors vs Paper
+g.set_outcome(g.root.children[2].children[2], draw)  # Scissors vs Scissors
+
+# Save the EFG
+efg = g.write(format='native')
+```

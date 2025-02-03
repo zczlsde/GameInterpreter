@@ -1,0 +1,10 @@
+EFG 2 R "Sustainable Logging Practices Game" { "Company 1" "Company 2" }
+""
+
+p "" 1 1 "" { "Sustainable" "Not Sustainable" } 0
+p "" 2 1 "" { "Sustainable" "Not Sustainable" } 0
+t "" 1 "Both Sustainable" { 7, 7 }
+t "" 2 "Company 1 Sustainable" { 0, 4 }
+p "" 2 1 "" { "Sustainable" "Not Sustainable" } 0
+t "" 3 "Company 2 Sustainable" { 4, 0 }
+t "" 4 "Neither Sustainable" { 3, 3 }

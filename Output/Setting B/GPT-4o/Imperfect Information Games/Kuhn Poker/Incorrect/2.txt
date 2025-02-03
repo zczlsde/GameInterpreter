@@ -1,0 +1,45 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with players Alice and Bob
+g = gbt.Game.new_tree(players=["Alice", "Bob"],
+                      title="Three-card poker game")
+
+# Append a chance node to represent the allocation of cards
+g.append_move(g.root, g.players.chance, ["JQ", "JK", "QJ", "QK", "KJ", "KQ"])
+
+# For each possible allocation of cards, define the game structure
+for node in g.root.children:
+    # Alice's decision node
+    g.append_move(node, "Alice", ["Check", "Bet"])
+    
+    # Bob's decision node
+    g.append_move(node.children[0], "Bob", ["Check", "Bet"])
+    g.append_move(node.children[0].children[1], "Alice", ["Fold", "Call"])
+    
+    # Set information set for Bob's decision node
+    g.set_infoset(node.children[0].children[1], node.children[0].infoset)
+    
+    # Bob's decision node if Alice bets
+    g.append_move(node.children[1], "Bob", ["Fold", "Call"])
+    g.append_move(node.children[1].children[1], "Alice", ["Fold", "Call"])
+    
+    # Set information set for Bob's decision node if Alice bets
+    g.set_infoset(node.children[1].children[1], node.children[1].infoset)
+
+# Define outcomes for different game endings
+alice_winsbig = g.add_outcome([2, -2], label="Alice wins big")
+alice_wins = g.add_outcome([1, -1], label="Alice wins")
+bob_winsbig = g.add_outcome([-2, 2], label="Bob wins big")
+bob_wins = g.add_outcome([-1, 1], label="Bob wins")
+
+# Set outcomes for different decision paths
+g.set_outcome(g.root.children[0].children[0].children[0], alice_winsbig)  # Alice checks, Bob checks
+g.set_outcome(g.root.children[0].children[0].children[1].children[0], bob_wins)  # Alice checks, Bob bets, Alice folds
+g.set_outcome(g.root.children[0].children[0].children[1].children[1], alice_wins)  # Alice checks, Bob bets, Alice calls
+g.set_outcome(g.root.children[0].children[1].children[0], alice_wins)  # Alice bets, Bob folds
+g.set_outcome(g.root.children[0].children[1].children[1], bob_wins)  # Alice bets, Bob calls
+
+# Save the EFG
+efg = g.write(format='native')
+```

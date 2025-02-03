@@ -1,0 +1,67 @@
+```python
+# Import pygambit library
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Country A and Country B Scenario")
+
+# Step 1: Country B makes the first move, choosing between "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Step 2: If Country B accepts, Country A decides to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# Step 3: If Country B rebels, Country A decides to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Step 4: If Country A chooses to suppress, the outcome is determined by chance (war)
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Country B Wins", "Country B Loses"])
+
+# Set the probabilities for the chance node (war outcome)
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Since there is no simultaneous move or hidden information in this game, no information sets need to be set.
+# Therefore, no g.set_infoset() function is required in this scenario.
+```
+
+```python
+# Import pygambit library
+import pygambit as gbt
+
+# Create a new game tree with players Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"], title="Country A and Country B Scenario")
+
+# Step 1: Country B makes the first move, choosing between "Accept" and "Rebel"
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# Step 2: If Country B accepts, Country A decides to "Tax" or "Drop Taxes"
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# Step 3: If Country B rebels, Country A decides to "Grant Independence" or "Suppress"
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Step 4: If Country A chooses to suppress, the outcome is determined by chance (war)
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Country B Wins", "Country B Loses"])
+
+# Set the probabilities for the chance node (war outcome)
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Define the outcomes for each terminal node
+# If Country B accepts and Country A taxes
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([6, -2], label="Tax"))
+
+# If Country B accepts and Country A drops taxes
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4, 0], label="Drop Taxes"))
+
+# If Country B rebels and Country A grants independence
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 3], label="Grant Independence"))
+
+# If Country B rebels, Country A suppresses, and Country B wins the war
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, -3], label="Country B Wins War"))
+
+# If Country B rebels, Country A suppresses, and Country B loses the war
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-1, -5], label="Country B Loses War"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

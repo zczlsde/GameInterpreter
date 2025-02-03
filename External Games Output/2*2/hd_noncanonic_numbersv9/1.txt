@@ -1,0 +1,60 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, both making decisions simultaneously: Commander 1 and Commander 2.
+# Each player has two actions: Offense and Defense.
+
+# Step 2: Determine the imperfect information structure.
+# Since the players move simultaneously, neither commander knows the other's decision at the time of their own decision.
+# To model this in a sequential structure, assume Commander 1 moves first and Commander 2 moves second.
+# Commander 2's decision nodes are g.root.children[0] (Commander 1 chooses Offense) and g.root.children[1] (Commander 1 chooses Defense).
+
+# Step 3: Group Commander 2's decision nodes in the same information set.
+# Commander 2 cannot distinguish between Commander 1 choosing Offense or Defense when making their decision.
+# Therefore, Commander 2's decision nodes should be grouped in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players: Commander 1 and Commander 2.
+g = gbt.Game.new_tree(players=["Commander 1", "Commander 2"],
+                      title="Military Strategy Game")
+
+# Step 2: Model the game as a sequential game where Commander 1 moves first.
+# Commander 1 has two actions: Offense and Defense.
+g.append_move(g.root, "Commander 1", ["Offense", "Defense"])
+
+# Step 3: Commander 2 moves after Commander 1, but does not know Commander 1's choice.
+# Commander 2 also has two actions: Offense and Defense.
+# We append moves for Commander 2 at both nodes resulting from Commander 1's actions.
+g.append_move(g.root.children[0], "Commander 2", ["Offense", "Defense"])
+g.append_move(g.root.children[1], "Commander 2", ["Offense", "Defense"])
+
+# Step 4: Set the information set for Commander 2's decision nodes.
+# Since Commander 2 cannot distinguish between Commander 1 choosing Offense or Defense,
+# we group these decision nodes in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the outcomes for each possible combination of actions.
+# If both choose Defense, they secure their positions with 0 points.
+defense_defense = g.add_outcome([0, 0], label="Both Defend")
+
+# If one goes on offense and the other remains defensive, the offensive commander gains 5 points,
+# while the defensive commander suffers -5 points.
+offense_defense = g.add_outcome([5, -5], label="Offense vs Defense")
+defense_offense = g.add_outcome([-5, 5], label="Defense vs Offense")
+
+# If both go on offense, they exhaust their resources, resulting in -15 points each.
+offense_offense = g.add_outcome([-15, -15], label="Both Offend")
+
+# Step 6: Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], offense_offense)
+g.set_outcome(g.root.children[0].children[1], offense_defense)
+g.set_outcome(g.root.children[1].children[0], defense_offense)
+g.set_outcome(g.root.children[1].children[1], defense_defense)
+
+# Save the EFG
+efg = g.write(format='native')
+```

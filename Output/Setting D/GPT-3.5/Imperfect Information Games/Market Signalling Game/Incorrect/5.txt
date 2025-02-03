@@ -1,0 +1,56 @@
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Append the chance node for the strength of the New Manufacturer
+g.append_move(g.root, g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Append the chance node for the signal sent by the New Manufacturer
+for node in g.root.children:
+    g.append_move(node, g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Append the decision nodes for the Current Manufacturer based on the signal received
+for node in g.root.children:
+    for child_node in node.children:
+        g.append_move(child_node, "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+
+# Set the information sets for the decision nodes of the Current Manufacturer
+# Group the decision nodes based on the signal received by the New Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+```
+
+```python
+# Import the necessary library
+import pygambit as gbt
+
+# Create a new game tree with two players, Current Manufacturer and New Manufacturer
+g = gbt.Game.new_tree(players=["Current Manufacturer", "New Manufacturer"],
+                      title="Manufacturer Competition Game")
+
+# Append the chance node for the strength of the New Manufacturer
+g.append_move(g.root, g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Append the chance node for the signal sent by the New Manufacturer
+g.append_move(g.root.children[0], g.players.chance, ["Strong (S)", "Weak (W)"])
+g.append_move(g.root.children[1], g.players.chance, ["Strong (S)", "Weak (W)"])
+
+# Append the decision nodes for the Current Manufacturer based on the signal received
+g.append_move(g.root.children[0].children[0], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+g.append_move(g.root.children[0].children[1], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+g.append_move(g.root.children[1].children[0], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+g.append_move(g.root.children[1].children[1], "Current Manufacturer", ["Fight (F)", "Adapt (A)"])
+
+# Set the information sets for the decision nodes of the Current Manufacturer
+# Group the decision nodes based on the signal received by the New Manufacturer
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[0].children[1].infoset)
+g.set_infoset(g.root.children[1].children[0], g.root.children[1].children[1].infoset)
+g.set_infoset(g.root.children[1].children[1], g.root.children[1].children[1].infoset)
+```

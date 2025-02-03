@@ -1,0 +1,10 @@
+EFG 2 R "Labor Negotiation Game" { "Labor Union" "Company Management" }
+""
+
+p "" 1 1 "" { "Compromise" "Hold Firm" } 0
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 1 "Reasonable Contract" { 1, 1 }
+t "" 3 "Management Favorable" { 0, 2 }
+p "" 2 1 "" { "Compromise" "Hold Firm" } 0
+t "" 2 "Union Favorable" { 2, 0 }
+t "" 4 "Strike" { -1, -1 }

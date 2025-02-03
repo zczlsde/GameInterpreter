@@ -1,0 +1,4 @@
+Your code contains an error. Please review and fix it before trying again.
+
+Functions like g.append_move, g.append_infoset, g.set_outcome, and g.set_infoset return None.
+Regarding the error “name ‘node’ is not defined”: Regenerate the path for node1 and node2 when using g.set_infoset(node1, node2.infoset).

@@ -1,0 +1,10 @@
+The CODE for representing the imperfect information of the game is as follows:
+
+Avoid using recursion or loops in the code generation.  
+Refrain from using the ``+'' operator in the code generation.  
+Note that `g.append_move', `g.append_infoset', `g.set_outcome', and `g.set_infoset' all return `None'.  
+Make sure to call `g.set_infoset(node1, node2.infoset)' only after `g.append_move' has been executed on both `node1' and `node2'.  
+Use `gbt.Rational' to represent probabilities at the chance node. 
+
+Then, could you write python code to generate the EFG for this game using the pygambit library in the example?
+Let’s think step by step and write the reasoning in the code comments.

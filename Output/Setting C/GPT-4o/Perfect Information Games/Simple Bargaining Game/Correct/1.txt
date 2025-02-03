@@ -1,0 +1,45 @@
+```python
+# Step-by-step thought process:
+
+# 1. The game involves two players, A and B, negotiating the division of 10,000 pounds.
+# 2. The game is sequential, with A proposing first, followed by B, and then A again.
+# 3. There is no simultaneous move or hidden information in this game.
+# 4. Since all moves are sequential and each player knows the previous actions, there is no imperfect information.
+# 5. Therefore, there are no information sets to be set in this game.
+
+# As there is no imperfect information, no set_infoset() function is needed.
+```
+
+```python
+import pygambit as gbt
+
+# Create a new extensive-form game with players A and B
+g = gbt.Game.new_tree(players=["A", "B"], title="Negotiation Game")
+
+# Step 1: A proposes a distribution plan where A gets 5500 and B gets 4500
+g.append_move(g.root, "A", ["Propose 5500/4500"])
+
+# Step 2: B decides to accept or reject A's proposal
+g.append_move(g.root.children[0], "B", ["Accept", "Reject"])
+
+# If B accepts, the game ends with payoffs 5500 for A and 4500 for B
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([5500, 4500], label="B accepts A's proposal"))
+
+# Step 3: If B rejects, B proposes an equal split of 5000 each
+g.append_move(g.root.children[0].children[1], "B", ["Propose 5000/5000"])
+
+# Step 4: A decides to accept or reject B's proposal
+g.append_move(g.root.children[0].children[1].children[0], "A", ["Accept", "Reject"])
+
+# If A accepts, the game ends with payoffs 4750 for both A and B
+g.set_outcome(g.root.children[0].children[1].children[0].children[0], g.add_outcome([4750, 4750], label="A accepts B's proposal"))
+
+# Step 5: If A rejects, A proposes a new plan where A gets 5200 and B gets 4800
+g.append_move(g.root.children[0].children[1].children[0].children[1], "A", ["Propose 5200/4800"])
+
+# B must accept this proposal, and the game ends with payoffs 4693 for A and 4332 for B
+g.set_outcome(g.root.children[0].children[1].children[0].children[1].children[0], g.add_outcome([4693, 4332], label="B accepts A's final proposal"))
+
+# Save the EFG
+efg = g.write(format='native')
+```

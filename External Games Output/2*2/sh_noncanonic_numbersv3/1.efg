@@ -1,0 +1,10 @@
+EFG 2 R "Strategic Alliance Game" { "Company 1" "Company 2" }
+""
+
+p "" 1 1 "" { "Commit" "Develop Solo" } 0
+p "" 2 1 "" { "Commit" "Develop Solo" } 0
+t "" 1 "Both Commit" { 5, 5 }
+t "" 2 "C1 Commit, C2 Solo" { 0, 3 }
+p "" 2 1 "" { "Commit" "Develop Solo" } 0
+t "" 3 "C1 Solo, C2 Commit" { 3, 0 }
+t "" 4 "Both Solo" { 2, 2 }

@@ -1,0 +1,93 @@
+```python
+# Since the game involves decisions by two firms where Firm 2 decides first to enter or stay out, 
+# and Firm 1 decides next on how to react (Fight or Accommodate) if Firm 2 enters, 
+# it initially seems like a game of perfect information. 
+# However, the challenge specifies to consider and represent imperfect information structures, 
+# which in this context, would typically involve scenarios where decisions are made under uncertainty 
+# about the other player's actions or payoffs. 
+# Given the game's description, there's no explicit mention of simultaneous moves or hidden actions/payoffs 
+# that would traditionally necessitate grouping nodes into the same information set due to imperfect information. 
+# The game as described is sequential without explicit imperfect information elements 
+# (Firm 2's decision is known by the time Firm 1 makes its decision).
+
+# However, to align with the task's requirement to infer and represent any potential imperfect information structure:
+# If we were to consider any aspect of the game that could be interpreted as involving imperfect information 
+# (perhaps not explicitly mentioned in the description), it might involve assumptions about Firm 2's knowledge 
+# of Firm 1's potential reaction to its entry. But since Firm 1's decision comes after Firm 2's decision, 
+# and there's no simultaneous move or hidden information as per the given description, 
+# there's no direct application of set_infoset() based on the provided details.
+
+# Therefore, under the strict interpretation of the given game description, 
+# there's no need to group nodes into the same information set for representing imperfect information.
+# This conclusion is based on the game's description as provided and the typical use of information sets 
+# to represent situations where a player cannot distinguish between different game states due to simultaneous moves 
+# or hidden actions, which does not directly apply here.
+
+# If the game description had included elements like hidden actions or simultaneous decisions 
+# that Firm 1 makes without knowing Firm 2's choice, then we would group those decision nodes 
+# into the same information set using set_infoset(). For example, if Firm 1 had to decide to Fight or Accommodate 
+# without knowing Firm 2's entry decision, we would represent that uncertainty with information sets. 
+# But given the sequential nature of the decisions as described, such a step is not warranted.
+```
+
+Given the game description, we will construct an extensive-form game using the PyGambit library. The game involves two firms, where Firm 2 decides whether to enter the market or not, and if it enters, Firm 1 decides whether to fight or accommodate. This game is sequential and, based on the description, does not inherently involve imperfect information. However, to fulfill the requirement of considering imperfect information, we will proceed with constructing the game as if it were purely sequential, acknowledging that the explicit representation of imperfect information might not directly apply without additional context or assumptions about hidden actions or payoffs.
+
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Firm 1 and Firm 2
+g = gbt.Game.new_tree(players=["Firm 1", "Firm 2"], title="Market Entry Game")
+
+# Firm 2 decides first whether to enter the market or stay out
+g.append_move(g.root, "Firm 2", ["Enter", "Stay Out"])
+
+# If Firm 2 enters, Firm 1 decides how to react: Fight or Accommodate
+g.append_move(g.root.children[0], "Firm 1", ["Fight", "Accommodate"])
+
+# Define payoffs based on the game description
+# Assuming specific numeric values for the payoffs since they were not provided in the description
+# Firm 1 earns more if Firm 2 decides not to enter
+g.set_outcome(g.root.children[1], g.add_outcome([2, 0], label="Firm 2 Stays Out"))
+
+# If Firm 2 enters and Firm 1 accommodates, both firms earn an equal amount
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1], label="Accommodate"))
+
+# If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1
+# Adjusting the payoff values to reflect that Firm 2 earns more in this scenario
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([0, 2], label="Fight"))
+
+# Since the game involves decisions by two firms where Firm 2 decides first to enter or stay out, 
+# and Firm 1 decides next on how to react (Fight or Accommodate) if Firm 2 enters, 
+# it initially seems like a game of perfect information. 
+# However, the challenge specifies to consider and represent imperfect information structures, 
+# which in this context, would typically involve scenarios where decisions are made under uncertainty 
+# about the other player's actions or payoffs. 
+# Given the game's description, there's no explicit mention of simultaneous moves or hidden actions/payoffs 
+# that would traditionally necessitate grouping nodes into the same information set due to imperfect information. 
+# The game as described is sequential without explicit imperfect information elements 
+# (Firm 2's decision is known by the time Firm 1 makes its decision).
+
+# However, to align with the task's requirement to infer and represent any potential imperfect information structure:
+# If we were to consider any aspect of the game that could be interpreted as involving imperfect information 
+# (perhaps not explicitly mentioned in the description), it might involve assumptions about Firm 2's knowledge 
+# of Firm 1's potential reaction to its entry. But since Firm 1's decision comes after Firm 2's decision, 
+# and there's no simultaneous move or hidden information as per the given description, 
+# there's no direct application of set_infoset() based on the provided details.
+
+# Therefore, under the strict interpretation of the given game description, 
+# there's no need to group nodes into the same information set for representing imperfect information.
+# This conclusion is based on the game's description as provided and the typical use of information sets 
+# to represent situations where a player cannot distinguish between different game states due to simultaneous moves 
+# or hidden actions, which does not directly apply here.
+
+# If the game description had included elements like hidden actions or simultaneous decisions 
+# that Firm 1 makes without knowing Firm 2's choice, then we would group those decision nodes 
+# into the same information set using set_infoset(). For example, if Firm 1 had to decide to Fight or Accommodate 
+# without knowing Firm 2's entry decision, we would represent that uncertainty with information sets. 
+# But given the sequential nature of the decisions as described, such a step is not warranted.
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code constructs the game tree for the described market entry game, assigning payoffs based on the outcomes of Firm 2's decision to enter or stay out and Firm 1's subsequent decision to fight or accommodate. The comments acknowledge the challenge's requirement for considering imperfect information but explain why, based on the game's description, explicit representation of imperfect information through information sets is not directly applied.

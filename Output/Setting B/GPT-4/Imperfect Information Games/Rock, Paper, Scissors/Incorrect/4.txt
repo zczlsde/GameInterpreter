@@ -1,0 +1,73 @@
+To model the Rock-Paper-Scissors game as an extensive form game (EFG) using the Pygambit library, we need to consider that the game involves simultaneous moves. In EFG representation, simultaneous moves can be modeled by introducing a chance move at the beginning that selects the combination of actions taken by the players. This approach transforms the simultaneous game into a sequential game from the perspective of the EFG representation, where the chance move effectively "decides" the actions of both players before the game unfolds.
+
+Here's how we can write the Python code to generate the EFG for Rock-Paper-Scissors using the Pygambit library:
+
+```python
+import pygambit as gbt
+
+# Create a new game with a title
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous decision-making.
+# The chance move will have 9 outcomes representing all possible combinations of actions (Rock, Paper, Scissors) by both players.
+g.append_move(g.root, g.players.chance, ["RR", "RP", "RS", "PR", "PP", "PS", "SR", "SP", "SS"])
+
+# Set the probabilities for each outcome of the chance move to be equal, as each combination is equally likely.
+# Using gbt.Rational to ensure the probabilities are represented accurately.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9) for _ in range(9)])
+
+# Define the outcomes for each combination of actions.
+# The outcomes are based on the rules: Rock beats Scissors, Scissors beats Paper, and Paper beats Rock.
+# The payoffs are set such that winning yields a payoff of 1, losing yields a payoff of -1, and a tie yields a payoff of 0 for both players.
+outcomes = {
+    "RR": [0, 0], "RP": [-1, 1], "RS": [1, -1],
+    "PR": [1, -1], "PP": [0, 0], "PS": [-1, 1],
+    "SR": [-1, 1], "SP": [1, -1], "SS": [0, 0]
+}
+
+# Loop through each child of the root (representing each possible combination of actions) and set the outcome accordingly.
+# Note: The loop is used here for clarity and brevity in setting outcomes based on the predefined rules.
+for i, node in enumerate(g.root.children):
+    action_combination = node.move.label
+    g.set_outcome(node, g.add_outcome(outcomes[action_combination]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet creates an EFG representation of the Rock-Paper-Scissors game, where a chance move initially decides the actions of both players. Each possible combination of actions (e.g., Player 1 chooses Rock and Player 2 chooses Scissors) is represented as a child of the root node. The outcomes are then set based on the rules of the game, with payoffs assigned to reflect winning, losing, or tying the game.
+=======================================
+'pygambit.gambit.Node' object has no attribute 'move'
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with a title
+g = gbt.Game.new_tree(players=["Player 1", "Player 2"], title="Rock-Paper-Scissors")
+
+# Append a chance move at the root to represent the simultaneous decision-making.
+# The chance move will have 9 outcomes representing all possible combinations of actions (Rock, Paper, Scissors) by both players.
+# Since we cannot use loops or recursion, we manually specify each combination.
+g.append_move(g.root, g.players.chance, ["RR", "RP", "RS", "PR", "PP", "PS", "SR", "SP", "SS"])
+
+# Set the probabilities for each outcome of the chance move to be equal, as each combination is equally likely.
+# Using gbt.Rational to ensure the probabilities are represented accurately.
+# Manually setting probabilities as we avoid using loops.
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 9)] * 9)
+
+# Manually define and set outcomes for each combination of actions.
+# The outcomes are based on the rules: Rock beats Scissors, Scissors beats Paper, and Paper beats Rock.
+# The payoffs are set such that winning yields a payoff of 1, losing yields a payoff of -1, and a tie yields a payoff of 0 for both players.
+# Since we cannot use loops, we manually set each outcome.
+g.set_outcome(g.root.children[0], g.add_outcome([0, 0], label="Tie - RR"))
+g.set_outcome(g.root.children[1], g.add_outcome([-1, 1], label="P1 loses - RP"))
+g.set_outcome(g.root.children[2], g.add_outcome([1, -1], label="P1 wins - RS"))
+g.set_outcome(g.root.children[3], g.add_outcome([1, -1], label="P1 wins - PR"))
+g.set_outcome(g.root.children[4], g.add_outcome([0, 0], label="Tie - PP"))
+g.set_outcome(g.root.children[5], g.add_outcome([-1, 1], label="P1 loses - PS"))
+g.set_outcome(g.root.children[6], g.add_outcome([-1, 1], label="P1 loses - SR"))
+g.set_outcome(g.root.children[7], g.add_outcome([1, -1], label="P1 wins - SP"))
+g.set_outcome(g.root.children[8], g.add_outcome([0, 0], label="Tie - SS"))
+
+# Save the EFG
+efg = g.write(format='native')

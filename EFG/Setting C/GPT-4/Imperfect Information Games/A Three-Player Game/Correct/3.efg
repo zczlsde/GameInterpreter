@@ -1,0 +1,18 @@
+EFG 2 R "Three-Player Game with Chance Event" { "Player 1" "Player 2" "Player 3" }
+""
+
+c "" 1 "" { "A" 1/2 "B" 1/2 } 0
+p "" 1 1 "" { "L" "R" } 0
+p "" 2 1 "" { "l" "r" } 0
+p "" 3 1 "" { "a" "b" } 0
+t "" 5 "a selected" { 3, 3, 3 }
+t "" 6 "b selected" { 3, 3, 3 }
+t "" 3 "r selected" { 2, 2, 2 }
+t "" 1 "R selected" { 1, 1, 1 }
+p "" 1 1 "" { "L" "R" } 0
+p "" 2 1 "" { "l" "r" } 0
+p "" 3 1 "" { "a" "b" } 0
+t "" 7 "a selected" { 3, 3, 3 }
+t "" 8 "b selected" { 3, 3, 3 }
+t "" 4 "r selected" { 2, 2, 2 }
+t "" 2 "R selected" { 1, 1, 1 }

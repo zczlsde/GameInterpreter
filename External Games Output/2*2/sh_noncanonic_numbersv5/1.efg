@@ -1,0 +1,10 @@
+EFG 2 R "Mutual Defense Pact Game" { "Nation 1" "Nation 2" }
+""
+
+p "" 1 1 "" { "Sign" "Not sign" } 0
+p "" 2 1 "" { "Sign" "Not sign" } 0
+t "" 1 "Both sign" { 4, 4 }
+t "" 2 "Nation 1 signs, Nation 2 does not" { 0, 2 }
+p "" 2 1 "" { "Sign" "Not sign" } 0
+t "" 3 "Nation 2 signs, Nation 1 does not" { 2, 0 }
+t "" 4 "Neither sign" { 1, 1 }

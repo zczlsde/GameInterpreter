@@ -1,0 +1,213 @@
+```python
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Chance Node")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the decision of the chance node
+# Since Player 1 does not observe the chance node's action, we create an information set for Player 1's decision that spans both outcomes of the chance node.
+for node in g.root.children:
+    g.append_move(node, "Player 1", ["L", "R"])
+# Set information set for Player 1's moves to indicate they are indistinguishable
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+for node in [g.root.children[0].children[1], g.root.children[1].children[1]]:
+    g.set_outcome(node, g.add_outcome([1, 1, 1]))
+
+# Stage 3: Player 2 chooses 'l' or 'r' without observing Player 1's action
+# Only proceed if Player 1 chooses 'L'
+for node in [g.root.children[0].children[0], g.root.children[1].children[0]]:
+    g.append_move(node, "Player 2", ["l", "r"])
+# Since Player 2 does not observe Player 1's action, we create an information set for Player 2's decision
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+for node in [g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1]]:
+    g.set_outcome(node, g.add_outcome([2, 2, 2]))
+
+# Stage 4: Player 3 chooses 'a' or 'b' without observing Player 2's action
+# Only proceed if Player 2 chooses 'l'
+for node in [g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0]]:
+    g.append_move(node, "Player 3", ["a", "b"])
+# Since Player 3 does not observe Player 2's action, we create an information set for Player 3's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[0].infoset)
+
+# The game ends with a payoff (3, 3, 3) after Player 3's decision
+for node in [g.root.children[0].children[0].children[0].children, g.root.children[1].children[0].children[0].children]:
+    for child in node:
+        g.set_outcome(child, g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')
+```
+
+This code snippet constructs the extensive form game (EFG) for the described three-player game with a chance node at the beginning. The game progresses through stages with decisions made by players 1, 2, and 3, without any of them observing the actions taken by the chance node or the previous players. The use of information sets reflects the players' lack of knowledge about previous moves, ensuring that the game accurately represents the described scenario.
+=======================================
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Chance Node")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the decision of the chance node
+# Since Player 1 does not observe the chance node's action, we create an information set for Player 1's decision that spans both outcomes of the chance node.
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["L", "R"])
+# Set information set for Player 1's moves to indicate they are indistinguishable
+g.set_infoset(g.root.children[0].children[0], g.root.children[0].children[0].infoset)
+
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+for chance_outcome in g.root.children:
+    g.set_outcome(chance_outcome.children[1], g.add_outcome([1, 1, 1]))
+
+# Stage 3: Player 2 chooses 'l' or 'r' without observing Player 1's action
+# Only proceed if Player 1 chooses 'L'
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome.children[0], "Player 2", ["l", "r"])
+# Since Player 2 does not observe Player 1's action, we create an information set for Player 2's decision
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[0].children[0].children[0].infoset)
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+for chance_outcome in g.root.children:
+    g.set_outcome(chance_outcome.children[0].children[1], g.add_outcome([2, 2, 2]))
+
+# Stage 4: Player 3 chooses 'a' or 'b' without observing Player 2's action
+# Only proceed if Player 2 chooses 'l'
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome.children[0].children[0], "Player 3", ["a", "b"])
+# Since Player 3 does not observe Player 2's action, we create an information set for Player 3's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[0].children[0].children[0].children[0].infoset)
+
+# The game ends with a payoff (3, 3, 3) after Player 3's decision
+for chance_outcome in g.root.children:
+    for player3_decision in chance_outcome.children[0].children[0].children:
+        g.set_outcome(player3_decision, g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Chance Node")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the decision of the chance node
+# Append moves for Player 1 under each outcome of the chance node
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome, "Player 1", ["L", "R"])
+
+# Since Player 1 does not observe the chance node's action, we create an information set for Player 1's decision that spans both outcomes of the chance node.
+# Correctly setting the information set for Player 1's decision
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+for chance_outcome in g.root.children:
+    g.set_outcome(chance_outcome.children[1], g.add_outcome([1, 1, 1]))
+
+# Stage 3: Player 2 chooses 'l' or 'r' without observing Player 1's action
+# Only proceed if Player 1 chooses 'L'. Append moves for Player 2 under each 'L' decision of Player 1
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome.children[0], "Player 2", ["l", "r"])
+
+# Since Player 2 does not observe Player 1's action, we create an information set for Player 2's decision
+# Correctly setting the information set for Player 2's decision
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+for chance_outcome in g.root.children:
+    g.set_outcome(chance_outcome.children[0].children[1], g.add_outcome([2, 2, 2]))
+
+# Stage 4: Player 3 chooses 'a' or 'b' without observing Player 2's action
+# Only proceed if Player 2 chooses 'l'. Append moves for Player 3 under each 'l' decision of Player 2
+for chance_outcome in g.root.children:
+    g.append_move(chance_outcome.children[0].children[0], "Player 3", ["a", "b"])
+
+# Since Player 3 does not observe Player 2's action, we create an information set for Player 3's decision
+# Correctly setting the information set for Player 3's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[0].infoset)
+
+# The game ends with a payoff (3, 3, 3) after Player 3's decision
+for chance_outcome in g.root.children:
+    for player3_decision in chance_outcome.children[0].children[0].children[0].children:
+        g.set_outcome(player3_decision, g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')
+
+name 'node' is not defined
+Error in code generation. Trying again...
+
+import pygambit as gbt
+
+# Create a new game with three players
+g = gbt.Game.new_tree(players=["Player 1", "Player 2", "Player 3"],
+                      title="Three Players Game with Chance Node")
+
+# Stage 1: Chance node decides 'A' or 'B' with equal probability
+g.append_move(g.root, g.players.chance, ["A", "B"])
+g.set_chance_probs(g.root.infoset, [gbt.Rational(1, 2), gbt.Rational(1, 2)])
+
+# Stage 2: Player 1 chooses 'L' or 'R' without knowing the decision of the chance node
+# Append moves for Player 1 under each outcome of the chance node
+g.append_move(g.root.children[0], "Player 1", ["L", "R"])
+g.append_move(g.root.children[1], "Player 1", ["L", "R"])
+# Since Player 1 does not observe the chance node's action, we create an information set for Player 1's decision that spans both outcomes of the chance node.
+# Correctly setting the information set for Player 1's decision
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# If Player 1 chooses 'R', the game ends with a payoff (1, 1, 1)
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([1, 1, 1]))
+g.set_outcome(g.root.children[1].children[1], g.add_outcome([1, 1, 1]))
+
+# Stage 3: Player 2 chooses 'l' or 'r' without observing Player 1's action
+# Only proceed if Player 1 chooses 'L'. Append moves for Player 2 under each 'L' decision of Player 1
+g.append_move(g.root.children[0].children[0], "Player 2", ["l", "r"])
+g.append_move(g.root.children[1].children[0], "Player 2", ["l", "r"])
+# Since Player 2 does not observe Player 1's action, we create an information set for Player 2's decision
+# Correctly setting the information set for Player 2's decision
+g.set_infoset(g.root.children[0].children[0].children[0], g.root.children[1].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[1], g.root.children[1].children[0].children[1].infoset)
+
+# If Player 2 chooses 'r', the game ends with a payoff (2, 2, 2)
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([2, 2, 2]))
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 2, 2]))
+
+# Stage 4: Player 3 chooses 'a' or 'b' without observing Player 2's action
+# Only proceed if Player 2 chooses 'l'. Append moves for Player 3 under each 'l' decision of Player 2
+g.append_move(g.root.children[0].children[0].children[0], "Player 3", ["a", "b"])
+g.append_move(g.root.children[1].children[0].children[0], "Player 3", ["a", "b"])
+# Since Player 3 does not observe Player 2's action, we create an information set for Player 3's decision
+# Correctly setting the information set for Player 3's decision
+g.set_infoset(g.root.children[0].children[0].children[0].children[0], g.root.children[1].children[0].children[0].children[0].infoset)
+g.set_infoset(g.root.children[0].children[0].children[0].children[1], g.root.children[1].children[0].children[0].children[1].infoset)
+
+# The game ends with a payoff (3, 3, 3) after Player 3's decision
+g.set_outcome(g.root.children[0].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[0].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[0], g.add_outcome([3, 3, 3]))
+g.set_outcome(g.root.children[1].children[0].children[0].children[1], g.add_outcome([3, 3, 3]))
+
+# Save the EFG
+efg = g.write(format='native')

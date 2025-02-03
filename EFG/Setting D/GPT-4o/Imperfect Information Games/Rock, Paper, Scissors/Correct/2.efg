@@ -1,0 +1,17 @@
+EFG 2 R "Rock-Paper-Scissors with Imperfect Information" { "Player 1" "Player 2" }
+""
+
+p "" 1 1 "" { "Rock" "Paper" "Scissors" } 0
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 1 "Draw" { 0, 0 }
+t "" 5 "Player 2 wins with Paper" { -1, 1 }
+t "" 2 "Player 1 wins" { 1, -1 }
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 4 "Player 1 wins with Paper" { 1, -1 }
+t "" 1 "Draw" { 0, 0 }
+t "" 7 "Player 2 wins with Scissors" { -1, 1 }
+p "" 2 1 "" { "Rock" "Paper" "Scissors" } 0
+t "" 3 "Player 2 wins" { -1, 1 }
+t "" 6 "Player 1 wins with Scissors" { 1, -1 }
+t "" 1 "Draw" { 0, 0 }
+

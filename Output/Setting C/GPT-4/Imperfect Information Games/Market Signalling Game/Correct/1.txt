@@ -1,0 +1,86 @@
+```python
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"])
+
+# Append the chance node for the new manufacturer's strength
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+
+# For each strength outcome, append the signal sent by the new manufacturer
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# For each signal sent after being strong, set the existing manufacturer's decision
+for signal_node in g.root.children[0].children:
+    g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# For each signal sent after being weak, set the existing manufacturer's decision
+for signal_node in g.root.children[1].children:
+    g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Set information sets for the existing manufacturer, as they cannot distinguish between the strength of the new manufacturer, only the signal sent.
+# Grouping nodes based on the signal received, regardless of the actual strength of the new manufacturer.
+
+# Grouping nodes where the existing manufacturer sees a strong signal
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Grouping nodes where the existing manufacturer sees a weak signal
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# The existing manufacturer's decisions are grouped into information sets based on the observed signal, not the actual strength of the new manufacturer.
+# This represents the imperfect information in the game: the existing manufacturer knows the signal but not the actual strength.
+```
+
+```python
+import pygambit as gbt
+
+# Initialize the game with two players
+g = gbt.Game.new_tree(players=["New Manufacturer", "Existing Manufacturer"])
+
+# Append the chance node for the new manufacturer's strength with probabilities
+g.append_move(g.root, g.players.chance, ["Strong", "Weak"])
+# Setting the probabilities for the strength of the new manufacturer
+g.set_chance_probs(g.root.infoset, [gbt.Rational(2, 3), gbt.Rational(1, 3)])
+
+# For each strength outcome (Strong, Weak), append the signal sent by the new manufacturer
+# This is a decision made by the new manufacturer, hence it's modeled as their move
+for strength_node in g.root.children:
+    g.append_move(strength_node, "New Manufacturer", ["Strong Signal", "Weak Signal"])
+
+# For each signal sent (Strong Signal, Weak Signal), set the existing manufacturer's decision (Fight, Adapt)
+# This decision is made after observing the signal, hence it's the existing manufacturer's move
+for strength_node in g.root.children:
+    for signal_node in strength_node.children:
+        g.append_move(signal_node, "Existing Manufacturer", ["Fight", "Adapt"])
+
+# Set outcomes based on the game description
+# Strong-Strong-Fight
+g.set_outcome(g.root.children[0].children[0].children[0], g.add_outcome([1, 0]))
+# Strong-Strong-Adapt
+g.set_outcome(g.root.children[0].children[0].children[1], g.add_outcome([3, 1]))
+# Strong-Weak-Fight
+g.set_outcome(g.root.children[0].children[1].children[0], g.add_outcome([0, 0]))
+# Strong-Weak-Adapt
+g.set_outcome(g.root.children[0].children[1].children[1], g.add_outcome([2, 1]))
+# Weak-Strong-Fight
+g.set_outcome(g.root.children[1].children[0].children[0], g.add_outcome([0, 2]))
+# Weak-Strong-Adapt
+g.set_outcome(g.root.children[1].children[0].children[1], g.add_outcome([2, 1]))
+# Weak-Weak-Fight
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([1, 2]))
+# Weak-Weak-Adapt
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([3, 1]))
+
+# Set information sets for the existing manufacturer, as they cannot distinguish between the strength of the new manufacturer, only the signal sent.
+# Grouping nodes based on the signal received, regardless of the actual strength of the new manufacturer.
+
+# Grouping nodes where the existing manufacturer sees a strong signal
+g.set_infoset(g.root.children[0].children[0], g.root.children[1].children[0].infoset)
+
+# Grouping nodes where the existing manufacturer sees a weak signal
+g.set_infoset(g.root.children[0].children[1], g.root.children[1].children[1].infoset)
+
+# The existing manufacturer's decisions are grouped into information sets based on the observed signal, not the actual strength of the new manufacturer.
+# This represents the imperfect information in the game: the existing manufacturer knows the signal but not the actual strength.
+```

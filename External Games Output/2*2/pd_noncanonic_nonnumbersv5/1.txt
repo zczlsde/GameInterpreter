@@ -1,0 +1,57 @@
+```python
+# Step 1: Identify the players and their actions.
+# There are two players, Company A and Company B. Each player has two actions: Invest or Not Invest.
+
+# Step 2: Determine the sequence of moves.
+# Since the game is simultaneous, we can model it as if one player moves first and the other follows, but they do not know the other's action.
+
+# Step 3: Identify the decision nodes for each player.
+# Assume Company A moves first, and Company B moves second. 
+# Company B's decision nodes are g.root.children[0] (Company A chooses Invest) and g.root.children[1] (Company A chooses Not Invest).
+
+# Step 4: Group the decision nodes into information sets.
+# Company B cannot distinguish between the actions of Company A, so both decision nodes for Company B should be in the same information set.
+
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+```
+
+```python
+import pygambit as gbt
+
+# Step 1: Create a new extensive-form game with two players, Company A and Company B.
+g = gbt.Game.new_tree(players=["Company A", "Company B"],
+                      title="Investment Game with Imperfect Information")
+
+# Step 2: Model the game as if Company A moves first and Company B follows, but they do not know the other's action.
+# Company A has two actions: Invest or Not Invest.
+g.append_move(g.root, "Company A", ["Invest", "Not Invest"])
+
+# Step 3: Company B also has two actions: Invest or Not Invest.
+# We append moves for Company B at both decision nodes created by Company A's actions.
+g.append_move(g.root.children[0], "Company B", ["Invest", "Not Invest"])
+g.append_move(g.root.children[1], "Company B", ["Invest", "Not Invest"])
+
+# Step 4: Group the decision nodes into information sets.
+# Company B cannot distinguish between the actions of Company A, so both decision nodes for Company B should be in the same information set.
+g.set_infoset(g.root.children[0], g.root.children[1].infoset)
+
+# Step 5: Define the payoffs for each outcome.
+# - If both invest, they stay competitive: (2, 2)
+# - If one invests and the other doesn't, the investor faces high costs: (-1, 3) or (3, -1)
+# - If neither invests, they save costs but fall behind: (1, 1)
+
+# Set the outcomes for each terminal node.
+outcome_both_invest = g.add_outcome([2, 2], label="Both Invest")
+outcome_a_invests = g.add_outcome([-1, 3], label="A Invests, B Not Invest")
+outcome_b_invests = g.add_outcome([3, -1], label="B Invests, A Not Invest")
+outcome_neither_invest = g.add_outcome([1, 1], label="Neither Invest")
+
+# Assign the outcomes to the terminal nodes.
+g.set_outcome(g.root.children[0].children[0], outcome_both_invest)
+g.set_outcome(g.root.children[0].children[1], outcome_a_invests)
+g.set_outcome(g.root.children[1].children[0], outcome_b_invests)
+g.set_outcome(g.root.children[1].children[1], outcome_neither_invest)
+
+# Save the EFG
+efg = g.write(format='native')
+```

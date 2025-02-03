@@ -1,0 +1,20 @@
+Based on the game description provided, here is the EFG representation:
+
+```
+EFG 2 R "Entry Deterrence Game" { "Firm 1" "Firm 2" }
+p "" 2 1 "" { "Enter" "Out" } 0
+p "" 1 1 "" { "Fight" "Accommodate" } 0
+t "" 1 "Firm 1 Accommodates" { x, x }  ; Assuming x is the payoff when Firm 1 accommodates and Firm 2 enters
+t "" 2 "Firm 1 Fights" { y, z }  ; Assuming y < z, y is Firm 1's payoff, z is Firm 2's payoff when Firm 1 fights
+t "" 3 "Firm 2 Stays Out" { w, 0 }  ; w > x, Firm 1's payoff when Firm 2 does not enter
+```
+
+In this representation:
+- The game starts with Firm 2 deciding whether to Enter the market or to stay Out. This is a decision node for Firm 2.
+- If Firm 2 enters, Firm 1 must decide how to compete: either Fight or Accommodate. This is a decision node for Firm 1.
+- The terminal nodes represent the outcomes of the game, with the associated payoffs for each firm. The payoffs are represented by variables (x, y, z, w) since specific values were not provided in the description. The conditions given in the description guide the relationships between these variables:
+  - Firm 1 earns more if Firm 2 does not enter (w > x).
+  - If Firm 2 enters and Firm 1 accommodates, both firms earn the same amount (x).
+  - If Firm 2 enters and Firm 1 fights, Firm 2 earns more than Firm 1 (y < z).
+
+Please adjust the variables (x, y, z, w) to specific values that satisfy the conditions given in the game description for a complete and accurate representation.

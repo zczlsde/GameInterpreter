@@ -1,0 +1,41 @@
+```python
+import pygambit as gbt
+
+# Create a new game tree with two players: Country A and Country B
+g = gbt.Game.new_tree(players=["Country A", "Country B"],
+                      title="Country A and Country B Game")
+
+# Country B makes the first move: Accept or Rebel
+g.append_move(g.root, "Country B", ["Accept", "Rebel"])
+
+# If Country B accepts, Country A can choose to Tax or Drop Taxes
+g.append_move(g.root.children[0], "Country A", ["Tax", "Drop Taxes"])
+
+# Set outcomes for the Accept branch
+# If Country A chooses to Tax, Country A earns 6 and Country B loses 2
+g.set_outcome(g.root.children[0].children[0], g.add_outcome([6, -2], label="Tax"))
+# If Country A chooses to Drop Taxes, Country A earns 4 and Country B earns 0
+g.set_outcome(g.root.children[0].children[1], g.add_outcome([4, 0], label="Drop Taxes"))
+
+# If Country B rebels, Country A can choose to Grant Independence or Suppress
+g.append_move(g.root.children[1], "Country A", ["Grant Independence", "Suppress"])
+
+# Set outcomes for the Rebel branch
+# If Country A grants independence, Country A earns 0 and Country B earns 3
+g.set_outcome(g.root.children[1].children[0], g.add_outcome([0, 3], label="Grant Independence"))
+
+# If Country A tries to suppress, a move of nature determines the outcome of the war
+g.append_move(g.root.children[1].children[1], g.players.chance, ["Country B Wins", "Country B Loses"])
+
+# Set the probabilities for the chance node
+g.set_chance_probs(g.root.children[1].children[1].infoset, [gbt.Rational(3, 10), gbt.Rational(7, 10)])
+
+# Set outcomes for the war
+# If Country B wins the war, Country B loses 3 and Country A loses 1
+g.set_outcome(g.root.children[1].children[1].children[0], g.add_outcome([-1, -3], label="Country B Wins War"))
+# If Country B loses the war, Country B loses 5 and Country A loses 1
+g.set_outcome(g.root.children[1].children[1].children[1], g.add_outcome([-1, -5], label="Country B Loses War"))
+
+# Save the EFG
+efg = g.write(format='native')
+```
